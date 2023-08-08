@@ -1,7 +1,4 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-eval $(fnm env | sed 1d)
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
-export PATH=$(cygpath $FNM_MULTISHELL_PATH):$PATH
-
-pnpm commitlint --edit $1
+npx --no -- commitlint --edit ${1}
