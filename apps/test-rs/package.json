@@ -1,0 +1,8 @@
+{
+    "name": "@warbrokers/test-rs",
+    "scripts": {
+        "dev": "cargo watch -x run",
+        "start": "cargo run",
+        "build": "cargo build"
+    }
+}

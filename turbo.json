@@ -1,0 +1,18 @@
+{
+    "npmClient": "pnpm",
+    "pipeline": {
+        "dev": {
+            "cache": false
+        },
+        "start": {
+            "cache": false
+        },
+        "build": {
+            "dependsOn": ["^build"],
+            "outputs": [".next/**", "dist/**"]
+        },
+        "lint": {
+            "outputs": []
+        }
+    }
+}

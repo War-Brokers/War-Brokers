@@ -1,0 +1,36 @@
+{
+    // workspace dictionary
+    "cSpell.words": [
+        "commitlint",
+        "developomp",
+        "rustup",
+        "turborepo",
+        "warbrokers"
+    ],
+
+    // editor
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[toml]": {
+        "editor.defaultFormatter": "tamasfe.even-better-toml"
+    },
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+
+    // etc
+    "search.exclude": {
+        "**/pnpm-lock.yaml": true,
+        "**/.pnp.*": true
+    },
+    "conventionalCommits.scopes": [
+        "main",
+        "commit",
+        "@gaia/routes",
+        "deps",
+        "@gaia",
+        "@gaia/logs",
+        "@athena",
+        "docs"
+    ]
+}
