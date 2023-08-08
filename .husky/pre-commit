@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# temporarily disabled
-# pnpm lint
+export PATH="$PATH:$HOME/.npm-global/bin"
+
+pnpm lint

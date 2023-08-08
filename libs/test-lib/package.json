@@ -9,6 +9,7 @@
         "lint": "eslint ."
     },
     "devDependencies": {
+        "@warbrokers/eslint-config": "workspace:*",
         "eslint": "^8.46.0",
         "typescript": "^4.9.4"
     }
