@@ -14,13 +14,13 @@
 3. Clone the forked repository
 4. Open repository with vscode
    - install recommended extensions (a toast should show up on the bottom right corner of the window)
-5. Initialize Git Hooks ([husky](https://github.com/typicode/husky))
-   ```
-   pnpm prepare
-   ```
-6. Install dependencies
+5. Install dependencies
    ```
    pnpm install
+   ```
+6. Initialize Git Hooks ([husky](https://github.com/typicode/husky))
+   ```
+   pnpm prepare
    ```
 
 ## package.json script naming convention
