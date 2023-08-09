@@ -1,2 +1,5 @@
 _/*
+**/.turbo/
+**/build/
+**/lib/
 **/pnpm-lock.yaml

@@ -22,6 +22,7 @@
    ```
    pnpm prepare
    ```
+7. read `README.md` files in [`apps`](./apps) and [`libs`](./libs)
 
 ## package.json script naming convention
 

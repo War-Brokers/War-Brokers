@@ -1,0 +1,36 @@
+{
+    "functions": [
+        {
+            "source": ".",
+            "runtime": "nodejs18",
+            "codebase": "default",
+            "ignore": ["node_modules", ".git", "*.log"],
+            "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"]
+        }
+    ],
+    "hosting": [
+        {
+            "target": "api",
+            "public": "public",
+            "rewrites": [
+                {
+                    "source": "**",
+                    "function": "api"
+                }
+            ],
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+        }
+    ],
+    "emulators": {
+        "functions": {
+            "port": 5001
+        },
+        "hosting": {
+            "port": 5000
+        },
+        "ui": {
+            "enabled": true
+        },
+        "singleProjectMode": true
+    }
+}

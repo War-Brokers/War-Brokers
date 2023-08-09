@@ -3,9 +3,19 @@
     "cSpell.words": [
         "commitlint",
         "developomp",
+        "etags",
+        "firebaserc",
+        "firelink",
+        "firestore",
+        "multisites",
+        "openapi",
+        "predeploy",
         "rustup",
+        "rxdi",
+        "tsoa",
         "turborepo",
-        "warbrokers"
+        "warbrokers",
+        "wbapi"
     ],
 
     // editor

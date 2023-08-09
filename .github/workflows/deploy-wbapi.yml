@@ -1,0 +1,41 @@
+name: Deploy WBAPI
+
+on:
+    push:
+        branches:
+            - master
+        paths:
+            - "apps/wbapi/**"
+        # allow manual dispatch
+        workflow_dispatch:
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v3
+
+            - uses: pnpm/action-setup@v2
+              with:
+                  version: 8
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18.x
+                  cache: "pnpm"
+
+            - name: Install Dependencies
+              run: pnpm install
+
+            - name: Build
+              working-directory: apps/wbapi
+              run: pnpm build
+
+            - name: Deploy to Firebase
+              uses: w9jds/firebase-action@master
+              with:
+                  args: deploy --project war-brokers-projects
+              env:
+                  GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
