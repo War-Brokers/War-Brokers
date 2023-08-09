@@ -25,15 +25,5 @@
     "search.exclude": {
         "**/pnpm-lock.yaml": true,
         "**/.pnp.*": true
-    },
-    "conventionalCommits.scopes": [
-        "main",
-        "commit",
-        "@gaia/routes",
-        "deps",
-        "@gaia",
-        "@gaia/logs",
-        "@athena",
-        "docs"
-    ]
+    }
 }
