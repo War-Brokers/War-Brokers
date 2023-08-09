@@ -12,7 +12,7 @@
             "outputs": [".next/**", "dist/**"]
         },
         "lint": {
-            "outputs": []
+            "cache": false
         }
     }
 }
