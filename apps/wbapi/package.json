@@ -1,6 +1,7 @@
 {
     "name": "@warbrokers/wbapi",
     "version": "0.0.0",
+    "type": "module",
     "private": true,
     "scripts": {
         "build": "rm -rf lib build && tsoa spec-and-routes && vite build",

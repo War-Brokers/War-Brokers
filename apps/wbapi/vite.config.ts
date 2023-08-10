@@ -34,7 +34,6 @@ export default defineConfig({
             entry: resolve(__dirname, "src/index.ts"),
             name: "functions",
             fileName: "index",
-            // we build to es module format because it is the most modern format and we don't need to support other formats
             formats: ["umd"],
         },
         copyPublicDir: false,
