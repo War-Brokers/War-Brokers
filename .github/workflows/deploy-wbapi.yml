@@ -38,4 +38,6 @@ jobs:
             # FIREBASE_TOKEN retrieved from "firebase login:ci"
             - name: Deploy to Firebase
               working-directory: apps/wbapi
-              run: pnpm firebase deploy --only functions --project war-brokers-projects --token "${{ secrets.FIREBASE_TOKEN }}"
+              run: |
+                  pnpm install -g firebase-tools
+                  pnpm firebase deploy --only functions --project war-brokers-projects --token "${{ secrets.FIREBASE_TOKEN }}"
