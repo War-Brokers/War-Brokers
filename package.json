@@ -4,6 +4,7 @@
         "start": "turbo run start --parallel",
         "build": "turbo run build --parallel",
         "lint": "turbo run lint --parallel && prettier . --check",
+        "clean": "turbo run clean --parallel && rm -rf out node_modules target Cargo.lock",
         "prepare": "husky install"
     },
     "devDependencies": {

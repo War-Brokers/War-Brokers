@@ -6,7 +6,8 @@
     "types": "./dist/index.d.ts",
     "scripts": {
         "build": "tsc",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "clean": "rm -rf .turbo dist node_modules"
     },
     "devDependencies": {
         "@warbrokers/eslint-config": "workspace:*",

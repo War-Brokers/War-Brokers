@@ -1,6 +1,7 @@
 # Contribution Guide
 
 - Must follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0)
+- must run commands on shell-like terminal emulators (e.g. sh, bash, zsh, fish, git bash, etc...)
 
 ## Setting up
 
@@ -30,6 +31,7 @@
 - `dev` - run with live reload
 - `start` - start the built app
 - `lint` - run lint
+- `clean` - remove all generated files
 
 ## Managing workspaces
 

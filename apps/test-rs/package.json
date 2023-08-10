@@ -3,6 +3,7 @@
     "scripts": {
         "dev": "cargo watch -x run",
         "start": "cargo run",
-        "build": "cargo build"
+        "build": "cargo build",
+        "clean": "rm -rf .turbo"
     }
 }

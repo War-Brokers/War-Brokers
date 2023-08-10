@@ -5,7 +5,8 @@
     "scripts": {
         "build": "tsc",
         "start": "pnpm build && node dist",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "clean": "rm -rf .turbo dist node_modules"
     },
     "dependencies": {
         "@warbrokers/test-lib": "workspace:*"
