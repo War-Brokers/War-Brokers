@@ -6,8 +6,9 @@ on:
             - master
         paths:
             - "apps/wbapi/**"
-        # allow manual dispatch
-        workflow_dispatch:
+            - ".github/workflows/deploy-wbapi.yml"
+    # allow manual dispatch
+    workflow_dispatch:
 
 jobs:
     deploy:
