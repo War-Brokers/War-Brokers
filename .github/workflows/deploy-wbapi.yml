@@ -33,9 +33,7 @@ jobs:
               working-directory: apps/wbapi
               run: pnpm build
 
+            # FIREBASE_TOKEN retrieved from "firebase login:ci"
             - name: Deploy to Firebase
-              uses: w9jds/firebase-action@master
-              with:
-                  args: deploy --project war-brokers-projects
-              env:
-                  GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+              working-directory: out/apps/wbapi
+              run: firebase deploy --only functions --project war-brokers-projects --token "${{ secrets.FIREBASE_TOKEN }}"
