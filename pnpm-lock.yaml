@@ -41,22 +41,6 @@ importers:
 
   apps/test-rs: {}
 
-  apps/test-ts:
-    dependencies:
-      '@warbrokers/test-lib':
-        specifier: workspace:*
-        version: link:../../libs/test-lib
-    devDependencies:
-      '@warbrokers/eslint-config':
-        specifier: workspace:*
-        version: link:../../libs/eslint-config
-      eslint:
-        specifier: ^8.46.0
-        version: 8.46.0
-      typescript:
-        specifier: ^4.9.4
-        version: 4.9.4
-
   apps/wbapi:
     dependencies:
       '@google-cloud/functions-framework':
@@ -165,18 +149,6 @@ importers:
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
-
-  libs/test-lib:
-    devDependencies:
-      '@warbrokers/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      eslint:
-        specifier: ^8.46.0
-        version: 8.46.0
-      typescript:
-        specifier: ^4.9.4
-        version: 4.9.4
 
 packages:
 
@@ -5102,6 +5074,7 @@ packages:
   /mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
     engines: {node: '>= 0.6'}
+    requiresBuild: true
 
   /mime-types@2.1.35:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
@@ -6474,12 +6447,6 @@ packages:
       call-bind: 1.0.2
       for-each: 0.3.3
       is-typed-array: 1.1.12
-    dev: true
-
-  /typescript@4.9.4:
-    resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
-    engines: {node: '>=4.2.0'}
-    hasBin: true
     dev: true
 
   /typescript@5.1.6:
