@@ -1,7 +1,6 @@
 import "./tailwind.css"
 import "./global.scss"
 import "@fortawesome/fontawesome-svg-core/styles.css"
-import "react-vertical-timeline-component/style.min.css"
 
 import { config } from "@fortawesome/fontawesome-svg-core"
 import type { Metadata } from "next"
