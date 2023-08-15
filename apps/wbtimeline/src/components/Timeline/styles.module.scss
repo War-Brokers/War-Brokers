@@ -1,0 +1,6 @@
+// vertical line
+.timeline::before {
+    content: "";
+
+    @apply absolute left-12 h-full w-[2px] bg-white lg:left-1/2;
+}

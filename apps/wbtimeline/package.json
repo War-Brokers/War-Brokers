@@ -1,0 +1,31 @@
+{
+    "name": "@warbrokers/wbtimeline",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "devDependencies": {
+        "@fortawesome/fontawesome-svg-core": "^6.4.2",
+        "@fortawesome/free-solid-svg-icons": "^6.4.2",
+        "@fortawesome/react-fontawesome": "^0.2.0",
+        "@types/node": "20.4.9",
+        "@types/react": "18.2.20",
+        "@types/react-dom": "18.2.7",
+        "@warbrokers/eslint-config": "workspace:*",
+        "autoprefixer": "10.4.14",
+        "eslint": "8.46.0",
+        "eslint-config-next": "13.4.13",
+        "nanoid": "^4.0.2",
+        "next": "13.4.13",
+        "postcss": "8.4.27",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "sass": "^1.65.1",
+        "tailwindcss": "3.3.3",
+        "typescript": "5.1.6"
+    }
+}

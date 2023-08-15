@@ -3,6 +3,7 @@
     "tabWidth": 4,
     "endOfLine": "auto",
     "singleQuote": false,
+    "plugins": ["prettier-plugin-tailwindcss"],
     "overrides": [
         {
             "files": ["*.md"],

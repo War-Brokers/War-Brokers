@@ -1,0 +1,15 @@
+{
+    "projects": {
+        "default": "war-brokers-projects"
+    },
+    "targets": {
+        "war-brokers-projects": {
+            "hosting": {
+                "wbtimeline": [
+                    "wbp-wbtimeline"
+                ]
+            }
+        }
+    },
+    "etags": {}
+}

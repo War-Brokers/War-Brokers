@@ -2,20 +2,28 @@
     // workspace dictionary
     "cSpell.words": [
         "commitlint",
+        "deathmatch",
         "developomp",
         "etags",
         "firebaserc",
         "firelink",
         "firestore",
+        "fontawesome",
+        "fortawesome",
+        "minigun",
         "multisites",
         "openapi",
         "predeploy",
+        "respawn",
+        "royale",
         "rustup",
         "rxdi",
+        "tailwindcss",
         "tsoa",
         "turborepo",
         "warbrokers",
-        "wbapi"
+        "wbapi",
+        "wbtimeline"
     ],
 
     // editor
@@ -29,6 +37,14 @@
     },
     "[rust]": {
         "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+
+    // tailwind
+    "css.lint.unknownAtRules": "ignore",
+    "scss.lint.unknownAtRules": "ignore",
+    "tailwindCSS.classAttributes": ["class", "className", ".*Style*"],
+    "editor.quickSuggestions": {
+        "strings": true
     },
 
     // etc
