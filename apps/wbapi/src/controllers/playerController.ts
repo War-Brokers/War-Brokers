@@ -1,7 +1,7 @@
+import { type Player } from "@warbrokers/types"
 import { firestore } from "firebase-admin"
 import { info } from "firebase-functions/logger"
 import { Controller, Get, Path, Res, Route, TsoaResponse } from "tsoa"
-import { type Player } from "wb-types"
 
 @Route("/players")
 export class PlayerController extends Controller {

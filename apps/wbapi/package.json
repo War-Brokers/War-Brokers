@@ -17,7 +17,7 @@
         "firebase-functions": "^4.4.1",
         "swagger-ui-express": "^5.0.0",
         "tsoa": "6.0.0-rc.3",
-        "wb-types": "^0.1.0"
+        "@warbrokers/types": "*"
     },
     "devDependencies": {
         "@types/express": "^4.17.17",
