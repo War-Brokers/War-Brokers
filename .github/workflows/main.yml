@@ -1,0 +1,86 @@
+# FIREBASE_TOKEN - from "firebase login:ci"
+name: Main
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      #
+      # Build
+      #
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-store-
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      #
+      # Lint
+      #
+
+      - name: Lint
+        run: pnpm lint
+
+      #
+      # Deploy WBAPI
+      #
+
+      - name: Check if WBAPI related files have changed
+        uses: marceloprado/has-changed-path@v1
+        id: changed-wbapi
+        with:
+          paths: apps/wbapi .github/workflows/main.yml
+
+      - name: Deploy WBAPI
+        if: steps.changed-wbapi.outputs.changed == 'true'
+        working-directory: apps/wbapi
+        run: |
+          pnpm install -g firebase-tools
+          pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
+
+      #
+      # Deploy WB Timeline
+      #
+
+      - name: Check if WB Timeline related files have changed
+        uses: marceloprado/has-changed-path@v1
+        id: changed-wbtimeline
+        with:
+          paths: apps/wbtimeline .github/workflows/main.yml
+
+      - name: Deploy WB Timeline
+        if: steps.changed-wbtimeline.outputs.changed == 'true'
+        working-directory: apps/wbtimeline
+        run: |
+          pnpm install -g firebase-tools
+          pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
