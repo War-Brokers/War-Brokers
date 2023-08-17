@@ -1,0 +1,45 @@
+{
+    "name": "wb-types",
+    "version": "0.1.0",
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "files": [
+        "src",
+        "dist"
+    ],
+    "description": "typescript types and zod schemas for War Brokers",
+    "author": {
+        "email": "developomp@gmail.com",
+        "name": "developomp",
+        "url": "https://developomp.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/War-Brokers/wb-types.git"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "license": "MIT",
+    "scripts": {
+        "build": "tsup",
+        "lint": "eslint src --quiet && tsc",
+        "release": "changeset publish"
+    },
+    "dependencies": {
+        "zod": "^3.22.1"
+    },
+    "devDependencies": {
+        "@changesets/cli": "^2.26.2",
+        "@typescript-eslint/eslint-plugin": "^6.4.0",
+        "@typescript-eslint/parser": "^6.4.0",
+        "@warbrokers/eslint-config": "workspace:*",
+        "eslint": "^8.47.0",
+        "eslint-config-prettier": "^9.0.0",
+        "eslint-plugin-prettier": "^5.0.0",
+        "prettier": "3.0.2",
+        "tsup": "^7.2.0",
+        "typescript": "^5.1.6"
+    }
+}
