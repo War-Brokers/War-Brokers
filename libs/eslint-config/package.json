@@ -1,5 +1,6 @@
 {
     "name": "@warbrokers/eslint-config",
+    "private": true,
     "type": "module",
     "main": ".eslintrc.cjs",
     "scripts": {

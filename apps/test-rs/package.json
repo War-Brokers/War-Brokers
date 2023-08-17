@@ -1,5 +1,6 @@
 {
     "name": "@warbrokers/test-rs",
+    "private": true,
     "scripts": {
         "dev": "cargo watch -x run",
         "start": "cargo run",
