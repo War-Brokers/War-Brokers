@@ -1,4 +1,5 @@
 # FIREBASE_TOKEN - from "firebase login:ci"
+# git diff --quiet: exits with status code 1 if there were differences (https://git-scm.com/docs/git-diff)
 name: Main
 
 on:
@@ -57,13 +58,12 @@ jobs:
       #
 
       - name: Check if WBAPI related files have changed
-        uses: marceloprado/has-changed-path@v1
         id: changed-wbapi
-        with:
-          paths: apps/wbapi .github/workflows/main.yml
+        continue-on-error: true
+        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/wbapi .github/workflows/main.yml
 
       - name: Deploy WBAPI
-        if: steps.changed-wbapi.outputs.changed == 'true'
+        if: steps.changed-wbapi.outcome == 'failure'
         working-directory: apps/wbapi
         run: |
           pnpm install -g firebase-tools
@@ -74,13 +74,12 @@ jobs:
       #
 
       - name: Check if WB Timeline related files have changed
-        uses: marceloprado/has-changed-path@v1
         id: changed-wbtimeline
-        with:
-          paths: apps/wbtimeline .github/workflows/main.yml
+        continue-on-error: true
+        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/wbtimeline .github/workflows/main.yml
 
       - name: Deploy WB Timeline
-        if: steps.changed-wbtimeline.outputs.changed == 'true'
+        if: steps.changed-wbtimeline.outcome == 'failure'
         working-directory: apps/wbtimeline
         run: |
           pnpm install -g firebase-tools
@@ -91,14 +90,13 @@ jobs:
       #
 
       - name: Check if wb-types related files have changed
-        uses: marceloprado/has-changed-path@v1
         id: changed-wb-types
-        with:
-          paths: libs/wb-types .github/workflows/main.yml
+        continue-on-error: true
+        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- libs/wb-types .github/workflows/main.yml
 
       - name: Publish wb-types
         id: changesets
-        if: steps.changed-wb-types.outputs.changed == 'true'
+        if: steps.changed-wb-types.outcome == 'failure'
         uses: changesets/action@v1
         with:
           publish: cd libs/wb-types && pnpm run release
