@@ -100,8 +100,6 @@ jobs:
         id: changesets
         if: steps.changed-wb-types.outcome == 'failure'
         uses: changesets/action@v1
-        with:
-          publish: cd libs/wb-types && pnpm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
