@@ -5,6 +5,7 @@
         "tamasfe.even-better-toml",
         "vivaxy.vscode-conventional-commits",
         "dbaeumer.vscode-eslint",
-        "bradlc.vscode-tailwindcss"
+        "bradlc.vscode-tailwindcss",
+        "github.vscode-github-actions"
     ]
 }
