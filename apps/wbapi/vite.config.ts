@@ -16,7 +16,7 @@ const externalDepsObj = {}
 
 /** For each dependency that is not a monorepo package, mark it as an external dependency */
 Object.keys(dependencies).forEach((dep) => {
-    if (dependencies[dep] !== "*") {
+    if (dependencies[dep] !== "workspace:*") {
         // This regex matches the pattern: 'package', 'package/subpackage', etc.
         const depRegex = new RegExp(`^${dep}(/.*)?$`)
         externalDepsList.push(depRegex)
