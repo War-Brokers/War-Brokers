@@ -43,7 +43,11 @@
 
 ## Managing workspaces
 
-Workspaces are managed by the following files
+The monorepo is managed by [turborepo](https://turbo.build/repo),
+[pnpm workspace](https://pnpm.io/workspaces), and
+[cargo workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html).
+Related files can be found here:
 
-- Rust: [`Cargo.toml`](./Cargo.toml)
-- JS / TS: [`pnpm-workspace.yaml`](./pnpm-workspace.yaml)
+- [`turbo.json`](./turbo.json)
+- [`Cargo.toml`](./Cargo.toml)
+- [`pnpm-workspace.yaml`](./pnpm-workspace.yaml)
