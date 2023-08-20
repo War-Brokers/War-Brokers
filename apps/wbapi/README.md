@@ -16,17 +16,6 @@ WBAPI is entirely built on Google firebase's infrastructure. It uses
 [hosting](https://firebase.google.com/docs/hosting) to expose everything to
 the web.
 
-The project is essentially a regular NodeJS project built with
-[express.js](https://github.com/expressjs/express) that takes HTTP requests and
-handles them accordingly. [tsoa](https://github.com/lukeautry/tsoa) is use to
-document all the routes.
-
-Once the code is pushed to GitHub, it spins up the
-[`deploy.yml`](../../.github/workflows/deploy.yml) GitHub action where it
-automatically builds and deploys everything to firebase.
-
-The `public` directory just contains static files used for hosting.
-
 ## Setting up
 
 To test the project locally, perform the following steps:

@@ -5,13 +5,18 @@
         "noImplicitReturns": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
+        "skipLibCheck": true,
         "outDir": "lib",
         "sourceMap": true,
         "strict": true,
         "target": "es2017",
         "resolveJsonModule": true,
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
+        "emitDecoratorMetadata": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*"]
+        }
     },
     "compileOnSave": true,
     "include": ["src"]

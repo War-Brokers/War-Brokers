@@ -28,6 +28,7 @@ export default defineConfig({
     resolve: {
         // This setting is necessary for vite to resolve symlinks to packages in the monorepo
         preserveSymlinks: true,
+        alias: [{ find: "@", replacement: resolve(__dirname, "src") }],
     },
     build: {
         lib: {

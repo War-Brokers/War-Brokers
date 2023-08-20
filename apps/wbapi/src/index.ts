@@ -1,13 +1,16 @@
-import type { Request, Response } from "express"
-import express, { json, urlencoded } from "express"
+import { createExpressMiddleware } from "@trpc/server/adapters/express"
+import cors from "cors"
+import express from "express"
 // eslint-disable-next-line import/no-unresolved
 import { initializeApp } from "firebase-admin/app"
 import { setGlobalOptions } from "firebase-functions/v2"
 import { onRequest } from "firebase-functions/v2/https"
 import swaggerUi from "swagger-ui-express"
+import { createOpenApiExpressMiddleware } from "trpc-openapi"
 
-import { RegisterRoutes } from "../build/routes"
-import swaggerDoc from "../build/swagger.json"
+import { openApiDocument } from "@/openapi"
+import { appRouter } from "@/router"
+import { createContext } from "@/trpc"
 
 initializeApp()
 
@@ -17,16 +20,19 @@ setGlobalOptions({ maxInstances: 10 })
 
 const app = express()
 
-app.use(
-    urlencoded({
-        extended: true,
-    }),
-)
-app.use(json())
-app.use("/api-docs", swaggerUi.serve, async (_req: Request, res: Response) => {
-    return res.send(swaggerUi.generateHTML(swaggerDoc))
-})
+app.use(cors())
 
-RegisterRoutes(app)
+// API documentations
+app.use("/api-docs", swaggerUi.serve)
+app.get("/api-docs", swaggerUi.setup(openApiDocument))
+
+// Handle incoming tRPC requests
+app.use("/trpc", createExpressMiddleware({ router: appRouter, createContext }))
+
+// Handle incoming OpenAPI requests
+app.use(
+    "/",
+    createOpenApiExpressMiddleware({ router: appRouter, createContext }),
+)
 
 export const api = onRequest(app)
