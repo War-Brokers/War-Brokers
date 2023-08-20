@@ -1,5 +1,5 @@
 _/*
 **/.turbo/
 **/build/
-**/lib/
+apps/wbapi/lib/
 **/pnpm-lock.yaml
