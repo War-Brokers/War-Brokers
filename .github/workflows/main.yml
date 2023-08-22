@@ -49,6 +49,13 @@ jobs:
         run: pnpm build
 
       #
+      # Lint
+      #
+
+      - name: Lint
+        run: pnpm lint
+
+      #
       # Test
       #
 
