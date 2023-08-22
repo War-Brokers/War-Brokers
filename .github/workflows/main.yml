@@ -91,6 +91,23 @@ jobs:
             apps/*/test-results
 
       #
+      # Deploy wb-types
+      #
+
+      - name: Check if wb-types related files have changed
+        id: changed-wb-types
+        continue-on-error: true
+        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- libs/wb-types .github/workflows/main.yml
+
+      - name: Publish wb-types
+        id: changesets
+        if: steps.changed-wb-types.outcome == 'failure'
+        uses: changesets/action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      #
       # Deploy WBAPI
       #
 
@@ -121,20 +138,3 @@ jobs:
         run: |
           pnpm install -g firebase-tools
           pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
-
-      #
-      # Deploy wb-types
-      #
-
-      - name: Check if wb-types related files have changed
-        id: changed-wb-types
-        continue-on-error: true
-        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- libs/wb-types .github/workflows/main.yml
-
-      - name: Publish wb-types
-        id: changesets
-        if: steps.changed-wb-types.outcome == 'failure'
-        uses: changesets/action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
