@@ -49,6 +49,41 @@ jobs:
         run: pnpm build
 
       #
+      # Test
+      #
+
+      - name: Get Playwright's Version
+        id: playwright-version
+        run: |
+          PLAYWRIGHT_VERSION=$(npm ls @playwright/test | grep @playwright | sed 's/.*@//')
+          echo "Playwright Version: $PLAYWRIGHT_VERSION"
+          echo "version=$PLAYWRIGHT_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright Browsers
+        id: cache-playwright-browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ steps.playwright-version.outputs.version }}
+
+      - name: Install Playwright Browsers
+        if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
+      - name: Run unit tests
+        run: pnpm test:unit
+
+      - name: Run E2E tests
+        run: pnpm test:e2e
+
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: |
+            apps/*/test-results
+
+      #
       # Deploy WBAPI
       #
 
