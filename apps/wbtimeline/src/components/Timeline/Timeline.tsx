@@ -8,7 +8,7 @@ import styles from "./styles.module.scss"
 export default function Timeline() {
     return (
         <div
-            className={`relative flex max-w-6xl flex-col gap-20 ${styles.timeline}`}
+            className={`relative flex w-full max-w-6xl flex-col gap-20 ${styles.timeline}`}
         >
             {data.map((item) => (
                 <Entry key={nanoid()} {...item} />
