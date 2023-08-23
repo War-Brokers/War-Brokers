@@ -42,7 +42,7 @@ const data: Parameters<typeof Entry>[0][] = [
         category: "development",
         subcategory: "maps",
         description: "",
-        title: "Escape",
+        title: "Escape added",
     },
     {
         timestamp: "Apr 3, 2018",
@@ -56,7 +56,7 @@ const data: Parameters<typeof Entry>[0][] = [
         category: "development",
         subcategory: "weapons",
         description: "",
-        title: "Crossbow",
+        title: "Crossbow added",
     },
     {
         timestamp: "Mar 27, 2019",
@@ -78,6 +78,34 @@ const data: Parameters<typeof Entry>[0][] = [
         subcategory: "maps",
         description: "",
         title: "Dungeon added",
+    },
+    {
+        timestamp: "Mar 4, 2021",
+        category: "development",
+        subcategory: "maps",
+        description: "",
+        title: "4v4 Three Lane added",
+    },
+    {
+        timestamp: "Mar 11, 2021",
+        category: "development",
+        subcategory: "maps",
+        description: "",
+        title: "4v4 Sniper Alley added",
+    },
+    {
+        timestamp: "Mar 24, 2021",
+        category: "development",
+        subcategory: "maps",
+        description: "",
+        title: "4v4 Pyramid added",
+    },
+    {
+        timestamp: "Aug 27, 2021",
+        category: "development",
+        subcategory: "maps",
+        description: "",
+        title: "Siege added",
     },
 ]
 
