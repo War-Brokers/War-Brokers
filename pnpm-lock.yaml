@@ -17,6 +17,9 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^17.7.0
         version: 17.7.0
+      '@playwright/test':
+        specifier: ^1.37.1
+        version: 1.37.1
       '@types/eslint':
         specifier: ^8.44.2
         version: 8.44.2
