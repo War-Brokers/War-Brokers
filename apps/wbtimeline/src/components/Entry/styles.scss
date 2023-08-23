@@ -2,6 +2,11 @@
     @apply bg-gray-600;
     border-radius: 0 6px 6px 6px;
 
+    ul *,
+    ol * {
+        @apply ml-4 list-item list-outside list-disc;
+    }
+
     // triangle
     &::before {
         content: "";
@@ -82,6 +87,12 @@
             // reverse triangle
             &::before {
                 transform: scaleX(-1) translateX(-15px) translateY(-16px);
+            }
+
+            ul *,
+            ol * {
+                @apply mr-4 list-outside;
+                direction: rtl;
             }
 
             .date {
