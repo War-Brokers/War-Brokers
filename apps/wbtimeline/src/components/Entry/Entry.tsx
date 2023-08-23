@@ -7,7 +7,7 @@ import { nanoid } from "nanoid"
 interface Props {
     className?: string
 
-    category: string
+    category: "community" | "development"
     subcategory?: string
     timestamp: string
 
