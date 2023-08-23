@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { PlayerSchema } from "@warbrokers/types"
+import { PlayerSchema } from "@warbrokers/types/src/player"
 import { firestore } from "firebase-admin"
 import { info } from "firebase-functions/logger"
 import { z } from "zod"
