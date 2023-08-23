@@ -138,3 +138,20 @@ jobs:
         run: |
           pnpm install -g firebase-tools
           pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
+
+      #
+      # Deploy Stats Site
+      #
+
+      - name: Check if stats site related files have changed
+        id: changed-stats-site
+        continue-on-error: true
+        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/stats-site .github/workflows/main.yml
+
+      - name: Deploy Stats Site
+        if: steps.changed-stats-site.outcome == 'failure'
+        working-directory: apps/stats-site
+        run: |
+          pnpm install -g firebase-tools
+          pnpm firebase experiments:enable webframeworks
+          pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"

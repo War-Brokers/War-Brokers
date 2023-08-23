@@ -22,6 +22,7 @@
         "royale",
         "rustup",
         "rxdi",
+        "sveltefire",
         "tailwindcss",
         "trpc",
         "tsup",
@@ -43,6 +44,15 @@
     "[rust]": {
         "editor.defaultFormatter": "rust-lang.rust-analyzer"
     },
+
+    // eslint
+    "eslint.validate": [
+        "svelte",
+        "javascript",
+        "typescript",
+        "javascriptreact",
+        "typescriptreact"
+    ],
 
     // tailwind
     "css.lint.unknownAtRules": "ignore",

@@ -1,0 +1,9 @@
+{
+    "name": "@warbrokers/playwright-config",
+    "version": "0.0.0",
+    "private": true,
+    "main": "index.ts",
+    "devDependencies": {
+        "@playwright/test": "^1.36.2"
+    }
+}
