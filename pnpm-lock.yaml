@@ -83,6 +83,9 @@ importers:
       svelte:
         specifier: ^4.2.0
         version: 4.2.0
+      svelte-awesome:
+        specifier: ^3.2.1
+        version: 3.2.1(svelte@4.2.0)
       svelte-check:
         specifier: ^3.5.0
         version: 3.5.0(postcss@8.4.28)(svelte@4.2.0)
@@ -8704,6 +8707,14 @@ packages:
   /supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  /svelte-awesome@3.2.1(svelte@4.2.0):
+    resolution: {integrity: sha512-4jckcBktldqgmHUWg1xvl3vCrZllt5YSSsPun4NW7dOp9VZx1mOqJ9ddkYCH7O3PJN4ntucJr5P9/6q2xvw/0A==}
+    peerDependencies:
+      svelte: ^3.43.1 || ^4.0.0
+    dependencies:
+      svelte: 4.2.0
+    dev: true
 
   /svelte-check@3.5.0(postcss@8.4.28)(svelte@4.2.0):
     resolution: {integrity: sha512-KHujbn4k17xKYLmtCwv0sKKM7uiHTYcQvXnvrCcNU6a7hcszh99zFTIoiu/Sp/ewAw5aJmillJ1Cs8gKLmcX4A==}
