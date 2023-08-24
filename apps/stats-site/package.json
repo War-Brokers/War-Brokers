@@ -17,6 +17,7 @@
         "@sveltejs/adapter-auto": "^2.1.0",
         "@sveltejs/kit": "^1.22.6",
         "@trpc/client": "^10.37.1",
+        "@warbrokers/types": "workspace:*",
         "svelte": "^4.2.0",
         "svelte-awesome": "^3.2.1"
     },
