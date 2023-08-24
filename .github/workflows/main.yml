@@ -154,4 +154,5 @@ jobs:
         run: |
           pnpm install -g firebase-tools
           pnpm firebase experiments:enable webframeworks
+          pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/stats-site 
           pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
