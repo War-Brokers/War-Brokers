@@ -13,21 +13,25 @@
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
     },
-    "devDependencies": {
-        "@playwright/test": "^1.37.1",
+    "dependencies": {
         "@sveltejs/adapter-auto": "^2.1.0",
         "@sveltejs/kit": "^1.22.6",
+        "@trpc/client": "^10.37.1",
+        "firebase": "^9.0.0",
+        "svelte": "^4.2.0",
+        "svelte-awesome": "^3.2.1",
+        "sveltefire": "^0.4.2"
+    },
+    "devDependencies": {
+        "@playwright/test": "^1.37.1",
         "@warbrokers/eslint-config": "workspace:*",
         "@warbrokers/playwright-config": "workspace:*",
+        "@warbrokers/wbapi": "workspace:*",
         "autoprefixer": "10.4.15",
         "eslint": "^8.47.0",
         "eslint-plugin-svelte": "^2.33.0",
-        "firebase": "^10.3.0",
         "postcss": "8.4.28",
-        "svelte": "^4.2.0",
-        "svelte-awesome": "^3.2.1",
         "svelte-check": "^3.5.0",
-        "sveltefire": "^0.4.2",
         "tailwindcss": "3.3.3",
         "tslib": "^2.6.2",
         "typescript": "^5.1.6",
