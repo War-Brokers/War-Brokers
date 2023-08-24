@@ -11,7 +11,7 @@
 <FirebaseApp {auth} {firestore} {storage}>
     <Header />
 
-    <main class="flex my-4 flex-auto max-w-5xl mx-auto w-full">
+    <main class="px-4 flex flex-col my-4 flex-auto max-w-5xl mx-auto w-full">
         <slot />
     </main>
 
