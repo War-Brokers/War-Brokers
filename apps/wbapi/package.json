@@ -6,7 +6,7 @@
     "scripts": {
         "build": "rm -rf lib && vite build",
         "start": "pnpm build && NODE_ENV=development firebase emulators:start",
-        "lint": "eslint . && tsc",
+        "lint": "eslint . && tsc --noEmit",
         "test:unit": "vitest run",
         "clean": "rm -rf .turbo lib node_modules *.log"
     },
