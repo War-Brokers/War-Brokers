@@ -30,6 +30,9 @@ export default defineConfig({
         preserveSymlinks: true,
         alias: [{ find: "@", replacement: resolve(__dirname, "src") }],
     },
+    test: {
+        exclude: ["**/build/**", "**/lib/**"],
+    },
     build: {
         lib: {
             entry: resolve(__dirname, "src/index.ts"),
