@@ -103,6 +103,8 @@ jobs:
         id: changesets
         if: steps.changed-wb-types.outcome == 'failure'
         uses: changesets/action@v1
+        with:
+          commit: "chore: release package(s) (changesets)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
