@@ -4,11 +4,11 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "build": "rm -rf lib && vite build",
+        "build": "rm -rf build lib && vite build && tsc",
         "start": "pnpm build && NODE_ENV=development firebase emulators:start",
         "lint": "eslint . && tsc --noEmit",
         "test:unit": "vitest run",
-        "clean": "rm -rf .turbo lib node_modules *.log"
+        "clean": "rm -rf .turbo build lib node_modules *.log"
     },
     "dependencies": {
         "@google-cloud/functions-framework": "^3.3.0",
