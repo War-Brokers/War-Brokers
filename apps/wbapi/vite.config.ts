@@ -1,7 +1,7 @@
 import { resolve } from "path"
 import copy from "rollup-plugin-copy"
 import generatePackageJson from "rollup-plugin-generate-package-json"
-import { defineConfig } from "vite"
+import { defineConfig } from "vitest/config"
 
 import { dependencies, engines, name, version } from "./package.json"
 
