@@ -2,15 +2,18 @@
     "npmClient": "pnpm",
     "pipeline": {
         "dev": {
+            "dependsOn": ["build"],
             "cache": false
         },
         "start": {
+            "dependsOn": ["build"],
             "cache": false
         },
         "build": {
             "dependsOn": ["^build"],
             "outputs": [
                 ".next/**",
+                "!.next/cache/**",
                 "out/**",
                 "dist/**",
                 "build/**",
@@ -18,9 +21,9 @@
                 ".svelte-kit/**"
             ]
         },
-        "lint": {},
-        "test:e2e": {},
-        "test:unit": {},
+        "lint": { "dependsOn": ["build"] },
+        "test:e2e": { "dependsOn": ["build"] },
+        "test:unit": { "dependsOn": ["build"] },
         "clean": {
             "cache": false
         }
