@@ -165,7 +165,7 @@ jobs:
       - name: WB Timeline - Lint
         if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline
         working-directory: apps/wbtimeline
-        run: pnpm test:unit
+        run: pnpm lint
 
       - name: WB Timeline - Deploy
         if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline
