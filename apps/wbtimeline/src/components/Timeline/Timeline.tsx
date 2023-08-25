@@ -19,7 +19,7 @@ export default function Timeline() {
                 timestamp="NOW"
                 title="You can be part of the history"
                 description={
-                    'Join the <a href="https://discord.gg/warbrokers" target="_blank">War Brokers discord community</a> today and be a part of the history!'
+                    'Join the <a href="https://discord.gg/warbrokers">War Brokers discord community</a> today and be a part of the history!'
                 }
                 category="community"
             />

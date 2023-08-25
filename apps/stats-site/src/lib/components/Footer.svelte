@@ -11,7 +11,6 @@
         <div>
             <a
                 href="https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site"
-                target="_blank"
             >
                 <Icon data={github} scale={3} class="hover:text-gray-100" />
             </a>
