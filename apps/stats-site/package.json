@@ -11,7 +11,8 @@
         "test:e2e": "playwright test",
         "lint": "eslint .",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-        "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+        "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+        "clean": "rm -rf .firebase .svelte-kit .turbo *.timestamp-*"
     },
     "dependencies": {
         "@sveltejs/adapter-auto": "^2.1.0",

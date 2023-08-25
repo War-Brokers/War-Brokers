@@ -5,7 +5,8 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "lint": "next lint"
+        "lint": "next lint",
+        "clean": "rm -rf .firebase .next .turbo node_modules out"
     },
     "devDependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.4.2",
