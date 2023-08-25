@@ -1,5 +1,11 @@
 {
     "$schema": "https://turbo.build/schema.json",
+    "globalDependencies": [
+        ".prettierignore",
+        ".prettierrc.json",
+        "Cargo.toml",
+        "rust-toolchain.toml"
+    ],
     "pipeline": {
         "dev": {
             "dependsOn": ["build"],
