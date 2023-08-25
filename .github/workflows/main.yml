@@ -91,25 +91,6 @@ jobs:
             apps/*/test-results
 
       #
-      # Deploy wb-types
-      #
-
-      - name: Check if wb-types related files have changed
-        id: changed-wb-types
-        continue-on-error: true
-        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- libs/wb-types .github/workflows/main.yml
-
-      - name: Publish wb-types
-        id: changesets
-        if: steps.changed-wb-types.outcome == 'failure'
-        uses: changesets/action@v1
-        with:
-          commit: "chore: release package(s) (changesets)"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      #
       # Deploy WBAPI
       #
 
