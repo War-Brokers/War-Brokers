@@ -89,27 +89,27 @@ jobs:
         run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/stats-site
 
       - name: Stats Site - Build
-        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site == 'true'
+        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
         working-directory: apps/stats-site
         run: pnpm build
 
       - name: Stats Site - Lint
-        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site == 'true'
+        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
         working-directory: apps/stats-site
         run: pnpm lint
 
       - name: Stats Site - Unit Tests
-        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site == 'true'
+        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
         working-directory: apps/stats-site
         run: pnpm test:unit
 
       - name: Stats Site - End to End Tests
-        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site == 'true'
+        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
         working-directory: apps/stats-site
         run: pnpm test:e2e
 
       - name: Stats Site - Deploy
-        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site == 'true'
+        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
         working-directory: apps/stats-site
         run: |
           pnpm install -g firebase-tools
@@ -127,22 +127,22 @@ jobs:
         run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/wbapi
 
       - name: WBAPI - Build
-        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi == 'true'
+        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
         working-directory: apps/wbapi
         run: pnpm build
 
       - name: WBAPI - Lint
-        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi == 'true'
+        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
         working-directory: apps/wbapi
         run: pnpm lint
 
       - name: WBAPI - Unit Tests
-        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi == 'true'
+        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
         working-directory: apps/wbapi
         run: pnpm test:unit
 
       - name: WBAPI - Deploy
-        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi == 'true'
+        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
         working-directory: apps/wbapi
         run: |
           pnpm install -g firebase-tools
@@ -158,17 +158,17 @@ jobs:
         run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/wbtimeline
 
       - name: WB Timeline - Build
-        if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline == 'true'
+        if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline
         working-directory: apps/wbtimeline
         run: pnpm build
 
       - name: WB Timeline - Lint
-        if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline == 'true'
+        if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline
         working-directory: apps/wbtimeline
         run: pnpm test:unit
 
       - name: WB Timeline - Deploy
-        if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline == 'true'
+        if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline
         working-directory: apps/wbtimeline
         run: |
           pnpm install -g firebase-tools
