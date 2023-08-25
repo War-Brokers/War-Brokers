@@ -6,13 +6,26 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
+    inputs:
+      deploy-stats-site:
+        required: true
+        type: boolean
+
+      deploy-wbapi:
+        required: true
+        type: boolean
+
+      deploy-wbtimeline:
+        required: true
+        type: boolean
 
 jobs:
   main:
     runs-on: ubuntu-latest
     steps:
       #
-      # Build
+      # Prepare
       #
 
       - name: Checkout Repo
@@ -20,13 +33,8 @@ jobs:
         with:
           fetch-depth: 30 # get 30 of the most recent commits (default is 1)
 
-      - name: Cache turbo build setup
-        uses: actions/cache@v3
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
+      - name: Cache turbo build
+        uses: dtinth/setup-github-actions-caching-for-turbo@v1
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -50,22 +58,8 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-pnpm-store-
 
-      - name: Install Dependencies
+      - name: Install Node Dependencies
         run: pnpm install
-
-      - name: Build
-        run: pnpm build
-
-      #
-      # Lint
-      #
-
-      - name: Lint
-        run: pnpm lint
-
-      #
-      # Test
-      #
 
       - name: Get Playwright's Version
         id: playwright-version
@@ -85,65 +79,97 @@ jobs:
         if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
 
-      - name: Run unit tests
+      #
+      # Stats Site
+      #
+
+      - name: Stats Site - Check if changed
+        id: changed-stats-site
+        continue-on-error: true
+        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/stats-site
+
+      - name: Stats Site - Build
+        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site == 'true'
+        working-directory: apps/stats-site
+        run: pnpm build
+
+      - name: Stats Site - Lint
+        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site == 'true'
+        working-directory: apps/stats-site
+        run: pnpm lint
+
+      - name: Stats Site - Unit Tests
+        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site == 'true'
+        working-directory: apps/stats-site
         run: pnpm test:unit
 
-      - name: Run E2E tests
+      - name: Stats Site - End to End Tests
+        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site == 'true'
+        working-directory: apps/stats-site
         run: pnpm test:e2e
 
-      - name: Upload E2E test results
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: |
-            apps/*/test-results
+      - name: Stats Site - Deploy
+        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site == 'true'
+        working-directory: apps/stats-site
+        run: |
+          pnpm install -g firebase-tools
+          pnpm firebase experiments:enable webframeworks
+          pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/stats-site 
+          pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
 
       #
-      # Deploy WBAPI
+      # WBAPI
       #
 
-      - name: Check if WBAPI related files have changed
+      - name: WBAPI - Check if changed
         id: changed-wbapi
         continue-on-error: true
-        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/wbapi .github/workflows/main.yml
+        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/wbapi
 
-      - name: Deploy WBAPI
-        if: steps.changed-wbapi.outcome == 'failure'
+      - name: WBAPI - Build
+        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi == 'true'
+        working-directory: apps/wbapi
+        run: pnpm build
+
+      - name: WBAPI - Lint
+        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi == 'true'
+        working-directory: apps/wbapi
+        run: pnpm lint
+
+      - name: WBAPI - Unit Tests
+        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi == 'true'
+        working-directory: apps/wbapi
+        run: pnpm test:unit
+
+      - name: WBAPI - Deploy
+        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi == 'true'
         working-directory: apps/wbapi
         run: |
           pnpm install -g firebase-tools
           pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
 
       #
-      # Deploy WB Timeline
+      # WB Timeline
       #
 
-      - name: Check if WB Timeline related files have changed
+      - name: WB Timeline - Check if changed
         id: changed-wbtimeline
         continue-on-error: true
-        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/wbtimeline .github/workflows/main.yml
+        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/wbtimeline
 
-      - name: Deploy WB Timeline
-        if: steps.changed-wbtimeline.outcome == 'failure'
+      - name: WB Timeline - Build
+        if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline == 'true'
+        working-directory: apps/wbtimeline
+        run: pnpm build
+
+      - name: WB Timeline - Lint
+        if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline == 'true'
+        working-directory: apps/wbtimeline
+        run: pnpm test:unit
+
+      - name: WB Timeline - Deploy
+        if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline == 'true'
         working-directory: apps/wbtimeline
         run: |
           pnpm install -g firebase-tools
-          pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
-
-      #
-      # Deploy Stats Site
-      #
-
-      - name: Check if stats site related files have changed
-        id: changed-stats-site
-        continue-on-error: true
-        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/stats-site .github/workflows/main.yml
-
-      - name: Deploy Stats Site
-        if: steps.changed-stats-site.outcome == 'failure'
-        working-directory: apps/stats-site
-        run: |
-          pnpm install -g firebase-tools
-          pnpm firebase experiments:enable webframeworks
-          pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/stats-site 
           pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
