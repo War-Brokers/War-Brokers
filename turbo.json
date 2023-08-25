@@ -1,5 +1,5 @@
 {
-    "npmClient": "pnpm",
+    "$schema": "https://turbo.build/schema.json",
     "pipeline": {
         "dev": {
             "dependsOn": ["build"],
