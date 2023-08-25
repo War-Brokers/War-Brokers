@@ -1,0 +1,31 @@
+[package]
+name = "bbc"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = { git = "https://github.com/bevyengine/bevy.git", rev = "fd32c6f0ec2b7b6c1936d6929d6e6303c9b8524c", default-features = false, features = [
+    # disable some default features
+    # https://github.com/bevyengine/bevy/blob/HEAD/docs/cargo_features.md#default-features
+    "animation",
+    "bevy_animation",
+    "bevy_asset",
+    "bevy_audio",
+    "bevy_core_pipeline",
+    "bevy_gizmos",
+    "bevy_gltf",
+    "bevy_pbr",
+    "bevy_render",
+    "bevy_scene",
+    "bevy_sprite",
+    "bevy_text",
+    "bevy_ui",
+    "bevy_winit",
+    "filesystem_watcher",
+    "ktx2",
+    "png",
+    "tonemapping_luts",
+    "vorbis",
+    "x11",
+    "zstd",
+] }

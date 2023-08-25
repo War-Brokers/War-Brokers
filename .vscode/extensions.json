@@ -8,6 +8,7 @@
         "bradlc.vscode-tailwindcss",
         "github.vscode-github-actions",
         "svelte.svelte-vscode",
-        "ardenivanov.svelte-intellisense"
+        "ardenivanov.svelte-intellisense",
+        "serayuzgur.crates"
     ]
 }

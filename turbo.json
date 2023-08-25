@@ -24,7 +24,8 @@
                 "dist/**",
                 "build/**",
                 "lib/**",
-                ".svelte-kit/**"
+                ".svelte-kit/**",
+                "target"
             ]
         },
         "lint": { "dependsOn": ["build"] },

@@ -45,6 +45,8 @@ importers:
         specifier: ^5.1.6
         version: 5.1.6
 
+  apps/bbc: {}
+
   apps/stats-site:
     dependencies:
       '@sveltejs/adapter-auto':
@@ -108,8 +110,6 @@ importers:
       vitest:
         specifier: ^0.34.2
         version: 0.34.2
-
-  apps/test-rs: {}
 
   apps/wbapi:
     dependencies:

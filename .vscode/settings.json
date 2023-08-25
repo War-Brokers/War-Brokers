@@ -1,6 +1,10 @@
 {
     // workspace dictionary
     "cSpell.words": [
+        "aarch",
+        "alsa",
+        "APIV",
+        "Cheatsheets",
         "commitlint",
         "deathmatch",
         "developomp",
@@ -11,9 +15,19 @@
         "fontawesome",
         "fortawesome",
         "heli",
+        "Kenney",
+        "libasound",
+        "librust",
+        "libsdl",
+        "libudev",
+        "libwayland",
+        "libx",
+        "libxkbcommon",
         "linebreak",
         "marceloprado",
         "minigun",
+        "montudor",
+        "msvc",
         "multisites",
         "nicklower",
         "openapi",
@@ -22,14 +36,20 @@
         "royale",
         "rustup",
         "rxdi",
+        "softprops",
         "sveltefire",
         "tailwindcss",
+        "thedoctor",
         "trpc",
         "tsup",
         "turborepo",
+        "Vsync",
         "warbrokers",
         "wbapi",
-        "wbtimeline"
+        "wbtimeline",
+        "WINIT",
+        "xwayland",
+        "zephraph"
     ],
 
     // editor
@@ -61,6 +81,15 @@
     "editor.quickSuggestions": {
         "strings": true
     },
+
+    // for windows users
+    "terminal.integrated.profiles.windows": {
+        "GitBash": {
+            "source": "Git Bash",
+            "path": ["C:\\Program Files\\Git\\bin\\bash.exe"]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "GitBash",
 
     // etc
     "search.exclude": {
