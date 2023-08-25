@@ -9,17 +9,18 @@
         },
         "build": {
             "dependsOn": ["^build"],
-            "outputs": [".next/**", "dist/**"]
+            "outputs": [
+                ".next/**",
+                "out/**",
+                "dist/**",
+                "build/**",
+                "lib/**",
+                ".svelte-kit/**"
+            ]
         },
-        "lint": {
-            "cache": false
-        },
-        "test:e2e": {
-            "cache": false
-        },
-        "test:unit": {
-            "cache": false
-        },
+        "lint": {},
+        "test:e2e": {},
+        "test:unit": {},
         "clean": {
             "cache": false
         }
