@@ -4,12 +4,10 @@ import { firestore } from "firebase-admin"
 import { info } from "firebase-functions/logger"
 import { z } from "zod"
 
-import { createTRPCRouter, publicProcedure } from "@/trpc"
+import { publicProcedure } from "@/trpc"
 
-export const tag = "player"
-
-export default createTRPCRouter({
-    getPlayer: publicProcedure
+export default (tag: string) =>
+    publicProcedure
         .meta({
             openapi: {
                 method: "GET",
@@ -39,5 +37,4 @@ export default createTRPCRouter({
                 })
 
             return parseResult.data
-        }),
-})
+        })

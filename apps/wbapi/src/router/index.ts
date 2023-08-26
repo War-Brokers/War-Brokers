@@ -1,11 +1,11 @@
 import { createTRPCRouter } from "@/trpc"
 
-import pingRouter from "./pingRouter"
+import ping from "./pingProcedure"
 import playerRouter from "./playersRouter"
 import statusRouter from "./statusRouter"
 
 export const appRouter = createTRPCRouter({
-    ping: pingRouter,
+    ping,
     players: playerRouter,
     status: statusRouter,
 })

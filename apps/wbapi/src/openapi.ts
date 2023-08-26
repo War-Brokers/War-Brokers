@@ -2,8 +2,10 @@ import type { OpenAPIV3 } from "openapi-types"
 import { generateOpenApiDocument } from "trpc-openapi"
 
 import { appRouter } from "@/router"
-import { tag as pingTag } from "@/router/pingRouter"
+// tags
+import { tag as pingTag } from "@/router/pingProcedure"
 import { tag as playerTag } from "@/router/playersRouter"
+import { tag as statusTag } from "@/router/statusRouter"
 
 export const openApiDocument: OpenAPIV3.Document = generateOpenApiDocument(
     appRouter,
@@ -18,6 +20,6 @@ export const openApiDocument: OpenAPIV3.Document = generateOpenApiDocument(
                 : "https://wbp-wbapi.web.app", // production
         docsUrl:
             "https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbapi",
-        tags: [pingTag, playerTag],
+        tags: [pingTag, playerTag, statusTag],
     },
 )
