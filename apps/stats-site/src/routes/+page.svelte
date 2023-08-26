@@ -1,4 +1,5 @@
 <script lang="ts">
+    import PlayerSearch from "$lib/components/PlayerSearch.svelte"
     import Title from "$lib/components/title.svelte"
 
     import type { PageData } from "./$types"
@@ -8,6 +9,8 @@
 </script>
 
 <Title title="Home" />
+
+<PlayerSearch />
 
 <div class="flex flex-wrap gap-10">
     <div>

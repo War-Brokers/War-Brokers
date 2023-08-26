@@ -19,11 +19,13 @@
         "@sveltejs/kit": "^1.22.6",
         "@trpc/client": "^10.37.1",
         "@warbrokers/types": "workspace:*",
+        "lodash": "^4.17.21",
         "svelte": "^4.2.0",
         "svelte-awesome": "^3.2.1"
     },
     "devDependencies": {
         "@playwright/test": "^1.37.1",
+        "@types/lodash": "^4.14.197",
         "@warbrokers/eslint-config": "workspace:*",
         "@warbrokers/playwright-config": "workspace:*",
         "@warbrokers/wbapi": "workspace:*",
