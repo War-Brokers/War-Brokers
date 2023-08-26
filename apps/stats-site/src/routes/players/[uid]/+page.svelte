@@ -11,12 +11,12 @@
 
 <div class="flex gap-10">
     <div>
-        <span class="dark:text-gray-400 font-bold">Games Elo</span>
-        <h2 class="font-black text-2xl">{player.gamesELO}</h2>
+        <span class="font-bold dark:text-gray-400">Games Elo</span>
+        <h2 class="text-2xl font-black">{player.gamesELO}</h2>
     </div>
 
     <div>
-        <span class="dark:text-gray-400 font-bold">Kills Elo</span>
-        <h2 class="font-black text-2xl">{player.killsELO}</h2>
+        <span class="font-bold dark:text-gray-400">Kills Elo</span>
+        <h2 class="text-2xl font-black">{player.killsELO}</h2>
     </div>
 </div>

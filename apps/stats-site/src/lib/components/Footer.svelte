@@ -3,9 +3,9 @@
     import github from "svelte-awesome/icons/github"
 </script>
 
-<footer class="dark:bg-gray-950 dark:text-gray-400 w-full h-28">
+<footer class="h-28 w-full dark:bg-gray-950 dark:text-gray-400">
     <div
-        class="px-4 max-w-5xl h-full w-full flex items-center justify-between mx-auto"
+        class="mx-auto flex h-full w-full max-w-5xl items-center justify-between px-4"
     >
         <div></div>
         <div>

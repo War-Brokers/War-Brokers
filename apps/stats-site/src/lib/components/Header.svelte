@@ -1,8 +1,8 @@
-<header class="px-4 h-16 dark:bg-gray-700">
-    <div class="mx-auto flex items-center max-w-5xl">
+<header class="h-16 px-4 dark:bg-gray-700">
+    <div class="mx-auto flex max-w-5xl items-center">
         <img width="64" height="64" src="/WBP.avif" alt="War Brokers logo" />
         <a href="/">
-            <h2 class="font-black tracking-wide text-xl">War Brokers Stats</h2>
+            <h2 class="text-xl font-black tracking-wide">War Brokers Stats</h2>
         </a>
     </div>
 </header>
