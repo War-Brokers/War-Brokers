@@ -4,16 +4,26 @@
     import type { PageData } from "./$types"
 
     export let data: PageData
-    const { playersOnline } = data
+    const { playersOnline, playerCount, twitchStreams } = data
 </script>
 
 <Title title="Home" />
 
-<h1 class="font-black text-3xl mx-auto">Home</h1>
-
-<div class="flex gap-10">
+<div class="flex flex-wrap gap-10">
     <div>
-        <span class="dark:text-gray-400 font-bold">Players online</span>
-        <h2 class="font-black text-2xl">{playersOnline}</h2>
+        <span class="font-bold dark:text-gray-400">Total Players</span>
+        <h2 class="text-2xl font-black">
+            {playerCount?.toLocaleString("en-US")}
+        </h2>
+    </div>
+
+    <div>
+        <span class="font-bold dark:text-gray-400">Players online</span>
+        <h2 class="text-2xl font-black">{playersOnline}</h2>
+    </div>
+
+    <div>
+        <span class="font-bold dark:text-gray-400">Twitch Streams</span>
+        <h2 class="text-2xl font-black">{twitchStreams?.total}</h2>
     </div>
 </div>
