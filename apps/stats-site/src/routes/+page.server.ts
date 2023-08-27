@@ -4,27 +4,24 @@ import type { PageServerLoad } from "./$types"
 
 export const load: PageServerLoad = async () => {
     let playersOnline: number | undefined
-    try {
-        playersOnline = await trpc.status.playersOnline.query()
-    } catch {
-        //
-    }
-
     let playerCount: number | undefined
-    try {
-        playerCount = await trpc.status.playerCount.query()
-    } catch {
-        //
-    }
-
     let twitchStreams:
         | Awaited<ReturnType<typeof trpc.status.twitchStreams.query>>
         | undefined
-    try {
-        twitchStreams = await trpc.status.twitchStreams.query()
-    } catch {
-        //
-    }
+
+    await Promise.allSettled([
+        (async () => {
+            playersOnline = await trpc.status.playersOnline.query()
+        })(),
+
+        (async () => {
+            playerCount = await trpc.status.playerCount.query()
+        })(),
+
+        (async () => {
+            twitchStreams = await trpc.status.twitchStreams.query()
+        })(),
+    ])
 
     return {
         playersOnline,
