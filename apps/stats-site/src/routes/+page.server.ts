@@ -2,7 +2,7 @@ import trpc from "$lib/trpc"
 
 import type { PageServerLoad } from "./$types"
 
-export const load: PageServerLoad = async () => {
+export const load = (async () => {
     let playersOnline: number | undefined
     let playerCount: number | undefined
     let twitchStreams:
@@ -28,4 +28,4 @@ export const load: PageServerLoad = async () => {
         playerCount,
         twitchStreams,
     }
-}
+}) satisfies PageServerLoad

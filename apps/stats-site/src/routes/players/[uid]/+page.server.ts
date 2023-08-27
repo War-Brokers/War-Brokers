@@ -1,4 +1,3 @@
-import type { Load } from "@sveltejs/kit"
 import { error } from "@sveltejs/kit"
 import type { Player } from "@warbrokers/types/src/player"
 import { ObjectId } from "bson"
@@ -6,7 +5,9 @@ import dayjs from "dayjs"
 
 import trpc from "$lib/trpc"
 
-export const load: Load = async ({ params }) => {
+import type { PageServerLoad } from "./$types"
+
+export const load = (async ({ params }) => {
     const { uid } = params
 
     if (!uid) throw error(404, "Not Found")
@@ -22,4 +23,4 @@ export const load: Load = async ({ params }) => {
     } catch {
         throw error(404, "Not Found")
     }
-}
+}) satisfies PageServerLoad
