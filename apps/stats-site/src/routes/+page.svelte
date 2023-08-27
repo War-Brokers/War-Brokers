@@ -10,7 +10,9 @@
 
 <Title title="Home" />
 
-<PlayerSearch />
+<div class="mb-16 mt-6">
+    <PlayerSearch />
+</div>
 
 <div class="flex flex-wrap gap-10">
     <div>

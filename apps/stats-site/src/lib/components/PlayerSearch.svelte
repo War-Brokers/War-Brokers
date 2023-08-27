@@ -8,7 +8,7 @@
         ReturnType<typeof trpc.players.searchByName.query>
     > = []
 
-    const handleSearchInput = debounce(async (e: Event) => {
+    export let handleSearchInput = debounce(async (e: Event) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const text: string = e.target?.value
@@ -21,7 +21,7 @@
 
 <form
     on:submit|preventDefault={() => {}}
-    class="mb-16 mt-6 flex h-14 w-full rounded-full px-7 dark:bg-gray-600"
+    class="flex h-14 w-full rounded-full px-7 dark:bg-gray-600"
 >
     <div class="relative flex w-full flex-col">
         <label for="player-search" class="mt-1 text-sm font-black">
