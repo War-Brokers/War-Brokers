@@ -3,5 +3,5 @@
 </script>
 
 <svelte:head>
-    <title>War Brokers Stats{title && " | " + title}</title>
+    <title>{title && title + " - "}War Brokers Stats</title>
 </svelte:head>
