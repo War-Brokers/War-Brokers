@@ -26,7 +26,7 @@
         <input
             required
             type="search"
-            name="player-search"
+            id="player-search"
             autocomplete="off"
             maxlength="20"
             class="h-full bg-transparent pb-2 text-lg outline-none dark:text-gray-200"
