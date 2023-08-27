@@ -2,21 +2,33 @@
     import Title from "$lib/components/title.svelte"
 
     import type { PageData } from "./$types"
+    import Stat from "./stat.svelte"
 
     export let data: PageData
-    const { player } = data
+    const { player, timestamp } = data
 </script>
 
-<Title title={player.nick} />
+<Title title="[{player.squad}] {player.nick}" />
 
-<div class="flex gap-10">
-    <div>
-        <span class="font-bold dark:text-gray-400">Games Elo</span>
-        <h2 class="text-2xl font-black">{player.gamesELO}</h2>
-    </div>
+<h1 class="mx-auto mb-10 text-4xl font-black">
+    <a href="/squads/{player.squad}" class="hover:dark:underline">
+        [{player.squad}]
+    </a>
+    {player.nick}
+</h1>
 
-    <div>
-        <span class="font-bold dark:text-gray-400">Kills Elo</span>
-        <h2 class="text-2xl font-black">{player.killsELO}</h2>
-    </div>
+<div class="mb-10 flex w-24">
+    <span class="whitespace-nowrap font-bold dark:text-gray-400">
+        Playing Since
+    </span>
+    &nbsp;
+    <span class="whitespace-nowrap font-black">
+        {timestamp}
+    </span>
+</div>
+
+<div class="flex w-full flex-wrap gap-10">
+    <Stat title="Level" data={player.level} />
+    <Stat title="Games Elo" data={player.gamesELO} />
+    <Stat title="Kills Elo" data={player.killsELO} />
 </div>
