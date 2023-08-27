@@ -1,0 +1,17 @@
+::-webkit-scrollbar {
+    width: 6px; /* for horizontal scrolling */
+    height: 6px; /* for vertical scrolling */
+}
+
+::-webkit-scrollbar-track {
+    @apply rounded-full dark:bg-gray-700;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply rounded-full dark:bg-gray-800;
+
+    &:hover,
+    &:active {
+        @apply dark:bg-gray-900;
+    }
+}
