@@ -62,12 +62,24 @@
     </div>
 </form>
 
-<style>
+<style lang="postcss">
     /* https://stackoverflow.com/a/9422689 */
     input[type="search"]::-webkit-search-decoration,
     input[type="search"]::-webkit-search-cancel-button,
     input[type="search"]::-webkit-search-results-button,
     input[type="search"]::-webkit-search-results-decoration {
         -webkit-appearance: none;
+    }
+
+    ::-webkit-scrollbar {
+        @apply rounded-full;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply rounded-full dark:bg-gray-700;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply dark:bg-gray-800;
     }
 </style>
