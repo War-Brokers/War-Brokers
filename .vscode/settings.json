@@ -76,8 +76,7 @@
     ],
 
     // tailwind
-    "css.lint.unknownAtRules": "ignore",
-    "scss.lint.unknownAtRules": "ignore",
+    "css.customData": [".vscode/tailwind.json"], // https://github.com/tailwindlabs/tailwindcss/discussions/5258#discussioncomment-1979394
     "tailwindCSS.classAttributes": ["class", "className", ".*Style*"],
     "editor.quickSuggestions": {
         "strings": true
