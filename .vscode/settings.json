@@ -82,6 +82,10 @@
         "strings": true
     },
 
+    // This is here to fix this error: https://github.com/windicss/vite-plugin-windicss/issues/98
+    // where the IDE shows an error but the code actually works.
+    "svelte.plugin.svelte.diagnostics.enable": false,
+
     // for windows users
     "terminal.integrated.profiles.windows": {
         "GitBash": {
