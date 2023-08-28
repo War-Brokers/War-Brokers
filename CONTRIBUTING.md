@@ -1,53 +1,63 @@
 # Contribution Guide
 
-- Must follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0)
-- must run commands on shell-like terminal emulators (e.g. sh, bash, zsh, fish, git bash, etc...)
+## Welcome!
 
-## If you are on Windows OS
+Hello, and thank <u>you 🫵</u> for taking your precious time to contribute to
+War Brokers Projects! We hope you have a pleasant experience working with us <3
 
-- Do **NOT** use the Command Prompt (cmd)
-- Do **NOT** use Windows PowerShell
-- Run all commands from PowerShell\* or a Linux terminal such as WSL or Git Bash
+## How is the project organized?
 
-\* PowerShell and Windows PowerShell are [different applications](https://learn.microsoft.com/en-us/powershell/scripting/whats-new/differences-from-windows-powershell?view=powershell-7.3)
+The War Brokers Projects monorepo is managed by the following:
+
+- [turborepo](https://turbo.build/repo)
+  - used to orchestrate everything
+  - config: [`turbo.json`](./turbo.json)
+- [pnpm workspace](https://pnpm.io/workspaces)
+  - used for JavaScript/Typescript projects and `package.json` scripts
+  - config: [`pnpm-workspace.yaml`](./pnpm-workspace.yaml)
+- [cargo workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html)
+  - used for rust projects
+  - config: [`Cargo.toml`](./Cargo.toml)
 
 ## Setting up
 
-1. Install the following:
-   - NodeJS
-   - pnpm
+**⚠️ WAIT! ⚠️**
+
+If you are using Windows OS, make sure to run all commands in git bash which
+you can download [here](https://git-scm.com/downloads).
+
+1. Install the following
    - git
    - vscode
+   - NodeJS
+   - pnpm
    - rust toolchain (recommend using rustup)
 2. Fork this repository
-3. Clone the forked repository
-4. Open repository with vscode
+3. `git clone` the forked repository to your computer
+4. Open cloned repository with vscode
    - install recommended extensions (a toast should show up on the bottom right corner of the window)
 5. Install dependencies
    ```
    pnpm install
    ```
-6. Initialize Git Hooks ([husky](https://github.com/typicode/husky))
+6. Initialize Git Hooks
+   - this is used to lint your commit messages so they follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0)
    ```
    pnpm prepare
    ```
-7. read `README.md` files in [`apps`](./apps) and [`libs`](./libs)
+7. read `README.md` files of projects you would like to work on.
+   You can find all projects in the [`apps`](./apps) and [`libs`](./libs)
+   directory. You can run `package.json` scripts in the project directory like
+   normal.
 
-## package.json script naming convention
+   For example:
 
-- `build` - build library / app
-- `dev` - run with live reload
-- `start` - start the built app
-- `lint` - run lint
-- `clean` - remove all generated files
+   ```
+   cd apps/wbtimeline && pnpm dev
+   ```
 
-## Managing workspaces
+## More
 
-The monorepo is managed by [turborepo](https://turbo.build/repo),
-[pnpm workspace](https://pnpm.io/workspaces), and
-[cargo workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html).
-Related files can be found here:
-
-- [`turbo.json`](./turbo.json)
-- [`Cargo.toml`](./Cargo.toml)
-- [`pnpm-workspace.yaml`](./pnpm-workspace.yaml)
+- Managing packages
+  - [How do I add a package?](./docs/package-addition.md)
+  - [How do I remove a package?](./docs/package-removal.md)
