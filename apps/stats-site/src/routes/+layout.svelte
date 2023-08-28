@@ -7,7 +7,9 @@
 
 <Header />
 
-<main class="mx-auto my-4 flex w-full max-w-5xl flex-auto flex-col px-4">
+<main
+    class="mx-auto my-4 flex w-full max-w-5xl flex-auto flex-col overflow-x-hidden px-4"
+>
     <slot />
 </main>
 
