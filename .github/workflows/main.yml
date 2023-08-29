@@ -90,23 +90,19 @@ jobs:
 
       - name: Stats Site - Build
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
-        working-directory: apps/stats-site
-        run: pnpm build
+        run: pnpm build --filter @warbrokers/stats-site
 
       - name: Stats Site - Lint
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
-        working-directory: apps/stats-site
-        run: pnpm lint
+        run: pnpm lint --filter @warbrokers/stats-site
 
       - name: Stats Site - Unit Tests
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
-        working-directory: apps/stats-site
-        run: pnpm test:unit
+        run: pnpm test:unit --filter @warbrokers/stats-site
 
       - name: Stats Site - End to End Tests
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
-        working-directory: apps/stats-site
-        run: pnpm test:e2e
+        run: pnpm test:e2e --filter @warbrokers/stats-site
 
       - name: Stats Site - Deploy
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
@@ -128,18 +124,15 @@ jobs:
 
       - name: WBAPI - Build
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
-        working-directory: apps/wbapi
-        run: pnpm build
+        run: pnpm build --filter @warbrokers/wbapi
 
       - name: WBAPI - Lint
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
-        working-directory: apps/wbapi
-        run: pnpm lint
+        run: pnpm lint --filter @warbrokers/wbapi
 
       - name: WBAPI - Unit Tests
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
-        working-directory: apps/wbapi
-        run: pnpm test:unit
+        run: pnpm test:unit --filter @warbrokers/wbapi
 
       - name: WBAPI - Deploy
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
@@ -159,13 +152,11 @@ jobs:
 
       - name: WB Timeline - Build
         if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline
-        working-directory: apps/wbtimeline
-        run: pnpm build
+        run: pnpm build --filter @warbrokers/wbtimeline
 
       - name: WB Timeline - Lint
         if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline
-        working-directory: apps/wbtimeline
-        run: pnpm lint
+        run: pnpm lint --filter @warbrokers/wbtimeline
 
       - name: WB Timeline - Deploy
         if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline
