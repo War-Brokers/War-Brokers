@@ -1,3 +1,5 @@
+<img align="right" width="128" height="128" src="https://raw.githubusercontent.com/War-Brokers/.github/master/imgs/WBP.avif" alt="WBP logo" />
+
 # War Brokers Projects Monorepo
 
 [![discord](https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/synPSeuNFK)
