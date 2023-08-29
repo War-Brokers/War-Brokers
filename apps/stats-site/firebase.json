@@ -5,7 +5,7 @@
         "cleanUrls": true,
         "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
         "frameworksBackend": {
-            "region": "us-west1",
+            "region": "us-central1",
             "minInstances": 0,
             "maxInstances": 10
         }

@@ -3,6 +3,7 @@
         {
             "target": "wbtimeline",
             "public": "out",
+            "_region": "only available in us-central1",
             "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
         }
     ]

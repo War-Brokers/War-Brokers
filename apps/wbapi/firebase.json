@@ -13,7 +13,8 @@
             "rewrites": [
                 {
                     "source": "**",
-                    "function": "api"
+                    "function": "api",
+                    "_region": "only available in us-central1"
                 }
             ],
             "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
