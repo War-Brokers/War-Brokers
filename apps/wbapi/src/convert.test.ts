@@ -1,5 +1,3 @@
-import { expect, test } from "vitest"
-
 import { string2number } from "./convert"
 
 test("string2number", () => {

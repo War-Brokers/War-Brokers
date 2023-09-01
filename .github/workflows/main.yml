@@ -110,7 +110,7 @@ jobs:
         run: |
           pnpm install -g firebase-tools
           pnpm firebase experiments:enable webframeworks
-          pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/stats-site 
+          pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/stats-site
           pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
 
       #
@@ -139,6 +139,7 @@ jobs:
         working-directory: apps/wbapi
         run: |
           pnpm install -g firebase-tools
+          pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/wbapi
           pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
 
       #

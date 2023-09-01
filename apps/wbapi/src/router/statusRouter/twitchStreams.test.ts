@@ -1,5 +1,3 @@
-import { expect, test } from "vitest"
-
 import { parseData } from "./twitchStreams.util"
 
 test("twitchStreams", () => {

@@ -1,8 +1,7 @@
 {
     "functions": [
         {
-            "source": "lib",
-            "codebase": "default",
+            "source": ".",
             "ignore": ["node_modules", ".git", "*.log"]
         }
     ],
