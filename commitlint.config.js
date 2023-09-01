@@ -10,7 +10,7 @@ module.exports = {
         "scope-enum": [
             2,
             "always",
-            ["bbc", "stats-site", "wbapi", "wbtimeline"],
+            ["bbc", "stats-site", "wbapi", "wbtimeline", "wb-types"],
         ],
     },
 }
