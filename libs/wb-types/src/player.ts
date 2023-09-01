@@ -3,7 +3,6 @@ import z from "zod"
 import GameMode from "./gameMode"
 import Weapon from "./weapon"
 
-// incomplete
 export const PlayerSchema = z.object({
     // Core
     uid: z.string(),
