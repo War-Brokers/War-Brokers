@@ -24,7 +24,14 @@ app.use(cors())
 
 // API documentations
 app.use("/api-docs", swaggerUi.serve)
-app.get("/api-docs", swaggerUi.setup(openApiDocument))
+app.get(
+    "/api-docs",
+    swaggerUi.setup(openApiDocument, {
+        swaggerOptions: {
+            tryItOutEnabled: true,
+        },
+    }),
+)
 
 // Handle incoming tRPC requests
 app.use("/trpc", createExpressMiddleware({ router: appRouter, createContext }))
