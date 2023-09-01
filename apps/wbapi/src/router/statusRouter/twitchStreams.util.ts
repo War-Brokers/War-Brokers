@@ -13,7 +13,7 @@ export const apiResponseSchema = z.object({
     streams: z.array(streamSchema),
 })
 
-export type APIResponseSchema = (typeof apiResponseSchema)["_output"]
+export type APIResponseSchema = z.infer<typeof apiResponseSchema>
 
 /**
  * @param data - looks like: "total,thumbnail_1,streamer_1,viewers_1,thumbnail_2,streamer_2,viewers_2,...".
