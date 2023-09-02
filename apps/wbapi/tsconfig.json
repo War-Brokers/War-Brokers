@@ -1,25 +1,26 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "noImplicitReturns": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "skipLibCheck": true,
+        // generation related
         "outDir": "build",
         "declaration": true,
-        "lib": ["ES6", "DOM"],
-        "sourceMap": true,
+        "emitDeclarationOnly": true,
+
+        // regular configs
         "strict": true,
-        "target": "es2017",
-        "resolveJsonModule": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+
+        // node version related
+        "moduleResolution": "Node",
+        "module": "commonjs",
+        "lib": ["ES2021", "DOM"],
+        "target": "ES2021",
+
+        // path related
         "baseUrl": ".",
         "paths": {
             "@/*": ["./src/*"]
         }
     },
-    "compileOnSave": true,
     "include": ["src"]
 }
