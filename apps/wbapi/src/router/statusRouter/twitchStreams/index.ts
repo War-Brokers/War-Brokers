@@ -5,7 +5,7 @@ import { z } from "zod"
 import { publicProcedure } from "@/trpc"
 import { twitchStreamsURL } from "@/url"
 
-import { apiResponseSchema, parseData } from "./twitchStreams.util"
+import { apiResponseSchema, parseData } from "./util"
 
 export default (tag: string) =>
     publicProcedure

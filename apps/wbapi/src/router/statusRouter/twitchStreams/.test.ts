@@ -1,4 +1,4 @@
-import { parseData } from "./twitchStreams.util"
+import { parseData } from "./util"
 
 test("twitchStreams", () => {
     expect(parseData("0,")).toStrictEqual({
