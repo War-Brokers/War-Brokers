@@ -11,6 +11,15 @@ body:
       value: |
         Thanks for taking the time to fill out this bug report!
 
+  - type: checkboxes
+    id: sanity-checks
+    attributes:
+      label: Sanity Checks
+      description:
+      options:
+        - label: I have searched existing issues and didn't find any that were similar
+          required: true
+
   - type: textarea
     id: describe-the-bug
     attributes:
