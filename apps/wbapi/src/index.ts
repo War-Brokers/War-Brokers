@@ -2,8 +2,8 @@ import { createExpressMiddleware } from "@trpc/server/adapters/express"
 import cors from "cors"
 import express from "express"
 import { initializeApp } from "firebase-admin/app"
-import * as functions from "firebase-functions"
 import { setGlobalOptions } from "firebase-functions/v2"
+import { onRequest } from "firebase-functions/v2/https"
 import swaggerUi from "swagger-ui-express"
 import { createOpenApiExpressMiddleware } from "trpc-openapi"
 
@@ -42,7 +42,11 @@ app.use(
     createOpenApiExpressMiddleware({ router: appRouter, createContext }),
 )
 
-export const api = functions
-    .region("us-central1")
-    .runWith({ secrets: [WB_ID, WB_PW, WB_DOMAIN] })
-    .https.onRequest(app)
+export const api = onRequest(
+    {
+        region: "us-central1",
+        memory: "128MiB",
+        secrets: [WB_ID, WB_PW, WB_DOMAIN],
+    },
+    app,
+)
