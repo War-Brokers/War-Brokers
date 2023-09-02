@@ -1,10 +1,10 @@
 import { TRPCError } from "@trpc/server"
 import { PlayerSchema } from "@warbrokers/types/src/player"
-import { firestore } from "firebase-admin"
 import { info } from "firebase-functions/logger"
 import { z } from "zod"
 
 import { publicProcedure } from "@/trpc"
+import cachePlayer from "@/upstash/cachePlayer"
 import { getPlayer } from "@/wbFetch"
 
 export default (tag: string) =>
@@ -42,8 +42,6 @@ export default (tag: string) =>
                     message: `Failed to process data. ${parseResult.error}`,
                 })
 
-            // cache
-            firestore().collection("players").doc(uid).set(parseResult.data)
-
+            cachePlayer(parseResult.data)
             return parseResult.data
         })

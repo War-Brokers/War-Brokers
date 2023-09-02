@@ -7,7 +7,7 @@ import { onRequest } from "firebase-functions/v2/https"
 import swaggerUi from "swagger-ui-express"
 import { createOpenApiExpressMiddleware } from "trpc-openapi"
 
-import { WB_DOMAIN, WB_ID, WB_PW } from "@/env"
+import { UPSTASH_TOKEN, UPSTASH_URL, WB_DOMAIN, WB_ID, WB_PW } from "@/env"
 import { openApiDocument } from "@/openapi"
 import { appRouter } from "@/router"
 import { createContext } from "@/trpc"
@@ -46,7 +46,7 @@ export const api = onRequest(
     {
         region: "us-central1",
         memory: "128MiB",
-        secrets: [WB_ID, WB_PW, WB_DOMAIN],
+        secrets: [WB_ID, WB_PW, WB_DOMAIN, UPSTASH_URL, UPSTASH_TOKEN],
     },
     app,
 )

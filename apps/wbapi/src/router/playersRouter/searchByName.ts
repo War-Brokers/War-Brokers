@@ -38,8 +38,6 @@ export default (tag: string) =>
 
             info(`Searching users with ${query}`)
 
-            // todo: replace with firestore full-text search powered by algolia
-            // https://firebase.google.com/docs/firestore/solutions/search?provider=algolia
             const raw = await fetch(
                 `https://stats.warbrokers.io/players/search?term=${query}`,
             )
