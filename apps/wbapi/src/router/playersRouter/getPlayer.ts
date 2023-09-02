@@ -1,6 +1,5 @@
 import { TRPCError } from "@trpc/server"
 import { PlayerSchema } from "@warbrokers/types/src/player"
-import { info } from "firebase-functions/logger"
 import { z } from "zod"
 
 import { publicProcedure } from "@/trpc"
@@ -25,8 +24,6 @@ export default (tag: string) =>
         .output(PlayerSchema)
         .query(async ({ input }) => {
             const { uid } = input
-
-            info(`attempting to fetch user info. UID: ${uid}`)
 
             const res = await getPlayer(uid)
             if (!res.ok)

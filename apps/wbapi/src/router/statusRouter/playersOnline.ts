@@ -1,4 +1,3 @@
-import { info } from "firebase-functions/logger"
 import fetch from "node-fetch"
 import { z } from "zod"
 
@@ -18,8 +17,6 @@ export default (tag: string) =>
         .input(z.undefined())
         .output(z.number())
         .query(async () => {
-            info("Getting players online")
-
             const res = await fetch(playersOnlineURL())
             const raw = await res.text() // X,XXX
 

@@ -1,4 +1,3 @@
-import { info } from "firebase-functions/logger"
 import fetch from "node-fetch"
 import { z } from "zod"
 
@@ -21,8 +20,6 @@ export default (tag: string) =>
         .input(z.undefined())
         .output(apiResponseSchema)
         .query(async () => {
-            info("Getting War Brokers twitch streams")
-
             const res = await fetch(twitchStreamsURL())
             const raw = await res.text()
 

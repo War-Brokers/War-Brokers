@@ -1,6 +1,5 @@
 import { TRPCError } from "@trpc/server"
 import { PlayerSchema } from "@warbrokers/types/src/player"
-import { info } from "firebase-functions/logger"
 import fetch from "node-fetch"
 import { z } from "zod"
 
@@ -35,8 +34,6 @@ export default (tag: string) =>
         .output(apiResponseSchema)
         .query(async ({ input }) => {
             const { query } = input
-
-            info(`Searching users with ${query}`)
 
             const raw = await fetch(
                 `https://stats.warbrokers.io/players/search?term=${query}`,
