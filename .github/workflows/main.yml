@@ -114,6 +114,7 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_WAR_BROKERS_PROJECTS }}"
           entryPoint: apps/stats-site
+          channelId: live
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
 
@@ -148,6 +149,7 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_WAR_BROKERS_PROJECTS }}"
           entryPoint: apps/wbapi
+          channelId: live
 
       #
       # WB Timeline
@@ -173,3 +175,4 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_WAR_BROKERS_PROJECTS }}"
           entryPoint: apps/wbtimeline
+          channelId: live
