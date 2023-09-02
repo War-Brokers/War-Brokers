@@ -4,7 +4,7 @@
     "main": "./build/index.js",
     "private": true,
     "scripts": {
-        "build": "rm -rf build && tsup && tsc",
+        "build": "rm -rf build && tsup && tsc --emitDeclarationOnly",
         "start": "pnpm build && NODE_ENV=development firebase emulators:start",
         "lint": "eslint . && tsc --noEmit",
         "test:unit": "jest",

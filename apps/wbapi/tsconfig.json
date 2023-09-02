@@ -3,7 +3,6 @@
         // generation related
         "outDir": "build",
         "declaration": true,
-        "emitDeclarationOnly": true,
 
         // regular configs
         "strict": true,
