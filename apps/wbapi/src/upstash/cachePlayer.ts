@@ -4,7 +4,7 @@ import { zadd } from "."
 
 const cached = ["xp", "killsELO", "gamesELO"] as const
 
-export default (player: Player) => {
+export default async (player: Player) => {
     for (const i of cached)
-        zadd(`player:${i}`, { member: player.uid, score: player[i] })
+        await zadd(`player:${i}`, { member: player.uid, score: player[i] })
 }

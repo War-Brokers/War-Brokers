@@ -42,6 +42,6 @@ export default (tag: string) =>
                     message: `Failed to process data. ${parseResult.error}`,
                 })
 
-            cachePlayer(parseResult.data)
+            await cachePlayer(parseResult.data)
             return parseResult.data
         })
