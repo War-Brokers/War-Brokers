@@ -1,7 +1,7 @@
-name: Bug Report
-title: "bug: "
-description: File a bug report
-labels: ["type:bug", "meta:needs-review"]
+name: Suggestion
+title: "suggestion: "
+description: feature requests and stuff
+labels: ["type:suggestion", "meta:needs-review"]
 assignees:
   - developomp
 
@@ -21,10 +21,9 @@ body:
           required: true
 
   - type: textarea
-    id: describe-the-bug
+    id: describe-your-suggestion
     attributes:
-      label: Describe the bug
-      description: What is happening? And if necessary, what was supposed to happen?
+      label: Describe your suggestion
       value:
     validations:
       required: true
