@@ -44,13 +44,16 @@
         "trpc",
         "tsup",
         "turborepo",
+        "upstash",
         "Vsync",
         "warbrokers",
         "wbapi",
         "wbtimeline",
         "WINIT",
         "xwayland",
-        "zephraph"
+        "zadd",
+        "zephraph",
+        "zrevrank"
     ],
 
     // editor
