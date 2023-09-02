@@ -5,6 +5,7 @@ import { info } from "firebase-functions/logger"
 import { z } from "zod"
 
 import { publicProcedure } from "@/trpc"
+import { getPlayer } from "@/wbFetch"
 
 export default (tag: string) =>
     publicProcedure
@@ -27,14 +28,22 @@ export default (tag: string) =>
 
             info(`attempting to fetch user info. UID: ${uid}`)
 
-            const doc = await firestore().collection("players").doc(uid).get()
-            const parseResult = PlayerSchema.safeParse(doc.data())
-
-            if (!parseResult.success)
+            const res = await getPlayer(uid)
+            if (!res.ok)
                 throw new TRPCError({
                     code: "BAD_REQUEST",
                     message: `Player with UID "${uid}" was not found. Is the UID valid?`,
                 })
+
+            const parseResult = PlayerSchema.safeParse(await res.json())
+            if (!parseResult.success)
+                throw new TRPCError({
+                    code: "INTERNAL_SERVER_ERROR",
+                    message: `Failed to process data. ${parseResult.error}`,
+                })
+
+            // cache
+            firestore().collection("players").doc(uid).set(parseResult.data)
 
             return parseResult.data
         })
