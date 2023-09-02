@@ -90,9 +90,7 @@ jobs:
 
       - name: Stats Site - Build
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
-        run: |
-          pnpm build --filter @warbrokers/stats-site
-          pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/stats-site
+        run: pnpm build --filter @warbrokers/stats-site
 
       - name: Stats Site - Lint
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
@@ -105,6 +103,9 @@ jobs:
       - name: Stats Site - End to End Tests
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
         run: pnpm test:e2e --filter @warbrokers/stats-site
+
+      - if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
+        run: pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/stats-site
 
       - name: Stats Site - Deploy
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
@@ -127,9 +128,7 @@ jobs:
 
       - name: WBAPI - Build
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
-        run: |
-          pnpm build --filter @warbrokers/wbapi
-          pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/wbapi
+        run: pnpm build --filter @warbrokers/wbapi
 
       - name: WBAPI - Lint
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
@@ -138,6 +137,9 @@ jobs:
       - name: WBAPI - Unit Tests
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
         run: pnpm test:unit --filter @warbrokers/wbapi
+
+      - if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
+        run: pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/wbapi
 
       - name: WBAPI - Deploy
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
