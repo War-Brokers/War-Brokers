@@ -104,7 +104,8 @@ jobs:
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
         run: pnpm test:e2e --filter @warbrokers/stats-site
 
-      - if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
+      - name: Statas Site - Pre Deploy
+        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
         run: pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/stats-site
 
       - name: Stats Site - Deploy
@@ -117,6 +118,11 @@ jobs:
           channelId: live
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
+
+      - name: Statas Site - Post Deploy
+        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
+        working-directory: apps/stats-site
+        run: rm -rf .firebase-pnpm-workspaces && git checkout HEAD -- package.json
 
       #
       # WBAPI
@@ -139,7 +145,8 @@ jobs:
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
         run: pnpm test:unit --filter @warbrokers/wbapi
 
-      - if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
+      - name: WBAPI - Pre Deploy
+        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
         run: pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/wbapi
 
       - name: WBAPI - Deploy
@@ -150,6 +157,11 @@ jobs:
           firebaseServiceAccount: "${{ secrets.GCP_SA_KEY }}"
           entryPoint: apps/wbapi
           channelId: live
+
+      - name: WBAPI - Post Deploy
+        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
+        working-directory: apps/wbapi
+        run: rm -rf .firebase-pnpm-workspaces && git checkout HEAD -- package.json
 
       #
       # WB Timeline
