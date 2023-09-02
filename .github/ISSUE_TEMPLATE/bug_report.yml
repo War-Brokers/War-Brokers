@@ -1,0 +1,25 @@
+name: Bug Report
+title: "bug: "
+labels: ["type:bug", "meta:needs-review"]
+assignees:
+  - developomp
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: checkboxes
+    attributes:
+      options:
+        - label: I have searched existing issues and didn't find any that were similar
+          required: true
+
+  - type: textarea
+    attributes:
+      label: Describe the bug
+      description: What is happening? And if necessary, what was supposed to happen?
+      value:
+    validations:
+      required: true
