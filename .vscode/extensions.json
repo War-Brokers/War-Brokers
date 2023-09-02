@@ -9,6 +9,7 @@
         "github.vscode-github-actions",
         "svelte.svelte-vscode",
         "ardenivanov.svelte-intellisense",
-        "serayuzgur.crates"
+        "serayuzgur.crates",
+        "foxundermoon.shell-format"
     ]
 }
