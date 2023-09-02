@@ -1,4 +1,4 @@
-import type Location from "@warbrokers/types/src/location"
+import { type Location } from "@warbrokers/types/src/location"
 
 // I literally don't know what this number is.
 // Anything from 200 to 283 works, but nothing higher or lower.
