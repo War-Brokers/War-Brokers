@@ -90,7 +90,9 @@ jobs:
 
       - name: Stats Site - Build
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
-        run: pnpm build --filter @warbrokers/stats-site
+        run: |
+          pnpm build --filter @warbrokers/stats-site
+          pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/stats-site
 
       - name: Stats Site - Lint
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
@@ -106,12 +108,13 @@ jobs:
 
       - name: Stats Site - Deploy
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
-        working-directory: apps/stats-site
-        run: |
-          pnpm install -g firebase-tools
-          pnpm firebase experiments:enable webframeworks
-          pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/stats-site
-          pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_WAR_BROKERS_PROJECTS }}"
+          entryPoint: apps/stats-site
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
 
       #
       # WBAPI
@@ -124,7 +127,9 @@ jobs:
 
       - name: WBAPI - Build
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
-        run: pnpm build --filter @warbrokers/wbapi
+        run: |
+          pnpm build --filter @warbrokers/wbapi
+          pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/wbapi
 
       - name: WBAPI - Lint
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
@@ -136,11 +141,11 @@ jobs:
 
       - name: WBAPI - Deploy
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
-        working-directory: apps/wbapi
-        run: |
-          pnpm install -g firebase-tools
-          pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/wbapi
-          pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_WAR_BROKERS_PROJECTS }}"
+          entryPoint: apps/wbapi
 
       #
       # WB Timeline
@@ -161,7 +166,8 @@ jobs:
 
       - name: WB Timeline - Deploy
         if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline
-        working-directory: apps/wbtimeline
-        run: |
-          pnpm install -g firebase-tools
-          pnpm firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_WAR_BROKERS_PROJECTS }}"
+          entryPoint: apps/wbtimeline
