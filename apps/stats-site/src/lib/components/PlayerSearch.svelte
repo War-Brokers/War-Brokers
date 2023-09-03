@@ -34,7 +34,7 @@
             id="player-search"
             autocomplete="off"
             maxlength="20"
-            class="h-full bg-transparent pb-2 text-lg outline-none dark:text-gray-200"
+            class="h-full border-none bg-transparent p-0 pb-2 text-lg focus:ring-0 dark:text-gray-200"
             placeholder="Player Name"
             aria-invalid={inputError ? "true" : undefined}
             on:input={handleSearchInput}
