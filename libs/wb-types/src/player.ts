@@ -1,7 +1,28 @@
 import z from "zod"
 
-import GameMode from "./gameMode"
+import { GameMode } from "./gameMode"
 import Weapon from "./weapon"
+
+type Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+
+export const GameModeName: { [key in GameMode]: `m${Digit}${Digit}` } = {
+    [GameMode.DeathMatch]: "m00",
+    [GameMode.DemolitionDerby]: "m01",
+    [GameMode.ProtectLeader]: "m02",
+    [GameMode.ResourceCapture]: "m03",
+    [GameMode.Race]: "m04",
+    [GameMode.TankBattle]: "m05",
+    [GameMode.TankKing]: "m06",
+    [GameMode.CapturePoint]: "m07",
+    [GameMode.VehicleEscort]: "m08",
+    [GameMode.PackageDrop]: "m09",
+    [GameMode.ScudLaunch]: "m10",
+    [GameMode.BattleRoyale]: "m11",
+    [GameMode.Competitive]: "m12",
+    [GameMode.LobbyCompetitive]: "m13",
+    [GameMode.LobbyBR]: "m14",
+    [GameMode.Count]: "m15",
+}
 
 export const PlayerSchema = z.object({
     // Core
@@ -19,7 +40,7 @@ export const PlayerSchema = z.object({
     number_of_jumps: z.number().int().or(z.null()),
 
     // Match Results
-    losses: z.record(z.nativeEnum(GameMode), z.number().int()).or(z.null()),
+    losses: z.record(z.nativeEnum(GameModeName), z.number().int()).or(z.null()),
     zombie_deaths: z.number().int().gte(0),
     zombie_kills: z.number().int().gte(0),
     zombie_wins: z.number().int().gte(0),
