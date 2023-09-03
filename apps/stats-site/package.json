@@ -21,6 +21,8 @@
         "@warbrokers/types": "workspace:*",
         "bson": "^5.4.0",
         "dayjs": "^1.11.9",
+        "flowbite": "^1.8.1",
+        "flowbite-svelte": "^0.44.4",
         "lodash": "^4.17.21",
         "svelte": "^4.2.0",
         "svelte-awesome": "^3.2.1",
