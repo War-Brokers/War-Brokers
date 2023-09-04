@@ -109,11 +109,10 @@ jobs:
 
       - name: Stats Site - Deploy
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
-        uses: w9jds/firebase-action@v12.4.0
-        with:
-          args: deploy
+        run: |
+          .github/install-firebase-cli.sh
+          cd apps/stats-site && pnpm firebase deploy
         env:
-          PROJECT_PATH: apps/stats-site
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           FIREBASE_CLI_EXPERIMENTS: webframeworks
 
@@ -149,11 +148,10 @@ jobs:
 
       - name: WBAPI - Deploy
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
-        uses: w9jds/firebase-action@v12.4.0
-        with:
-          args: deploy
+        run: |
+          .github/install-firebase-cli.sh
+          cd apps/wbapi && pnpm firebase deploy
         env:
-          PROJECT_PATH: apps/wbapi
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
       - name: WBAPI - Post Deploy
@@ -180,9 +178,8 @@ jobs:
 
       - name: WB Timeline - Deploy
         if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline
-        uses: w9jds/firebase-action@v12.4.0
-        with:
-          args: deploy
+        run: |
+          .github/install-firebase-cli.sh
+          cd apps/wbtimeline && pnpm firebase deploy
         env:
-          PROJECT_PATH: apps/wbtimeline
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
