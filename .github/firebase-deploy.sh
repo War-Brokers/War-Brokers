@@ -20,7 +20,10 @@ else
     exit 126
 fi
 
-pnpm install -g firebase-tools
+if ! [ -x "$(command -v firebase)" ]; then
+    echo "Installing firebase CLI"
+    pnpm install -g firebase-tools
+fi
 
 if [ -n "$PROJECT_PATH" ]; then
     cd "$PROJECT_PATH"
