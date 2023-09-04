@@ -20,8 +20,10 @@ else
     exit 126
 fi
 
+pnpm install -g firebase-tools
+
 if [ -n "$PROJECT_PATH" ]; then
     cd "$PROJECT_PATH"
 fi
 
-pnpm install -g firebase-tools
+pnpm firebase deploy
