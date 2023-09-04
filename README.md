@@ -5,7 +5,11 @@
 [![](https://shields.io/badge/discord-chat-5865F2?logo=discord&logoColor=FFFFFF&style=for-the-badge)](https://discord.gg/synPSeuNFK)
 [![contributing](https://img.shields.io/badge/contributing-yellow?style=for-the-badge)](https://github.com/War-Brokers/War-Brokers/blob/master/CONTRIBUTING.md)
 
-WBP (War Brokers Projects) is an attempt to bring together community projects related to War Brokers with the goal of making them more visible and making collaboration easier.
+WBP (War Brokers Projects) is [@developomp][developomp]'s\* effort to gather
+community projects connected to War Brokers. The aim is to increase their
+visibility and simplify collaboration.
+
+\*: also known as [`[LP] POMP`][lp-pomp] in-game
 
 ## Projects
 
@@ -19,6 +23,8 @@ WBP (War Brokers Projects) is an attempt to bring together community projects re
 |        [BBC][BBC]         |                       alternative Desktop WB client (a Better Broker Client)                       |     Pre-Alpha      |
 |      War Brokers Hub      |                        web UI for everything WB (squads, stats, wiki, etc)                         |      Planned       |
 
+[developomp]: https://github.com/developomp
+[lp-pomp]: https://wbp-stats.web.app/players/5d2ead35d142affb05757778
 [wbtimeline]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbtimeline
 [squad-bot]: https://github.com/War-Brokers/squad-bot
 [stats-site]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site
