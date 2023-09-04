@@ -3,6 +3,7 @@
 
     import trpc from "$lib/trpc"
 
+    let opened = false
     let inputError = ""
     let searchResult: Awaited<
         ReturnType<typeof trpc.players.searchByName.query>
@@ -13,7 +14,10 @@
         // @ts-ignore
         const text: string = e.target?.value
 
-        if (!text) return
+        if (!text) {
+            searchResult = []
+            return
+        }
 
         searchResult = await trpc.players.searchByName.query({ query: text })
     }, 300)
@@ -38,27 +42,29 @@
             placeholder="Player Name"
             aria-invalid={inputError ? "true" : undefined}
             on:input={handleSearchInput}
+            on:focus={/**/ async () => setTimeout(() => (opened = true), 100)}
+            on:blur={/* */ async () => setTimeout(() => (opened = false), 100)}
         />
         <span class="mt-1 dark:text-red-500">{inputError}</span>
 
-        {#if searchResult.length > 0}
-            <div
-                id="search-results"
-                class="absolute top-20 h-96 max-h-96 w-full overflow-auto rounded-lg py-4 dark:bg-gray-600"
-            >
-                <div class="relative h-full overflow-y-scroll">
-                    {#each searchResult as { nick, uid } (uid)}
-                        <a
-                            href="/players/{uid}"
-                            class="flex w-full flex-col p-2 hover:dark:bg-gray-700"
-                        >
-                            <b class="text-lg">{nick}</b>
-                            <p class="text-md dark:text-gray-400">{uid}</p>
-                        </a>
-                    {/each}
-                </div>
+        <div
+            id="search-results"
+            class={`${
+                !(opened && searchResult.length > 0) && "hidden"
+            } absolute top-20 h-96 max-h-96 w-full overflow-auto rounded-lg py-4 dark:bg-gray-600`}
+        >
+            <div class="relative h-full overflow-y-scroll">
+                {#each searchResult as { nick, uid } (uid)}
+                    <a
+                        href="/players/{uid}"
+                        class="flex w-full flex-col p-2 hover:dark:bg-gray-700"
+                    >
+                        <b class="text-lg">{nick}</b>
+                        <p class="text-md dark:text-gray-400">{uid}</p>
+                    </a>
+                {/each}
             </div>
-        {/if}
+        </div>
     </div>
 </form>
 
