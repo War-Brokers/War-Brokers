@@ -3,7 +3,6 @@
 # War Brokers Projects
 
 [![](https://shields.io/badge/discord-chat-5865F2?logo=discord&logoColor=FFFFFF&style=for-the-badge)](https://discord.gg/synPSeuNFK)
-[![](https://shields.io/badge/homepage-blue?style=for-the-badge)](https://war-brokers-projects.notion.site/0ab13d7077a843e79b99a328e00d2008)
 [![contributing](https://img.shields.io/badge/contributing-yellow?style=for-the-badge)](https://github.com/War-Brokers/War-Brokers/blob/master/CONTRIBUTING.md)
 
 WBP (War Brokers Projects) is an attempt to bring together community projects related to War Brokers with the goal of making them more visible and making collaboration easier.
