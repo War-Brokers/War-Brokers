@@ -10,14 +10,20 @@ WBP (War Brokers Projects) is an attempt to bring together community projects re
 
 ## Projects
 
-|                                         Name                                         |                                         Short Description                                          | Development Status |
-| :----------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: | :----------------: |
-| [wbtimeline](https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbtimeline) | a website that lists various events happened in the War Brokers community in a chronological order |       Stable       |
-|                [squad-bot](https://github.com/War-Brokers/squad-bot)                 |                                     Discord utility bot for WB                                     |       Alpha        |
-| [stats site](https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site) |              An attempt to create an improved version of https://stats.warbrokers.io               |       Alpha        |
-|   [wb-types](https://github.com/War-Brokers/War-Brokers/tree/master/libs/wb-types)   |                            shared Typescript types & [Zod][zod] schema                             |       Alpha        |
-|      [wbapi](https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbapi)      |                                    DB mirror & API proxy for WB                                    |       Alpha        |
-|        [BBC](https://github.com/War-Brokers/War-Brokers/tree/master/apps/bbc)        |                       alternative Desktop WB client (a Better Broker Client)                       |     Pre-Alpha      |
-|                                   War Brokers Hub                                    |                        web UI for everything WB (squads, stats, wiki, etc)                         |      Planned       |
+|           Name            |                                         Short Description                                          | Development Status |
+| :-----------------------: | :------------------------------------------------------------------------------------------------: | :----------------: |
+| [WB Timeline][wbtimeline] | a website that lists various events happened in the War Brokers community in a chronological order |       Stable       |
+|  [Squad Bot][squad-bot]   |                                     Discord utility bot for WB                                     |       Alpha        |
+| [Stats Site][stats-site]  |              An attempt to create an improved version of https://stats.warbrokers.io               |       Alpha        |
+|   [WB Types][wb-types]    |                            shared Typescript types & [Zod][zod] schema                             |       Alpha        |
+|      [WB API][wbapi]      |                                    DB mirror & API proxy for WB                                    |       Alpha        |
+|        [BBC][BBC]         |                       alternative Desktop WB client (a Better Broker Client)                       |     Pre-Alpha      |
+|      War Brokers Hub      |                        web UI for everything WB (squads, stats, wiki, etc)                         |      Planned       |
 
+[wbtimeline]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbtimeline
+[squad-bot]: https://github.com/War-Brokers/squad-bot
+[stats-site]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site
+[wb-types]: https://github.com/War-Brokers/War-Brokers/tree/master/libs/wb-types
+[wbapi]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbapi
+[BBC]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/bbc
 [zod]: https://github.com/colinhacks/zod
