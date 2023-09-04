@@ -1,4 +1,14 @@
-enum Weapon {
+import { z } from "zod"
+
+import type { Digit } from "./digit"
+
+export const WeaponIDSchema = z.custom<
+    `p${Digit}${Digit}` | `p${Digit}${Digit}${Digit}`
+>((val) => /^p\d\d\d?$/g.test(val as string))
+
+export type WeaponID = z.infer<typeof WeaponIDSchema>
+
+export enum Weapon {
     AirStrike = "p09",
     BGM = "p11",
     UNKNOWN_52 = "p52", // TODO
@@ -40,11 +50,12 @@ enum Weapon {
     SCAR = "p93",
     TacticalShotgun = "p94",
     VEK = "p95",
+    UNKNOWN_96 = "p96", // TODO
     UNKNOWN_97 = "p97", // TODO
     LMG = "p98",
     UNKNOWN_105 = "p105", // TODO
+    UNKNOWN_101 = "p101", // TODO
+    UNKNOWN_110 = "p110", // TODO
     LaserTripMine = "p111",
     UNKNOWN_112 = "p112", // TODO
 }
-
-export default Weapon
