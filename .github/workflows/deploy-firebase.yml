@@ -113,7 +113,7 @@ jobs:
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           FIREBASE_CLI_EXPERIMENTS: webframeworks
-          PROJECT_PATH: cd apps/stats-site
+          PROJECT_PATH: apps/stats-site
 
       - name: Statas Site - Post Deploy
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
@@ -150,7 +150,7 @@ jobs:
         run: .github/firebase-deploy.sh
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-          PROJECT_PATH: cd apps/wbapi
+          PROJECT_PATH: apps/wbapi
 
       - name: WBAPI - Post Deploy
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
@@ -179,4 +179,4 @@ jobs:
         run: .github/firebase-deploy.sh
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-          PROJECT_PATH: cd apps/wbtimeline
+          PROJECT_PATH: apps/wbtimeline
