@@ -109,7 +109,7 @@ jobs:
 
       - name: Stats Site - Deploy
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
-        uses: w9jds/firebase-action@master
+        uses: w9jds/firebase-action@v12.4.0
         with:
           args: deploy
         env:
@@ -149,7 +149,7 @@ jobs:
 
       - name: WBAPI - Deploy
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
-        uses: w9jds/firebase-action@master
+        uses: w9jds/firebase-action@v12.4.0
         with:
           args: deploy
         env:
@@ -180,7 +180,7 @@ jobs:
 
       - name: WB Timeline - Deploy
         if: steps.changed-wbtimeline.outcome == 'failure' || inputs.deploy-wbtimeline
-        uses: w9jds/firebase-action@master
+        uses: w9jds/firebase-action@v12.4.0
         with:
           args: deploy
         env:
