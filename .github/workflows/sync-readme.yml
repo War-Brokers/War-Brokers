@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - master
+    paths:
+      - README.md
+      - .github/sync-readme.yml
+      - .github/workflows/sync-readme.yml # this file
   workflow_dispatch:
 
 jobs:
