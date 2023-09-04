@@ -22,3 +22,5 @@ fi
 if [ -n "$PROJECT_PATH" ]; then
     cd "$PROJECT_PATH"
 fi
+
+pnpm install -g firebase-tools
