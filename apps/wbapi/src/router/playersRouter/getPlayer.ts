@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server"
 import { PlayerSchema } from "@warbrokers/types/src/player"
 import { debug } from "firebase-functions/logger"
 import { z } from "zod"
+import { generateErrorMessage } from "zod-error"
 
 import { publicProcedure } from "@/trpc"
 import cachePlayer from "@/upstash/cachePlayer"
@@ -44,7 +45,15 @@ export default (tag: string) =>
                 debug(raw)
                 throw new TRPCError({
                     code: "INTERNAL_SERVER_ERROR",
-                    message: `Failed to process data. ${parseResult.error}`,
+                    // https://github.com/andrewvo89/zod-error?tab=readme-ov-file#generateerrormessageissues-zzodissue-options-errormessageoptions-string
+                    message: `Failed to process data. ${generateErrorMessage(
+                        parseResult.error.issues,
+                        {
+                            delimiter: { error: " 🔥 " },
+                            transform: ({ errorMessage, index }) =>
+                                `Error #${index + 1}: ${errorMessage}`,
+                        },
+                    )}`,
                 })
             }
 
