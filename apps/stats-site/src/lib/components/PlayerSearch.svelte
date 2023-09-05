@@ -77,15 +77,11 @@
         -webkit-appearance: none;
     }
 
-    ::-webkit-scrollbar {
-        @apply rounded-full;
-    }
-
     ::-webkit-scrollbar-track {
-        @apply rounded-full dark:bg-gray-700;
+        @apply rounded-full bg-gray-700;
     }
 
     ::-webkit-scrollbar-thumb {
-        @apply dark:bg-gray-800;
+        @apply bg-gray-800;
     }
 </style>

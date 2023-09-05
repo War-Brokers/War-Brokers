@@ -1,10 +1,15 @@
-::-webkit-scrollbar {
-    width: 6px; /* for horizontal scrolling */
-    height: 6px; /* for vertical scrolling */
+/**
+ * https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar#css_scrollbar_selectors
+ */
 
-    @apply dark:bg-gray-900;
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-gray-900;
 }
 
 ::-webkit-scrollbar-thumb {
-    @apply rounded-full dark:bg-gray-600;
+    @apply rounded-full bg-gray-600;
 }
