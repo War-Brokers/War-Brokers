@@ -1,11 +1,9 @@
 name: BBC - Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        required: true
-        type: string
+  push:
+    tags:
+      - "bbc-v*.*.*"
 
 jobs:
   build:
@@ -70,33 +68,33 @@ jobs:
       - name: Download all Artifacts
         uses: actions/download-artifact@v3
 
-      - name: Create x86_64-windows-${{ inputs.version }}.zip Archive
+      - name: Create ${{ github.ref_name }}-x86_64-windows.zip Archive
         uses: thedoctor0/zip-release@0.7.1
         with:
           path: x86_64-windows
-          filename: x86_64-windows-${{ inputs.version }}.zip
+          filename: ${{ github.ref_name }}-x86_64-windows.zip
 
-      - name: Create x86_64-linux-${{ inputs.version }}.zip Archive
+      - name: Create ${{ github.ref_name }}-x86_64-linux.zip Archive
         uses: thedoctor0/zip-release@0.7.1
         with:
           path: x86_64-linux
-          filename: x86_64-linux-${{ inputs.version }}.zip
+          filename: ${{ github.ref_name }}-x86_64-linux.zip
 
-      - name: Create x86_64-apple-${{ inputs.version }}.zip Archive
+      - name: Create ${{ github.ref_name }}-x86_64-apple.zip Archive
         uses: thedoctor0/zip-release@0.7.1
         with:
           path: x86_64-apple
-          filename: x86_64-apple-${{ inputs.version }}.zip
+          filename: ${{ github.ref_name }}-x86_64-apple.zip
 
-      - name: Create aarch64-apple-${{ inputs.version }}.zip Archive
+      - name: Create ${{ github.ref_name }}-aarch64-apple.zip Archive
         uses: thedoctor0/zip-release@0.7.1
         with:
           path: aarch64-apple
-          filename: aarch64-apple-${{ inputs.version }}.zip
+          filename: ${{ github.ref_name }}-aarch64-apple.zip
 
       - name: Generate Changelog
         run: |
-          echo "# ${{ inputs.version }} Release
+          echo "# ${{ github.ref_name }} Release
           " > ${{ github.workspace }}-CHANGELOG.txt
 
       - name: Release
@@ -104,7 +102,7 @@ jobs:
         with:
           body_path: ${{ github.workspace }}-CHANGELOG.txt
           files: |
-            x86_64-windows-${{ inputs.version }}.zip
-            x86_64-linux-${{ inputs.version }}.zip
-            x86_64-apple-${{ inputs.version }}.zip
-            aarch64-apple-${{ inputs.version }}.zip
+            ${{ github.ref_name }}-x86_64-windows.zip
+            ${{ github.ref_name }}-x86_64-linux.zip
+            ${{ github.ref_name }}-x86_64-apple.zip
+            ${{ github.ref_name }}-aarch64-apple.zip
