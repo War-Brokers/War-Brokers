@@ -1,4 +1,10 @@
-<img align="right" width="128" height="128" src="https://avatars.githubusercontent.com/u/123612928?s=128&v=4" alt="WBP logo" />
+<img
+  align="right"
+  width="128"
+  height="128"
+  alt="WBP logo"
+  src="https://raw.githubusercontent.com/War-Brokers/War-Brokers/master/imgs/WBP.avif"
+/>
 
 # War Brokers Projects
 
