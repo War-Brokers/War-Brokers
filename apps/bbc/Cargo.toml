@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-bevy = { git = "https://github.com/bevyengine/bevy.git", rev = "fd32c6f0ec2b7b6c1936d6929d6e6303c9b8524c", default-features = false, features = [
+bevy = { git = "https://github.com/bevyengine/bevy.git", rev = "04885eb49c426ad1f053ab5106cedb0aa4ef20ab", default-features = false, features = [
     # disable some default features
     # https://github.com/bevyengine/bevy/blob/HEAD/docs/cargo_features.md#default-features
     "animation",
