@@ -94,8 +94,7 @@ jobs:
 
       - name: Generate Changelog
         run: |
-          echo "# ${{ github.ref_name }} Release
-          " > ${{ github.workspace }}-CHANGELOG.txt
+          echo "" > ${{ github.workspace }}-CHANGELOG.txt
 
       - name: Release
         uses: softprops/action-gh-release@v1
