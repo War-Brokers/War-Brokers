@@ -8,19 +8,7 @@ test("serverList", async () => {
     ).toStrictEqual([
         {
             maxPlayers: 16,
-            playerCount: 10,
-        },
-        {
-            maxPlayers: 16,
             playerCount: 14,
-        },
-        {
-            maxPlayers: 16,
-            playerCount: 0,
-        },
-        {
-            maxPlayers: 16,
-            playerCount: 0,
         },
         {
             maxPlayers: 16,
@@ -28,19 +16,15 @@ test("serverList", async () => {
         },
         {
             maxPlayers: 16,
-            playerCount: 0,
-        },
-        {
-            maxPlayers: 16,
-            playerCount: 5,
-        },
-        {
-            maxPlayers: 16,
             playerCount: 11,
         },
         {
             maxPlayers: 16,
-            playerCount: 0,
+            playerCount: 10,
+        },
+        {
+            maxPlayers: 16,
+            playerCount: 5,
         },
     ])
 })

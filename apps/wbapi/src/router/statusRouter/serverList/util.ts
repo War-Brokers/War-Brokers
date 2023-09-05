@@ -41,6 +41,8 @@ export async function parseData(data: string): Promise<APIResponse> {
     }
 
     return result
+        .sort((a, b) => b.playerCount - a.playerCount)
+        .filter((item) => item.playerCount !== 0)
 }
 
 function maxPlayers(map: number) {
