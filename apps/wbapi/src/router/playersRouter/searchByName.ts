@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server"
 import { PlayerSchema } from "@warbrokers/types/src/player"
+import { sanitize } from "isomorphic-dompurify"
 import fetch from "node-fetch"
 import { z } from "zod"
 
@@ -39,9 +40,7 @@ export default (tag: string) =>
                 `https://stats.warbrokers.io/players/search?term=${query.toLowerCase()}`,
             )
 
-            const a = await raw.json()
-            console.log(a, JSON.stringify(a))
-            const parseResult = searchSchema.safeParse(a)
+            const parseResult = searchSchema.safeParse(await raw.json())
             if (!parseResult.success)
                 throw new TRPCError({
                     code: "INTERNAL_SERVER_ERROR",
@@ -51,7 +50,7 @@ export default (tag: string) =>
             const result: z.infer<typeof apiResponseSchema> = []
             for (const data of parseResult.data) {
                 result.push({
-                    nick: data[0],
+                    nick: sanitize(data[0]),
                     uid: data[1],
                 })
             }
