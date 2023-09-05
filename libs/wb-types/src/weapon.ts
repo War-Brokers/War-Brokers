@@ -11,15 +11,15 @@ export type WeaponID = z.infer<typeof WeaponIDSchema>
 export enum Weapon {
     AirStrike = "p09",
     BGM = "p11",
-    UNKNOWN_52 = "p52", // TODO
-    UNKNOWN_53 = "p53", // TODO
-    UNKNOWN_54 = "p54", // TODO
-    UNKNOWN_55 = "p55", // TODO
-    UNKNOWN_56 = "p56", // TODO
-    UNKNOWN_57 = "p57", // TODO
-    UNKNOWN_58 = "p58", // TODO
-    UNKNOWN_59 = "p59", // TODO
-    UNKNOWN_60 = "p60", // TODO
+    // TODO p52
+    // TODO p53
+    // TODO p54
+    // TODO p55
+    // TODO p56
+    // TODO p57
+    // TODO p58
+    // TODO p59
+    // TODO p60
     ARRifle = "p61",
     AKRifle = "p62",
     Pistol = "p63",
@@ -36,12 +36,12 @@ export enum Weapon {
     Revolver = "p78",
     Minigun = "p79",
     GrenadeLauncher = "p80",
-    UNKNOWN_82 = "p82", // TODO
-    UNKNOWN_83 = "p83", // TODO
-    UNKNOWN_84 = "p84", // TODO
-    UNKNOWN_85 = "p85", // TODO
-    UNKNOWN_86 = "p86", // TODO
-    UNKNOWN_87 = "p87", // TODO
+    // TODO p82
+    // TODO p83
+    // TODO p84
+    // TODO p85
+    // TODO p86
+    // TODO p87
     Fists = "p88",
     VSS = "p89",
     FiftyCalSniper = "p90",
@@ -50,12 +50,43 @@ export enum Weapon {
     SCAR = "p93",
     TacticalShotgun = "p94",
     VEK = "p95",
-    UNKNOWN_96 = "p96", // TODO
-    UNKNOWN_97 = "p97", // TODO
+    // TODO p96
+    // TODO p97
     LMG = "p98",
-    UNKNOWN_105 = "p105", // TODO
-    UNKNOWN_101 = "p101", // TODO
-    UNKNOWN_110 = "p110", // TODO
+    // TODO p105
+    // TODO p101
+    // TODO p110
     LaserTripMine = "p111",
-    UNKNOWN_112 = "p112", // TODO
+    // TODO p112
+}
+
+export const WeaponName: { [key in Weapon]: string } = {
+    [Weapon.AirStrike]: "Air Strike",
+    [Weapon.BGM]: "BGM",
+    [Weapon.ARRifle]: "AR Rifle",
+    [Weapon.AKRifle]: "AK Rifle",
+    [Weapon.Pistol]: "Pistol",
+    [Weapon.HuntingRifle]: "Hunting",
+    [Weapon.RPG]: "RPG",
+    [Weapon.Shotgun]: "Shotgun",
+    [Weapon.SniperRifle]: "Sniper",
+    [Weapon.SMG]: "SMG",
+    [Weapon.Homing]: "Homing",
+    [Weapon.Grenade]: "Grenade",
+    [Weapon.HeliMinigun]: "Heli Minigun",
+    [Weapon.TankMinigun]: "Tank Minigun",
+    [Weapon.Knife]: "Knife",
+    [Weapon.Revolver]: "Revolver",
+    [Weapon.Minigun]: "Minigun",
+    [Weapon.GrenadeLauncher]: "G. Launcher",
+    [Weapon.Fists]: "Fists",
+    [Weapon.VSS]: "VSS",
+    [Weapon.FiftyCalSniper]: ".50 Cal Sniper",
+    [Weapon.MGTurret]: "MG Turret",
+    [Weapon.Crossbow]: "Crossbow",
+    [Weapon.SCAR]: "SCAR",
+    [Weapon.TacticalShotgun]: "Tactical Shotgun",
+    [Weapon.VEK]: "VEK",
+    [Weapon.LMG]: "LMG",
+    [Weapon.LaserTripMine]: "Laser Trip Mine",
 }
