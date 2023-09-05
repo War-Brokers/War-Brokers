@@ -36,7 +36,7 @@ export default (tag: string) =>
             const { query } = input
 
             const raw = await fetch(
-                `https://stats.warbrokers.io/players/search?term=${query}`,
+                `https://stats.warbrokers.io/players/search?term=${query.toLowerCase()}`,
             )
 
             const a = await raw.json()
