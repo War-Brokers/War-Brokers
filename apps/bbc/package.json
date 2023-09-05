@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "cargo watch -x run",
+        "start": "cargo run --release",
         "clean": "rm -rf .turbo"
     }
 }
