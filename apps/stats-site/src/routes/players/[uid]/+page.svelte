@@ -8,12 +8,14 @@
     const { player, timestamp } = data
 </script>
 
-<Title title="[{player.squad}] {player.nick}" />
+<Title title="{player.squad && `[${player.squad}] `}{player.nick}" />
 
 <h1 class="mx-auto mb-10 text-4xl font-black">
-    <a href="/squads/{player.squad}" class="hover:dark:underline">
-        [{player.squad}]
-    </a>
+    {#if player.squad}
+        <a href="/squads/{player.squad}" class="hover:dark:underline">
+            [{player.squad}]
+        </a>
+    {/if}
     {player.nick}
 </h1>
 
