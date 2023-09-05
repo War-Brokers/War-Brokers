@@ -4,9 +4,10 @@
         "vivaxy.vscode-conventional-commits",
         "github.vscode-github-actions",
 
-        // JS stuff
+        // JS / TS stuff
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
+        "yoavbls.pretty-ts-errors",
 
         // tailwind
         "bradlc.vscode-tailwindcss",
