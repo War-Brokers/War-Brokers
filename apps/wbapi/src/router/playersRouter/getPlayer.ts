@@ -5,7 +5,6 @@ import { z } from "zod"
 import { generateErrorMessage } from "zod-error"
 
 import { publicProcedure } from "@/trpc"
-import cachePlayer from "@/upstash/cachePlayer"
 import { getPlayer } from "@/wbFetch"
 
 export default (tag: string) =>
@@ -57,6 +56,5 @@ export default (tag: string) =>
                 })
             }
 
-            await cachePlayer(parseResult.data)
             return parseResult.data
         })
