@@ -51,7 +51,7 @@ jobs:
 
       - name: Build
         working-directory: apps/bbc
-        run: cargo build --release --target=${{ matrix.target }} --out-dir build/${{ matrix.target-name }} -Z unstable-options
+        run: cargo build --release --target=${{ matrix.target }} --out-dir ../../build/${{ matrix.target-name }} -Z unstable-options
 
       - name: Copy Assets
         run: cp -r apps/bbc/assets build/${{ matrix.target-name }}
