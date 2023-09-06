@@ -15,9 +15,6 @@ The War Brokers Projects monorepo is managed by the following:
 - [pnpm workspace](https://pnpm.io/workspaces)
   - used for JavaScript/Typescript projects and `package.json` scripts
   - config: [`pnpm-workspace.yaml`](./pnpm-workspace.yaml)
-- [cargo workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html)
-  - used for rust projects
-  - config: [`Cargo.toml`](./Cargo.toml)
 
 ## Setting up
 
@@ -31,7 +28,6 @@ you can download [here](https://git-scm.com/downloads).
    - vscode
    - NodeJS
    - pnpm
-   - rust toolchain (recommend using rustup)
 2. Fork this repository
 3. `git clone` the forked repository to your computer
 4. Open cloned repository with vscode

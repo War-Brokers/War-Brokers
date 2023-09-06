@@ -1,5 +1,0 @@
-# https://rust-lang.github.io/rustup/overrides.html
-[toolchain]
-# synced with .github/workflows/release.yml 
-channel = "nightly-2023-06-30"
-components = ["rustfmt", "clippy", "rust-analysis"]

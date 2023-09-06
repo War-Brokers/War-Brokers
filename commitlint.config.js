@@ -11,7 +11,6 @@ module.exports = {
             2,
             "always",
             [
-                "bbc",
                 "stats-site",
                 "wbapi",
                 "wbtimeline",

@@ -1,11 +1,6 @@
 {
     "$schema": "https://turbo.build/schema.json",
-    "globalDependencies": [
-        ".prettierignore",
-        ".prettierrc.json",
-        "Cargo.toml",
-        "rust-toolchain.toml"
-    ],
+    "globalDependencies": [".prettierignore", ".prettierrc.json"],
     "pipeline": {
         "dev": {
             "dependsOn": ["build"],
@@ -23,9 +18,7 @@
                 "out/**",
                 "dist/**",
                 "build/**",
-                "lib/**",
-                ".svelte-kit/**",
-                "target"
+                ".svelte-kit/**"
             ]
         },
         "lint": { "dependsOn": ["build"] },

@@ -26,7 +26,6 @@ visibility and simplify collaboration.
 | [Stats Site][stats-site]  |              An attempt to create an improved version of https://stats.warbrokers.io               |       Alpha        |
 |   [WB Types][wb-types]    |                            shared Typescript types & [Zod][zod] schema                             |       Alpha        |
 |      [WB API][wbapi]      |                                    DB mirror & API proxy for WB                                    |       Alpha        |
-|        [BBC][BBC]         |                       alternative Desktop WB client (a Better Broker Client)                       |     Pre-Alpha      |
 |      War Brokers Hub      |                        web UI for everything WB (squads, stats, wiki, etc)                         |      Planned       |
 
 [developomp]: https://github.com/developomp
@@ -36,5 +35,4 @@ visibility and simplify collaboration.
 [stats-site]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site
 [wb-types]: https://github.com/War-Brokers/War-Brokers/tree/master/libs/wb-types
 [wbapi]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbapi
-[BBC]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/bbc
 [zod]: https://github.com/colinhacks/zod

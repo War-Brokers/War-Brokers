@@ -17,10 +17,6 @@
         "svelte.svelte-vscode",
 
         // shell
-        "foxundermoon.shell-format",
-
-        // rust
-        "rust-lang.rust-analyzer",
-        "zerotaskx.rust-extension-pack"
+        "foxundermoon.shell-format"
     ]
 }
