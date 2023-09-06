@@ -45,7 +45,7 @@ app.use(
 export const api = onRequest(
     {
         region: "us-central1",
-        memory: "128MiB",
+        memory: "256MiB",
         secrets: [WB_ID, WB_PW, WB_DOMAIN],
     },
     app,
