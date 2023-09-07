@@ -22,7 +22,7 @@ jobs:
           password: ${{ secrets.DEVELOPOMP_DOCKERHUB_TOKEN }}
 
       - name: Build Docker Image
-        run: docker build -f apps/squad-bot/Dockerfile.prod -t developomp/wbp-squad-bot:latest .
+        run: docker build -f apps/squad-bot/Dockerfile -t developomp/wbp-squad-bot:latest .
 
       - name: Push Docker Image
         run: docker push developomp/wbp-squad-bot:latest
