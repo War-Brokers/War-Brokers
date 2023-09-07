@@ -11,6 +11,7 @@ module.exports = {
             2,
             "always",
             [
+                "squad-bot",
                 "stats-site",
                 "wbapi",
                 "wbtimeline",
