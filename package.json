@@ -1,5 +1,6 @@
 {
     "scripts": {
+        "turbo": "turbo",
         "dev": "turbo run dev --parallel",
         "start": "turbo run start --parallel",
         "build": "turbo run build --parallel --cache-dir=.turbo",
