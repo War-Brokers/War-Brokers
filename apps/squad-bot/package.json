@@ -1,0 +1,33 @@
+{
+    "name": "@warbrokers/squad-bot",
+    "version": "0.0.0",
+    "main": "dist/index.js",
+    "scripts": {
+        "dev": "nodemon",
+        "build": "tsup",
+        "clean": "rm -rf .turbo dist node_modules"
+    },
+    "dependencies": {
+        "@sapphire/decorators": "^6.0.2",
+        "@sapphire/framework": "^4.6.0",
+        "@t3-oss/env-core": "^0.6.1",
+        "discord.js": "^14.13.0",
+        "dotenv": "^16.3.1",
+        "firebase-admin": "^11.10.1",
+        "node-fetch": "^2.7.0",
+        "zod": "^3.22.2"
+    },
+    "devDependencies": {
+        "@sapphire/ts-config": "^5.0.0",
+        "@swc/core": "^1.3.82",
+        "@types/node": "^20.5.9",
+        "@types/node-fetch": "^2.6.4",
+        "@warbrokers/eslint-config": "workspace:*",
+        "nodemon": "^3.0.1",
+        "tsup": "^7.2.0",
+        "typescript": "^5.2.2"
+    },
+    "engines": {
+        "node": "18"
+    }
+}

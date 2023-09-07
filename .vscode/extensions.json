@@ -4,7 +4,7 @@
         "vivaxy.vscode-conventional-commits",
         "github.vscode-github-actions",
 
-        // JS / TS stuff
+        // JS / TS
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
         "yoavbls.pretty-ts-errors",
@@ -17,6 +17,12 @@
         "svelte.svelte-vscode",
 
         // shell
-        "foxundermoon.shell-format"
+        "foxundermoon.shell-format",
+
+        // dotenv
+        "mikestead.dotenv",
+
+        // docker
+        "ms-azuretools.vscode-docker"
     ]
 }
