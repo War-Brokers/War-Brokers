@@ -11,9 +11,8 @@
 [![](https://shields.io/badge/discord-chat-5865F2?logo=discord&logoColor=FFFFFF&style=for-the-badge)](https://discord.gg/synPSeuNFK)
 [![contributing](https://img.shields.io/badge/contributing-yellow?style=for-the-badge)](https://github.com/War-Brokers/War-Brokers/blob/master/CONTRIBUTING.md)
 
-WBP (War Brokers Projects) is [@developomp][developomp]'s\* effort to gather
-community projects connected to War Brokers. The aim is to increase their
-visibility and simplify collaboration.
+WBP (War Brokers Projects) is a collection of [@developomp][developomp]'s\*
+[War Brokers](https://warbrokers.io) related projects.
 
 \*: also known as [`[LP] POMP`][lp-pomp] in-game
 
