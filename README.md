@@ -20,6 +20,7 @@ WBP (War Brokers Projects) is a collection of [@developomp][developomp]'s\*
 
 |           Name            |                                         Short Description                                          | Development Status |
 | :-----------------------: | :------------------------------------------------------------------------------------------------: | :----------------: |
+|  [War Brokers Mods][wbm]  |                             An unofficial utility mod for War Brokers                              |       Stable       |
 | [WB Timeline][wbtimeline] | a website that lists various events happened in the War Brokers community in a chronological order |       Stable       |
 | [Stats Site][stats-site]  |              An attempt to create an improved version of https://stats.warbrokers.io               |       Alpha        |
 |   [WB Types][wb-types]    |                            shared Typescript types & [Zod][zod] schema                             |       Alpha        |
@@ -28,6 +29,7 @@ WBP (War Brokers Projects) is a collection of [@developomp][developomp]'s\*
 
 [developomp]: https://github.com/developomp
 [lp-pomp]: https://wbp-stats.web.app/players/5d2ead35d142affb05757778
+[wbm]: https://github.com/War-Brokers-Mods
 [wbtimeline]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbtimeline
 [stats-site]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site
 [wb-types]: https://github.com/War-Brokers/War-Brokers/tree/master/libs/wb-types
