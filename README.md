@@ -22,7 +22,6 @@ visibility and simplify collaboration.
 |           Name            |                                         Short Description                                          | Development Status |
 | :-----------------------: | :------------------------------------------------------------------------------------------------: | :----------------: |
 | [WB Timeline][wbtimeline] | a website that lists various events happened in the War Brokers community in a chronological order |       Stable       |
-|  [Squad Bot][squad-bot]   |                                     Discord utility bot for WB                                     |       Alpha        |
 | [Stats Site][stats-site]  |              An attempt to create an improved version of https://stats.warbrokers.io               |       Alpha        |
 |   [WB Types][wb-types]    |                            shared Typescript types & [Zod][zod] schema                             |       Alpha        |
 |      [WB API][wbapi]      |                                    DB mirror & API proxy for WB                                    |       Alpha        |
@@ -31,7 +30,6 @@ visibility and simplify collaboration.
 [developomp]: https://github.com/developomp
 [lp-pomp]: https://wbp-stats.web.app/players/5d2ead35d142affb05757778
 [wbtimeline]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbtimeline
-[squad-bot]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/squad-bot
 [stats-site]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site
 [wb-types]: https://github.com/War-Brokers/War-Brokers/tree/master/libs/wb-types
 [wbapi]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbapi

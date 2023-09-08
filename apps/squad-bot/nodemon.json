@@ -1,5 +1,0 @@
-{
-    "watch": ["src"],
-    "ext": "ts,json",
-    "exec": "pnpm build && cp .env src/serviceAccountKey.json dist/ && node ."
-}

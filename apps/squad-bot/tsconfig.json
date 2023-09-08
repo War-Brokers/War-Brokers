@@ -1,7 +1,0 @@
-{
-    "extends": "@sapphire/ts-config",
-    "compilerOptions": {
-        "experimentalDecorators": true
-    },
-    "include": ["src", "tsup.config.ts"]
-}
