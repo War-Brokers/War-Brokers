@@ -41,7 +41,9 @@ you can download [here](https://git-scm.com/downloads).
    ```
    pnpm prepare
    ```
-7. read `README.md` files of projects you would like to work on.
+7. Install Firebase CLI
+   - https://firebase.google.com/docs/cli
+8. read `README.md` files of projects you would like to work on.
    You can find all projects in the [`apps`](./apps) and [`libs`](./libs)
    directory. You can run `package.json` scripts in the project directory like
    normal.
