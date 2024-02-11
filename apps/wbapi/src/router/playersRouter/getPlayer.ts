@@ -33,9 +33,10 @@ export default (tag: string) =>
                     message: `Player with UID "${uid}" was not found. Is the UID valid?`,
                 })
 
-            const raw = await res.json()
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const raw: any = await res.json()
 
-            // also handles undefined values because null == undefined in JS
+            // also handles undefined values because null == undefined is true in JS
             if (raw["time_alive_longest"] != null)
                 raw["time_alive_longest"] = Number(raw["time_alive_longest"])
 
