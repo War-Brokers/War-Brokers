@@ -5,10 +5,10 @@ module.exports = {
         node: true,
     },
     extends: [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:prettier/recommended",
         "turbo",
+        "plugin:@typescript-eslint/recommended",
+        "eslint:recommended",
+        "plugin:prettier/recommended",
     ],
     ignorePatterns: ["dist/", "build/"],
     parser: "@typescript-eslint/parser",
