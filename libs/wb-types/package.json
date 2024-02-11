@@ -6,12 +6,12 @@
         "lint": "eslint src --quiet && tsc"
     },
     "dependencies": {
-        "zod": "^3.22.2"
+        "zod": "^3.22.4"
     },
     "devDependencies": {
         "@warbrokers/eslint-config": "workspace:*",
-        "eslint": "^8.48.0",
+        "eslint": "^8.56.0",
         "prettier": "3.0.2",
-        "typescript": "^5.2.2"
+        "typescript": "^5.3.3"
     }
 }

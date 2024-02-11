@@ -4,6 +4,6 @@
     "private": true,
     "main": "index.ts",
     "devDependencies": {
-        "@playwright/test": "^1.37.1"
+        "@playwright/test": "^1.41.2"
     }
 }
