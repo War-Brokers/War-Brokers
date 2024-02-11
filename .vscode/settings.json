@@ -102,5 +102,12 @@
     "search.exclude": {
         "**/pnpm-lock.yaml": true,
         "**/.pnp.*": true
-    }
+    },
+    "[shellscript]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "[ignore]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "typescript.tsdk": "node_modules/typescript/lib"
 }
