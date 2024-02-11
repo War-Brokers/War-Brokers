@@ -1,4 +1,4 @@
-/.firebase/
 /.svelte-kit/
 /package/
 *.timestamp-*
+.vercel/
