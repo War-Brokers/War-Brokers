@@ -2,12 +2,12 @@
 
 ## Welcome!
 
-Hello, and thank <u>you 🫵</u> for taking your precious time to contribute to
+Hi! Thank you for taking your precious time to contribute to
 War Brokers Projects! We hope you have a pleasant experience working with us <3
 
 ## How is the project organized?
 
-The War Brokers Projects monorepo is managed by the following:
+The War Brokers Projects monorepo is managed using the following technologies:
 
 - [turborepo](https://turbo.build/repo)
   - used to orchestrate everything
@@ -15,6 +15,14 @@ The War Brokers Projects monorepo is managed by the following:
 - [pnpm workspace](https://pnpm.io/workspaces)
   - used for JavaScript/Typescript projects and `package.json` scripts
   - config: [`pnpm-workspace.yaml`](./pnpm-workspace.yaml)
+
+## Online Infrastructure
+
+Our codes are deployed to the following services:
+
+- [Upstash (Redis)](https://upstash.com) - database indexing (for things like leaderboard)
+- [Firebase](https://firebase.google.com) - user auth, API endpoint, exposing endpoints to the web
+- [Vercel](https://vercel.com) - frontend hosting
 
 ## Setting up
 
