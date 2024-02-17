@@ -1,7 +1,6 @@
 import { TRPCError } from "@trpc/server"
 import { PlayerSchema } from "@warbrokers/types/src/player"
 import { sanitize } from "isomorphic-dompurify"
-import fetch from "node-fetch"
 import { z } from "zod"
 
 import { publicProcedure } from "@/trpc"

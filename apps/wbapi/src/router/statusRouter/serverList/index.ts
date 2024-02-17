@@ -1,5 +1,4 @@
 import { LocationSchema } from "@warbrokers/types/src/location"
-import fetch from "node-fetch"
 import { z } from "zod"
 
 import { AbortError } from "@/errors"

@@ -1,11 +1,11 @@
 import { TRPCError } from "@trpc/server"
+import { getPlayer } from "@warbrokers/fetch/src/player"
+import { FailReason } from "@warbrokers/fetch/src/types"
 import { PlayerSchema } from "@warbrokers/types/src/player"
-import { debug } from "firebase-functions/logger"
 import { z } from "zod"
-import { generateErrorMessage } from "zod-error"
 
+import env from "@/env"
 import { publicProcedure } from "@/trpc"
-import { getPlayer } from "@/wbFetch"
 
 export default (tag: string) =>
     publicProcedure
@@ -26,36 +26,35 @@ export default (tag: string) =>
         .query(async ({ input }) => {
             const { uid } = input
 
-            const res = await getPlayer(uid)
-            if (!res.ok)
-                throw new TRPCError({
-                    code: "BAD_REQUEST",
-                    message: `Player with UID "${uid}" was not found. Is the UID valid?`,
-                })
+            const res = await getPlayer(
+                {
+                    id: env.wb.id.value(),
+                    pw: env.wb.pw.value(),
+                    ip: env.wb.ip.value(),
+                },
+                uid,
+            )
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const raw: any = await res.json()
+            if (!res.success)
+                switch (res.reason) {
+                    case FailReason.RequestFailed:
+                        throw new TRPCError({
+                            code: "BAD_REQUEST",
+                            message: `Player with UID "${uid}" was not found. Is the UID valid?`,
+                        })
+                    case FailReason.InvalidType:
+                        throw new TRPCError({
+                            code: "INTERNAL_SERVER_ERROR",
+                            message:
+                                "Schema validation failure. Please tell the developers about it.",
+                        })
+                    default:
+                        throw new TRPCError({
+                            code: "INTERNAL_SERVER_ERROR",
+                            message:
+                                "An unknown error occurred. Please tell the developers about it.",
+                        })
+                }
 
-            // also handles undefined values because null == undefined is true in JS
-            if (raw["time_alive_longest"] != null)
-                raw["time_alive_longest"] = Number(raw["time_alive_longest"])
-
-            const parseResult = PlayerSchema.safeParse(raw)
-            if (!parseResult.success) {
-                debug(raw)
-                throw new TRPCError({
-                    code: "INTERNAL_SERVER_ERROR",
-                    // https://github.com/andrewvo89/zod-error?tab=readme-ov-file#generateerrormessageissues-zzodissue-options-errormessageoptions-string
-                    message: `Failed to process data. ${generateErrorMessage(
-                        parseResult.error.issues,
-                        {
-                            delimiter: { error: " 🔥 " },
-                            transform: ({ errorMessage, index }) =>
-                                `Error #${index + 1}: ${errorMessage}`,
-                        },
-                    )}`,
-                })
-            }
-
-            return parseResult.data
+            return res.data
         })
