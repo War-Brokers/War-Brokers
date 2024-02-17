@@ -3,6 +3,7 @@ _/*
 **/build/
 **/.svelte-kit/
 **/.firebase/
+**/.vercel/
 apps/stats-site/package/
 
 **/pnpm-lock.yaml
