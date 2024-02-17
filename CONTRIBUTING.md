@@ -21,8 +21,8 @@ The War Brokers Projects monorepo is managed using the following technologies:
 Our codes are deployed to the following services:
 
 - [Upstash (Redis)](https://upstash.com) - database indexing (for things like leaderboard)
-- [Firebase](https://firebase.google.com) - user auth, API endpoint, exposing endpoints to the web
-- [Vercel](https://vercel.com) - frontend hosting
+- [Firebase](https://firebase.google.com) - user auth, API endpoint, exposing endpoints to the web, static sites
+- [Vercel](https://vercel.com) - frontend hosting, SSR sites
 
 ## Setting up
 
