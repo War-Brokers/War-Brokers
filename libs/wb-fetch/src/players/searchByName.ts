@@ -17,7 +17,7 @@ export async function searchPlayerByName(
     name: string,
 ): Promise<Result<Response>> {
     const res = await fetch(
-        `http://stats.warbrokers.io/players/search?term=${name.toLowerCase()}`,
+        `https://stats.warbrokers.io/players/search?term=${name.toLowerCase()}`,
     )
 
     const schema = z.array(
