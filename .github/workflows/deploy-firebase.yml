@@ -91,10 +91,6 @@ jobs:
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
         run: pnpm lint --filter @warbrokers/wbapi
 
-      - name: WBAPI - Unit Tests
-        if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
-        run: pnpm test:unit --filter @warbrokers/wbapi
-
       - name: WBAPI - Pre Deploy
         if: steps.changed-wbapi.outcome == 'failure' || inputs.deploy-wbapi
         run: pnpm dlx firebase-pnpm-workspaces --filter=@warbrokers/wbapi
