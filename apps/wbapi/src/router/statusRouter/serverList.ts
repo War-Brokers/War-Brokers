@@ -1,11 +1,12 @@
+import {
+    responseSchema,
+    serverList,
+} from "@warbrokers/fetch/src/status/serverList"
 import { LocationSchema } from "@warbrokers/types/src/location"
 import { z } from "zod"
 
-import { AbortError } from "@/errors"
+import { reason2TRPCError } from "@/errors"
 import { publicProcedure } from "@/trpc"
-import { serverListURL } from "@/url"
-
-import { apiResponseSchema, parseData } from "./util"
 
 export default (tag: string) =>
     publicProcedure
@@ -19,23 +20,14 @@ Valid inputs: USA, USA_WEST, ASIA, AUSTRALIA, EUROPE, INDIA, JAPAN, RUSSIA, USA_
                 tags: [tag],
             },
         })
-        .input(
-            z.object({
-                region: LocationSchema,
-            }),
-        )
-        .output(apiResponseSchema)
+        .input(z.object({ region: LocationSchema }))
+        .output(responseSchema)
         .query(async ({ input }) => {
-            const res = await fetch(serverListURL(input.region))
-            const raw = await res.text()
+            const { region } = input
 
-            if (
-                !raw ||
-                raw.includes("404 Not Found") ||
-                raw.includes("Error") ||
-                raw.includes("signout")
-            )
-                throw AbortError
+            const res = await serverList(region)
 
-            return await parseData(raw)
+            if (!res.success) throw reason2TRPCError(res.reason)
+
+            return res.data
         })

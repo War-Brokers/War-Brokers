@@ -3,7 +3,7 @@ import { setGlobalOptions } from "firebase-functions/v2"
 import { onRequest } from "firebase-functions/v2/https"
 
 import { app } from "@/app"
-import { WB_IP, WB_ID, WB_PW } from "@/env"
+import { WB_DB_IP, WB_ID, WB_PW } from "@/env"
 
 initializeApp()
 
@@ -15,7 +15,7 @@ export const api = onRequest(
     {
         region: "us-central1",
         memory: "256MiB",
-        secrets: [WB_ID, WB_PW, WB_IP],
+        secrets: [WB_ID, WB_PW, WB_DB_IP],
     },
     app,
 )

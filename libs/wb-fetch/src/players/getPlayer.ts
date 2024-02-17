@@ -1,7 +1,7 @@
 import { type Player, PlayerSchema } from "@warbrokers/types/src/player"
 
-import type { DBAuth, Result } from "./types"
-import { FailReason } from "./types"
+import type { DBAuth, Result } from "../util/types"
+import { FailReason } from "../util/types"
 
 export async function getPlayer(
     auth: DBAuth,
@@ -15,7 +15,7 @@ export async function getPlayer(
     if (!res.ok)
         return {
             success: false,
-            reason: FailReason.RequestFailed,
+            reason: FailReason.DBConnectionFail,
         }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,7 +29,7 @@ export async function getPlayer(
     if (!parseResult.success)
         return {
             success: false,
-            reason: FailReason.InvalidType,
+            reason: FailReason.SchemaValidationFail,
         }
 
     return {

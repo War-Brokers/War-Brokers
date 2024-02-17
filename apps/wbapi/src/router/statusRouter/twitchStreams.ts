@@ -1,9 +1,11 @@
+import {
+    responseSchema,
+    twitchStreamCount,
+} from "@warbrokers/fetch/src/status/twitchStreamCount"
 import { z } from "zod"
 
+import { reason2TRPCError } from "@/errors"
 import { publicProcedure } from "@/trpc"
-import { twitchStreamsURL } from "@/url"
-
-import { apiResponseSchema, parseData } from "./util"
 
 export default (tag: string) =>
     publicProcedure
@@ -17,10 +19,11 @@ export default (tag: string) =>
             },
         })
         .input(z.undefined())
-        .output(apiResponseSchema)
+        .output(responseSchema)
         .query(async () => {
-            const res = await fetch(twitchStreamsURL())
-            const raw = await res.text()
+            const res = await twitchStreamCount()
 
-            return parseData(raw)
+            if (!res.success) throw reason2TRPCError(res.reason)
+
+            return res.data
         })

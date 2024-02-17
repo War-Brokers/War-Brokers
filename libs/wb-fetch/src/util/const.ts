@@ -8,7 +8,7 @@ export const mysteryNumber = 283
  * useless for us
  */
 export function locationURL() {
-    return "https://warbrokers.io/get_location.php" as const
+    return `https://warbrokers.io/get_location.php` as const
 }
 
 export function playerCountURL() {
@@ -25,4 +25,12 @@ export function twitchStreamsURL() {
 
 export function serverListURL(location: Location) {
     return `https://store1.warbrokers.io/${mysteryNumber}/server_list.php?location=${location}` as const
+}
+
+export function playerListURL() {
+    return `https://store1.warbrokers.io/${mysteryNumber}/get_player_list.php` as const
+}
+
+export function changelogURL() {
+    return `https://store1.warbrokers.io/${mysteryNumber}/motd.php` as const
 }

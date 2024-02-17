@@ -1,8 +1,11 @@
+import {
+    playerCount,
+    responseSchema,
+} from "@warbrokers/fetch/src/status/playerCount"
 import { z } from "zod"
 
-import { string2number } from "@/convert"
+import { reason2TRPCError } from "@/errors"
 import { publicProcedure } from "@/trpc"
-import { playerCountURL } from "@/url"
 
 export default (tag: string) =>
     publicProcedure
@@ -15,10 +18,11 @@ export default (tag: string) =>
             },
         })
         .input(z.undefined())
-        .output(z.number())
+        .output(responseSchema)
         .query(async () => {
-            const res = await fetch(playerCountURL())
-            const raw = await res.text() // XXX,XXX,XXX
+            const res = await playerCount()
 
-            return string2number(raw)
+            if (!res.success) throw reason2TRPCError(res.reason)
+
+            return res.data
         })
