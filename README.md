@@ -28,7 +28,7 @@ WBP (War Brokers Projects) is a collection of [@developomp][developomp]'s\*
 |  [War Brokers Mods][wbm]  |                             An unofficial utility mod for War Brokers                              |      Archived      |
 
 [developomp]: https://github.com/developomp
-[lp-pomp]: https://wbp-stats.web.app/players/5d2ead35d142affb05757778
+[lp-pomp]: https://stats.wbpjs.com/players/5d2ead35d142affb05757778
 [wbm]: https://github.com/War-Brokers-Mods
 [wbtimeline]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbtimeline
 [stats-site]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site
