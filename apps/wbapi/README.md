@@ -1,20 +1,20 @@
 # WBAPI
 
-A mirror/proxy of the War Brokers API.
+A one-stop hub for accessing various War Brokers APIs and DBs.
 
-Prior to this project's existence, developers had to manually scrape
-War Brokers' website or use undocumented API endpoints. WBAPI fixes this issue
-by providing a simple, unified HTTP interface to read all sorts of data.
+Prior to this project, developers had to manually scrape War Brokers' website
+or use undocumented API endpoints. WBAPI aims to solve this problem by
+providing simple interface between it and you.
 
-Documentations and the API itself can be found here: https://wbp-wbapi.web.app
+## Usage
 
-## Understanding the underlying technologies
+Documentations as well as the API itself can be found here: https://wbapi.wbpjs.com
 
-WBAPI is entirely built on Google firebase's infrastructure. It uses
-[firestore](https://firebase.google.com/docs/firestore) to store data,
-[cloud functions](https://firebase.google.com/docs/functions) for backend, and
-[hosting](https://firebase.google.com/docs/hosting) to expose everything to
-the web.
+## Tech Stack
+
+- [Upstash (Redis)](https://upstash.com) - leaderboard, index, etc
+- [Firebase functions](https://firebase.google.com/docs/functions) - backend
+- [Firebase hosting](https://firebase.google.com/docs/hosting) - exposing firebase functions to the web
 
 ## Setting up
 
