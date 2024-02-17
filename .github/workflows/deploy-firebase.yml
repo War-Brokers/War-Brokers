@@ -87,6 +87,15 @@ jobs:
         continue-on-error: true
         run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/stats-site
 
+      - name: Stats Site - Create Dummy env
+        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
+        run: |
+          cat <<EOF > apps/stats-site/.env
+          WB_DB_ID=
+          WB_DB_PW=
+          WB_DB_IP=
+          EOF
+
       - name: Stats Site - Build
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
         run: pnpm build --filter @warbrokers/stats-site
