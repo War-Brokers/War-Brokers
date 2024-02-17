@@ -130,3 +130,16 @@ jobs:
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           PROJECT_PATH: apps/wbtimeline
+
+      #
+      # WB Fetch
+      #
+
+      - name: WB Fetch - Check if changed
+        id: changed-wbfetch
+        continue-on-error: true
+        run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- libs/wb-fetch
+
+      - name: WB Fetch - Unit Tests
+        if: steps.changed-wbfetch.outcome == 'failure'
+        run: pnpm test:unit --filter @warbrokers/wbfetch
