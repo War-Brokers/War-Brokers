@@ -1,6 +1,6 @@
 # wbtimeline
 
-Live: https://wbp-wbtimeline.web.app
+Live: https://wbtimeline.wbpjs.com
 
 The War Brokers Timeline is a website that lists various events happened in the [War Brokers](https://warbrokers.io) community in a chronological order.
 
