@@ -12,6 +12,13 @@ export async function getPlayer(
     const res = await fetch(`http://${ip}/get_player_stats.php?uid=${uid}`, {
         headers: { Authorization: `Basic ${btoa(`${id}:${pw}`)}` },
     })
+
+    console.log({
+        url: `http://${ip}/get_player_stats.php?uid=${uid}`,
+        status: res.status,
+        res: res.text(),
+    })
+
     if (!res.ok)
         return {
             success: false,

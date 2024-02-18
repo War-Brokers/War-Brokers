@@ -12,7 +12,6 @@ export const load = (async ({ params }) => {
 
     if (!uid) error(404, "Not Found")
 
-    console.log({ id: env.WB_DB_ID, pw: env.WB_DB_PW, ip: env.WB_DB_IP })
     const res = await getPlayer(
         { id: env.WB_DB_ID, pw: env.WB_DB_PW, ip: env.WB_DB_IP },
         uid,
