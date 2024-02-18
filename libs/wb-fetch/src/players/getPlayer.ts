@@ -10,7 +10,11 @@ export async function getPlayer(
     const { id, pw, ip } = auth
 
     const res = await fetch(`http://${ip}/get_player_stats.php?uid=${uid}`, {
-        headers: { Authorization: `Basic ${btoa(`${id}:${pw}`)}` },
+        credentials: "include",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            Authorization: `Basic ${btoa(`${id}:${pw}`)}`,
+        },
     })
 
     if (!res.ok)
