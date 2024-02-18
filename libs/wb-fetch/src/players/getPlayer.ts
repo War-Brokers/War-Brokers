@@ -13,12 +13,6 @@ export async function getPlayer(
         headers: { Authorization: `Basic ${btoa(`${id}:${pw}`)}` },
     })
 
-    console.log({
-        url: `http://${ip}/get_player_stats.php?uid=${uid}`,
-        status: res.status,
-        res: res.text(),
-    })
-
     if (!res.ok)
         return {
             success: false,
