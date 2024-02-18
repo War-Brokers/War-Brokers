@@ -1,7 +1,8 @@
 import { error } from "@sveltejs/kit"
 import { getPlayer } from "@warbrokers/fetch/src/players/getPlayer"
 import dayjs from "dayjs"
-import DOMPurify from "isomorphic-dompurify"
+import DOMPurify from "dompurify"
+import { JSDOM } from "jsdom"
 
 import env from "$lib/env"
 
@@ -22,8 +23,10 @@ export const load = (async ({ params }) => {
     const player = res.data
 
     // prevent XSS (hopefully)
-    player.nick = DOMPurify.sanitize(player.nick)
-    player.nicklower = DOMPurify.sanitize(player.nicklower)
+    const window = new JSDOM("").window
+    const purify = DOMPurify(window)
+    player.nick = purify.sanitize(player.nick)
+    player.nicklower = purify.sanitize(player.nicklower)
 
     return {
         player: player,

@@ -68,9 +68,15 @@ importers:
       '@trpc/client':
         specifier: ^10.45.1
         version: 10.45.1(@trpc/server@10.45.1)
+      '@types/dompurify':
+        specifier: ^3.0.5
+        version: 3.0.5
       '@types/eslint':
         specifier: 8.56.2
         version: 8.56.2
+      '@types/jsdom':
+        specifier: ^21.1.6
+        version: 21.1.6
       '@types/lodash':
         specifier: ^4.14.202
         version: 4.14.202
@@ -101,6 +107,9 @@ importers:
       dayjs:
         specifier: ^1.11.10
         version: 1.11.10
+      dompurify:
+        specifier: ^3.0.8
+        version: 3.0.8
       eslint:
         specifier: ^8.56.0
         version: 8.56.0
@@ -116,9 +125,9 @@ importers:
       flowbite-svelte:
         specifier: ^0.44.23
         version: 0.44.23(svelte@4.2.10)
-      isomorphic-dompurify:
-        specifier: ^2.3.0
-        version: 2.3.0
+      jsdom:
+        specifier: ^24.0.0
+        version: 24.0.0
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -154,7 +163,7 @@ importers:
         version: 5.1.1(@types/node@20.11.17)
       vitest:
         specifier: ^1.2.2
-        version: 1.2.2(@types/node@20.11.17)
+        version: 1.2.2(@types/node@20.11.17)(jsdom@24.0.0)
       zod:
         specifier: ^3.22.4
         version: 3.22.4
@@ -2386,6 +2395,14 @@ packages:
       pretty-format: 29.7.0
     dev: true
 
+  /@types/jsdom@21.1.6:
+    resolution: {integrity: sha512-/7kkMsC+/kMs7gAYmmBR9P0vGTnOoLhQhyhQJSlXGI5bzTHp6xdo0TtKWQAsz6pmSAeVqKSbqeyP6hytqr9FDw==}
+    dependencies:
+      '@types/node': 20.11.17
+      '@types/tough-cookie': 4.0.5
+      parse5: 7.1.2
+    dev: true
+
   /@types/json-schema@7.0.15:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
     dev: true
@@ -2502,8 +2519,6 @@ packages:
   /@types/tough-cookie@4.0.5:
     resolution: {integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==}
     requiresBuild: true
-    dev: false
-    optional: true
 
   /@types/trusted-types@2.0.7:
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -5703,20 +5718,6 @@ packages:
 
   /isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
-    dev: true
-
-  /isomorphic-dompurify@2.3.0:
-    resolution: {integrity: sha512-FCoKY4/mW/jnn/+VgE7wXGC2D/RXzVCAmGYuGWEuZXtyWnwmE2100caciIv+RbHk90q9LA0OW5IBn2f+ywHtww==}
-    engines: {node: '>=18'}
-    dependencies:
-      '@types/dompurify': 3.0.5
-      dompurify: 3.0.8
-      jsdom: 24.0.0
-    transitivePeerDependencies:
-      - bufferutil
-      - canvas
-      - supports-color
-      - utf-8-validate
     dev: true
 
   /istanbul-lib-coverage@3.2.2:
@@ -9262,7 +9263,7 @@ packages:
       vite: 5.1.1(@types/node@20.11.17)
     dev: true
 
-  /vitest@1.2.2(@types/node@20.11.17):
+  /vitest@1.2.2(@types/node@20.11.17)(jsdom@24.0.0):
     resolution: {integrity: sha512-d5Ouvrnms3GD9USIK36KG8OZ5bEvKEkITFtnGv56HFaSlbItJuYr7hv2Lkn903+AvRAgSixiamozUVfORUekjw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -9298,6 +9299,7 @@ packages:
       chai: 4.4.1
       debug: 4.3.4
       execa: 8.0.1
+      jsdom: 24.0.0
       local-pkg: 0.5.0
       magic-string: 0.30.7
       pathe: 1.1.2
