@@ -87,21 +87,12 @@ jobs:
         continue-on-error: true
         run: git diff --quiet ${{ github.event.before }} ${{ github.event.after }} -- apps/stats-site
 
-      - name: Stats Site - Create Dummy env
+      - name: Stats Site - Build
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
         env:
           WB_DB_ID: ${{ secrets.WB_DB_ID }}
           WB_DB_PW: ${{ secrets.WB_DB_PW }}
           WB_DB_IP: ${{ secrets.WB_DB_IP }}
-        run: |
-          cat <<EOF > apps/stats-site/.env
-          WB_DB_ID="$WB_DB_ID"
-          WB_DB_PW="$WB_DB_PW"
-          WB_DB_IP="$WB_DB_IP"
-          EOF
-
-      - name: Stats Site - Build
-        if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
         run: pnpm build --filter @warbrokers/stats-site
 
       - name: Stats Site - Lint
@@ -110,10 +101,18 @@ jobs:
 
       - name: Stats Site - Unit Tests
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
+        env:
+          WB_DB_ID: ${{ secrets.WB_DB_ID }}
+          WB_DB_PW: ${{ secrets.WB_DB_PW }}
+          WB_DB_IP: ${{ secrets.WB_DB_IP }}
         run: pnpm test:unit --filter @warbrokers/stats-site
 
       - name: Stats Site - E2E Tests
         if: steps.changed-stats-site.outcome == 'failure' || inputs.deploy-stats-site
+        env:
+          WB_DB_ID: ${{ secrets.WB_DB_ID }}
+          WB_DB_PW: ${{ secrets.WB_DB_PW }}
+          WB_DB_IP: ${{ secrets.WB_DB_IP }}
         run: pnpm test:e2e --filter @warbrokers/stats-site
 
       # The steps below are used to deploy the stats site to firebase functions
