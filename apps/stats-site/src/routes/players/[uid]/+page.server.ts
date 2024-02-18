@@ -3,7 +3,7 @@ import { getPlayer } from "@warbrokers/fetch/src/players/getPlayer"
 import dayjs from "dayjs"
 import DOMPurify from "isomorphic-dompurify"
 
-import { WB_DB_ID, WB_DB_IP, WB_DB_PW } from "$env/static/private"
+import env from "$lib/env"
 
 import type { PageServerLoad } from "./$types"
 
@@ -13,7 +13,7 @@ export const load = (async ({ params }) => {
     if (!uid) error(404, "Not Found")
 
     const res = await getPlayer(
-        { id: WB_DB_ID, pw: WB_DB_PW, ip: WB_DB_IP },
+        { id: env.WB_DB_ID, pw: env.WB_DB_PW, ip: env.WB_DB_IP },
         uid,
     )
 

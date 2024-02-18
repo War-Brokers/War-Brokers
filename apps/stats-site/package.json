@@ -19,6 +19,7 @@
         "@sveltejs/adapter-vercel": "5.1.0",
         "@sveltejs/kit": "^2.5.0",
         "@sveltejs/vite-plugin-svelte": "^3.0.2",
+        "@t3-oss/env-core": "^0.9.2",
         "@trpc/client": "^10.45.1",
         "@types/eslint": "8.56.2",
         "@types/lodash": "^4.14.202",
