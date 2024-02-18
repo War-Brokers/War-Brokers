@@ -1,7 +1,7 @@
 export interface DBAuth {
     id: string
     pw: string
-    ip: string
+    base: string
 }
 
 export enum FailReason {

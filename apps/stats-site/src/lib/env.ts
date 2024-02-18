@@ -5,8 +5,8 @@ import { z } from "zod"
 export default createEnv({
     server: {
         WB_DB_ID: z.string(),
-        WB_DB_IP: z.string(),
         WB_DB_PW: z.string(),
+        WB_DB_BASE: z.string(),
     },
     runtimeEnv: process.env,
 })

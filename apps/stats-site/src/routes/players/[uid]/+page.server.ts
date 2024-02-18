@@ -1,6 +1,5 @@
 import { error } from "@sveltejs/kit"
-import { FailReason } from "@warbrokers/fetch/src/util/types"
-import { PlayerSchema } from "@warbrokers/types/src/player"
+import { getPlayer } from "@warbrokers/fetch/src/players/getPlayer"
 import dayjs from "dayjs"
 import xss from "xss"
 
@@ -13,39 +12,18 @@ export const load = (async ({ params }) => {
 
     if (!uid) error(404, "Not Found")
 
-    const res = await fetch(
-        `http://${env.WB_DB_IP}/get_player_stats.php?uid=${uid}`,
+    const res = await getPlayer(
         {
-            method: "GET",
-            headers: {
-                Authorization:
-                    "Basic " +
-                    Buffer.from(`${env.WB_DB_ID}:${env.WB_DB_PW}`).toString(
-                        "base64",
-                    ),
-            },
+            id: env.WB_DB_ID,
+            pw: env.WB_DB_PW,
+            base: env.WB_DB_BASE,
         },
+        uid,
     )
 
-    if (!res.ok) {
-        console.log(
-            `failed to get player stats of ${uid}. DB responded:`,
-            await res.text(),
-        )
-        return error(500, FailReason.DBConnectionFail)
-    }
+    if (!res.success) error(500, res.reason)
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const raw: any = await res.json()
-
-    // this check works on both null and undefined values because JS
-    if (raw["time_alive_longest"] != null)
-        raw["time_alive_longest"] = Number(raw["time_alive_longest"])
-
-    const parseResult = PlayerSchema.safeParse(raw)
-    if (!parseResult.success) return error(500, FailReason.SchemaValidationFail)
-
-    const player = parseResult.data
+    const player = res.data
 
     // prevent XSS (hopefully)
     player.nick = xss(player.nick)

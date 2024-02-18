@@ -7,10 +7,9 @@ export async function getPlayer(
     auth: DBAuth,
     uid: Player["uid"],
 ): Promise<Result<Player>> {
-    const { id, pw, ip } = auth
+    const { id, pw, base } = auth
 
-    const res = await fetch(`http://${ip}/get_player_stats.php?uid=${uid}`, {
-        method: "GET",
+    const res = await fetch(`${base}/get_player_stats.php?uid=${uid}`, {
         headers: {
             Authorization:
                 "Basic " + Buffer.from(`${id}:${pw}`).toString("base64"),
