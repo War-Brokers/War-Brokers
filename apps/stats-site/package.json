@@ -21,7 +21,6 @@
         "@sveltejs/vite-plugin-svelte": "^3.0.2",
         "@t3-oss/env-core": "^0.9.2",
         "@trpc/client": "^10.45.1",
-        "@types/dompurify": "^3.0.5",
         "@types/eslint": "8.56.2",
         "@types/jsdom": "^21.1.6",
         "@types/lodash": "^4.14.202",
@@ -34,13 +33,11 @@
         "@warbrokers/wbapi": "workspace:*",
         "autoprefixer": "10.4.17",
         "dayjs": "^1.11.10",
-        "dompurify": "^3.0.8",
         "eslint": "^8.56.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-svelte": "^2.35.1",
         "flowbite": "^2.2.1",
         "flowbite-svelte": "^0.44.23",
-        "jsdom": "^24.0.0",
         "lodash": "^4.17.21",
         "postcss": "8.4.35",
         "prettier": "^3.2.5",
@@ -53,6 +50,7 @@
         "typescript": "^5.3.3",
         "vite": "^5.1.1",
         "vitest": "^1.2.2",
+        "xss": "^1.0.14",
         "zod": "^3.22.4"
     }
 }
