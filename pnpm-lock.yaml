@@ -319,8 +319,8 @@ importers:
         specifier: ^12.0.0
         version: 12.0.0(eslint@8.56.0)
       eslint-plugin-turbo:
-        specifier: ^1.12.3
-        version: 1.12.3(eslint@8.56.0)
+        specifier: ^1.12.4
+        version: 1.12.4(eslint@8.56.0)
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -4515,6 +4515,15 @@ packages:
 
   /eslint-plugin-turbo@1.12.3(eslint@8.56.0):
     resolution: {integrity: sha512-7hEyxa+oP898EFNoxVenHlH8jtBwV1hbbIkdQWgqDcB0EmVNGVEZkYRo5Hm6BuMAjR433B+NISBJdj0bQo4/Lg==}
+    peerDependencies:
+      eslint: '>6.6.0'
+    dependencies:
+      dotenv: 16.0.3
+      eslint: 8.56.0
+    dev: true
+
+  /eslint-plugin-turbo@1.12.4(eslint@8.56.0):
+    resolution: {integrity: sha512-3AGmXvH7E4i/XTWqBrcgu+G7YKZJV/8FrEn79kTd50ilNsv+U3nS2IlcCrQB6Xm2m9avGD9cadLzKDR1/UF2+g==}
     peerDependencies:
       eslint: '>6.6.0'
     dependencies:
