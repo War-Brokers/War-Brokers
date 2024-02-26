@@ -17,7 +17,7 @@
     "devDependencies": {
         "@playwright/test": "^1.41.2",
         "@sveltejs/adapter-vercel": "5.1.0",
-        "@sveltejs/kit": "^2.5.0",
+        "@sveltejs/kit": "^2.5.1",
         "@sveltejs/vite-plugin-svelte": "^3.0.2",
         "@t3-oss/env-core": "^0.9.2",
         "@trpc/client": "^10.45.1",
