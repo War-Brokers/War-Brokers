@@ -21,8 +21,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
-          cache: yarn
+          node-version: "20"
+          cache: "yarn"
 
       - name: Install Node Dependencies
         run: yarn install
@@ -56,7 +56,15 @@ jobs:
         run: yarn lint
 
       - name: Test (end-to-end)
+        env:
+          WB_DB_ID: ${{ secrets.WB_DB_ID }}
+          WB_DB_PW: ${{ secrets.WB_DB_PW }}
+          WB_DB_BASE: ${{ secrets.WB_DB_BASE }}
         run: yarn test:e2e
 
       - name: Test (unit)
+        env:
+          WB_DB_ID: ${{ secrets.WB_DB_ID }}
+          WB_DB_PW: ${{ secrets.WB_DB_PW }}
+          WB_DB_BASE: ${{ secrets.WB_DB_BASE }}
         run: yarn test:unit
