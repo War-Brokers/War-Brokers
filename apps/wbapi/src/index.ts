@@ -15,6 +15,9 @@ export const env = {
     WB_DB_ID: process.env.WB_DB_ID as string,
     WB_DB_PW: process.env.WB_DB_PW as string,
     WB_DB_BASE: process.env.WB_DB_BASE as string,
+
+    REDIS_ENDPOINT: process.env.REDIS_ENDPOINT as string,
+    REDIS_PW: process.env.REDIS_PW as string,
     /* eslint-enable turbo/no-undeclared-env-vars */
 }
 

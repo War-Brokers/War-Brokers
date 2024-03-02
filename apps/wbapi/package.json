@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "@trpc/server": "^10.45.1",
+        "@upstash/redis": "^1.28.4",
         "@warbrokers/types": "*",
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",

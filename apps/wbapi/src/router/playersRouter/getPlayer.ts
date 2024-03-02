@@ -5,6 +5,7 @@ import { z } from "zod"
 
 import { reason2TRPCError } from "@/errors"
 import { env } from "@/index"
+import { setGamesElo, setKillsElo, setXP } from "@/redis"
 import { publicProcedure } from "@/trpc"
 import type { Result } from "@/types"
 import { FailReason } from "@/types"
@@ -36,7 +37,13 @@ export default (tag: string) =>
                 throw reason2TRPCError(res.reason)
             }
 
-            return res.data
+            const player = res.data
+
+            setKillsElo(player.uid, player.killsELO)
+            setGamesElo(player.uid, player.gamesELO)
+            setXP(player.uid, player.xp)
+
+            return player
         })
 
 export async function getPlayer(uid: Player["uid"]): Promise<Result<Player>> {

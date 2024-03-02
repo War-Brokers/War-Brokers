@@ -15,6 +15,9 @@ export enum FailReason {
     // when the server is not able to get a response from WB's API
     APIConnectionFail = "API_CONNECTION_FAIL",
 
+    // when the server is not able to get a response from Redis
+    RedisConnectionFail = "REDIS_CONNECTION_FAIL",
+
     // when the server is not able to get a response from WB's stats site
     StatsSiteConnectionFail = "STATS_SITE_CONNECTION_FAIL",
 }
