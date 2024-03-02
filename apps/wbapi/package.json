@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "yarn build && yarn start",
         "build": "rm -rf build && tsup && tsc --emitDeclarationOnly",
-        "start": "node .",
+        "start": "NODE_ENV=development node .",
         "lint": "eslint . && tsc --noEmit",
         "test:unit": "jest",
         "clean": "rm -rf .turbo build node_modules *.log"
