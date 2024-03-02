@@ -44,7 +44,7 @@ export async function getPercentile(
 ): Promise<Result<number>> {
     const [size, rank] = await Promise.all([
         // https://redis.io/commands/scard
-        redis.scard(key),
+        redis.zcard(key),
 
         // https://redis.io/commands/zrank
         redis.zrevrank(key, uid),
