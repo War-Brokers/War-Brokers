@@ -20,9 +20,6 @@
         "foxundermoon.shell-format",
 
         // dotenv
-        "mikestead.dotenv",
-
-        // docker
-        "ms-azuretools.vscode-docker"
+        "mikestead.dotenv"
     ]
 }

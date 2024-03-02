@@ -1,21 +1,51 @@
-import { initializeApp } from "firebase-admin/app"
-import { setGlobalOptions } from "firebase-functions/v2"
-import { onRequest } from "firebase-functions/v2/https"
+import "dotenv/config"
 
-import { app } from "@/app"
-import { WB_DB_IP, WB_ID, WB_PW } from "@/env"
+import { createExpressMiddleware } from "@trpc/server/adapters/express"
+import cors from "cors"
+import express from "express"
+import swaggerUi from "swagger-ui-express"
+import { createOpenApiExpressMiddleware } from "trpc-openapi"
 
-initializeApp()
+import { openApiDocument } from "@/openapi"
+import { appRouter } from "@/router"
+import { createContext } from "@/trpc"
 
-// Set the maximum instances to 10 for all functions
-// limitations set by quota
-setGlobalOptions({ maxInstances: 10 })
+export const env = {
+    /* eslint-disable turbo/no-undeclared-env-vars */
+    WB_DB_ID: process.env.WB_DB_ID as string,
+    WB_DB_PW: process.env.WB_DB_PW as string,
+    WB_DB_BASE: process.env.WB_DB_BASE as string,
+    /* eslint-enable turbo/no-undeclared-env-vars */
+}
 
-export const api = onRequest(
-    {
-        region: "us-central1",
-        memory: "256MiB",
-        secrets: [WB_ID, WB_PW, WB_DB_IP],
-    },
-    app,
+if (!env.WB_DB_ID || !env.WB_DB_PW || !env.WB_DB_BASE) {
+    console.error("Misconfigured env variable!")
+    process.exit(1)
+}
+
+const app = express()
+
+app.use(cors())
+
+// API documentations
+app.use("/api-docs", swaggerUi.serve)
+app.get(
+    "/api-docs",
+    swaggerUi.setup(openApiDocument, {
+        swaggerOptions: {
+            tryItOutEnabled: true,
+        },
+    }),
 )
+
+// Handle incoming tRPC requests
+app.use("/trpc", createExpressMiddleware({ router: appRouter, createContext }))
+
+// Handle incoming OpenAPI requests
+app.use(
+    "/",
+    createOpenApiExpressMiddleware({ router: appRouter, createContext }),
+)
+
+console.log("====> http://127.0.0.1:5000/api-docs")
+app.listen(5000)

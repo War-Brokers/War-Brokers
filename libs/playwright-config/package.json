@@ -3,6 +3,9 @@
     "version": "0.0.0",
     "private": true,
     "main": "index.ts",
+    "scripts": {
+        "clean": "rm -rf .turbo node_modules"
+    },
     "devDependencies": {
         "@playwright/test": "^1.41.2"
     }

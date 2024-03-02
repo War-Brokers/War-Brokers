@@ -9,5 +9,5 @@ The War Brokers Timeline is a website that lists various events happened in the 
 1. Set up monorepo ([`CONTRIBUTING.md`](../../CONTRIBUTING.md))
 2. Start a local dev server at http://localhost:3000
    ```
-   pnpm start
+   yarn start
    ```

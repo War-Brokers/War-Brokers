@@ -1,7 +1,9 @@
-import { playersOnlineURL } from "../util/const"
 import z from "zod"
+
+import { playersOnlineURL } from "../util/const"
 import { string2number } from "../util/convert"
-import { FailReason, Result } from "../util/types"
+import type { Result } from "../util/types"
+import { FailReason } from "../util/types"
 
 export const responseSchema = z.number()
 export type Response = z.infer<typeof responseSchema>

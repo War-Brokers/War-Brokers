@@ -15,7 +15,7 @@ Example `package.json` file:
 The main purpose of `package.json` are:
 
 - to let turborepo know about the project's existence
-- to use `package.json` scripts via pnpm.
+- to use `package.json` scripts via yarn.
 
 ## package.json script naming convention
 

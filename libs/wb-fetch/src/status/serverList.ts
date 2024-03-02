@@ -1,7 +1,9 @@
+import type { Location } from "@warbrokers/types/src/location"
 import { z } from "zod"
+
 import { serverListURL } from "../util/const"
-import { FailReason, Result } from "../util/types"
-import { Location } from "@warbrokers/types/src/location"
+import type { Result } from "../util/types"
+import { FailReason } from "../util/types"
 
 export const serverSchema = z.object({
     playerCount: z.number(),

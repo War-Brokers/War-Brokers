@@ -11,7 +11,6 @@
         "developomp",
         "dompurify",
         "etags",
-        "firebaserc",
         "firelink",
         "firestore",
         "flowbite",
@@ -62,6 +61,7 @@
     // editor
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "typescript.tsdk": "node_modules/typescript/lib",
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit"
     },
@@ -69,6 +69,12 @@
         "editor.defaultFormatter": "tamasfe.even-better-toml"
     },
     "[dotenv]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "[shellscript]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "[ignore]": {
         "editor.defaultFormatter": "foxundermoon.shell-format"
     },
 
@@ -103,14 +109,7 @@
 
     // etc
     "search.exclude": {
-        "**/pnpm-lock.yaml": true,
+        "**/yarn.lock": true,
         "**/.pnp.*": true
-    },
-    "[shellscript]": {
-        "editor.defaultFormatter": "foxundermoon.shell-format"
-    },
-    "[ignore]": {
-        "editor.defaultFormatter": "foxundermoon.shell-format"
-    },
-    "typescript.tsdk": "node_modules/typescript/lib"
+    }
 }

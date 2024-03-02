@@ -4,8 +4,8 @@ import { FailReason } from "@warbrokers/fetch/src/util/types"
 import { PlayerSchema } from "@warbrokers/types/src/player"
 import { z } from "zod"
 
-import env from "@/env"
 import { reason2TRPCError } from "@/errors"
+import { env } from "@/index"
 import { publicProcedure } from "@/trpc"
 
 export default (tag: string) =>
@@ -25,9 +25,9 @@ export default (tag: string) =>
 
             const res = await getPlayer(
                 {
-                    id: env.wb.id.value(),
-                    pw: env.wb.pw.value(),
-                    ip: env.wb.ip_db.value(),
+                    id: env.WB_DB_ID,
+                    pw: env.WB_DB_PW,
+                    base: env.WB_DB_BASE,
                 },
                 uid,
             )

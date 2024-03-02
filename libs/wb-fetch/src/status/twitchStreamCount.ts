@@ -1,6 +1,8 @@
 import { z } from "zod"
+
 import { twitchStreamsURL } from "../util/const"
-import { FailReason, Result } from "../util/types"
+import type { Result } from "../util/types"
+import { FailReason } from "../util/types"
 
 export const streamSchema = z.object({
     thumbnail: z.string(),

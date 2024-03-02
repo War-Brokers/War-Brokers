@@ -16,7 +16,7 @@ export const openApiDocument: OpenAPIV3.Document = generateOpenApiDocument(
         baseUrl:
             // eslint-disable-next-line turbo/no-undeclared-env-vars
             process.env.NODE_ENV === "development"
-                ? "http://localhost:5000" // firebase emulator
+                ? "http://localhost:5000" // development
                 : "https://wbapi.wbpjs.com", // production
         docsUrl:
             "https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbapi",

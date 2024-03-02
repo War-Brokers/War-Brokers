@@ -1,4 +1,9 @@
 {
+    "private": true,
+    "workspaces": [
+        "apps/*",
+        "libs/*"
+    ],
     "scripts": {
         "turbo": "turbo",
         "dev": "turbo run dev --parallel",
@@ -7,7 +12,7 @@
         "lint": "prettier . --check && turbo run lint --parallel",
         "test:e2e": "turbo run test:e2e --parallel",
         "test:unit": "turbo run test:unit --parallel",
-        "clean": "turbo run clean --parallel && rm -rf .turbo node_modules target Cargo.lock",
+        "clean": "turbo run clean --parallel && rm -rf .turbo node_modules",
         "prepare": "husky install"
     },
     "devDependencies": {
@@ -24,5 +29,9 @@
         "prettier-plugin-tailwindcss": "^0.5.11",
         "turbo": "^1.12.4",
         "typescript": "^5.3.3"
+    },
+    "engines": {
+        "yarn": "1.x",
+        "node": "20.x"
     }
 }

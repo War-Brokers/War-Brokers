@@ -1,4 +1,3 @@
 /.svelte-kit/
-/package/
 *.timestamp-*
 .vercel/
