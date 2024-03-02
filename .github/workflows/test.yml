@@ -46,13 +46,17 @@ jobs:
         run: yarn playwright install --with-deps
 
       - name: Build
+        env:
+          WB_DB_ID: ${{ secrets.WB_DB_ID }}
+          WB_DB_PW: ${{ secrets.WB_DB_PW }}
+          WB_DB_BASE: ${{ secrets.WB_DB_BASE }}
         run: yarn build
 
       - name: Lint
         run: yarn lint
 
-      - name: Tests (end-to-end)
+      - name: Test (end-to-end)
         run: yarn test:e2e
 
-      - name: Tests (unit)
+      - name: Test (unit)
         run: yarn test:unit
