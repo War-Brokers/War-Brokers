@@ -21,11 +21,6 @@ export const env = {
     /* eslint-enable turbo/no-undeclared-env-vars */
 }
 
-if (!env.WB_DB_ID || !env.WB_DB_PW || !env.WB_DB_BASE) {
-    console.error("Misconfigured env variable!")
-    process.exit(1)
-}
-
 const app = express()
 
 app.use(cors())
