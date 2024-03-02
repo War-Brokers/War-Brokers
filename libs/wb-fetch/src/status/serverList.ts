@@ -1,4 +1,4 @@
-import type { Location } from "@warbrokers/types/src/location"
+import type { Region } from "@warbrokers/types/src/region"
 import { z } from "zod"
 
 import { serverListURL } from "../util/const"
@@ -53,7 +53,7 @@ export function parseData(data: string) {
         .filter((item) => item.playerCount !== 0)
 }
 
-export async function serverList(region: Location): Promise<Result<Response>> {
+export async function serverList(region: Region): Promise<Result<Response>> {
     const res = await fetch(serverListURL(region))
 
     // looks like: "serverCount,data1,data2,data3,data4,data5,data6,data1,data2,data3,data4,data5,data6...".

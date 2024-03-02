@@ -2,7 +2,7 @@ import {
     responseSchema,
     serverList,
 } from "@warbrokers/fetch/src/status/serverList"
-import { LocationSchema } from "@warbrokers/types/src/location"
+import { regionSchema } from "@warbrokers/types/src/region"
 import { z } from "zod"
 
 import { reason2TRPCError } from "@/errors"
@@ -20,7 +20,7 @@ Valid inputs: USA, USA_WEST, ASIA, AUSTRALIA, EUROPE, INDIA, JAPAN, RUSSIA, USA_
                 tags: [tag],
             },
         })
-        .input(z.object({ region: LocationSchema }))
+        .input(z.object({ region: regionSchema }))
         .output(responseSchema)
         .query(async ({ input }) => {
             const { region } = input

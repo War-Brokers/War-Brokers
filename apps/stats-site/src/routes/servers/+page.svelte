@@ -1,8 +1,5 @@
 <script lang="ts">
-    import {
-        type Location as Region,
-        LocationSchema as RegionSchema,
-    } from "@warbrokers/types/src/location"
+    import { type Region, regionSchema } from "@warbrokers/types/src/region"
     import {
         Table,
         TableBody,
@@ -18,7 +15,7 @@
 
     import Row from "./Row.svelte"
 
-    const regions: Region[] = RegionSchema._def.options
+    const regions: Region[] = regionSchema._def.options
         .map((item) => item.value)
         .filter((item) => !item.includes("TEST"))
         .filter((item) => !item.includes("CLAN"))

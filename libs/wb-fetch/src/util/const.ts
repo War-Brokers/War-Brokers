@@ -1,4 +1,4 @@
-import { type Location } from "@warbrokers/types/src/location"
+import { type Region } from "@warbrokers/types/src/region"
 
 // I literally don't know what this number is.
 // Anything from 200 to 283 works, but nothing higher or lower.
@@ -23,7 +23,7 @@ export function twitchStreamsURL() {
     return `https://store1.warbrokers.io/${mysteryNumber}/get_twitch_streams.php` as const
 }
 
-export function serverListURL(location: Location) {
+export function serverListURL(location: Region) {
     return `https://store1.warbrokers.io/${mysteryNumber}/server_list.php?location=${location}` as const
 }
 

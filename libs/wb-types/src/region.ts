@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const LocationSchema = z.union([
+export const regionSchema = z.union([
     z.literal("USA"),
     z.literal("USA_WEST"),
     z.literal("ASIA"),
@@ -21,4 +21,4 @@ export const LocationSchema = z.union([
     z.literal("NA_COMPETITIVE_TESTING"),
 ])
 
-export type Location = z.infer<typeof LocationSchema>
+export type Region = z.infer<typeof regionSchema>
