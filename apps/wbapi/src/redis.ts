@@ -13,7 +13,7 @@ export function initRedis() {
     })
 }
 
-enum RedisKey {
+export enum RedisKey {
     KILLS_ELO = "kills-elo",
     GAMES_ELO = "games-elo",
     XP = "xp",
@@ -47,7 +47,7 @@ export async function getPercentile(
         redis.zcard(key),
 
         // https://redis.io/commands/zrank
-        redis.zrevrank(key, uid),
+        redis.zrank(key, uid),
     ])
 
     if (rank === null)
@@ -59,6 +59,6 @@ export async function getPercentile(
     return {
         success: true,
         // rank starts at 0
-        data: 100 * (rank + 1 / size),
+        data: 100 * ((rank + 1) / size),
     }
 }
