@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server"
 
-import { FailReason } from "@/util/types"
+import { FailReason } from "@/types"
 
 function tellDev(msg: string) {
     return `${msg}. Please tell the developers about it.`

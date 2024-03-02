@@ -1,9 +1,9 @@
 import { z } from "zod"
 
+import { twitchStreamsURL } from "@/const"
 import { reason2TRPCError } from "@/errors"
 import { publicProcedure } from "@/trpc"
-import { twitchStreamsURL } from "@/util/const"
-import { FailReason, type Result } from "@/util/types"
+import { FailReason, type Result } from "@/types"
 
 export const streamSchema = z.object({
     thumbnail: z.string(),

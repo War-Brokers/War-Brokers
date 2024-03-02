@@ -6,8 +6,8 @@ import { z } from "zod"
 import { reason2TRPCError } from "@/errors"
 import { env } from "@/index"
 import { publicProcedure } from "@/trpc"
-import type { Result } from "@/util/types"
-import { FailReason } from "@/util/types"
+import type { Result } from "@/types"
+import { FailReason } from "@/types"
 
 export default (tag: string) =>
     publicProcedure

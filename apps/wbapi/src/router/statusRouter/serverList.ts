@@ -2,10 +2,10 @@ import type { Region } from "@warbrokers/types/src/region"
 import { regionSchema } from "@warbrokers/types/src/region"
 import { z } from "zod"
 
+import { serverListURL } from "@/const"
 import { reason2TRPCError } from "@/errors"
 import { publicProcedure } from "@/trpc"
-import { serverListURL } from "@/util/const"
-import { FailReason, type Result } from "@/util/types"
+import { FailReason, type Result } from "@/types"
 
 export const serverSchema = z.object({
     playerCount: z.number(),

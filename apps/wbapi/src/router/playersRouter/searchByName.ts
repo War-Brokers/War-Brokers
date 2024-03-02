@@ -3,7 +3,7 @@ import { z } from "zod"
 
 import { reason2TRPCError } from "@/errors"
 import { publicProcedure } from "@/trpc"
-import { FailReason, type Result } from "@/util/types"
+import { FailReason, type Result } from "@/types"
 
 export const responseSchema = z.array(
     z.object({

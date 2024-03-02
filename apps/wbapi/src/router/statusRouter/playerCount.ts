@@ -1,10 +1,10 @@
 import { z } from "zod"
 
+import { playerCountURL } from "@/const"
+import { string2number } from "@/convert"
 import { reason2TRPCError } from "@/errors"
 import { publicProcedure } from "@/trpc"
-import { playerCountURL } from "@/util/const"
-import { string2number } from "@/util/convert"
-import { FailReason, type Result } from "@/util/types"
+import { FailReason, type Result } from "@/types"
 
 export const responseSchema = z.number()
 export type Response = z.infer<typeof responseSchema>
