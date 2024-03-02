@@ -5,7 +5,13 @@
     import Stat from "./stat.svelte"
 
     export let data: PageData
-    const { player, timestamp } = data
+    const {
+        player,
+        timestamp,
+        xpPercentile,
+        killsEloPercentile,
+        gamesEloPercentile,
+    } = data
 </script>
 
 <Title title="{player.squad && `[${player.squad}] `}{player.nick}" />
@@ -31,6 +37,22 @@
 
 <div class="flex w-full flex-wrap gap-10">
     <Stat title="Level" data={player.level} />
-    <Stat title="Games Elo" data={player.gamesELO} />
-    <Stat title="Kills Elo" data={player.killsELO} />
+    <Stat
+        title="XP"
+        data={player.xp}
+        _id="xp-percentile"
+        percentile={xpPercentile}
+    />
+    <Stat
+        title="Kills Elo"
+        data={player.killsELO}
+        _id="kills-elo-percentile"
+        percentile={killsEloPercentile}
+    />
+    <Stat
+        title="Games Elo"
+        data={player.gamesELO}
+        _id="games-elo-percentile"
+        percentile={gamesEloPercentile}
+    />
 </div>

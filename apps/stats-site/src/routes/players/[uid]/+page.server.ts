@@ -19,6 +19,9 @@ export const load = (async ({ params }) => {
 
     return {
         player: player,
+        xpPercentile: trpc.players.xpPercentile.query({ uid }),
+        killsEloPercentile: trpc.players.killsEloPercentile.query({ uid }),
+        gamesEloPercentile: trpc.players.gamesEloPercentile.query({ uid }),
         timestamp: dayjs(MongoDBObjectId2Date(player.uid)).format(
             "MMMM D, YYYY",
         ),
