@@ -8,12 +8,12 @@
 
 <TableBodyRow>
     <TableBodyCell>
-        <div class="font-bold">{name}</div></TableBodyCell
-    >
-    <TableBodyCell>WIP</TableBodyCell>
-    <TableBodyCell>WIP</TableBodyCell>
-    <TableBodyCell>WIP</TableBodyCell>
-    <TableBodyCell>
+        <div class="font-bold">{name}</div>
+    </TableBodyCell>
+    <TableBodyCell tdClass="text-center">WIP</TableBodyCell>
+    <TableBodyCell tdClass="text-center">WIP</TableBodyCell>
+    <TableBodyCell tdClass="text-center">WIP</TableBodyCell>
+    <TableBodyCell tdClass="text-center">
         {#if playerCount === maxPlayers}
             <div class="dark:text-red-500">
                 {playerCount} / {maxPlayers}
