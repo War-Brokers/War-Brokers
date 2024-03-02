@@ -4,10 +4,14 @@ import type { Player } from "@warbrokers/types/src/player"
 import { env } from "."
 import { FailReason, type Result } from "./types"
 
-const redis = new Redis({
-    url: env.REDIS_ENDPOINT,
-    token: env.REDIS_PW,
-})
+let redis: Redis
+
+export function initRedis() {
+    redis = new Redis({
+        url: env.REDIS_ENDPOINT,
+        token: env.REDIS_PW,
+    })
+}
 
 enum RedisKey {
     KILLS_ELO = "kills-elo",

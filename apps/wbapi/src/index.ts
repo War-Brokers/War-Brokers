@@ -7,6 +7,7 @@ import swaggerUi from "swagger-ui-express"
 import { createOpenApiExpressMiddleware } from "trpc-openapi"
 
 import { openApiDocument } from "@/openapi"
+import { initRedis } from "@/redis"
 import { appRouter } from "@/router"
 import { createContext } from "@/trpc"
 
@@ -20,6 +21,8 @@ export const env = {
     REDIS_PW: process.env.REDIS_PW as string,
     /* eslint-enable turbo/no-undeclared-env-vars */
 }
+
+initRedis()
 
 const app = express()
 
