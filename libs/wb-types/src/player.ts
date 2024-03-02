@@ -6,6 +6,8 @@ import { WeaponIDSchema } from "./weapon"
 export const PlayerSchema = z.object({
     // Core
     uid: z.string(),
+    // currently, nicknames could only be 2~20 characters long, but there are
+    // old accounts with nickname length outside this range.
     nick: z.string(),
     nicklower: z.string().describe("Lowercase player nickname"),
     level: z.number().int().gte(1),
