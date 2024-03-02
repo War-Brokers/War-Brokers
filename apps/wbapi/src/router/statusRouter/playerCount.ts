@@ -1,11 +1,13 @@
-import {
-    playerCount,
-    responseSchema,
-} from "@warbrokers/fetch/src/status/playerCount"
 import { z } from "zod"
 
 import { reason2TRPCError } from "@/errors"
 import { publicProcedure } from "@/trpc"
+import { playerCountURL } from "@/util/const"
+import { string2number } from "@/util/convert"
+import { FailReason, type Result } from "@/util/types"
+
+export const responseSchema = z.number()
+export type Response = z.infer<typeof responseSchema>
 
 export default (tag: string) =>
     publicProcedure
@@ -26,3 +28,20 @@ export default (tag: string) =>
 
             return res.data
         })
+
+export async function playerCount(): Promise<Result<Response>> {
+    const res = await fetch(playerCountURL())
+    if (!res.ok)
+        return {
+            success: false,
+            reason: FailReason.APIConnectionFail,
+        }
+
+    // looks like "XXX,XXX,XXX"
+    const raw = await res.text()
+
+    return {
+        success: true,
+        data: string2number(raw),
+    }
+}

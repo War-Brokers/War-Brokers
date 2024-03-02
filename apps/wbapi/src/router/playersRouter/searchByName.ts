@@ -1,11 +1,18 @@
-import {
-    responseSchema,
-    searchPlayerByName,
-} from "@warbrokers/fetch/src/players/searchByName"
+import { playerSchema } from "@warbrokers/types/src/player"
 import { z } from "zod"
 
 import { reason2TRPCError } from "@/errors"
 import { publicProcedure } from "@/trpc"
+import { FailReason, type Result } from "@/util/types"
+
+export const responseSchema = z.array(
+    z.object({
+        nick: playerSchema.shape.nick,
+        uid: playerSchema.shape.uid,
+    }),
+)
+
+export type Response = z.infer<typeof responseSchema>
 
 export default (tag: string) =>
     publicProcedure
@@ -29,3 +36,29 @@ export default (tag: string) =>
 
             return res.data
         })
+
+export async function searchPlayerByName(
+    name: string,
+): Promise<Result<Response>> {
+    const res = await fetch(
+        `https://stats.warbrokers.io/players/search?term=${name.toLowerCase()}`,
+    )
+
+    const schema = z.array(
+        z.tuple([playerSchema.shape.nick, playerSchema.shape.uid]),
+    )
+
+    const parseResult = schema.safeParse(await res.json())
+    if (!parseResult.success)
+        return { success: false, reason: FailReason.SchemaValidationFail }
+
+    const result: Response = []
+    for (const data of parseResult.data) {
+        result.push({
+            nick: data[0],
+            uid: data[1],
+        })
+    }
+
+    return { success: true, data: result }
+}
