@@ -1,9 +1,5 @@
 <script lang="ts">
     import {
-        type Response,
-        serverList,
-    } from "@warbrokers/fetch/src/status/serverList"
-    import {
         type Location as Region,
         LocationSchema as RegionSchema,
     } from "@warbrokers/types/src/location"
@@ -18,6 +14,7 @@
     import { onMount } from "svelte"
 
     import Title from "$lib/components/title.svelte"
+    import trpc from "$lib/trpc"
 
     import Row from "./Row.svelte"
 
@@ -26,15 +23,21 @@
         .filter((item) => !item.includes("TEST"))
         .filter((item) => !item.includes("CLAN"))
 
-    const data: Partial<Record<Region, Response>> = {}
+    const data: Partial<
+        Record<
+            Region,
+            {
+                playerCount: number
+                maxPlayers: number
+            }[]
+        >
+    > = {}
 
     onMount(async () => {
-        for (const region of regions) {
-            const res = await serverList(region)
-            if (!res.success) continue // todo: handle error case
-
-            data[region] = res.data
-        }
+        regions.map(
+            async (region) =>
+                (data[region] = await trpc.status.serverList.query({ region })),
+        )
     })
 </script>
 

@@ -29,7 +29,6 @@
         "@vercel/analytics": "^1.2.0",
         "@vercel/speed-insights": "^1.0.10",
         "@warbrokers/eslint-config": "*",
-        "@warbrokers/fetch": "*",
         "@warbrokers/playwright-config": "*",
         "@warbrokers/types": "*",
         "@warbrokers/wbapi": "*",
