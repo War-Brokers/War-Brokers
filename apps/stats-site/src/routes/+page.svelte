@@ -9,7 +9,7 @@
     import type { PageData } from "./$types"
 
     export let data: PageData
-    const { playersOnlineResult, twitchStreamsResult } = data
+    const { playersOnline, twitchStreams } = data
 </script>
 
 <Title title="Home" />
@@ -22,23 +22,29 @@
     <div>
         <span class="font-bold dark:text-gray-400">Players online</span>
         <h2 class="text-2xl font-black">
-            {#if playersOnlineResult?.success}
-                {playersOnlineResult.data}
-            {:else}
+            {#await playersOnline}
+                ...
+            {:then playersOnline}
+                {playersOnline}
+            {:catch _}
                 <span class="dark:text-red-600">ERROR</span>
-            {/if}
+            {/await}
         </h2>
-        <A href="/servers">Browse Servers &nbsp; <Icon data={arrowRight} /></A>
+        <A href="/servers">
+            Browse Servers &nbsp; <Icon data={arrowRight} />
+        </A>
     </div>
 
     <div>
         <span class="font-bold dark:text-gray-400">Twitch Streams</span>
         <h2 class="text-2xl font-black">
-            {#if twitchStreamsResult?.success}
-                {twitchStreamsResult.data.total}
-            {:else}
+            {#await twitchStreams}
+                ...
+            {:then { total }}
+                {total}
+            {:catch _}
                 <span class="dark:text-red-600">ERROR</span>
-            {/if}
+            {/await}
         </h2>
         <A href="https://www.twitch.tv/warbrokers">
             Watch Live &nbsp; <Icon data={arrowRight} />
