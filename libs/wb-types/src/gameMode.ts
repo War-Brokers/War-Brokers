@@ -2,11 +2,11 @@ import { z } from "zod"
 
 import type { Digit } from "./digit"
 
-export const GameModeIDSchema = z.custom<`m${Digit}${Digit}`>((val) =>
+export const gameModeIDSchema = z.custom<`m${Digit}${Digit}`>((val) =>
     /^m\d\d$/g.test(val as string),
 )
 
-export type GameModeID = z.infer<typeof GameModeIDSchema>
+export type GameModeID = z.infer<typeof gameModeIDSchema>
 
 export enum GameMode {
     DeathMatch = "m00",

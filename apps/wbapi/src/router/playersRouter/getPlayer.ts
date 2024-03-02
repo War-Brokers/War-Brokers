@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server"
 import { getPlayer } from "@warbrokers/fetch/src/players/getPlayer"
 import { FailReason } from "@warbrokers/fetch/src/util/types"
-import { PlayerSchema } from "@warbrokers/types/src/player"
+import { playerSchema } from "@warbrokers/types/src/player"
 import { z } from "zod"
 
 import { reason2TRPCError } from "@/errors"
@@ -19,7 +19,7 @@ export default (tag: string) =>
             },
         })
         .input(z.object({ uid: z.string() }))
-        .output(PlayerSchema)
+        .output(playerSchema)
         .query(async ({ input }) => {
             const { uid } = input
 

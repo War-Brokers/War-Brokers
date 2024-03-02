@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const DigitSchema = z.enum([
+export const digitSchema = z.enum([
     "0",
     "1",
     "2",
@@ -13,4 +13,4 @@ export const DigitSchema = z.enum([
     "9",
 ])
 
-export type Digit = z.infer<typeof DigitSchema>
+export type Digit = z.infer<typeof digitSchema>

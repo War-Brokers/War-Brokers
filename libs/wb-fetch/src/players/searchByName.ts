@@ -1,4 +1,4 @@
-import { PlayerSchema } from "@warbrokers/types/src/player"
+import { playerSchema } from "@warbrokers/types/src/player"
 import z from "zod"
 
 import type { Result } from "../util/types"
@@ -6,8 +6,8 @@ import { FailReason } from "../util/types"
 
 export const responseSchema = z.array(
     z.object({
-        nick: PlayerSchema.shape.nick,
-        uid: PlayerSchema.shape.uid,
+        nick: playerSchema.shape.nick,
+        uid: playerSchema.shape.uid,
     }),
 )
 
@@ -21,7 +21,7 @@ export async function searchPlayerByName(
     )
 
     const schema = z.array(
-        z.tuple([PlayerSchema.shape.nick, PlayerSchema.shape.uid]),
+        z.tuple([playerSchema.shape.nick, playerSchema.shape.uid]),
     )
 
     const parseResult = schema.safeParse(await res.json())

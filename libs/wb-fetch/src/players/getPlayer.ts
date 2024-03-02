@@ -1,4 +1,4 @@
-import { type Player, PlayerSchema } from "@warbrokers/types/src/player"
+import { type Player, playerSchema } from "@warbrokers/types/src/player"
 
 import type { DBAuth, Result } from "../util/types"
 import { FailReason } from "../util/types"
@@ -34,7 +34,7 @@ export async function getPlayer(
     if (raw["time_alive_longest"] != null)
         raw["time_alive_longest"] = Number(raw["time_alive_longest"])
 
-    const parseResult = PlayerSchema.safeParse(raw)
+    const parseResult = playerSchema.safeParse(raw)
     if (!parseResult.success)
         return {
             success: false,

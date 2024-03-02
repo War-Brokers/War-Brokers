@@ -2,11 +2,11 @@ import { z } from "zod"
 
 import type { Digit } from "./digit"
 
-export const WeaponIDSchema = z.custom<
+export const weaponIDSchema = z.custom<
     `p${Digit}${Digit}` | `p${Digit}${Digit}${Digit}`
 >((val) => /^p\d\d\d?$/g.test(val as string))
 
-export type WeaponID = z.infer<typeof WeaponIDSchema>
+export type WeaponID = z.infer<typeof weaponIDSchema>
 
 export enum Weapon {
     AirStrike = "p09",

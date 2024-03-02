@@ -1,9 +1,9 @@
 import z from "zod"
 
-import { GameModeIDSchema } from "./gameMode"
-import { WeaponIDSchema } from "./weapon"
+import { gameModeIDSchema } from "./gameMode"
+import { weaponIDSchema } from "./weapon"
 
-export const PlayerSchema = z.object({
+export const playerSchema = z.object({
     // Core
     uid: z.string(),
     // currently, nicknames could only be 2~20 characters long, but there are
@@ -21,13 +21,13 @@ export const PlayerSchema = z.object({
     number_of_jumps: z.number().int().or(z.null()),
 
     // Match Results
-    losses: z.record(GameModeIDSchema, z.number().int()).or(z.null()),
+    losses: z.record(gameModeIDSchema, z.number().int()).or(z.null()),
     zombie_deaths: z.number().int().gte(0),
     zombie_kills: z.number().int().gte(0),
     zombie_wins: z.number().int().gte(0),
 
     // Damages
-    damage_dealt: z.record(WeaponIDSchema, z.number()).or(z.null()),
+    damage_dealt: z.record(weaponIDSchema, z.number()).or(z.null()),
 
     // Flags
     banned: z
@@ -51,4 +51,4 @@ export const PlayerSchema = z.object({
     zombie_time_alive: z.number().gte(0),
 })
 
-export type Player = z.infer<typeof PlayerSchema>
+export type Player = z.infer<typeof playerSchema>
