@@ -31,7 +31,7 @@ export function setGamesElo(uid: string, gamesElo: number) {
 
 export function setXP(uid: string, xp: number) {
     // https://redis.io/commands/zadd
-    redis.zadd(RedisKey.GAMES_ELO, { member: uid, score: xp })
+    redis.zadd(RedisKey.XP, { member: uid, score: xp })
 }
 
 /**
