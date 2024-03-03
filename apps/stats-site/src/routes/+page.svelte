@@ -30,7 +30,7 @@
                 <span class="dark:text-red-600">ERROR</span>
             {/await}
         </h2>
-        <A href="/servers">
+        <A href="/servers" class="dark:text-orange-500">
             Browse Servers &nbsp; <Icon data={arrowRight} />
         </A>
     </div>
@@ -46,7 +46,7 @@
                 <span class="dark:text-red-600">ERROR</span>
             {/await}
         </h2>
-        <A href="https://www.twitch.tv/warbrokers">
+        <A href="https://www.twitch.tv/warbrokers" class="dark:text-orange-500">
             Watch Live &nbsp; <Icon data={arrowRight} />
         </A>
     </div>
