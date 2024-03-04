@@ -3,6 +3,7 @@
     import Icon from "svelte-awesome"
     import arrowRight from "svelte-awesome/icons/arrowRight"
 
+    import PlayerSearch from "$lib/components/PlayerSearch.svelte"
     import Title from "$lib/components/title.svelte"
 
     import type { PageData } from "./$types"
@@ -12,6 +13,10 @@
 </script>
 
 <Title title="Home" />
+
+<div class="mb-4 flex w-full justify-center">
+    <PlayerSearch />
+</div>
 
 <div class="flex flex-wrap gap-10">
     <div>
