@@ -4,9 +4,10 @@
     "main": "./build/index.js",
     "private": true,
     "scripts": {
-        "dev": "yarn build && yarn start",
+        "dev": "yarn build && yarn start:dev",
         "build": "rm -rf build && tsup && tsc --emitDeclarationOnly",
-        "start": "NODE_ENV=development node .",
+        "start:dev": "NODE_ENV=development node .",
+        "start:prod": "node .",
         "lint": "eslint . && tsc --noEmit",
         "test:unit": "jest",
         "clean": "rm -rf .turbo build node_modules *.log"
