@@ -1,5 +1,6 @@
 <script lang="ts">
     import { Popover } from "flowbite-svelte"
+    import QuestionMarkIcon from "flowbite-svelte-icons/QuestionCircleSolid.svelte"
 
     import { percentile2rank, type Rank } from "$lib/rank"
 
@@ -25,18 +26,14 @@
         </span>
         {#await percentile then percentile}
             {#if percentile !== undefined}
-                <a
-                    href="/ranks"
-                    class="flex items-center justify-center"
-                    id={_id}
-                >
+                <div class="flex items-center justify-center" id={_id}>
                     <img
                         alt="The project logo"
                         src={icon}
                         class="ms-1.5 aspect-square w-7 text-gray-200"
                     />
                     <span class="sr-only">Show information</span>
-                </a>
+                </div>
                 <Popover
                     triggeredBy="#{_id}"
                     class="space-y-2 p-3 text-sm font-light dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400"
@@ -59,6 +56,13 @@
                         </span>
                         of the players!
                     </h3>
+                    <br />
+                    <a
+                        href="/ranks"
+                        class="flex font-medium hover:text-gray-300"
+                    >
+                        <QuestionMarkIcon class="mr-1 w-4" /> Learn More
+                    </a>
                 </Popover>
             {/if}
         {/await}
