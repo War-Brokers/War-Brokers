@@ -19,9 +19,9 @@ export enum RedisKey {
     XP = "xp",
 }
 
-export function setSquad(uid: string, squad: string) {
+export function setSquad(_uid: string, _squad: string) {
     // https://redis.io/commands/sadd
-    redis.sadd(`squad:${squad}`, uid)
+    // todo: implement
 }
 
 export function setKillsElo(uid: string, killsElo: number) {
