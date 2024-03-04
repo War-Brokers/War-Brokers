@@ -1,6 +1,10 @@
 <script lang="ts">
+    import Title from "$lib/components/title.svelte"
+
     import RankBadge from "./RankBadge.svelte"
 </script>
+
+<Title title="Ranks" />
 
 <div class="flex flex-wrap justify-center">
     <RankBadge rank="Godlike" />
