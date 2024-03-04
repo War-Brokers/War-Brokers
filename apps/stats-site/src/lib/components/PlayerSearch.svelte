@@ -30,7 +30,7 @@
 <form
     on:submit|preventDefault={() => {}}
     novalidate={true}
-    class="flex h-12 w-[32rem] items-center justify-center rounded-full pr-7 dark:bg-gray-600"
+    class="flex h-12 max-w-[32rem] items-center justify-center rounded-full pr-7 dark:bg-gray-600"
 >
     <div
         class={`${!searching && "opacity-0"} ml-3 flex h-7 w-7 items-center justify-center`}
