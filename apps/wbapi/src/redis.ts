@@ -4,39 +4,57 @@ import type { Player } from "@warbrokers/types/src/player"
 import { env } from "."
 import { FailReason, type Result } from "./types"
 
-let redis: Redis
+let redis_leaderboard: Redis
+let redis_squad: Redis
 
 export function initRedis() {
-    redis = new Redis({
-        url: env.REDIS_ENDPOINT,
-        token: env.REDIS_PW,
+    redis_leaderboard = new Redis({
+        url: env.LEADERBOARD_REDIS_URL,
+        token: env.LEADERBOARD_REDIS_TOKEN,
+    })
+
+    redis_squad = new Redis({
+        url: env.SQUAD_REDIS_URL,
+        token: env.SQUAD_REDIS_TOKEN,
     })
 }
 
-export enum RedisKey {
+export enum LeaderboardKey {
     KILLS_ELO = "kills-elo",
     GAMES_ELO = "games-elo",
     XP = "xp",
 }
 
-export function setSquad(_uid: string, _squad: string) {
-    // https://redis.io/commands/sadd
-    // todo: implement
+export function setSquad(uid: string, squad_name: string) {
+    // squad:<uid> = <squad_name> (string)
+    // members:<squad_name> = [uid1, uid2, ...] (set)
+
+    if (!squad_name) {
+        redis_squad.del(`squad:${uid}`, squad_name)
+        redis_squad.srem(`members:${squad_name}`, uid)
+        return
+    }
+
+    redis_squad.set(`squad:${uid}`, squad_name)
+    redis_squad.sadd(`members:${squad_name}`, uid)
 }
 
 export function setKillsElo(uid: string, killsElo: number) {
-    // https://redis.io/commands/zadd
-    redis.zadd(RedisKey.KILLS_ELO, { member: uid, score: killsElo })
+    redis_leaderboard.zadd(LeaderboardKey.KILLS_ELO, {
+        member: uid,
+        score: killsElo,
+    })
 }
 
 export function setGamesElo(uid: string, gamesElo: number) {
-    // https://redis.io/commands/zadd
-    redis.zadd(RedisKey.GAMES_ELO, { member: uid, score: gamesElo })
+    redis_leaderboard.zadd(LeaderboardKey.GAMES_ELO, {
+        member: uid,
+        score: gamesElo,
+    })
 }
 
 export function setXP(uid: string, xp: number) {
-    // https://redis.io/commands/zadd
-    redis.zadd(RedisKey.XP, { member: uid, score: xp })
+    redis_leaderboard.zadd(LeaderboardKey.XP, { member: uid, score: xp })
 }
 
 /**
@@ -44,15 +62,12 @@ export function setXP(uid: string, xp: number) {
  * i.e. This player is better than X percent of players.
  */
 export async function getPercentile(
-    key: RedisKey,
+    key: LeaderboardKey,
     uid: Player["uid"],
 ): Promise<Result<number>> {
     const [size, rank] = await Promise.all([
-        // https://redis.io/commands/scard
-        redis.zcard(key),
-
-        // https://redis.io/commands/zrank
-        redis.zrank(key, uid),
+        redis_leaderboard.zcard(key),
+        redis_leaderboard.zrank(key, uid),
     ])
 
     if (rank === null)

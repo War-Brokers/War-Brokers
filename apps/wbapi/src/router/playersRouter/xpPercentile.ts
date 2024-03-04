@@ -2,7 +2,7 @@ import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
 import { reason2TRPCError } from "@/errors"
-import { getPercentile, RedisKey } from "@/redis"
+import { getPercentile, LeaderboardKey } from "@/redis"
 import { publicProcedure } from "@/trpc"
 import { FailReason } from "@/types"
 
@@ -21,7 +21,7 @@ export default (tag: string) =>
         .query(async ({ input }) => {
             const { uid } = input
 
-            const res = await getPercentile(RedisKey.XP, uid)
+            const res = await getPercentile(LeaderboardKey.XP, uid)
 
             if (!res.success) {
                 if (res.reason === FailReason.RedisConnectionFail)
