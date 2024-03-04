@@ -5,7 +5,7 @@ import { z } from "zod"
 
 import { reason2TRPCError } from "@/errors"
 import { env } from "@/index"
-import { setGamesElo, setKillsElo, setXP } from "@/redis"
+import { setGamesElo, setKillsElo, setSquad, setXP } from "@/redis"
 import { publicProcedure } from "@/trpc"
 import type { Result } from "@/types"
 import { FailReason } from "@/types"
@@ -42,6 +42,7 @@ export default (tag: string) =>
             setKillsElo(player.uid, player.killsELO)
             setGamesElo(player.uid, player.gamesELO)
             setXP(player.uid, player.xp)
+            setSquad(player.uid, player.squad)
 
             return player
         })
