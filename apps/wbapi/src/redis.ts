@@ -25,18 +25,28 @@ export enum LeaderboardKey {
     XP = "xp",
 }
 
-export function setSquad(uid: string, squad_name: string) {
-    // squad:<uid> = <squad_name> (string)
-    // members:<squad_name> = [uid1, uid2, ...] (set)
+export function setSquad(uid: string, squadName: string) {
+    // squad:<uid> = <squadName> (string)
+    // members:<squadName> = [uid1, uid2, ...] (set)
 
-    if (!squad_name) {
-        redis_squad.del(`squad:${uid}`, squad_name)
-        redis_squad.srem(`members:${squad_name}`, uid)
+    if (!squadName) {
+        redis_squad.del(`squad:${uid}`, squadName)
+        redis_squad.srem(`members:${squadName}`, uid)
         return
     }
 
-    redis_squad.set(`squad:${uid}`, squad_name)
-    redis_squad.sadd(`members:${squad_name}`, uid)
+    redis_squad.set(`squad:${uid}`, squadName)
+    redis_squad.sadd(`members:${squadName}`, uid)
+}
+
+export async function getSquads(): Promise<string[]> {
+    const list = await redis_squad.keys("members:*")
+
+    return list.map((val) => val.slice(8))
+}
+
+export async function getSquadMembers(squadName: string): Promise<string[]> {
+    return await redis_squad.smembers(`members:${squadName}`)
 }
 
 export function setKillsElo(uid: string, killsElo: number) {
