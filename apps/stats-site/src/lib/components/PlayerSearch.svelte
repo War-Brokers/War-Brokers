@@ -1,51 +1,56 @@
 <script lang="ts">
     import debounce from "lodash/debounce"
+    import { Pulse } from "svelte-loading-spinners"
 
     import trpc from "$lib/trpc"
 
     let opened = false
-    let inputError = ""
+    let searching = false
     let searchResult: Awaited<
         ReturnType<typeof trpc.players.searchByName.query>
     > = []
 
     export let handleSearchInput = debounce(async (e: Event) => {
+        searching = true
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const text: string = e.target?.value
 
         if (!text) {
             searchResult = []
+            searching = false
             return
         }
 
         searchResult = await trpc.players.searchByName.query({ query: text })
+        searching = false
     }, 300)
 </script>
 
 <form
     on:submit|preventDefault={() => {}}
-    class="flex h-14 w-full rounded-full px-7 dark:bg-gray-600"
+    novalidate={true}
+    class="flex h-12 w-[32rem] items-center justify-center rounded-full pr-7 dark:bg-gray-600"
 >
+    <div
+        class={`${!searching && "opacity-0"} ml-3 flex h-7 w-7 items-center justify-center`}
+    >
+        <Pulse size="28" color="#d1d5db" unit="px" duration="1s" />
+    </div>
     <div class="relative flex w-full flex-col">
-        <label for="player-search" class="mt-1 text-sm font-black">
-            Search
-        </label>
-
         <input
             required
             type="search"
             id="player-search"
             autocomplete="off"
-            maxlength="20"
-            class="h-full border-none bg-transparent p-0 pb-2 text-lg focus:ring-0 dark:text-gray-200"
-            placeholder="Player Name"
-            aria-invalid={inputError ? "true" : undefined}
+            maxlength="40"
+            aria-required="false"
+            class="my-auto h-full border-none bg-transparent text-lg leading-7 focus:ring-0 dark:text-gray-200"
+            placeholder="Player Search"
             on:input={handleSearchInput}
-            on:focus={/**/ async () => setTimeout(() => (opened = true), 100)}
-            on:blur={/* */ async () => setTimeout(() => (opened = false), 100)}
+            on:focus={/**/ async () => setTimeout(() => (opened = true), 200)}
+            on:blur={/* */ async () => setTimeout(() => (opened = false), 200)}
         />
-        <span class="mt-1 dark:text-red-500">{inputError}</span>
 
         <div
             id="search-results"
