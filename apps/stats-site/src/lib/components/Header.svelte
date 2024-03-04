@@ -13,5 +13,11 @@
                 </h2>
             </a>
         </div>
+        <div class="flex gap-7">
+            <a href="/" class="hover:text-orange-500">Home</a>
+            <a href="/ranks" class="hover:text-orange-500">Ranks</a>
+            <span class="text-gray-400">Squads (WIP)</span>
+            <span class="text-gray-400">Leaderboard (WIP)</span>
+        </div>
     </div>
 </header>

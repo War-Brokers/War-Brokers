@@ -7,9 +7,7 @@
     <div
         class="mx-auto flex h-28 w-full max-w-5xl items-center justify-between px-4"
     >
-        <div>
-            <a href="/ranks" class="hover:text-orange-500">Ranks</a>
-        </div>
+        <div></div>
         <div>
             <a
                 href="https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site"
