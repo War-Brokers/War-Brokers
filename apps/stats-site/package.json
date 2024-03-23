@@ -26,8 +26,6 @@
         "@types/lodash": "^4.14.202",
         "@typescript-eslint/eslint-plugin": "^7.0.2",
         "@typescript-eslint/parser": "^6.21.0",
-        "@vercel/analytics": "^1.2.0",
-        "@vercel/speed-insights": "^1.0.10",
         "@warbrokers/eslint-config": "*",
         "@warbrokers/playwright-config": "*",
         "@warbrokers/types": "*",
