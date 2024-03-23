@@ -10,6 +10,7 @@
 
 [![](https://shields.io/badge/discord-chat-5865F2?logo=discord&logoColor=FFFFFF&style=for-the-badge)](https://discord.gg/synPSeuNFK)
 [![contributing](https://img.shields.io/badge/contributing-yellow?style=for-the-badge)](https://github.com/War-Brokers/War-Brokers/blob/master/CONTRIBUTING.md)
+[![license](https://img.shields.io/github/license/developomp/developomp-site?style=for-the-badge&color=yellow)](./LICENSE)
 
 WBP (War Brokers Projects) is a collection of [@developomp][developomp]'s\*
 [War Brokers](https://warbrokers.io) related projects.
