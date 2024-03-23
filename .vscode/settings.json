@@ -50,6 +50,7 @@
         "Vsync",
         "warbrokers",
         "wbapi",
+        "WBDB",
         "wbtimeline",
         "WINIT",
         "xwayland",

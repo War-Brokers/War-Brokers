@@ -1,11 +1,10 @@
-import { TRPCError } from "@trpc/server"
 import type { Player } from "@warbrokers/types/src/player"
 import { playerSchema } from "@warbrokers/types/src/player"
 import { z } from "zod"
 
-import { reason2TRPCError } from "@/errors"
+import { setPlayer } from "@/db"
+import { PlayerNotFoundTRPCError, reason2TRPCError } from "@/errors"
 import { env } from "@/index"
-import { setGamesElo, setKillsElo, setSquad, setXP } from "@/redis"
 import { publicProcedure } from "@/trpc"
 import type { Result } from "@/types"
 import { FailReason } from "@/types"
@@ -28,21 +27,14 @@ export default (tag: string) =>
             const res = await getPlayer(uid)
 
             if (!res.success) {
-                if (res.reason === FailReason.DBConnectionFail)
-                    throw new TRPCError({
-                        code: "BAD_REQUEST",
-                        message: `Player with UID "${uid}" was not found. Is the UID valid?`,
-                    })
-
+                if (res.reason === FailReason.WBDBConnectionFail)
+                    throw PlayerNotFoundTRPCError(uid)
                 throw reason2TRPCError(res.reason)
             }
 
             const player = res.data
 
-            setKillsElo(player.uid, player.killsELO)
-            setGamesElo(player.uid, player.gamesELO)
-            setXP(player.uid, player.xp)
-            setSquad(player.uid, player.squad)
+            setPlayer(player)
 
             return player
         })
@@ -63,12 +55,11 @@ export async function getPlayer(uid: Player["uid"]): Promise<Result<Player>> {
 
     if (!res.ok) {
         console.log(
-            `failed to get player stats of ${uid}. DB responded:`,
-            await res.text(),
+            `failed to get player stats of ${uid}. DB responded: "${await res.text()}"`,
         )
         return {
             success: false,
-            reason: FailReason.DBConnectionFail,
+            reason: FailReason.WBDBConnectionFail,
         }
     }
 

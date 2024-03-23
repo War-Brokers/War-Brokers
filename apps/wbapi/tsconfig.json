@@ -11,7 +11,7 @@
 
         // node version related
         "moduleResolution": "Node",
-        "module": "commonjs",
+        "module": "es2022",
         "lib": ["ES2022", "DOM"], // trpc needs the DOM lib
         "target": "ES2022",
 

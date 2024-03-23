@@ -1,10 +1,8 @@
 import { z } from "zod"
 
-import { getSquadMembers } from "@/redis"
+import { getSquadMembers } from "@/db"
+import { playerSelectSchema } from "@/db/schema"
 import { publicProcedure } from "@/trpc"
-
-export const responseSchema = z.array(z.string())
-export type Response = z.infer<typeof responseSchema>
 
 export default (tag: string) =>
     publicProcedure
@@ -31,7 +29,9 @@ export default (tag: string) =>
                     ),
             }),
         )
-        .output(responseSchema)
+        .output(z.array(playerSelectSchema))
         .query(async ({ input }) => {
-            return await getSquadMembers(input.squadName)
+            const data = await getSquadMembers(input.squadName)
+            console.log(data)
+            return data
         })

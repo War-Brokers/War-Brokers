@@ -79,7 +79,8 @@ export function parseData(data: string): Result<Response> {
 export async function twitchStreamCount(): Promise<Result<Response>> {
     const res = await fetch(twitchStreamsURL())
 
-    if (!res.ok) return { success: false, reason: FailReason.APIConnectionFail }
+    if (!res.ok)
+        return { success: false, reason: FailReason.WBAPIConnectionFail }
 
     // looks like: "total,thumbnail_1,streamer_1,viewers_1,thumbnail_2,streamer_2,viewers_2,...".
     const data = await res.text()

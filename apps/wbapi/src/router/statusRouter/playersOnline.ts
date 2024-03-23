@@ -34,7 +34,7 @@ export async function playersOnline(): Promise<Result<Response>> {
     if (!res.ok)
         return {
             success: false,
-            reason: FailReason.APIConnectionFail,
+            reason: FailReason.WBAPIConnectionFail,
         }
 
     // looks like "X,XXX"

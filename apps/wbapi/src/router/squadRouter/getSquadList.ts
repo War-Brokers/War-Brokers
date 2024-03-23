@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { getSquads } from "@/redis"
+import { getSquads } from "@/db"
 import { publicProcedure } from "@/trpc"
 
 export const responseSchema = z.array(z.string())

@@ -7,9 +7,10 @@ import swaggerUi from "swagger-ui-express"
 import { createOpenApiExpressMiddleware } from "trpc-openapi"
 
 import { openApiDocument } from "@/openapi"
-import { initRedis } from "@/redis"
 import { appRouter } from "@/router"
 import { createContext } from "@/trpc"
+
+import { initDB } from "./db"
 
 export const env = {
     /* eslint-disable turbo/no-undeclared-env-vars */
@@ -17,16 +18,13 @@ export const env = {
     WB_DB_PW: process.env.WB_DB_PW as string,
     WB_DB_BASE: process.env.WB_DB_BASE as string,
 
-    LEADERBOARD_REDIS_URL: process.env.LEADERBOARD_REDIS_URL as string,
-    LEADERBOARD_REDIS_TOKEN: process.env.LEADERBOARD_REDIS_TOKEN as string,
-
-    SQUAD_REDIS_URL: process.env.SQUAD_REDIS_URL as string,
-    SQUAD_REDIS_TOKEN: process.env.SQUAD_REDIS_TOKEN as string,
+    DATABASE_URL: process.env.DATABASE_URL as string,
     /* eslint-enable turbo/no-undeclared-env-vars */
 }
 
-initRedis()
+initDB()
 
+// fastify
 const app = express()
 
 app.use(cors())

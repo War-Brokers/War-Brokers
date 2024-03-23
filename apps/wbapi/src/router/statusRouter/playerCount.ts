@@ -34,7 +34,7 @@ export async function playerCount(): Promise<Result<Response>> {
     if (!res.ok)
         return {
             success: false,
-            reason: FailReason.APIConnectionFail,
+            reason: FailReason.WBAPIConnectionFail,
         }
 
     // looks like "XXX,XXX,XXX"
