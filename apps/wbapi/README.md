@@ -8,7 +8,7 @@ providing simple interface between it and you.
 
 ## Usage
 
-Documentations and APIs can be found in https://wbapi.wbpjs.com
+Documentations and APIs can be found in https://wbapi.wbpjs.com/api-docs
 
 ## Setting up
 
