@@ -5,6 +5,7 @@ import { drizzle } from "drizzle-orm/postgres-js"
 import postgres from "postgres"
 
 import { env } from "@/index"
+import type { Response as SearchByNameResponse } from "@/router/playersRouter/searchByName"
 import type { Result } from "@/types"
 import { FailReason } from "@/types"
 
@@ -48,6 +49,20 @@ export async function setPlayer(player: Player) {
             set: newPlayer,
             where: eq(players.uid, player.uid),
         })
+}
+
+export async function searchPlayerByName(
+    query: string,
+): Promise<SearchByNameResponse> {
+    return await db
+        .select({
+            uid: players.uid,
+            nick: players.nick,
+        })
+        .from(players)
+        .where(
+            sql`to_tsvector('english', ${players.nicklower}) @@ to_tsquery('english', lower(${query}) || ':*')`,
+        )
 }
 
 export async function getSquads(): Promise<string[]> {
