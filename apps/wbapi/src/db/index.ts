@@ -113,6 +113,6 @@ export async function getPercentile(
 
     return {
         success: true,
-        data: 100 * (rank / count),
+        data: 1 - 100 * (rank / count),
     }
 }
