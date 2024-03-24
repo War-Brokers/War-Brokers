@@ -20,7 +20,7 @@ export async function initDB() {
         // Disable prefetch as it is not supported for "Transaction" pool mode
         { prepare: false },
     )
-    db = drizzle(client)
+    db = drizzle(client, { logger: true })
 }
 
 export async function setPlayer(player: Player) {
@@ -75,22 +75,22 @@ export async function getPercentile(
     key: "xp" | "gamesELO" | "killsELO",
     uid: Player["uid"],
 ): Promise<Result<number>> {
-    let rank: number
-    let count: number
+    let n: number // number of players with worse stats than the player we're comparing with
+    let N: number // total number of players
 
     {
         const subQuery = db
             .select({
                 uid: players.uid,
-                rank: sql
-                    .raw(`RANK() OVER (ORDER BY "${key}" DESC)`)
-                    .as<number>("rank"),
+                n: sql
+                    .raw(`RANK() OVER (ORDER BY "${key}" ASC)`)
+                    .as<number>("n"),
             })
             .from(players)
             .as("sq")
 
         const arr = await db
-            .select({ rank: subQuery.rank })
+            .select({ n: subQuery.n })
             .from(subQuery)
             .where(eq(subQuery.uid, uid))
 
@@ -100,19 +100,17 @@ export async function getPercentile(
                 reason: FailReason.PlayerNotFound,
             }
 
-        rank = arr[0].rank
+        n = arr[0].n - 1 // exclude self
     }
 
     {
-        const arr = await db
-            .select({ count: sql<number>`count(*)` })
-            .from(players)
+        const arr = await db.select({ N: sql<number>`count(*)` }).from(players)
 
-        count = arr[0].count
+        N = arr[0].N
     }
 
     return {
         success: true,
-        data: 1 - 100 * (rank / count),
+        data: 100 * (n / N),
     }
 }
