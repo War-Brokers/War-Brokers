@@ -14,7 +14,7 @@ import { players } from "./schema"
 let client: postgres.Sql
 let db: PostgresJsDatabase
 
-export function initDB() {
+export async function initDB() {
     client = postgres(
         env.DATABASE_URL,
         // Disable prefetch as it is not supported for "Transaction" pool mode

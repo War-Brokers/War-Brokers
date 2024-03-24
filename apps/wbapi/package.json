@@ -1,7 +1,7 @@
 {
     "name": "@warbrokers/wbapi",
     "version": "0.0.0",
-    "main": "./build/index.js",
+    "main": "./build/index.mjs",
     "private": true,
     "scripts": {
         "dev": "yarn build && yarn start:dev",

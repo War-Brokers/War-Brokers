@@ -22,7 +22,7 @@ export const env = {
     /* eslint-enable turbo/no-undeclared-env-vars */
 }
 
-initDB()
+await initDB()
 
 // fastify
 const app = express()
