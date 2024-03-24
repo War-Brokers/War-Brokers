@@ -36,7 +36,7 @@
     </div>
 
     <div>
-        <span class="font-bold dark:text-gray-400">Twitch Streams</span>
+        <span class="font-bold dark:text-gray-400">Twitch streams</span>
         <h2 class="text-2xl font-black">
             {#await twitchStreams}
                 ...
