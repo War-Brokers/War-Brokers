@@ -22,6 +22,7 @@ WBP (War Brokers Projects) is a collection of [@developomp][developomp]'s\*
 |           Name            |                                         Short Description                                          | Development Status |
 | :-----------------------: | :------------------------------------------------------------------------------------------------: | :----------------: |
 |      War Brokers Hub      |                        web UI for everything WB (squads, stats, wiki, etc)                         |      Planned       |
+|    [WB UI v2][wbuiv2]     |                          An interactive new design of the War Brokers UI                           |     Pre-Alpha      |
 | [Stats Site][stats-site]  |              An attempt to create an improved version of https://stats.warbrokers.io               |       Alpha        |
 |   [WB Types][wb-types]    |                            shared Typescript types & [Zod][zod] schema                             |       Alpha        |
 |      [WB API][wbapi]      |                                    DB mirror & API proxy for WB                                    |       Alpha        |
@@ -30,12 +31,13 @@ WBP (War Brokers Projects) is a collection of [@developomp][developomp]'s\*
 
 [developomp]: https://github.com/developomp
 [lp-pomp]: https://stats.wbpjs.com/players/5d2ead35d142affb05757778
-[wbm]: https://github.com/War-Brokers-Mods
-[wbtimeline]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbtimeline
+[wbuiv2]: https://github.com/War-Brokers/wbuiv2
 [stats-site]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site
 [wb-types]: https://github.com/War-Brokers/War-Brokers/tree/master/libs/wb-types
-[wbapi]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbapi
 [zod]: https://github.com/colinhacks/zod
+[wbapi]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbapi
+[wbtimeline]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbtimeline
+[wbm]: https://github.com/War-Brokers-Mods
 
 ## Supporters
 
