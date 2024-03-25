@@ -36,3 +36,8 @@ WBP (War Brokers Projects) is a collection of [@developomp][developomp]'s\*
 [wb-types]: https://github.com/War-Brokers/War-Brokers/tree/master/libs/wb-types
 [wbapi]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbapi
 [zod]: https://github.com/colinhacks/zod
+
+## Supporters
+
+[![Nanderson](https://images.weserv.nl/?url=avatars.githubusercontent.com/u/89991191?h=48&w=48&fit=cover&mask=circle&maxage=2d)](https://github.com/Nanderson17)
+[![REKT](https://images.weserv.nl/?url=avatars.githubusercontent.com/u/90931360?h=48&w=48&fit=cover&mask=circle&maxage=2d)](https://github.com/REKTgg)
