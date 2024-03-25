@@ -21,7 +21,7 @@ export async function initDB() {
         // Disable prefetch as it is not supported for "Transaction" pool mode
         { prepare: false },
     )
-    db = drizzle(client, { logger: true })
+    db = drizzle(client)
 }
 
 export async function setPlayer(player: Player) {

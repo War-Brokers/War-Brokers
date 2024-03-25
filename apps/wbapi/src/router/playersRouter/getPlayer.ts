@@ -5,6 +5,7 @@ import { z } from "zod"
 import { setPlayer } from "@/db"
 import { PlayerNotFoundTRPCError, reason2TRPCError } from "@/errors"
 import { env } from "@/index"
+import { uid } from "@/querySchema"
 import { publicProcedure } from "@/trpc"
 import type { Result } from "@/types"
 import { FailReason } from "@/types"
@@ -19,7 +20,7 @@ export default (tag: string) =>
                 tags: [tag],
             },
         })
-        .input(z.object({ uid: z.string() }))
+        .input(z.object({ uid }))
         .output(playerSchema)
         .query(async ({ input }) => {
             const { uid } = input

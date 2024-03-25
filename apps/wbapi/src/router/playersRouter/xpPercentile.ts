@@ -2,6 +2,7 @@ import { z } from "zod"
 
 import { getPercentile } from "@/db"
 import { PlayerNotFoundTRPCError, reason2TRPCError } from "@/errors"
+import { uid } from "@/querySchema"
 import { publicProcedure } from "@/trpc"
 import { FailReason } from "@/types"
 
@@ -15,7 +16,7 @@ export default (tag: string) =>
                 tags: [tag],
             },
         })
-        .input(z.object({ uid: z.string() }))
+        .input(z.object({ uid }))
         .output(z.number())
         .query(async ({ input }) => {
             const { uid } = input

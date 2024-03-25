@@ -2,6 +2,7 @@ import { playerSchema } from "@warbrokers/types/src/player"
 import { z } from "zod"
 
 import { searchPlayerByName } from "@/db"
+import { nick } from "@/querySchema"
 import { publicProcedure } from "@/trpc"
 
 export const responseSchema = z.array(
@@ -24,7 +25,7 @@ export default (tag: string) =>
                 tags: [tag],
             },
         })
-        .input(z.object({ query: z.string() }))
+        .input(z.object({ query: nick }))
         .output(responseSchema)
         .query(async ({ input }) => {
             const { query } = input
