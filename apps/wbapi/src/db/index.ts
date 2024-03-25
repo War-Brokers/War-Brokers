@@ -1,5 +1,5 @@
 import type { Player } from "@warbrokers/types/src/player"
-import { eq, sql } from "drizzle-orm"
+import { eq, like, sql } from "drizzle-orm"
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js"
 import { drizzle } from "drizzle-orm/postgres-js"
 import postgres from "postgres"
@@ -60,9 +60,8 @@ export async function searchPlayerByName(
             nick: players.nick,
         })
         .from(players)
-        .where(
-            sql`to_tsvector('english', ${players.nicklower}) @@ to_tsquery('english', lower(${query}) || ':*')`,
-        )
+        // I know this is shit code but it does its job and is quite performant
+        .where(like(players.nicklower, `%${query}%`))
         .limit(20)
 }
 
