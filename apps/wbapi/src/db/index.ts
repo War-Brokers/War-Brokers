@@ -63,6 +63,7 @@ export async function searchPlayerByName(
         .where(
             sql`to_tsvector('english', ${players.nicklower}) @@ to_tsquery('english', lower(${query}) || ':*')`,
         )
+        .limit(20)
 }
 
 export async function getSquads(): Promise<string[]> {
