@@ -16,11 +16,7 @@ The War Brokers Projects monorepo is managed using the following technologies:
 
 ## Online Infrastructure
 
-Our codes are deployed to the following services:
-
-- [Supabase](https://supabase.com) - authentication, db, and other backend stuff
-- [Vercel](https://vercel.com/home) - web hosting
-- [DigitalOcean](https://digitalocean.com) - server hosting
+![Infrastructure Diagram](./.github/img/infra.png)
 
 ## Setting up
 
