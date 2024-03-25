@@ -1,3 +1,0 @@
-# Removing a package
-
-WIP

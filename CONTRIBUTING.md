@@ -18,9 +18,9 @@ The War Brokers Projects monorepo is managed using the following technologies:
 
 Our codes are deployed to the following services:
 
-- [Firebase](https://firebase.google.com) - user authentication and management
+- [Supabase](https://supabase.com) - authentication, db, and other backend stuff
+- [Vercel](https://vercel.com/home) - web hosting
 - [DigitalOcean](https://digitalocean.com) - server hosting
-- [Upstash (Redis)](https://upstash.com) - database indexing (for things like leaderboard)
 
 ## Setting up
 
@@ -59,4 +59,3 @@ you can download [here](https://git-scm.com/downloads).
 
 - Managing packages
   - [How do I add a package?](./docs/package-addition.md)
-  - [How do I remove a package?](./docs/package-removal.md)
