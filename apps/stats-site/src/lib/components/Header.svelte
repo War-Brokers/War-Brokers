@@ -13,19 +13,15 @@
     <div
         class="mx-auto flex h-16 w-full max-w-5xl items-center justify-between"
     >
-        <div class="flex items-center">
+        <a href="/" class="flex items-center">
             <img
                 width="64"
                 height="64"
                 src="/WBP.avif"
                 alt="War Brokers logo"
             />
-            <a href="/">
-                <h2 class="text-xl font-black tracking-wide">
-                    War Brokers Stats
-                </h2>
-            </a>
-        </div>
+            <h2 class="text-xl font-black tracking-wide">War Brokers Stats</h2>
+        </a>
 
         <div class="hidden gap-7 md:flex dark:bg-gray-700">
             {#each links as { name, path }}
