@@ -39,7 +39,9 @@ WBP (War Brokers Projects) is a collection of [@developomp][developomp]'s\*
 [wbtimeline]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbtimeline
 [wbm]: https://github.com/War-Brokers-Mods
 
-## Supporters
+## Sponsors
+
+Thank you for your generous donations <3
 
 [![Nanderson](https://images.weserv.nl/?url=avatars.githubusercontent.com/u/89991191?h=48&w=48&fit=cover&mask=circle&maxage=2d)](https://github.com/Nanderson17)
 [![REKT](https://images.weserv.nl/?url=avatars.githubusercontent.com/u/90931360?h=48&w=48&fit=cover&mask=circle&maxage=2d)](https://github.com/REKTgg)
