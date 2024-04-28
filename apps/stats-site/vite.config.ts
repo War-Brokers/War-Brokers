@@ -7,6 +7,7 @@ export default defineConfig({
         include: ["src/**/*.{test,spec}.{js,ts}"],
     },
     server: {
+        // only works in dev. For production rewrite rule, see vercel.json
         proxy: {
             // https://umami.is/docs/guides/bypass-ad-blockers
             // https://vitejs.dev/config/server-options.html#server-proxy

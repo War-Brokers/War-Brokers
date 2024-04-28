@@ -1,0 +1,10 @@
+{
+    "//": "only works in production. For dev rewrite rule, see vite.config.ts",
+    "rewrites": [
+        {
+            "//": "https://umami.is/docs/guides/bypass-ad-blockers",
+            "source": "/stats/:match*",
+            "destination": "https://analytics.umami.is/:match*"
+        }
+    ]
+}
