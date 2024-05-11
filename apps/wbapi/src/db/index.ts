@@ -51,6 +51,9 @@ export async function setPlayer(player: Player) {
         })
 }
 
+/**
+ * case-agnostic player search by nickname
+ */
 export async function searchPlayerByName(
     query: string,
 ): Promise<SearchByNameResponse> {
@@ -61,7 +64,7 @@ export async function searchPlayerByName(
         })
         .from(players)
         // I know this is shit code but it does its job and is quite performant
-        .where(like(players.nicklower, `%${query}%`))
+        .where(like(players.nicklower, `%${query.toLocaleLowerCase()}%`))
         .limit(20)
 }
 
