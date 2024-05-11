@@ -1,5 +1,5 @@
 import type { Player } from "@warbrokers/types/src/player"
-import { eq, like, sql } from "drizzle-orm"
+import { desc, eq, like, sql } from "drizzle-orm"
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js"
 import { drizzle } from "drizzle-orm/postgres-js"
 import postgres from "postgres"
@@ -132,3 +132,51 @@ export async function getPercentile(
         data: 100 * (n / N),
     }
 }
+
+type RankingFunc = (limit: number, offset: number) => Promise<unknown[]>
+
+export const getKillsEloRanking = (async (
+    limit: number,
+    offset: number = 0,
+) => {
+    return await db
+        .select({
+            uid: players.uid,
+            nick: players.nick,
+            killsELO: players.killsELO,
+        })
+        .from(players)
+        .orderBy(desc(players.killsELO))
+        .limit(limit)
+        .offset(offset)
+}) satisfies RankingFunc
+
+export const getGamesEloRanking = (async (
+    limit: number,
+    offset: number = 0,
+) => {
+    return await db
+        .select({
+            uid: players.uid,
+            nick: players.nick,
+            gamesELO: players.gamesELO,
+        })
+        .from(players)
+        .orderBy(desc(players.gamesELO))
+        .limit(limit)
+        .offset(offset)
+}) satisfies RankingFunc
+
+export const getXPRanking = (async (limit: number, offset: number = 0) => {
+    return await db
+        .select({
+            uid: players.uid,
+            nick: players.nick,
+            xp: players.xp,
+            level: players.level,
+        })
+        .from(players)
+        .orderBy(desc(players.xp))
+        .limit(limit)
+        .offset(offset)
+}) satisfies RankingFunc
