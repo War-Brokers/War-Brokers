@@ -1,6 +1,9 @@
 <script lang="ts">
+    import type { TRPCClientError } from "@trpc/client"
+    import type { AppRouter } from "@warbrokers/wbapi/build/router"
     import debounce from "lodash/debounce"
     import { Pulse } from "svelte-loading-spinners"
+    import type { ZodIssue } from "zod"
 
     import trpc from "$lib/trpc"
 
@@ -9,6 +12,7 @@
     let searchResult: Awaited<
         ReturnType<typeof trpc.players.searchByName.query>
     > = []
+    let searchError = ""
 
     export let handleSearchInput = debounce(async (e: Event) => {
         searching = true
@@ -19,59 +23,90 @@
         if (!text) {
             searchResult = []
             searching = false
+            searchError = ""
             return
         }
 
-        searchResult = await trpc.players.searchByName.query({ query: text })
+        try {
+            searchResult = await trpc.players.searchByName.query({
+                query: text,
+            })
+        } catch (_e) {
+            let e = (
+                JSON.parse(
+                    (_e as TRPCClientError<AppRouter>).message,
+                )[0] as ZodIssue
+            ).code
+
+            switch (e) {
+                case "too_small":
+                    searchError = "nickname must be at least 2 letters long"
+                    break
+            }
+
+            searching = false
+            return
+        }
+
         searching = false
+        searchError = ""
     }, 300)
 </script>
 
-<form
-    on:submit|preventDefault={() => {}}
-    novalidate={true}
-    class="flex h-12 w-full min-w-0 max-w-[36rem] items-center justify-center rounded-full pr-7 dark:bg-gray-600"
->
-    <div
-        class={`${!searching && "opacity-0"} ml-3 flex h-7 w-7 items-center justify-center`}
+<div class="flex w-full flex-col items-center">
+    <form
+        on:submit|preventDefault={() => {}}
+        novalidate={true}
+        class="flex h-12 w-full min-w-0 max-w-[36rem] items-center justify-center rounded-full pr-7 dark:bg-gray-600"
     >
-        <Pulse size="28" color="#d1d5db" unit="px" duration="1s" />
-    </div>
-    <div class="relative flex w-full flex-col">
-        <input
-            required
-            type="search"
-            id="player-search"
-            autocomplete="off"
-            maxlength="40"
-            aria-required="false"
-            class="my-auto h-full border-none bg-transparent text-lg leading-7 focus:ring-0 dark:text-gray-200"
-            placeholder="Player Search"
-            on:input={handleSearchInput}
-            on:focus={/**/ async () => setTimeout(() => (opened = true), 200)}
-            on:blur={/* */ async () => setTimeout(() => (opened = false), 200)}
-        />
-
         <div
-            id="search-results"
-            class={`${
-                !(opened && searchResult.length > 0) && "hidden"
-            } absolute top-20 h-96 max-h-96 w-full overflow-auto rounded-lg py-4 dark:bg-gray-600`}
+            class={`${!searching && "opacity-0"} ml-3 flex h-7 w-7 items-center justify-center`}
         >
-            <div class="relative h-full overflow-y-scroll">
-                {#each searchResult as { nick, uid } (uid)}
-                    <a
-                        href="/players/{uid}"
-                        class="flex w-full flex-col p-2 hover:dark:bg-gray-700"
-                    >
-                        <b class="text-lg">{nick}</b>
-                        <p class="text-md dark:text-gray-400">{uid}</p>
-                    </a>
-                {/each}
+            <Pulse size="28" color="#d1d5db" unit="px" duration="1s" />
+        </div>
+        <div class="relative flex w-full flex-col">
+            <input
+                required
+                type="search"
+                id="player-search"
+                autocomplete="off"
+                maxlength="20"
+                aria-required="false"
+                class="my-auto h-full border-none bg-transparent text-lg leading-7 focus:ring-0 dark:text-gray-200"
+                placeholder="Player Search"
+                on:input={handleSearchInput}
+                on:focus={/**/ async () =>
+                    setTimeout(() => (opened = true), 200)}
+                on:blur={/* */ async () =>
+                    setTimeout(() => (opened = false), 200)}
+            />
+
+            <div
+                id="search-results"
+                class={`${
+                    !(opened && searchResult.length > 0) && "hidden"
+                } absolute top-20 h-96 max-h-96 w-full overflow-auto rounded-lg py-4 dark:bg-gray-600`}
+            >
+                <div class="relative h-full overflow-y-scroll">
+                    {#each searchResult as { nick, uid } (uid)}
+                        <a
+                            href="/players/{uid}"
+                            class="flex w-full flex-col p-2 hover:dark:bg-gray-700"
+                        >
+                            <b class="text-lg">{nick}</b>
+                            <p class="text-md dark:text-gray-400">{uid}</p>
+                        </a>
+                    {/each}
+                </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+    <p
+        class={`${searchError === "" ? "invisible" : "visible"} ml-16 w-full max-w-[36rem] text-red-500`}
+    >
+        {searchError || "invisible string to prevent layout shift"}
+    </p>
+</div>
 
 <style lang="postcss">
     /* https://stackoverflow.com/a/9422689 */
