@@ -5,6 +5,7 @@
     const links = [
         { name: "Home", path: "/" },
         { name: "Ranks", path: "/ranks" },
+        { name: "Leaderboard", path: "/leaderboard" },
         { name: "Squads", path: "/squads" },
     ]
 </script>
@@ -24,7 +25,7 @@
         </a>
 
         <div class="hidden gap-7 md:flex dark:bg-gray-700">
-            {#each links as { name, path }}
+            {#each links as { name, path } (path)}
                 <a href={path} class="hover:text-orange-500">{name}</a>
             {/each}
         </div>
@@ -35,9 +36,9 @@
     </div>
 
     <div
-        class={`${open ? "h-[144px]" : "h-0"} flex flex-col overflow-hidden transition-[height] ease-linear md:hidden dark:bg-gray-700`}
+        class={`${open ? "h-[192px]" : "h-0"} flex flex-col overflow-hidden transition-[height] ease-linear md:hidden dark:bg-gray-700`}
     >
-        {#each links as { name, path }}
+        {#each links as { name, path } (path)}
             <a href={path} class="min-h-[48px] hover:text-orange-500">{name}</a>
         {/each}
     </div>
