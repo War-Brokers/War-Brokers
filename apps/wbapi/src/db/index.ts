@@ -1,5 +1,5 @@
 import type { Player } from "@warbrokers/types/src/player"
-import { and, desc, eq, isNotNull, like, sql } from "drizzle-orm"
+import { and, count, desc, eq, isNotNull, like, sql } from "drizzle-orm"
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js"
 import { drizzle } from "drizzle-orm/postgres-js"
 import postgres from "postgres"
@@ -131,6 +131,10 @@ export async function getPercentile(
         success: true,
         data: 100 * (n / N),
     }
+}
+
+export async function getDBPlayerCount(): Promise<number> {
+    return (await db.select({ count: count() }).from(players))[0].count
 }
 
 type RankingFunc = (limit: number, offset: number) => Promise<unknown[]>
