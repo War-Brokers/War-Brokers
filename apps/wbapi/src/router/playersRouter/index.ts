@@ -14,7 +14,7 @@ import xpPercentile from "./xpPercentile"
 export const tag = "player"
 
 export const rankingInput = z.object({
-    limit: z.number().min(3).max(30),
+    limit: z.number().min(3).max(100),
     offset: z.number().nonnegative().optional(),
 })
 
