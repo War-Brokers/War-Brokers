@@ -33,8 +33,6 @@
             {#await killsEloRanking}
                 <tr>
                     <td>Loading...</td>
-                    <td>Loading...</td>
-                    <td>Loading...</td>
                 </tr>
             {:then killsEloRanking}
                 {#each killsEloRanking as { uid, nick, killsELO }, i (uid)}
@@ -56,8 +54,6 @@
         <tbody>
             {#await gamesEloRanking}
                 <tr>
-                    <td>Loading...</td>
-                    <td>Loading...</td>
                     <td>Loading...</td>
                 </tr>
             {:then gamesEloRanking}
@@ -81,9 +77,6 @@
         <tbody>
             {#await xpRanking}
                 <tr>
-                    <td>Loading...</td>
-                    <td>Loading...</td>
-                    <td>Loading...</td>
                     <td>Loading...</td>
                 </tr>
             {:then xpRanking}
