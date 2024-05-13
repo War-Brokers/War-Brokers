@@ -2,8 +2,8 @@
     export let rank: number
     export let nick: string
     export let uid: string
-    export let stat: string
-    export let stat2: string | undefined = undefined
+    export let stat: unknown
+    export let stat2: unknown | undefined = undefined
 </script>
 
 <tr class="p-9 hover:bg-slate-900">
