@@ -1,5 +1,5 @@
 import type { Player } from "@warbrokers/types/src/player"
-import { desc, eq, like, sql } from "drizzle-orm"
+import { and, desc, eq, isNotNull, like, sql } from "drizzle-orm"
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js"
 import { drizzle } from "drizzle-orm/postgres-js"
 import postgres from "postgres"
@@ -139,36 +139,50 @@ export const getKillsEloRanking = (async (
     limit: number,
     offset: number = 0,
 ) => {
-    return await db
+    return db
         .select({
             uid: players.uid,
             nick: players.nick,
             killsELO: players.killsELO,
         })
         .from(players)
+        .where(isNotNull(players.killsELO))
         .orderBy(desc(players.killsELO))
         .limit(limit)
-        .offset(offset)
+        .offset(offset) as Promise<
+        {
+            uid: string
+            nick: string
+            killsELO: number
+        }[]
+    >
 }) satisfies RankingFunc
 
 export const getGamesEloRanking = (async (
     limit: number,
     offset: number = 0,
 ) => {
-    return await db
+    return db
         .select({
             uid: players.uid,
             nick: players.nick,
             gamesELO: players.gamesELO,
         })
         .from(players)
+        .where(isNotNull(players.gamesELO))
         .orderBy(desc(players.gamesELO))
         .limit(limit)
-        .offset(offset)
+        .offset(offset) as Promise<
+        {
+            uid: string
+            nick: string
+            gamesELO: number
+        }[]
+    >
 }) satisfies RankingFunc
 
 export const getXPRanking = (async (limit: number, offset: number = 0) => {
-    return await db
+    return db
         .select({
             uid: players.uid,
             nick: players.nick,
@@ -176,7 +190,15 @@ export const getXPRanking = (async (limit: number, offset: number = 0) => {
             level: players.level,
         })
         .from(players)
+        .where(and(isNotNull(players.xp), isNotNull(players.level)))
         .orderBy(desc(players.xp))
         .limit(limit)
-        .offset(offset)
+        .offset(offset) as Promise<
+        {
+            uid: string
+            nick: string
+            xp: number
+            level: number
+        }[]
+    >
 }) satisfies RankingFunc
