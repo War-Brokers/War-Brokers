@@ -15,7 +15,7 @@ export const tag = "player"
 
 export const rankingInput = z.object({
     limit: z.number().min(3).max(30),
-    offset: z.number().optional(),
+    offset: z.number().nonnegative().optional(),
 })
 
 export default createTRPCRouter({
