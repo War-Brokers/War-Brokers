@@ -7,7 +7,7 @@
     export let data: PageData
     const {
         player,
-        timestamp,
+        playingSince,
         xpPercentile,
         killsEloPercentile,
         gamesEloPercentile,
@@ -31,7 +31,7 @@
     </span>
     &nbsp;
     <span class="whitespace-nowrap font-black">
-        {timestamp}
+        {playingSince}
     </span>
 </div>
 
