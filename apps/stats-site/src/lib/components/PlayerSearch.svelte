@@ -102,7 +102,7 @@
         </div>
     </form>
     <p
-        class={`${searchError === "" ? "invisible" : "visible"} ml-16 w-full max-w-[36rem] text-red-500`}
+        class={`${searchError === "" ? "invisible" : "visible"} max-w-[36rem] text-red-500`}
     >
         {searchError || "invisible string to prevent layout shift"}
     </p>
