@@ -6713,10 +6713,10 @@ svelte-awesome@^3.3.1:
   resolved "https://registry.yarnpkg.com/svelte-awesome/-/svelte-awesome-3.3.1.tgz#b5d5ff8955a5fbddab670cac0f798e17e3c4c06d"
   integrity sha512-nC2KXPs/MQF79vnQEj7RZFkWKdocNfN64Zh/kAWTDS4gFNdCrp7q8dwN3PIxe/mqiaDIUc7x4iv2CtOnVPItcQ==
 
-svelte-check@^3.6.4:
-  version "3.6.6"
-  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-3.6.6.tgz#f3e0e02978b7f36ed84b5d02958820f283f580cd"
-  integrity sha512-b9q9rOHOMYF3U8XllK7LmXTq1LeWQ98waGfEJzrFutViadkNl1tgdEtxIQ8yuPx+VQ4l7YrknYol+0lfZocaZw==
+svelte-check@^3.7.1:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-3.7.1.tgz#d24d0535b22d9d9d8b50aa41f894f59544e9e577"
+  integrity sha512-U4uJoLCzmz2o2U33c7mPDJNhRYX/DNFV11XTUDlFxaKLsO7P+40gvJHMPpoRfa24jqZfST4/G9fGNcUGMO8NAQ==
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.17"
     chokidar "^3.4.1"

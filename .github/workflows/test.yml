@@ -55,6 +55,9 @@ jobs:
       - name: Lint
         run: yarn lint
 
+      - name: Svelte Check
+        run: yarn svelte-check
+
       - name: Test (end-to-end)
         env:
           WB_DB_ID: ${{ secrets.WB_DB_ID }}
