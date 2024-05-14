@@ -1,4 +1,5 @@
 <script lang="ts">
+    import DataHeaderCell from "$lib/components/Table/DataHeaderCell.svelte"
     import IndexHeaderCell from "$lib/components/Table/IndexHeaderCell.svelte"
     import LoadingRow from "$lib/components/Table/LoadingRow.svelte"
     import Table from "$lib/components/Table/Table.svelte"
@@ -26,11 +27,13 @@
 <h2 class="w-full text-center text-3xl font-black">Global Leaderboard</h2>
 
 <div class="flex w-full flex-col">
-    <LeaderboardHeading>Kills ELO</LeaderboardHeading>
+    <LeaderboardHeading href="/leaderboard/killsELO">
+        Kills ELO
+    </LeaderboardHeading>
     <Table>
         <THead>
             <IndexHeaderCell>#</IndexHeaderCell>
-            <th class="w-full">Player</th>
+            <DataHeaderCell>Player</DataHeaderCell>
             <th class="min-w-24">Kills ELO</th>
         </THead>
         <tbody>
@@ -46,11 +49,13 @@
         </tbody>
     </Table>
 
-    <LeaderboardHeading>Games ELO</LeaderboardHeading>
+    <LeaderboardHeading href="/leaderboard/gamesELO">
+        Games ELO
+    </LeaderboardHeading>
     <Table>
         <THead>
             <IndexHeaderCell>#</IndexHeaderCell>
-            <th class="w-full">Player</th>
+            <DataHeaderCell>Player</DataHeaderCell>
             <th class="min-w-24">Games ELO</th>
         </THead>
         <tbody>
@@ -66,11 +71,11 @@
         </tbody>
     </Table>
 
-    <LeaderboardHeading>XP & Level</LeaderboardHeading>
+    <LeaderboardHeading href="/leaderboard/xp">XP & Level</LeaderboardHeading>
     <Table>
         <THead>
             <IndexHeaderCell>#</IndexHeaderCell>
-            <th class="w-full">Player</th>
+            <DataHeaderCell>Player</DataHeaderCell>
             <th class="min-w-32">XP</th>
             <th class="min-w-24">Level</th>
         </THead>
