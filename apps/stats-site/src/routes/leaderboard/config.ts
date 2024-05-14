@@ -1,0 +1,1 @@
+export const SIMPLE_LEADERBOARD_LEN = 10
