@@ -6,6 +6,7 @@
     import Title from "$lib/components/title.svelte"
 
     import type { PageData } from "./$types"
+    import { SIMPLE_LEADERBOARD_LEN } from "./config"
     import LeaderboardHeading from "./LeaderboardHeading.svelte"
     import Row from "./Row.svelte"
 
@@ -34,7 +35,9 @@
         </THead>
         <tbody>
             {#await killsEloRanking}
-                <LoadingRow />
+                {#each { length: SIMPLE_LEADERBOARD_LEN } as _}
+                    <LoadingRow />
+                {/each}
             {:then killsEloRanking}
                 {#each killsEloRanking as { uid, nick, killsELO }, i (uid)}
                     <Row rank={i + 1} {nick} {uid} stat={killsELO} />
@@ -52,7 +55,9 @@
         </THead>
         <tbody>
             {#await gamesEloRanking}
-                <LoadingRow />
+                {#each { length: SIMPLE_LEADERBOARD_LEN } as _}
+                    <LoadingRow />
+                {/each}
             {:then gamesEloRanking}
                 {#each gamesEloRanking as { uid, nick, gamesELO }, i (uid)}
                     <Row rank={i + 1} {nick} {uid} stat={gamesELO} />
@@ -71,7 +76,9 @@
         </THead>
         <tbody>
             {#await xpRanking}
-                <LoadingRow />
+                {#each { length: SIMPLE_LEADERBOARD_LEN } as _}
+                    <LoadingRow />
+                {/each}
             {:then xpRanking}
                 {#each xpRanking as { uid, nick, xp, level }, i (uid)}
                     <Row
