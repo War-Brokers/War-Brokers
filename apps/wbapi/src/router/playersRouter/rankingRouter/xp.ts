@@ -1,17 +1,17 @@
 import { z } from "zod"
 
-import { getKillsEloRanking } from "@/db"
+import { getXPRanking } from "@/db"
 import { publicProcedure } from "@/trpc"
 
 import { rankingInput } from "."
 
-export default (tag: string) =>
+export default (tags: string[]) =>
     publicProcedure
         .meta({
             openapi: {
                 method: "GET",
-                path: "/players/getKillsEloRanking",
-                tags: [tag],
+                path: "/players/ranking/xp",
+                tags,
             },
         })
         .input(rankingInput)
@@ -20,11 +20,12 @@ export default (tag: string) =>
                 z.object({
                     uid: z.string(),
                     nick: z.string(),
-                    killsELO: z.number(),
+                    xp: z.number(),
+                    level: z.number(),
                 }),
             ),
         )
         .query(async ({ input }) => {
             const { limit, offset } = input
-            return await getKillsEloRanking(limit, offset || 0)
+            return await getXPRanking(limit, offset || 0)
         })

@@ -19,10 +19,7 @@ export const load = (async ({ url }) => {
         page,
         limit: LIMIT,
         offset,
-        XPRanking: trpc.players.getXPRanking.query({
-            limit: LIMIT,
-            offset,
-        }),
+        XPRanking: trpc.players.ranking.xp.query({ limit: LIMIT, offset }),
         playerCount: trpc.status.dbPlayerCount.query(),
     }
 }) satisfies PageServerLoad

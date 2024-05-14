@@ -6,14 +6,14 @@ import { uid } from "@/querySchema"
 import { publicProcedure } from "@/trpc"
 import { FailReason } from "@/types"
 
-export default (tag: string) =>
+export default (tags: string[]) =>
     publicProcedure
         .meta({
             openapi: {
                 method: "GET",
-                path: "/players/killsEloPercentile",
+                path: "/players/percentile/killsElo",
                 description: "Retrieves percentile of player's kills Elo",
-                tags: [tag],
+                tags,
             },
         })
         .input(z.object({ uid }))

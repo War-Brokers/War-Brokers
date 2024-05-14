@@ -5,13 +5,13 @@ import { publicProcedure } from "@/trpc"
 
 import { rankingInput } from "."
 
-export default (tag: string) =>
+export default (tags: string[]) =>
     publicProcedure
         .meta({
             openapi: {
                 method: "GET",
-                path: "/players/getGamesEloRanking",
-                tags: [tag],
+                path: "/players/ranking/gamesElo",
+                tags,
             },
         })
         .input(rankingInput)

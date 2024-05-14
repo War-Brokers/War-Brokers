@@ -6,14 +6,14 @@ import { uid } from "@/querySchema"
 import { publicProcedure } from "@/trpc"
 import { FailReason } from "@/types"
 
-export default (tag: string) =>
+export default (tags: string[]) =>
     publicProcedure
         .meta({
             openapi: {
                 method: "GET",
-                path: "/players/gamesEloPercentile",
-                description: "Retrieves percentile of player's games Elo",
-                tags: [tag],
+                path: "/players/percentile/xp",
+                description: "Retrieves percentile of player's XP",
+                tags,
             },
         })
         .input(z.object({ uid }))
@@ -21,7 +21,7 @@ export default (tag: string) =>
         .query(async ({ input }) => {
             const { uid } = input
 
-            const res = await getPercentile("gamesELO", uid)
+            const res = await getPercentile("xp", uid)
 
             if (!res.success) {
                 if (res.reason === FailReason.PlayerNotFound)

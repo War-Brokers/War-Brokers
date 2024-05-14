@@ -19,7 +19,7 @@ export const load = (async ({ url }) => {
         page,
         limit: LIMIT,
         offset,
-        getGamesEloRanking: trpc.players.getGamesEloRanking.query({
+        getGamesEloRanking: trpc.players.ranking.gamesElo.query({
             limit: LIMIT,
             offset,
         }),
