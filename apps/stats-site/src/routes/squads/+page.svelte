@@ -41,11 +41,14 @@
             {#if squadName
                 .toLocaleLowerCase()
                 .includes($searchTerm.toLocaleLowerCase())}
-                <div class="w-full rounded-lg p-4 dark:bg-gray-900">
-                    <a href={`/squads/${squadName}`} class="font-bold">
+                <a
+                    href={`/squads/${squadName}`}
+                    class="w-full rounded-lg p-4 font-bold dark:bg-gray-900"
+                >
+                    <div>
                         {squadName}
-                    </a>
-                </div>
+                    </div>
+                </a>
             {/if}
         {/each}
     {/await}
