@@ -1,8 +1,8 @@
 <script lang="ts">
+    import Stat from "$lib/components/stat.svelte"
     import Title from "$lib/components/title.svelte"
 
     import type { PageData } from "./$types"
-    import Stat from "./stat.svelte"
 
     export let data: PageData
     const {
@@ -18,7 +18,10 @@
 
 <h1 class="mx-auto mb-10 text-4xl font-black">
     {#if player.squad}
-        <a href="/squads/{player.squad}" class="hover:dark:underline">
+        <a
+            href="/squads/{player.squad}"
+            class="underline-offset-8 hover:text-orange-500 hover:underline"
+        >
             [{player.squad}]
         </a>
     {/if}
