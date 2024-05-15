@@ -1,10 +1,12 @@
-<table>
-    <slot />
-</table>
+<div class="overflow-x-auto border border-slate-600">
+    <table>
+        <slot />
+    </table>
+</div>
 
 <style lang="postcss">
-    table {
-        @apply overflow-auto border border-slate-600;
+    ::-webkit-scrollbar {
+        @apply h-2;
     }
 
     :global(th) {
