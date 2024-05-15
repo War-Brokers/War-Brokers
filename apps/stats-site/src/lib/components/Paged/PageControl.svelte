@@ -26,33 +26,44 @@
     }
 </script>
 
-<div class="mb-2 grid grid-cols-3 items-center justify-center">
-    <button
-        class="flex items-center justify-center place-self-start"
-        disabled={$maxPage === -1 || currentPage <= 1}
-        on:click={() => gotoPage(currentPage - 1)}
-    >
-        <Icon data={arrowLeft} /> &nbsp; Previous
-    </button>
-
+<div class="mb-2 flex flex-col">
     {#await total then playerCount}
-        <span class="text-center">
+        <span class="w-full text-center">
             page <b>{currentPage}</b> of <b>{setMaxPage(playerCount)}</b>
         </span>
     {/await}
 
-    <button
-        class="flex items-center justify-center place-self-end text-center"
-        disabled={$maxPage === -1 || currentPage >= $maxPage}
-        on:click={() => gotoPage(currentPage + 1)}
-    >
-        Next &nbsp; <Icon data={arrowRight} />
-    </button>
+    <div class="buttons flex w-full justify-between">
+        <button
+            class="place-self-start"
+            disabled={$maxPage === -1 || currentPage <= 1}
+            on:click={() => gotoPage(currentPage - 1)}
+        >
+            <Icon data={arrowLeft} /> &nbsp; Previous
+        </button>
+        <button
+            class="place-self-end"
+            disabled={$maxPage === -1 || currentPage >= $maxPage}
+            on:click={() => gotoPage(currentPage + 1)}
+        >
+            Next &nbsp; <Icon data={arrowRight} />
+        </button>
+    </div>
 </div>
 
 <style lang="postcss">
+    .buttons {
+        @media (max-width: 300px) {
+            @apply flex-col gap-2;
+
+            button {
+                @apply w-full;
+            }
+        }
+    }
+
     button {
-        @apply w-32 rounded-md bg-slate-500 px-4 py-2 hover:bg-slate-600 active:bg-slate-700 disabled:invisible;
+        @apply flex w-32 items-center justify-center rounded-md bg-slate-500 px-4 py-2 hover:bg-slate-600 active:bg-slate-700 disabled:invisible;
     }
 
     b {
