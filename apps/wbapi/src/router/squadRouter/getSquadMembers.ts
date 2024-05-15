@@ -30,8 +30,4 @@ export default (tag: string) =>
             }),
         )
         .output(z.array(playerSelectSchema))
-        .query(async ({ input }) => {
-            const data = await getSquadMembers(input.squadName)
-            console.log(data)
-            return data
-        })
+        .query(async ({ input }) => await getSquadMembers(input.squadName))
