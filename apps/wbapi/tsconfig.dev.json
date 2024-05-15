@@ -1,3 +1,8 @@
 {
-    "include": [".eslintrc.cjs", "tsup.config.ts"]
+    "include": [
+        ".eslintrc.cjs",
+        "tsup.config.ts",
+        "jest.config.cjs",
+        "health-check.mjs"
+    ]
 }

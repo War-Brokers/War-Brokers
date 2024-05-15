@@ -22,5 +22,5 @@
             "@/*": ["./src/*"]
         }
     },
-    "include": ["src", ".eslintrc.cjs", "jest.config.cjs"]
+    "include": ["src"]
 }
