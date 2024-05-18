@@ -28,11 +28,6 @@ export const DBConnectionTRPCError = new TRPCError({
     message: tellDev("Failed to connect to DB"),
 })
 
-export const StatsSiteConnectionTRPCError = new TRPCError({
-    code: "INTERNAL_SERVER_ERROR",
-    message: tellDev("Failed to connect to https://stats.warbrokers.io"),
-})
-
 export const UnknownTRPCError = new TRPCError({
     code: "INTERNAL_SERVER_ERROR",
     message: tellDev("An unknown error occurred"),
