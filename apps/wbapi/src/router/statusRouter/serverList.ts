@@ -93,7 +93,7 @@ export async function serverList(region: Region): Promise<Result<Response>> {
     )
         return {
             success: false,
-            reason: FailReason.StatsSiteConnectionFail,
+            reason: FailReason.WBAPIConnectionFail,
         }
 
     return {

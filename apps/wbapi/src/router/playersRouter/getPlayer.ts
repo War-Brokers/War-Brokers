@@ -54,7 +54,7 @@ export async function getPlayer(uid: Player["uid"]): Promise<Result<Player>> {
     )
 
     if (!res.ok) {
-        console.log(
+        console.error(
             `failed to get player stats of ${uid}. DB responded: "${await res.text()}"`,
         )
         return {
@@ -64,7 +64,17 @@ export async function getPlayer(uid: Player["uid"]): Promise<Result<Player>> {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const raw: any = await res.json()
+    let raw: any
+    try {
+        raw = await res.json()
+    } catch (e) {
+        console.error(`/players/getPlayer(${uid}) Failed:`, e)
+
+        return {
+            success: false,
+            reason: FailReason.SchemaValidationFail,
+        }
+    }
 
     // this check works on both null and undefined values because JS
     if (raw["time_alive_longest"] != null)

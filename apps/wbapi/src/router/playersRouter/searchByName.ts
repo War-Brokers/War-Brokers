@@ -1,6 +1,7 @@
 import { playerSchema } from "@warbrokers/types/src/player"
 import { z } from "zod"
 
+import { UnknownTRPCError } from "@/errors"
 import { db } from "@/index"
 import { nick } from "@/querySchema"
 import { publicProcedure } from "@/trpc"
@@ -30,5 +31,11 @@ export default (tag: string) =>
         .query(async ({ input }) => {
             const { query } = input
 
-            return await db.searchPlayerByName(query)
+            try {
+                return await db.searchPlayerByName(query)
+            } catch (e) {
+                console.error(`/players/searchByName(${query}) Failed:`, e)
+
+                throw UnknownTRPCError
+            }
         })
