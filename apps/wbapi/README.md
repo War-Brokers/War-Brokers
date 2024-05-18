@@ -19,6 +19,8 @@ Documentations and APIs can be found in https://wbapi.wbpjs.com/api-docs
 ![Typescript](https://img.shields.io/badge/typescript-222?style=for-the-badge&logo=typescript)
 ![Swagger](https://img.shields.io/badge/swagger-222?style=for-the-badge&logo=swagger)
 ![Express.js](https://img.shields.io/badge/express.js-222?style=for-the-badge&logo=express)
+![PostgreSQL](https://img.shields.io/badge/postgresql-222?style=for-the-badge&logo=postgresql)
+![Drizzle](https://img.shields.io/badge/drizzle_orm-222?style=for-the-badge&logo=drizzle)
 ![TRPC](https://img.shields.io/badge/trpc-222?style=for-the-badge&logo=trpc)
 
 ## Setting up
