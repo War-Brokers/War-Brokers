@@ -28,9 +28,9 @@ Documentations and APIs can be found in https://wbapi.wbpjs.com/api-docs
 To test the project locally, perform the following steps:
 
 1. Set up monorepo ([`CONTRIBUTING.md`](../../CONTRIBUTING.md))
-2. Open a terminal emulator in this (`wbapi`) directory
-3. Start a server in http://localhost:5000
-
+2. Install docker and docker compose
+3. Open a terminal emulator in this (`wbapi`) directory
+4. Start a server in http://localhost:5000
    ```
-   yarn start
+   yarn dev
    ```

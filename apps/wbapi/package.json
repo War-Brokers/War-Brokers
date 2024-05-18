@@ -5,7 +5,7 @@
     "private": true,
     "scripts": {
         "health-check": "node health-check.mjs",
-        "dev": "yarn build && yarn start:dev",
+        "dev": "yarn build && concurrently -c \"gray,white\" \"cd docker && docker compose up\" \"yarn start:dev\"",
         "build": "rm -rf build && tsup && tsc --emitDeclarationOnly",
         "start:dev": "NODE_ENV=development node .",
         "start:prod": "node .",
@@ -33,6 +33,7 @@
         "@types/jest": "^29.5.12",
         "@types/swagger-ui-express": "^4.1.6",
         "@warbrokers/eslint-config": "*",
+        "concurrently": "^8.2.2",
         "eslint": "^8.56.0",
         "jest": "^29.7.0",
         "openapi-types": "^12.1.3",

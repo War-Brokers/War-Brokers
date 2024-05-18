@@ -82,6 +82,12 @@
     "[svelte]": {
         "editor.defaultFormatter": "svelte.svelte-vscode"
     },
+    "[sql]": {
+        "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
+    },
+    "[php]": {
+        "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+    },
 
     // eslint
     "eslint.validate": [
