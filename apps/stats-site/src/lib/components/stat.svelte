@@ -2,6 +2,7 @@
     import { Popover } from "flowbite-svelte"
     import QuestionMarkIcon from "flowbite-svelte-icons/QuestionCircleSolid.svelte"
 
+    import A from "$lib/components/A.svelte"
     import { percentile2rank, type Rank } from "$lib/rank"
 
     export let title: string
@@ -57,12 +58,9 @@
                         of the players!
                     </h3>
                     <br />
-                    <a
-                        href="/ranks"
-                        class="flex font-medium hover:text-gray-300"
-                    >
+                    <A href="/ranks" class="flex font-medium">
                         <QuestionMarkIcon class="mr-1 w-4" /> Learn More
-                    </a>
+                    </A>
                 </Popover>
             {/if}
         {/await}

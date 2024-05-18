@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { A } from "flowbite-svelte"
     import Icon from "svelte-awesome"
     import arrowRight from "svelte-awesome/icons/arrowRight"
 
+    import A from "$lib/components/A.svelte"
     import PlayerSearch from "$lib/components/PlayerSearch.svelte"
     import Title from "$lib/components/title.svelte"
 
@@ -30,7 +30,7 @@
                 <span class="dark:text-red-600">ERROR</span>
             {/await}
         </h2>
-        <A href="/servers" class="dark:text-orange-500">
+        <A href="/servers">
             Browse Servers &nbsp; <Icon data={arrowRight} />
         </A>
     </div>
@@ -46,7 +46,7 @@
                 <span class="dark:text-red-600">ERROR</span>
             {/await}
         </h2>
-        <A href="https://www.twitch.tv/warbrokers" class="dark:text-orange-500">
+        <A href="https://www.twitch.tv/warbrokers">
             Watch Live &nbsp; <Icon data={arrowRight} />
         </A>
     </div>

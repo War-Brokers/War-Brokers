@@ -1,4 +1,6 @@
 <script lang="ts">
+    import A from "$lib/components/A.svelte"
+
     export let rank: number
     export let nick: string
     export let uid: string
@@ -9,7 +11,7 @@
 <tr class="p-9 hover:bg-slate-900">
     <td class="pr-4 text-right">{rank}</td>
     <td class="text-left">
-        <a class="dark:text-orange-500" href="/players/{uid}">{nick}</a>
+        <A href="/players/{uid}">{nick}</A>
     </td>
     <td class="text-left">{stat}</td>
     {#if stat2}

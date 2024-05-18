@@ -1,4 +1,5 @@
 <script lang="ts">
+    import A from "$lib/components/A.svelte"
     import Stat from "$lib/components/stat.svelte"
     import Title from "$lib/components/title.svelte"
 
@@ -18,12 +19,7 @@
 
 <h1 class="mx-auto mb-10 text-4xl font-black">
     {#if player.squad}
-        <a
-            href="/squads/{player.squad}"
-            class="underline-offset-8 hover:text-orange-500 hover:underline"
-        >
-            [{player.squad}]
-        </a>
+        <A href="/squads/{player.squad}">[{player.squad}]</A>
     {/if}
     {player.nick}
 </h1>
