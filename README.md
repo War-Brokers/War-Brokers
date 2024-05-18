@@ -8,7 +8,7 @@
   src="https://raw.githubusercontent.com/War-Brokers/War-Brokers/master/imgs/WBP.avif"
 />
 
-[![](https://shields.io/badge/discord-chat-5865F2?logo=discord&logoColor=FFFFFF&style=for-the-badge)](https://discord.gg/synPSeuNFK)
+[![](https://dcbadge.limes.pink/api/server/synPSeuNFK)](https://discord.gg/synPSeuNFK)
 [![contributing](https://img.shields.io/badge/contributing-yellow?style=for-the-badge)](https://github.com/War-Brokers/War-Brokers/blob/master/CONTRIBUTING.md)
 [![license](https://img.shields.io/github/license/War-Brokers/War-Brokers?style=for-the-badge&color=yellow)](./LICENSE)
 
