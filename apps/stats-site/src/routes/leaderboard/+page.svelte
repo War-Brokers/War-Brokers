@@ -10,6 +10,7 @@
     import { SIMPLE_LEADERBOARD_LEN } from "./config"
     import LeaderboardHeading from "./LeaderboardHeading.svelte"
     import Row from "./Row.svelte"
+    import ViewMore from "./ViewMore.svelte"
 
     export let data: PageData
     const { killsEloRanking, gamesEloRanking, xpRanking } = data
@@ -27,9 +28,7 @@
 <h2 class="w-full text-center text-3xl font-black">Global Leaderboard</h2>
 
 <div class="flex w-full flex-col">
-    <LeaderboardHeading href="/leaderboard/killsELO">
-        Kills ELO
-    </LeaderboardHeading>
+    <LeaderboardHeading>Kills ELO</LeaderboardHeading>
     <Table>
         <THead>
             <IndexHeaderCell>#</IndexHeaderCell>
@@ -45,13 +44,12 @@
                 {#each killsEloRanking as { uid, nick, killsELO }, i (uid)}
                     <Row rank={i + 1} {nick} {uid} stat={killsELO} />
                 {/each}
+                <ViewMore href="/leaderboard/killsELO" />
             {/await}
         </tbody>
     </Table>
 
-    <LeaderboardHeading href="/leaderboard/gamesELO">
-        Games ELO
-    </LeaderboardHeading>
+    <LeaderboardHeading>Games ELO</LeaderboardHeading>
     <Table>
         <THead>
             <IndexHeaderCell>#</IndexHeaderCell>
@@ -67,11 +65,12 @@
                 {#each gamesEloRanking as { uid, nick, gamesELO }, i (uid)}
                     <Row rank={i + 1} {nick} {uid} stat={gamesELO} />
                 {/each}
+                <ViewMore href="/leaderboard/gamesELO" />
             {/await}
         </tbody>
     </Table>
 
-    <LeaderboardHeading href="/leaderboard/xp">XP & Level</LeaderboardHeading>
+    <LeaderboardHeading>XP & Level</LeaderboardHeading>
     <Table>
         <THead>
             <IndexHeaderCell>#</IndexHeaderCell>
@@ -94,6 +93,7 @@
                         stat2={level}
                     />
                 {/each}
+                <ViewMore href="/leaderboard/xp" />
             {/await}
         </tbody>
     </Table>
