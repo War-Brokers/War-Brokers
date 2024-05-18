@@ -1,7 +1,7 @@
 import { z } from "zod"
 
-import { getPercentile } from "@/db"
 import { PlayerNotFoundTRPCError, reason2TRPCError } from "@/errors"
+import { db } from "@/index"
 import { uid } from "@/querySchema"
 import { publicProcedure } from "@/trpc"
 import { FailReason } from "@/types"
@@ -21,7 +21,7 @@ export default (tags: string[]) =>
         .query(async ({ input }) => {
             const { uid } = input
 
-            const res = await getPercentile("killsELO", uid)
+            const res = await db.getPercentile("killsELO", uid)
 
             if (!res.success) {
                 if (res.reason === FailReason.PlayerNotFound)

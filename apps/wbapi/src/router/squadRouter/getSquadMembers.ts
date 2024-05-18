@@ -1,7 +1,7 @@
 import { z } from "zod"
 
-import { getSquadMembers } from "@/db"
 import { playerSelectSchema } from "@/db/schema"
+import { db } from "@/index"
 import { publicProcedure } from "@/trpc"
 
 export default (tag: string) =>
@@ -30,4 +30,4 @@ export default (tag: string) =>
             }),
         )
         .output(z.array(playerSelectSchema))
-        .query(async ({ input }) => await getSquadMembers(input.squadName))
+        .query(async ({ input }) => await db.getSquadMembers(input.squadName))

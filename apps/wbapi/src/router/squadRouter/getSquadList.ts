@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { getSquads } from "@/db"
+import { db } from "@/index"
 import { publicProcedure } from "@/trpc"
 
 export const responseSchema = z.array(z.string())
@@ -19,5 +19,5 @@ export default (tag: string) =>
         .input(z.undefined())
         .output(responseSchema)
         .query(async () => {
-            return await getSquads()
+            return await db.getSquads()
         })

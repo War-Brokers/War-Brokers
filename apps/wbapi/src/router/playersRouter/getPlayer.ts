@@ -2,9 +2,8 @@ import type { Player } from "@warbrokers/types/src/player"
 import { playerSchema } from "@warbrokers/types/src/player"
 import { z } from "zod"
 
-import { setPlayer } from "@/db"
 import { PlayerNotFoundTRPCError, reason2TRPCError } from "@/errors"
-import { env } from "@/index"
+import { db, env } from "@/index"
 import { uid } from "@/querySchema"
 import { publicProcedure } from "@/trpc"
 import type { Result } from "@/types"
@@ -35,7 +34,7 @@ export default (tag: string) =>
 
             const player = res.data
 
-            setPlayer(player)
+            db.setPlayer(player)
 
             return player
         })

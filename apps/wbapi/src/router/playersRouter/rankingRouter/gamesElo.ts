@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { getGamesEloRanking } from "@/db"
+import { db } from "@/index"
 import { publicProcedure } from "@/trpc"
 
 import { rankingInput } from "."
@@ -26,5 +26,5 @@ export default (tags: string[]) =>
         )
         .query(async ({ input }) => {
             const { limit, offset } = input
-            return await getGamesEloRanking(limit, offset || 0)
+            return await db.getGamesEloRanking(limit, offset || 0)
         })

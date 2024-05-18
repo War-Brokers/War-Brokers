@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { getDBPlayerCount } from "@/db"
+import { db } from "@/index"
 import { publicProcedure } from "@/trpc"
 
 export default (tag: string) =>
@@ -15,4 +15,4 @@ export default (tag: string) =>
         })
         .input(z.undefined())
         .output(z.number())
-        .query(async () => await getDBPlayerCount())
+        .query(async () => await db.getDBPlayerCount())
