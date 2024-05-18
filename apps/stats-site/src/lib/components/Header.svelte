@@ -21,7 +21,11 @@
                 src="/WBP.avif"
                 alt="War Brokers logo"
             />
-            <h2 class="text-xl font-black tracking-wide">War Brokers Stats</h2>
+            <h2
+                class="invisible whitespace-nowrap text-xl font-black tracking-wide min-[330px]:visible"
+            >
+                War Brokers Stats
+            </h2>
         </a>
 
         <div class="hidden gap-7 md:flex dark:bg-gray-700">
