@@ -8,9 +8,9 @@
     export let stat2: unknown | undefined = undefined
 </script>
 
-<tr class="p-9 hover:bg-slate-900">
+<tr class="whitespace-nowrap p-9 hover:bg-slate-900">
     <td class="pr-4 text-right">{rank}</td>
-    <td class="text-left">
+    <td class="pr-4 text-left">
         <A href="/players/{uid}">{nick}</A>
     </td>
     <td class="text-left">{stat}</td>
