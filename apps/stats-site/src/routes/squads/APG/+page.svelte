@@ -27,8 +27,12 @@
 </span>
 
 <div class="mb-10 flex w-full flex-col lg:flex-row">
-    <img src={SquadEmblem} class="m-auto w-96" alt="LP squad emblem" />
-    <div>
+    <img
+        src={SquadEmblem}
+        class="m-auto w-96 grow basis-0"
+        alt="APG squad emblem"
+    />
+    <div class="grow basis-0">
         <h3 class="mb-2 text-xl font-black">Requirements</h3>
         <ol
             type="I"
