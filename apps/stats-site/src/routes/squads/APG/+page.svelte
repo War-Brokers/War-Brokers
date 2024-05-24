@@ -26,12 +26,12 @@
     </a>
 </span>
 
-<div class="mb-10 flex w-full flex-col gap-36 lg:flex-row">
-    <img
-        src={SquadEmblem}
-        class="m-auto w-96 grow basis-0"
-        alt="APG squad emblem"
-    />
+<div
+    class="mb-10 flex w-full flex-col items-center justify-center gap-36 lg:flex-row"
+>
+    <div class="flex grow basis-0 items-center justify-center">
+        <img src={SquadEmblem} alt="APG squad emblem" />
+    </div>
     <div class="grow basis-0">
         <h3 class="mb-2 text-xl font-black">Requirements</h3>
         <ol
