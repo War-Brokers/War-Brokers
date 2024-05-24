@@ -26,7 +26,7 @@
     </a>
 </span>
 
-<div class="mb-10 flex w-full flex-col lg:flex-row">
+<div class="mb-10 flex w-full flex-col gap-36 lg:flex-row">
     <img
         src={SquadEmblem}
         class="m-auto w-96 grow basis-0"
