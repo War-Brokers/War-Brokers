@@ -67,12 +67,14 @@
             SIGNIFICANTLY drop if you don't meet these criteria.
         </p>
 
-        <A
-            class="text-2xl font-bold"
-            href="https://forms.gle/STUdYz6KuVFijVJ57"
-        >
-            <div class="animate-bounce">Apply Now!</div>
-        </A>
+        <div class="w-fit">
+            <A
+                class="text-2xl font-bold"
+                href="https://forms.gle/STUdYz6KuVFijVJ57"
+            >
+                <div class="animate-bounce">Apply Now!</div>
+            </A>
+        </div>
     </div>
 </div>
 
