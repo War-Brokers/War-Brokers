@@ -9,7 +9,7 @@
     const title = "HF"
 
     export let data: PageData
-    const { members, serverMembersCount } = data
+    const { members, serverMembersCount, squadLeaders } = data
 </script>
 
 <Title {title} />
@@ -18,6 +18,22 @@
 <h2 class="mb-4 w-full text-center text-3xl font-black">
     Squad {title}
 </h2>
+<span class="mx-auto mb-10 text-xl font-black">
+    Squad Leader :
+    <span class="inline-flex gap-1">
+        {#each squadLeaders as player, i (player.uid)}
+            <a
+                class="underline underline-offset-4 hover:text-orange-500"
+                href="/players/{player.uid}"
+            >
+                {player.nick}
+            </a>
+            {#if i < squadLeaders.length - 1}
+                /
+            {/if}
+        {/each}
+    </span>
+</span>
 <a
     href="https://discord.gg/nZhsAWttge"
     class="mx-auto flex w-fit items-center justify-center gap-1 underline-offset-4 hover:underline"
