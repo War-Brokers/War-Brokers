@@ -46,7 +46,9 @@
             </li>
             <li>
                 You must have a
-                <span class="font-black">Kills ELO of 1703</span> or higher
+                <span class="font-black">
+                    Kills ELO better than 96% of players
+                </span>
             </li>
             <li>
                 You must have a
@@ -57,9 +59,8 @@
                 <span class="font-black">one type of vehicle</span>
             </li>
             <li>
-                You must have a
-                <span class="font-black">good reputation</span>
-                within the community and be respectful
+                You must <span class="font-black">be respectful</span> of others
+                and act mature
             </li>
         </ol>
         <p class="mb-5 text-slate-400">
