@@ -5,7 +5,7 @@
     "private": true,
     "scripts": {
         "health-check": "node health-check.mjs",
-        "dev": "yarn build && concurrently -c \"gray,white\" \"cd docker && docker compose up\" \"yarn start:dev\"",
+        "dev": "pnpm build && concurrently -c \"gray,white\" \"cd docker && docker compose up\" \"pnpm start:dev\"",
         "build": "rm -rf build && tsup && tsc --emitDeclarationOnly",
         "start:dev": "NODE_ENV=development node .",
         "start:prod": "node .",
@@ -14,8 +14,8 @@
         "clean": "rm -rf .turbo build node_modules *.log"
     },
     "dependencies": {
+        "@warbrokers/types": "workspace:*",
         "@trpc/server": "^10.45.1",
-        "@warbrokers/types": "*",
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",
         "drizzle-orm": "^0.29.4",
@@ -27,12 +27,12 @@
         "zod": "^3.22.4"
     },
     "devDependencies": {
+        "@warbrokers/eslint-config": "workspace:*",
         "@swc/core": "^1.4.2",
         "@types/cors": "^2.8.17",
         "@types/express": "^4.17.21",
         "@types/jest": "^29.5.12",
         "@types/swagger-ui-express": "^4.1.6",
-        "@warbrokers/eslint-config": "*",
         "concurrently": "^8.2.2",
         "eslint": "^8.56.0",
         "jest": "^29.7.0",
@@ -42,7 +42,7 @@
         "typescript": "^5.3.3"
     },
     "engines": {
-        "yarn": "1.x",
-        "node": "20.x"
+        "pnpm": ">=9.0",
+        "node": ">=20.0"
     }
 }

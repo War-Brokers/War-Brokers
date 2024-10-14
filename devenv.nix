@@ -13,8 +13,8 @@
     javascript = {
       enable = true;
       package = pkgs.nodejs_20; # as defined in package.json engines
-      yarn.enable = true;
-      yarn.install.enable = true;
+      pnpm.enable = true;
+      pnpm.install.enable = true;
     };
 
     # https://github.com/cachix/devenv/blob/main/src/modules/languages/php.nix
@@ -46,7 +46,7 @@
   # https://devenv.sh/processes
   processes = {
     dev = {
-      exec = "yarn dev";
+      exec = "pnpm dev";
       process-compose.depends_on.postgres.condition = "process_healthy";
     };
 

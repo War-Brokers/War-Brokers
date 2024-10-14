@@ -20,7 +20,7 @@ If you are a developer wanting to work on the code, make sure you are familiar w
 
 - git & GitHub (PR, clone, fork)
 - networking fundamentals
-- nodejs ecosystem (javascript, typescript, npm, yarn, etc.)
+- nodejs ecosystem (javascript, typescript, npm, etc.)
 - JS frameworks
   - [react](https://github.com/facebook/react)
   - [next.js](https://github.com/vercel/next.js)

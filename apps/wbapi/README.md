@@ -22,15 +22,3 @@ Documentations and APIs can be found in https://wbapi.wbpjs.com/api-docs
 ![PostgreSQL](https://img.shields.io/badge/postgresql-222?style=for-the-badge&logo=postgresql)
 ![Drizzle](https://img.shields.io/badge/drizzle_orm-222?style=for-the-badge&logo=drizzle)
 ![TRPC](https://img.shields.io/badge/trpc-222?style=for-the-badge&logo=trpc)
-
-## Setting up
-
-To test the project locally, perform the following steps:
-
-1. Set up monorepo ([`CONTRIBUTING.md`](../../CONTRIBUTING.md))
-2. Install docker and docker compose
-3. Open a terminal emulator in this (`wbapi`) directory
-4. Start a server in http://localhost:5000
-   ```
-   yarn dev
-   ```

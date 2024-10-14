@@ -12,11 +12,3 @@ The War Brokers Timeline is a website that lists various events happened in the 
 ![Tailwind CSS](https://img.shields.io/badge/tailwind_css-222?style=for-the-badge&logo=tailwindcss)
 ![React](https://img.shields.io/badge/react-222?style=for-the-badge&logo=react)
 ![Next.js](https://img.shields.io/badge/next.js-222?style=for-the-badge&logo=nextdotjs)
-
-## Setting up
-
-1. Set up monorepo ([`CONTRIBUTING.md`](../../CONTRIBUTING.md))
-2. Start a local dev server at http://localhost:3000
-   ```
-   yarn start
-   ```

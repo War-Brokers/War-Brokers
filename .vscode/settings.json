@@ -93,6 +93,11 @@
         "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
     },
 
+    // npmrc
+    "[properties]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+
     // nix
     "[nix]": {
         "editor.defaultFormatter": "jnoortheen.nix-ide"

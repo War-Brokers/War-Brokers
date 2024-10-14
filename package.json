@@ -1,13 +1,8 @@
 {
     "private": true,
-    "workspaces": [
-        "apps/*",
-        "libs/*"
-    ],
     "scripts": {
         "turbo": "turbo",
         "dev": "turbo run dev --parallel",
-        "start": "turbo run start --parallel",
         "build": "turbo run build --parallel --cache-dir=.turbo",
         "lint": "prettier . --check && turbo run lint --parallel",
         "test:e2e": "turbo run test:e2e --parallel",
@@ -31,7 +26,7 @@
         "typescript": "^5.3.3"
     },
     "engines": {
-        "yarn": "1.x",
-        "node": "20.x"
+        "pnpm": ">=9.0",
+        "node": ">=20.0"
     }
 }
