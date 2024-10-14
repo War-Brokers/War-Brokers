@@ -1,5 +1,15 @@
 /_/
 
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+
 # Created by https://www.toptal.com/developers/gitignore/api/node,turbo,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,turbo,macos
 

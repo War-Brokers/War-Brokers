@@ -3,6 +3,10 @@
         // general
         "vivaxy.vscode-conventional-commits",
         "github.vscode-github-actions",
+        "mkhl.direnv",
+
+        // nix
+        "jnoortheen.nix-ide",
 
         // JS / TS
         "esbenp.prettier-vscode",

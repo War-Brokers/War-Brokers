@@ -1,55 +1,48 @@
-# Contribution Guide
+# Contribution guide
 
 ## Welcome!
 
 Hi! Thank you for taking your precious time to contribute to
 War Brokers Projects! We hope you have a pleasant experience working with us <3
 
-## How is the project organized?
-
-The War Brokers Projects monorepo is managed using the following technologies:
-
-- [turborepo](https://turbo.build/repo)
-  - used to orchestrate everything
-  - config: [`turbo.json`](./turbo.json)
-- [yarn workspace](https://yarnpkg.com/features/workspaces)
-
-## Online Infrastructure
+## Online infrastructure
 
 ![Infrastructure Diagram](./.github/img/infra.png)
 
-## Setting up
+## Getting started
 
-**⚠️ WAIT! ⚠️**
+Everything in this repository is put there under the assumption that the viewer is a developer.
+If you are **NOT** a developer, but would like to contribute to the project, head over to our
+[discord server](https://discord.com/invite/synPSeuNFK) and share your feature suggestions and
+bug reports there!
 
-If you are using Windows OS, make sure to run all commands in git bash which
-you can download [here](https://git-scm.com/downloads).
+If you are a developer wanting to work on the code, make sure you are familiar with the following:
 
-1. Install the following
-   - git
-   - vscode
-   - NodeJS
-   - yarn
-2. Fork this repository
-3. `git clone` the forked repository to your computer
-4. Open cloned repository with vscode
-   - install recommended extensions (a toast should show up on the bottom right corner of the window)
-5. Install dependencies
-   ```
-   yarn install
-   ```
-6. Initialize Git Hooks
-   - this is used to lint your commit messages so they follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0)
-   ```
-   yarn prepare
-   ```
-7. read the `README.md` files of projects you would like to work on.
-   Projects are located in [`apps`](./apps) and [`libs`](./libs)
-   directory. You can run `package.json` scripts in the project directory like so:
+- git & GitHub (PR, clone, fork)
+- networking fundamentals
+- nodejs ecosystem (javascript, typescript, npm, yarn, etc.)
+- JS frameworks
+  - [react](https://github.com/facebook/react)
+  - [next.js](https://github.com/vercel/next.js)
+  - [express](https://github.com/expressjs/express)
+  - [trpc](https://github.com/trpc/trpc)
+- [turborepo](https://turbo.build/repo)
+- [devenv](https://devenv.sh/getting-started)
+  - and by extension [direnv](https://devenv.sh/automatic-shell-activation)
 
-   ```
-   cd apps/wbtimeline && yarn dev
-   ```
+Note that the above is a non-exhaustive, bare minimum list of things you need to be familiar with.
+
+## Command cheat sheet
+
+- Start testing server
+  - http://localhost:5432 - WBAPI postgres DB
+  - http://localhost:4000 - WB DB
+  - http://localhost:5000 - wbapi
+  - http://localhost:5173 - stats site
+  - http://localhost:3000 - wbtimeline
+  ```
+  devenv up
+  ```
 
 ## More
 

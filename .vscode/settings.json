@@ -9,6 +9,8 @@
         "commitlint",
         "deathmatch",
         "developomp",
+        "devenv",
+        "direnv",
         "dompurify",
         "etags",
         "firelink",
@@ -33,6 +35,8 @@
         "msvc",
         "multisites",
         "nicklower",
+        "nixos",
+        "nixpkgs",
         "openapi",
         "predeploy",
         "REMAGEN",
@@ -88,6 +92,14 @@
     "[php]": {
         "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
     },
+
+    // nix
+    "[nix]": {
+        "editor.defaultFormatter": "jnoortheen.nix-ide"
+    },
+    "nix.formatterPath": "nixfmt",
+    "nix.enableLanguageServer": true,
+    "nix.serverPath": "nixd",
 
     // eslint
     "eslint.validate": [
