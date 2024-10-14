@@ -3,4 +3,3 @@ _/*
 **/build/
 **/.svelte-kit/
 **/*.timestamp-*
-**/.vercel/
