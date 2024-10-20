@@ -2,6 +2,7 @@
     "recommendations": [
         // general
         "vivaxy.vscode-conventional-commits",
+        "streetsidesoftware.code-spell-checker",
         "github.vscode-github-actions",
         "mkhl.direnv",
 
