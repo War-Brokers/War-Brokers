@@ -142,7 +142,7 @@
 
     // etc
     "search.exclude": {
-        "**/yarn.lock": true,
-        "**/.pnp.*": true
+        "pnpm-lock.yaml": true,
+        "**.svg": true
     }
 }
