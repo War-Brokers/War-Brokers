@@ -1,14 +1,15 @@
-import { devices, type PlaywrightTestConfig } from "@playwright/test"
+import {
+    devices,
+    defineConfig,
+    type PlaywrightTestConfig,
+} from "@playwright/test"
 
 export interface Config {
-    command?: string
     port: number
 }
 
 export function createConfig(config: Config): PlaywrightTestConfig {
-    const baseURL = `http://localhost:${config.port}`
-
-    return {
+    return defineConfig({
         // Timeout per test
         timeout: 30 * 1000,
 
@@ -18,22 +19,12 @@ export function createConfig(config: Config): PlaywrightTestConfig {
         // Artifacts folder where screenshots, videos, and traces are stored.
         outputDir: "test-results/",
 
-        // Run your local dev server before starting the tests:
-        // https://playwright.dev/docs/test-advanced#launching-a-development-web-server-during-the-tests
-        webServer: {
-            command: config.command || "pnpm serve",
-            url: baseURL,
-            timeout: 30 * 1000,
-            // eslint-disable-next-line turbo/no-undeclared-env-vars
-            reuseExistingServer: !process.env.CI,
-            stdout: "ignore",
-            stderr: "ignore",
-        },
+        fullyParallel: true,
 
         use: {
             // Use baseURL so to make navigations relative.
             // More information: https://playwright.dev/docs/api/class-testoptions#test-options-base-url
-            baseURL,
+            baseURL: `http://localhost:${config.port}`,
 
             // Retry a test if its failing with enabled tracing. This allows you to analyse the DOM, console logs, network traffic etc.
             // More information: https://playwright.dev/docs/trace-viewer
@@ -45,6 +36,7 @@ export function createConfig(config: Config): PlaywrightTestConfig {
             // },
         },
 
+        // Configure projects for major browsers.
         projects: [
             {
                 name: "Desktop Chrome",
@@ -65,5 +57,5 @@ export function createConfig(config: Config): PlaywrightTestConfig {
                 },
             },
         ],
-    }
+    })
 }

@@ -8,6 +8,6 @@
         "clean": "rm -rf .turbo node_modules"
     },
     "devDependencies": {
-        "@playwright/test": "^1.41.2"
+        "@playwright/test": "1.47.0"
     }
 }

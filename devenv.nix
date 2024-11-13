@@ -5,14 +5,33 @@
     nixd
     nixfmt-rfc-style
     commitlint
+
+    # version of this package must be synced with npm package or else playwright
+    # will try to use browsers versions that aren't installed!
+    playwright-driver.browsers
   ];
+
+  env = {
+    PLAYWRIGHT_BROWSERS_PATH = pkgs.playwright-driver.browsers;
+    PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = true;
+  };
+
+  # https://devenv.sh/tests
+  enterTest = ''
+    pnpm lint
+    pnpm test:e2e
+    pnpm test:unit
+    cd apps/stats-site && pnpm svelte-check
+  '';
 
   languages = {
     # https://github.com/cachix/devenv/blob/main/src/modules/languages/javascript.nix
     # https://devenv.sh/supported-languages/javascript
     javascript = {
+      # sync package.json>engines versions on devenv update
+
       enable = true;
-      package = pkgs.nodejs_20; # as defined in package.json engines
+      package = pkgs.nodejs_20;
       pnpm.enable = true;
       pnpm.install.enable = true;
     };

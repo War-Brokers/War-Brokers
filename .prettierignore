@@ -4,3 +4,4 @@ _/*
 **/.svelte-kit/
 **/*.timestamp-*
 pnpm-lock.yaml
+**/test-results/

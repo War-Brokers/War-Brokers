@@ -1,77 +1,27 @@
-name: Test
+# https://devenv.sh/integrations/github-actions
+name: Run Tests
 
 on:
   push:
-    branches:
-      - master
   workflow_dispatch:
 
 jobs:
-  main:
+  test:
+    name: Run Tests
     runs-on: ubuntu-latest
+    permissions:
+      # permissions required for nix caching to work properly
+      id-token: write
+      contents: read
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Install devenv.sh
+        run: nix profile install nixpkgs#devenv
 
       - name: Cache turbo build
         uses: dtinth/setup-github-actions-caching-for-turbo@v1
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-          run_install: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-
-      - name: Install Node Dependencies
-        run: pnpm install
-
-      - name: Get Playwright's Version
-        id: playwright-version
-        run: |
-          PLAYWRIGHT_VERSION=$(npx playwright --version | sed 's/Version//')
-          echo "Playwright Version: $PLAYWRIGHT_VERSION"
-          echo "version=$PLAYWRIGHT_VERSION" >> $GITHUB_OUTPUT
-
-      - name: Cache Playwright Browsers
-        id: cache-playwright-browsers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-browsers-${{ steps.playwright-version.outputs.version }}
-
-      - name: Install Playwright Browsers
-        if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
-        run: pnpm playwright install --with-deps
-
-      - name: Build
-        env:
-          WB_DB_ID: ${{ secrets.WB_DB_ID }}
-          WB_DB_PW: ${{ secrets.WB_DB_PW }}
-          WB_DB_BASE: ${{ secrets.WB_DB_BASE }}
-        run: pnpm build
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Svelte Check
-        run: cd apps/stats-site && pnpm svelte-check
-
-      - name: Test (end-to-end)
-        env:
-          WB_DB_ID: ${{ secrets.WB_DB_ID }}
-          WB_DB_PW: ${{ secrets.WB_DB_PW }}
-          WB_DB_BASE: ${{ secrets.WB_DB_BASE }}
-        run: pnpm test:e2e
-
-      - name: Test (unit)
-        env:
-          WB_DB_ID: ${{ secrets.WB_DB_ID }}
-          WB_DB_PW: ${{ secrets.WB_DB_PW }}
-          WB_DB_BASE: ${{ secrets.WB_DB_BASE }}
-        run: pnpm test:unit
+      - run: devenv test
