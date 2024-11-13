@@ -25,3 +25,8 @@ jobs:
         uses: dtinth/setup-github-actions-caching-for-turbo@v1
 
       - run: devenv test
+        env:
+          WB_DB_ID: id
+          WB_DB_PW: pw
+          WB_DB_BASE: http://localhost:4000
+          DATABASE_URL: "postgresql://localhost:5432/postgres"
