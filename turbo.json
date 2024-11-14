@@ -1,7 +1,7 @@
 {
     "$schema": "https://turbo.build/schema.json",
     "globalDependencies": [".prettierignore", ".prettierrc.json"],
-    "pipeline": {
+    "tasks": {
         "@warbrokers/stats-site#dev": {
             "dependsOn": ["@warbrokers/wbapi#health-check"],
             "cache": false
@@ -9,13 +9,8 @@
         "health-check": {
             "cache": false
         },
-
         "dev": {
-            "dependsOn": ["build"],
-            "cache": false
-        },
-        "start": {
-            "dependsOn": ["build"],
+            "dependsOn": ["^dev"],
             "cache": false
         },
         "build": {
@@ -29,9 +24,15 @@
                 ".svelte-kit/**"
             ]
         },
-        "lint": { "dependsOn": ["build"] },
-        "test:e2e": { "dependsOn": ["build"] },
-        "test:unit": { "dependsOn": ["build"] },
+        "lint": { "dependsOn": ["^lint"] },
+        "test:e2e": {
+            "env": [
+                "PLAYWRIGHT_BROWSERS_PATH",
+                "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"
+            ],
+            "dependsOn": ["^test:e2e"]
+        },
+        "test:unit": { "dependsOn": ["^test:unit"] },
         "clean": {
             "cache": false
         }

@@ -4,10 +4,9 @@
   packages = with pkgs; [
     nixd
     nixfmt-rfc-style
-    commitlint
 
-    # version of this package must be synced with npm package or else playwright
-    # will try to use browsers versions that aren't installed!
+    # version of these packages must be synced with npm packages
+    commitlint
     playwright-driver.browsers
   ];
 
@@ -18,6 +17,12 @@
 
   # https://devenv.sh/tests
   enterTest = ''
+    wait_for_port 5432 # WBAPI postgres DB
+    wait_for_port 4000 # WB DB
+    wait_for_port 5000 # wbapi
+    wait_for_port 5173 # stats site
+    wait_for_port 3000 # wbtimeline
+
     pnpm lint
     pnpm test:e2e
     pnpm test:unit
