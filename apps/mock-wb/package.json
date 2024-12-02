@@ -1,0 +1,36 @@
+{
+    "name": "@warbrokers/mock-wb",
+    "version": "0.0.0",
+    "main": "./build/index.js",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "pnpm build && node .",
+        "build": "rm -rf build && tsup",
+        "lint": "eslint . && tsc --noEmit",
+        "test:e2e": "playwright test",
+        "clean": "rm -rf .turbo build node_modules"
+    },
+    "dependencies": {
+        "@warbrokers/types": "workspace:*",
+        "csv-parse": "5.6.0",
+        "csv-stringify": "6.5.2",
+        "express": "5.0.1",
+        "express-basic-auth": "1.2.1",
+        "postgres": "3.4.5",
+        "typescript": "5.6.3"
+    },
+    "devDependencies": {
+        "@faker-js/faker": "^9.2.0",
+        "@playwright/test": "1.47.0",
+        "@types/express": "5.0.0",
+        "@types/node": "22.9.0",
+        "@warbrokers/eslint-config": "workspace:*",
+        "@warbrokers/playwright-config": "workspace:*",
+        "tsup": "8.3.5"
+    },
+    "engines": {
+        "pnpm": ">=9.0",
+        "node": ">=20.0"
+    }
+}

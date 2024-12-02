@@ -4,6 +4,7 @@
         "aarch",
         "alsa",
         "APIV",
+        "automagically",
         "bson",
         "Cheatsheets",
         "commitlint",
@@ -18,6 +19,7 @@
         "flowbite",
         "fontawesome",
         "fortawesome",
+        "headshots",
         "heli",
         "Kenney",
         "leaderboard",
@@ -51,6 +53,7 @@
         "trpc",
         "tsup",
         "turborepo",
+        "unzoomed",
         "Upstash",
         "Vsync",
         "warbrokers",
@@ -71,9 +74,6 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit"
     },
-    "[toml]": {
-        "editor.defaultFormatter": "tamasfe.even-better-toml"
-    },
     "[dotenv]": {
         "editor.defaultFormatter": "foxundermoon.shell-format"
     },
@@ -85,12 +85,6 @@
     },
     "[svelte]": {
         "editor.defaultFormatter": "svelte.svelte-vscode"
-    },
-    "[sql]": {
-        "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
-    },
-    "[php]": {
-        "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
     },
 
     // npmrc

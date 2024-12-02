@@ -25,12 +25,6 @@
         "foxundermoon.shell-format",
 
         // dotenv
-        "mikestead.dotenv",
-
-        // sql
-        "inferrinizzard.prettier-sql-vscode",
-
-        // php
-        "bmewburn.vscode-intelephense-client"
+        "mikestead.dotenv"
     ]
 }

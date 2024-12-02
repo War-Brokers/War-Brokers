@@ -1,25 +1,17 @@
 import { z } from "zod"
 
-import type { Digit } from "./digit"
-
-export const weaponIDSchema = z.custom<
-    `p${Digit}${Digit}` | `p${Digit}${Digit}${Digit}`
->((val) => /^p\d\d\d?$/g.test(val as string))
-
-export type WeaponID = z.infer<typeof weaponIDSchema>
-
 export enum Weapon {
     AirStrike = "p09",
     BGM = "p11",
-    // TODO p52
-    // TODO p53
-    // TODO p54
-    // TODO p55
-    // TODO p56
-    // TODO p57
-    // TODO p58
-    // TODO p59
-    // TODO p60
+    UNKNOWN_WEAPON_52 = "p52",
+    UNKNOWN_WEAPON_53 = "p53",
+    UNKNOWN_WEAPON_54 = "p54",
+    UNKNOWN_WEAPON_55 = "p55",
+    UNKNOWN_WEAPON_56 = "p56",
+    UNKNOWN_WEAPON_57 = "p57",
+    UNKNOWN_WEAPON_58 = "p58",
+    UNKNOWN_WEAPON_59 = "p59",
+    UNKNOWN_WEAPON_60 = "p60",
     ARRifle = "p61",
     AKRifle = "p62",
     Pistol = "p63",
@@ -36,12 +28,12 @@ export enum Weapon {
     Revolver = "p78",
     Minigun = "p79",
     GrenadeLauncher = "p80",
-    // TODO p82
-    // TODO p83
-    // TODO p84
-    // TODO p85
-    // TODO p86
-    // TODO p87
+    UNKNOWN_WEAPON_82 = "p82",
+    UNKNOWN_WEAPON_83 = "p83",
+    UNKNOWN_WEAPON_84 = "p84",
+    UNKNOWN_WEAPON_85 = "p85",
+    UNKNOWN_WEAPON_86 = "p86",
+    UNKNOWN_WEAPON_87 = "p87",
     Fists = "p88",
     VSS = "p89",
     FiftyCalSniper = "p90",
@@ -50,19 +42,30 @@ export enum Weapon {
     SCAR = "p93",
     TacticalShotgun = "p94",
     VEK = "p95",
-    // TODO p96
-    // TODO p97
+    UNKNOWN_WEAPON_96 = "p96",
+    UNKNOWN_WEAPON_97 = "p97",
     LMG = "p98",
-    // TODO p105
-    // TODO p101
-    // TODO p110
+    UNKNOWN_WEAPON_105 = "p105",
+    UNKNOWN_WEAPON_101 = "p101",
+    UNKNOWN_WEAPON_110 = "p110",
     LaserTripMine = "p111",
-    // TODO p112
+    UNKNOWN_WEAPON_112 = "p112",
 }
+
+export const weaponIDSchema = z.nativeEnum(Weapon)
 
 export const WeaponName: { [key in Weapon]: string } = {
     [Weapon.AirStrike]: "Air Strike",
     [Weapon.BGM]: "BGM",
+    [Weapon.UNKNOWN_WEAPON_52]: "Unknown Weapon 52",
+    [Weapon.UNKNOWN_WEAPON_53]: "Unknown Weapon 53",
+    [Weapon.UNKNOWN_WEAPON_54]: "Unknown Weapon 54",
+    [Weapon.UNKNOWN_WEAPON_55]: "Unknown Weapon 55",
+    [Weapon.UNKNOWN_WEAPON_56]: "Unknown Weapon 56",
+    [Weapon.UNKNOWN_WEAPON_57]: "Unknown Weapon 57",
+    [Weapon.UNKNOWN_WEAPON_58]: "Unknown Weapon 58",
+    [Weapon.UNKNOWN_WEAPON_59]: "Unknown Weapon 59",
+    [Weapon.UNKNOWN_WEAPON_60]: "Unknown Weapon 60",
     [Weapon.ARRifle]: "AR Rifle",
     [Weapon.AKRifle]: "AK Rifle",
     [Weapon.Pistol]: "Pistol",
@@ -79,6 +82,12 @@ export const WeaponName: { [key in Weapon]: string } = {
     [Weapon.Revolver]: "Revolver",
     [Weapon.Minigun]: "Minigun",
     [Weapon.GrenadeLauncher]: "G. Launcher",
+    [Weapon.UNKNOWN_WEAPON_82]: "Unknown Weapon 82",
+    [Weapon.UNKNOWN_WEAPON_83]: "Unknown Weapon 83",
+    [Weapon.UNKNOWN_WEAPON_84]: "Unknown Weapon 84",
+    [Weapon.UNKNOWN_WEAPON_85]: "Unknown Weapon 85",
+    [Weapon.UNKNOWN_WEAPON_86]: "Unknown Weapon 86",
+    [Weapon.UNKNOWN_WEAPON_87]: "Unknown Weapon 87",
     [Weapon.Fists]: "Fists",
     [Weapon.VSS]: "VSS",
     [Weapon.FiftyCalSniper]: ".50 Cal Sniper",
@@ -87,6 +96,12 @@ export const WeaponName: { [key in Weapon]: string } = {
     [Weapon.SCAR]: "SCAR",
     [Weapon.TacticalShotgun]: "Tactical Shotgun",
     [Weapon.VEK]: "VEK",
+    [Weapon.UNKNOWN_WEAPON_96]: "Unknown Weapon 96",
+    [Weapon.UNKNOWN_WEAPON_97]: "Unknown Weapon 97",
     [Weapon.LMG]: "LMG",
+    [Weapon.UNKNOWN_WEAPON_105]: "Unknown Weapon 105",
+    [Weapon.UNKNOWN_WEAPON_101]: "Unknown Weapon 101",
+    [Weapon.UNKNOWN_WEAPON_110]: "Unknown Weapon 110",
     [Weapon.LaserTripMine]: "Laser Trip Mine",
+    [Weapon.UNKNOWN_WEAPON_112]: "Unknown Weapon 112",
 }

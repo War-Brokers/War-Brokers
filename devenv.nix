@@ -18,7 +18,7 @@
   # https://devenv.sh/tests
   enterTest = ''
     wait_for_port 5432 # WBAPI postgres DB
-    wait_for_port 4000 # WB DB
+    wait_for_port 4000 # Mock WB
     wait_for_port 5000 # wbapi
     wait_for_port 5173 # stats site
     wait_for_port 3000 # wbtimeline
@@ -40,19 +40,13 @@
       pnpm.enable = true;
       pnpm.install.enable = true;
     };
-
-    # https://github.com/cachix/devenv/blob/main/src/modules/languages/php.nix
-    # https://devenv.sh/supported-languages/php
-    php = {
-      enable = true;
-    };
   };
 
   # https://github.com/cachix/devenv/blob/main/src/modules/tasks.nix
   # https://devenv.sh/tasks
   tasks = {
     "bash:husky" = {
-      exec = "npm run husky";
+      exec = "pnpm run husky";
       before = [
         "devenv:enterShell"
       ];
@@ -69,13 +63,10 @@
 
   # https://devenv.sh/processes
   processes = {
+    # todo: https://f1bonacc1.github.io/process-compose/health wbapi health check
     dev = {
       exec = "pnpm dev";
       process-compose.depends_on.postgres.condition = "process_healthy";
-    };
-
-    start-wbdb = {
-      exec = "cd devenv/wbdb && php -S 127.0.0.1:4000";
     };
   };
 
@@ -87,7 +78,6 @@
     initialDatabases = [
       {
         name = "postgres";
-        schema = ./devenv/players.sql;
       }
     ];
     listen_addresses = "127.0.0.1";

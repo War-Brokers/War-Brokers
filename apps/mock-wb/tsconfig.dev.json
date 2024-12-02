@@ -1,0 +1,3 @@
+{
+    "include": [".eslintrc.cjs", "tsup.config.ts", "playwright.config.ts"]
+}

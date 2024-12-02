@@ -1,3 +1,61 @@
-enum Vehicle {}
+import { z } from "zod"
 
-export default Vehicle
+export enum Vehicle {
+    TankLv1 = "v00",
+    TankLv2 = "v01",
+    TankLv3 = "v02",
+    APCLv1 = "v10",
+    APCLv2 = "v11",
+    APCLv3 = "v12",
+    BattleRoyaleCar = "v13",
+    UNKNOWN_VEHICLE_14 = "v14",
+    Jet1FinMachineGun = "v15",
+    UNKNOWN_VEHICLE_16 = "v16",
+    UNKNOWN_VEHICLE_17 = "v17",
+    UNKNOWN_VEHICLE_18 = "v18",
+    UNKNOWN_VEHICLE_19 = "v19",
+    HeliLv1 = "v20",
+    HeliLv2 = "v21",
+    HeliLv3 = "v22",
+    HeliNoWeapon = "v23",
+    Player = "v30",
+    Jet1Fin = "v40",
+    Jet2Fin = "v41",
+    MachineGunTurret = "v50",
+    UNKNOWN_VEHICLE_60 = "v60",
+    UNKNOWN_VEHICLE_110 = "v110",
+    UNKNOWN_VEHICLE_111 = "v111",
+    UNKNOWN_VEHICLE_112 = "v112",
+    UNKNOWN_VEHICLE_113 = "v113",
+}
+
+export const vehicleSchema = z.nativeEnum(Vehicle)
+
+export const VehicleName: { [key in Vehicle]: string } = {
+    [Vehicle.TankLv1]: "Tank LVL 1",
+    [Vehicle.TankLv2]: "Tank LVL 2",
+    [Vehicle.TankLv3]: "Tank LVL 3",
+    [Vehicle.APCLv1]: "PAC LVL 1",
+    [Vehicle.APCLv2]: "PAC LVL 2",
+    [Vehicle.APCLv3]: "PAC LVL 3",
+    [Vehicle.BattleRoyaleCar]: "Battle Royale Car",
+    [Vehicle.UNKNOWN_VEHICLE_14]: "Unknown Vehicle 14",
+    [Vehicle.Jet1FinMachineGun]: "1 Fin Jet Machine Gun",
+    [Vehicle.UNKNOWN_VEHICLE_16]: "Unknown Vehicle 16",
+    [Vehicle.UNKNOWN_VEHICLE_17]: "Unknown Vehicle 17",
+    [Vehicle.UNKNOWN_VEHICLE_18]: "Unknown Vehicle 18",
+    [Vehicle.UNKNOWN_VEHICLE_19]: "Unknown Vehicle 19",
+    [Vehicle.HeliLv1]: "Heli LVL 1",
+    [Vehicle.HeliLv2]: "Heli LVL 2",
+    [Vehicle.HeliLv3]: "Heli LVL 3",
+    [Vehicle.HeliNoWeapon]: "Heli (No Weapon)",
+    [Vehicle.Player]: "Player",
+    [Vehicle.Jet1Fin]: "1 Fin Jet",
+    [Vehicle.Jet2Fin]: "2 Fin Jet",
+    [Vehicle.MachineGunTurret]: "Machine Gun Turret",
+    [Vehicle.UNKNOWN_VEHICLE_60]: "Unknown Vehicle 60",
+    [Vehicle.UNKNOWN_VEHICLE_110]: "Unknown Vehicle 110",
+    [Vehicle.UNKNOWN_VEHICLE_111]: "Unknown Vehicle 111",
+    [Vehicle.UNKNOWN_VEHICLE_112]: "Unknown Vehicle 112",
+    [Vehicle.UNKNOWN_VEHICLE_113]: "Unknown Vehicle 113",
+}

@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        // generation related
+        "outDir": "build",
+        "declaration": true,
+
+        // regular configs
+        "strict": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+
+        // node version related
+        "moduleResolution": "Node",
+        "module": "ESNext",
+        "target": "ESNext",
+
+        // path related
+        "baseUrl": ".",
+        "paths": {
+            "~/*": ["./src/*"]
+        }
+    },
+    "include": ["src"]
+}
