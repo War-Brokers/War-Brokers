@@ -13,4 +13,7 @@ test("should have proper title", async ({ page }) => {
 
     await page.goto("/404")
     expect(await page.title()).toEqual("404 Not Found" + suffix)
+
+    await page.goto("/path/that/does/not/exist")
+    expect(await page.title()).toEqual("404 Not Found" + suffix)
 })

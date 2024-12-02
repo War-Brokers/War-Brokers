@@ -65,13 +65,14 @@ export async function getPlayer(uid: Player["uid"]): Promise<Result<Player>> {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let raw: any
+    const res2 = res.clone()
     try {
         raw = await res.json()
     } catch (e) {
         console.error(
             `/players/getPlayer?uid=${uid} failed to retrieve data from DB.
 raw:
-${await res.text() /* idk if this will work after running await res.json() */}
+${await res2.text()}
 
 error:`,
             e,

@@ -24,9 +24,9 @@
     wait_for_port 3000 # wbtimeline
 
     pnpm lint
-    pnpm test:e2e
+    pnpm --filter=@warbrokers/stats-site test:e2e
+    pnpm --filter=@warbrokers/stats-site svelte-check
     pnpm test:unit
-    cd apps/stats-site && pnpm svelte-check
   '';
 
   languages = {
