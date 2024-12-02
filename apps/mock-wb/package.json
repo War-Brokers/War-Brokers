@@ -8,7 +8,6 @@
         "dev": "pnpm build && node .",
         "build": "rm -rf build && tsup",
         "lint": "eslint . && tsc --noEmit",
-        "test:e2e": "playwright test",
         "clean": "rm -rf .turbo build node_modules"
     },
     "dependencies": {
@@ -22,11 +21,9 @@
     },
     "devDependencies": {
         "@faker-js/faker": "^9.2.0",
-        "@playwright/test": "1.47.0",
         "@types/express": "5.0.0",
         "@types/node": "22.9.0",
         "@warbrokers/eslint-config": "workspace:*",
-        "@warbrokers/playwright-config": "workspace:*",
         "tsup": "8.3.5"
     },
     "engines": {

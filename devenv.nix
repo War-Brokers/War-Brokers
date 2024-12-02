@@ -75,11 +75,6 @@
   services.postgres = {
     enable = true;
     package = pkgs.postgresql_15; # same as supabase
-    initialDatabases = [
-      {
-        name = "postgres";
-      }
-    ];
     listen_addresses = "127.0.0.1";
   };
 }
