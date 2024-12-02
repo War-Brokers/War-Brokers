@@ -8,7 +8,7 @@ export default (db: PostgresJsDatabase) => {
     return async (player: Player) => {
         const newPlayer = {
             nick: player.nick,
-            nicklower: player.nicklower,
+            nicklower: player.nicklower || player.nick.toLocaleLowerCase(),
             gamesELO: player.gamesELO,
             killsELO: player.killsELO,
             level: player.level,
