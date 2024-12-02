@@ -11,7 +11,7 @@ import type { z } from "zod"
 
 export const players = pgTable("players", {
     uid: text("uid").primaryKey(),
-    nick: text("nick").notNull(),
+    nick: text("nick"),
     nicklower: text("nicklower").notNull(),
     level: integer("level").notNull(),
     xp: bigint("xp", { mode: "number" }).notNull(),
