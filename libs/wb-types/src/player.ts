@@ -65,7 +65,7 @@ export const playerSchema = z.object({
         .describe(
             "Whether the user is banned or not. Doesn't seem to be used. Is always false",
         ),
-    steam: z.boolean().or(z.null()),
+    steam: z.boolean().or(z.null()).optional(),
 
     // Time
     time: z.number().describe("UNIX timestamp of last session"),
