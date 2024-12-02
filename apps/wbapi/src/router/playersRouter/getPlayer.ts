@@ -68,7 +68,14 @@ export async function getPlayer(uid: Player["uid"]): Promise<Result<Player>> {
     try {
         raw = await res.json()
     } catch (e) {
-        console.error(`/players/getPlayer(${uid}) Failed:`, e)
+        console.error(
+            `/players/getPlayer?uid=${uid} failed to retrieve data from DB.
+raw:
+${await res.text() /* idk if this will work after running await res.json() */}
+
+error:`,
+            e,
+        )
 
         return {
             success: false,
@@ -81,11 +88,20 @@ export async function getPlayer(uid: Player["uid"]): Promise<Result<Player>> {
         raw["time_alive_longest"] = Number(raw["time_alive_longest"])
 
     const parseResult = playerSchema.safeParse(raw)
-    if (!parseResult.success)
+    if (!parseResult.success) {
+        console.error(
+            `/players/getPlayer?uid=${uid} failed to validate player data.
+raw:
+${JSON.stringify(raw, null, 2)}
+
+error:`,
+            parseResult.error,
+        )
         return {
             success: false,
             reason: FailReason.SchemaValidationFail,
         }
+    }
 
     return {
         success: true,

@@ -32,7 +32,10 @@ export default (tag: string) =>
         .query(async () => {
             const res = await twitchStreamCount()
 
-            if (!res.success) throw reason2TRPCError(res.reason)
+            if (!res.success) {
+                console.error(`/status/twitchStreams failed: ${res.reason}`)
+                throw reason2TRPCError(res.reason)
+            }
 
             return res.data
         })

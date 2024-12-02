@@ -34,7 +34,7 @@ export default (tag: string) =>
             try {
                 return await db.searchPlayerByName(query)
             } catch (e) {
-                console.error(`/players/searchByName(${query}) Failed:`, e)
+                console.error(`/players/searchByName?query=${query} failed:`, e)
 
                 throw UnknownTRPCError
             }

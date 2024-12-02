@@ -27,6 +27,9 @@ export default (tags: string[]) =>
                 if (res.reason === FailReason.PlayerNotFound)
                     throw PlayerNotFoundTRPCError(uid)
 
+                console.error(
+                    `/players/percentile/killsElo?uid=${uid} failed: ${res.reason}`,
+                )
                 throw reason2TRPCError(res.reason)
             }
 

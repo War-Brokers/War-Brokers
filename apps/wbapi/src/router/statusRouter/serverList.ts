@@ -35,7 +35,10 @@ Valid inputs: USA, USA_WEST, ASIA, AUSTRALIA, EUROPE, INDIA, JAPAN, RUSSIA, USA_
 
             const res = await serverList(region)
 
-            if (!res.success) throw reason2TRPCError(res.reason)
+            if (!res.success) {
+                console.error(`/status/serverList failed: ${res.reason}`)
+                throw reason2TRPCError(res.reason)
+            }
 
             return res.data
         })
