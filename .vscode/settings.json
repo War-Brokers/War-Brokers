@@ -66,6 +66,16 @@
         "zephraph",
         "zrevrank"
     ],
+    "cSpell.ignorePaths": [
+        "pnpm-lock.yaml",
+        "node_modules",
+        "vscode-extension",
+        ".git/{info,lfs,logs,refs,objects}/**",
+        ".git/{index,*refs,*HEAD}",
+        ".vscode",
+        ".vscode-insiders",
+        ".devenv"
+    ],
 
     // editor
     "editor.formatOnSave": true,
