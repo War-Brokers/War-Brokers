@@ -4,7 +4,6 @@
     "main": "./build/index.mjs",
     "private": true,
     "scripts": {
-        "health-check": "node health-check.mjs",
         "dev": "pnpm build && pnpm start:dev",
         "build": "rm -rf build && tsup && tsc --emitDeclarationOnly",
         "start:dev": "NODE_ENV=development node .",

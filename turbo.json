@@ -2,13 +2,6 @@
     "$schema": "https://turbo.build/schema.json",
     "globalDependencies": [".prettierignore", ".prettierrc.json"],
     "tasks": {
-        "@warbrokers/stats-site#dev": {
-            "dependsOn": ["@warbrokers/wbapi#health-check"],
-            "cache": false
-        },
-        "health-check": {
-            "cache": false
-        },
         "dev": {
             "dependsOn": ["^dev"],
             "cache": false
