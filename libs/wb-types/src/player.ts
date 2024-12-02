@@ -20,7 +20,7 @@ export const playerSchema = z.object({
     gamesELO: z.number(),
 
     // In-game stuff
-    // wins: z.record(gameModeIDSchema, z.number().int()).or(z.null()),
+    wins: z.record(gameModeIDSchema, z.number().int()).or(z.null()),
     losses: z.record(gameModeIDSchema, z.number().int()).or(z.null()),
     number_of_jumps: z.number().int().or(z.null()),
     // number_of_capture_points: z.number().int().gte(0),

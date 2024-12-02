@@ -638,14 +638,14 @@ export const stats: Player[] = [
         //     p104: 27,
         //     p126: 8,
         // },
-        // wins: {
-        //     m00: 1830,
-        //     m11: 199,
-        //     m10: 135,
-        //     m09: 25,
-        //     m08: 23,
-        //     m07: 11,
-        // },
+        wins: {
+            m00: 1830,
+            m11: 199,
+            m10: 135,
+            m09: 25,
+            m08: 23,
+            m07: 11,
+        },
         // frame_rate: 1227145.1394,
         // frame_rate_count: 15652,
         // ping_time: 2779028,
@@ -689,6 +689,19 @@ export const stats: Player[] = [
                     ) || "",
                 killsELO: faker.number.float({ min: 1000, max: 3000 }),
                 gamesELO: faker.number.float({ min: 1000, max: 3000 }),
+                wins:
+                    faker.helpers.maybe(() => ({
+                        // random choice of game modes
+                        ...faker.helpers.maybe(() => ({
+                            [GameMode.DeathMatch]: faker.number.int(20),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [GameMode.BattleRoyale]: faker.number.int(20),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [GameMode.Competitive]: faker.number.int(20),
+                        })),
+                    })) || null,
                 losses:
                     faker.helpers.maybe(() => ({
                         // random choice of game modes
