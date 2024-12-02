@@ -1,5 +1,8 @@
 import z from "zod"
 
+import { gameModeIDSchema } from "./gameMode"
+import { weaponIDSchema } from "./weapon"
+
 export const playerSchema = z.object({
     // Identity
     uid: z.string(),
@@ -18,7 +21,7 @@ export const playerSchema = z.object({
 
     // In-game stuff
     // wins: z.record(gameModeIDSchema, z.number().int()).or(z.null()),
-    // losses: z.record(gameModeIDSchema, z.number().int()).or(z.null()),
+    losses: z.record(gameModeIDSchema, z.number().int()).or(z.null()),
     number_of_jumps: z.number().int().or(z.null()),
     // number_of_capture_points: z.number().int().gte(0),
     // scuds_launched: z.number().int().gte(0).or(z.null()),
@@ -26,9 +29,9 @@ export const playerSchema = z.object({
     // total_kills: z.number().int().gte(0),
     // kill_to_death_ratio: z.number(),
     // kills_per_minute: z.number(),
-    // zombie_kills: z.number().int().gte(0),
-    // zombie_deaths: z.number().int().gte(0),
-    // zombie_wins: z.number().int().gte(0),
+    zombie_kills: z.number().int().gte(0),
+    zombie_deaths: z.number().int().gte(0),
+    zombie_wins: z.number().int().gte(0),
 
     // Vehicle Stats
     // distance_driven: z.record(vehicleSchema, z.number()).or(z.null()),
@@ -44,7 +47,7 @@ export const playerSchema = z.object({
     // shots_hit_unzoomed: z.record(weaponIDSchema, z.number().int()),
     // shots_hit_zoomed: z.record(weaponIDSchema, z.number().int()),
 
-    // damage_dealt: z.record(weaponIDSchema, z.number()),
+    damage_dealt: z.record(weaponIDSchema, z.number()).or(z.null()),
     // damage_received: z.record(weaponIDSchema, z.number()),
 
     // most_kills_between_deaths: z.record(weaponIDSchema, z.number().int()),
@@ -57,21 +60,21 @@ export const playerSchema = z.object({
 
     // Flags
     // guest: z.boolean().optional(),
-    // banned: z
-    //     .literal(false)
-    //     .describe(
-    //         "Whether the user is banned or not. Doesn't seem to be used. Is always false",
-    //     ),
+    banned: z
+        .literal(false)
+        .describe(
+            "Whether the user is banned or not. Doesn't seem to be used. Is always false",
+        ),
     steam: z.boolean().or(z.null()),
 
     // Time
-    // time: z.number().describe("UNIX timestamp of last session"),
+    time: z.number().describe("UNIX timestamp of last session"),
     // join_date: z.string().describe("YY-MM-DD formatted date or 0"),
     // last_seen: z.string().describe("YY-MM-DD formatted date or 0"),
-    // join_time: z
-    //     .number()
-    //     .int()
-    //     .describe("UNIX timestamp of join date & time (could be 0)"),
+    joinTime: z
+        .number()
+        .int()
+        .describe("UNIX timestamp of join date & time (could be 0)"),
     // ping_time: z.number().int().or(z.null()),
     // ping_time_count: z.number().int(),
     // frame_rate: z.number(),

@@ -45,11 +45,13 @@ export enum Weapon {
     UNKNOWN_WEAPON_96 = "p96",
     UNKNOWN_WEAPON_97 = "p97",
     LMG = "p98",
+    UNKNOWN_WEAPON_104 = "p104",
     UNKNOWN_WEAPON_105 = "p105",
     UNKNOWN_WEAPON_101 = "p101",
     UNKNOWN_WEAPON_110 = "p110",
     LaserTripMine = "p111",
     UNKNOWN_WEAPON_112 = "p112",
+    UNKNOWN_WEAPON_126 = "p126",
 }
 
 export const weaponIDSchema = z.nativeEnum(Weapon)
@@ -99,9 +101,11 @@ export const WeaponName: { [key in Weapon]: string } = {
     [Weapon.UNKNOWN_WEAPON_96]: "Unknown Weapon 96",
     [Weapon.UNKNOWN_WEAPON_97]: "Unknown Weapon 97",
     [Weapon.LMG]: "LMG",
+    [Weapon.UNKNOWN_WEAPON_104]: "Unknown Weapon 104",
     [Weapon.UNKNOWN_WEAPON_105]: "Unknown Weapon 105",
     [Weapon.UNKNOWN_WEAPON_101]: "Unknown Weapon 101",
     [Weapon.UNKNOWN_WEAPON_110]: "Unknown Weapon 110",
     [Weapon.LaserTripMine]: "Laser Trip Mine",
     [Weapon.UNKNOWN_WEAPON_112]: "Unknown Weapon 112",
+    [Weapon.UNKNOWN_WEAPON_126]: "Unknown Weapon 126",
 }
