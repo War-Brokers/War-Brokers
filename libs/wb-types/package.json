@@ -4,6 +4,8 @@
     "private": true,
     "scripts": {
         "lint": "eslint src --quiet && tsc",
+        "test:unit": "vitest run",
+        "vitest": "vitest",
         "clean": "rm -rf .turbo node_modules"
     },
     "dependencies": {
@@ -13,6 +15,7 @@
         "@warbrokers/eslint-config": "workspace:*",
         "eslint": "8.57.1",
         "prettier": "3.4.1",
-        "typescript": "5.7.2"
+        "typescript": "5.7.2",
+        "vitest": "2.1.8"
     }
 }

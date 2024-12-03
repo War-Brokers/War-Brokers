@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker"
 import { GameMode } from "@warbrokers/types/src/gameMode"
+import { xp2lv } from "@warbrokers/types/src/level"
 import type { Player } from "@warbrokers/types/src/player"
 import { Weapon } from "@warbrokers/types/src/weapon"
 
@@ -665,14 +666,14 @@ export const stats: Player[] = [
             const nick = faker.string.alphanumeric({
                 length: { min: 2, max: 20 },
             })
-            const level = faker.number.int({ min: 1, max: 5000 })
+            const xp = faker.number.int({ min: 100, max: 100_000_000 })
 
             return {
                 uid: faker.database.mongodbObjectId(),
                 nick,
                 nicklower: nick.toLocaleLowerCase(),
-                level,
-                xp: level * 1000, // it's wrong but it works
+                level: xp2lv(xp),
+                xp,
                 coins:
                     faker.helpers.maybe(() =>
                         faker.number.int({ min: 0, max: 100_000 }),
