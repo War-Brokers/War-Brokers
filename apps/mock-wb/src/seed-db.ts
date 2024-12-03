@@ -39,7 +39,6 @@ export async function seedDB() {
         const {
             uid,
             nick,
-            nicklower,
             level,
             xp,
             squad,
@@ -54,7 +53,7 @@ export async function seedDB() {
                 `seeding ${(100 * (i + 1)) / total}% complete (${i + 1} / ${total})`,
             )
 
-        await sql`INSERT INTO players VALUES (${uid}, ${nick}, ${nicklower}, ${level}, ${xp}, ${squad}, ${killsELO}, ${gamesELO}, ${coins}, ${number_of_jumps}, ${steam})`
+        await sql`INSERT INTO players VALUES (${uid}, ${nick}, ${nick.toLocaleLowerCase()}, ${level}, ${xp}, ${squad}, ${killsELO}, ${gamesELO}, ${coins}, ${number_of_jumps}, ${steam === undefined ? null : steam})`
     }
 
     console.log("seeding complete!")

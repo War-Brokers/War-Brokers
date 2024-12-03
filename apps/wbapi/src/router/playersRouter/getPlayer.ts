@@ -88,6 +88,9 @@ error:`,
     if (raw["time_alive_longest"] != null)
         raw["time_alive_longest"] = Number(raw["time_alive_longest"])
 
+    if (raw["nicklower"] === null)
+        raw["nicklower"] = raw["nick"].toLocaleLowerCase()
+
     const parseResult = playerSchema.safeParse(raw)
     if (!parseResult.success) {
         console.error(
