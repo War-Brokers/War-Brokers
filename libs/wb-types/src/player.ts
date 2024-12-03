@@ -1,8 +1,10 @@
 import z from "zod"
 
 import { gameModeIDSchema } from "./gameMode"
+import { vehicleSchema } from "./vehicle"
 import { weaponIDSchema } from "./weapon"
 
+// todo: add more stats
 export const playerSchema = z.object({
     // Identity
     uid: z.string(),
@@ -23,22 +25,18 @@ export const playerSchema = z.object({
     wins: z.record(gameModeIDSchema, z.number().int()).or(z.null()),
     losses: z.record(gameModeIDSchema, z.number().int()).or(z.null()),
     number_of_jumps: z.number().int().or(z.null()),
-    // number_of_capture_points: z.number().int().gte(0),
-    // scuds_launched: z.number().int().gte(0).or(z.null()),
-    // self_destructs: z.record(vehicleSchema, z.number().int()).or(z.null()),
-    // total_kills: z.number().int().gte(0),
-    // kill_to_death_ratio: z.number(),
-    // kills_per_minute: z.number(),
+    scuds_launched: z.number().int().gte(0).or(z.null()),
     zombie_kills: z.number().int().gte(0),
     zombie_deaths: z.number().int().gte(0),
     zombie_wins: z.number().int().gte(0),
 
     // Vehicle Stats
-    // distance_driven: z.record(vehicleSchema, z.number()).or(z.null()),
-    // distance_driven_count: z
-    //     .record(vehicleSchema, z.number().int())
-    //     .or(z.null()),
-    // kills_per_vehicle: z.record(vehicleSchema, z.number().int()).or(z.null()),
+    self_destructs: z.record(vehicleSchema, z.number().int()).or(z.null()),
+    distance_driven: z.record(vehicleSchema, z.number()).or(z.null()),
+    distance_driven_count: z
+        .record(vehicleSchema, z.number().int())
+        .or(z.null()),
+    kills_per_vehicle: z.record(vehicleSchema, z.number().int()).or(z.null()),
 
     // Weapon Stats
     // shots_fired_unzoomed: z.record(weaponIDSchema, z.number().int()),

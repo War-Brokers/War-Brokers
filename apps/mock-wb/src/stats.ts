@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker"
 import { GameMode } from "@warbrokers/types/src/gameMode"
 import { xp2lv } from "@warbrokers/types/src/level"
 import type { Player } from "@warbrokers/types/src/player"
+import { Vehicle } from "@warbrokers/types/src/vehicle"
 import { Weapon } from "@warbrokers/types/src/weapon"
 
 export const stats: Player[] = [
@@ -222,22 +223,22 @@ export const stats: Player[] = [
             p104: 59,
             p126: 252,
         },
-        // kills_per_vehicle: {
-        //     v30: 59369,
-        //     v01: 40,
-        //     v10: 209,
-        //     v21: 190,
-        //     v20: 35,
-        //     v50: 25,
-        //     v11: 51,
-        //     v00: 63,
-        //     v02: 13,
-        //     v41: 47,
-        //     v12: 39,
-        //     v40: 37,
-        //     v13: 25,
-        //     v22: 12,
-        // },
+        kills_per_vehicle: {
+            v30: 59369,
+            v01: 40,
+            v10: 209,
+            v21: 190,
+            v20: 35,
+            v50: 25,
+            v11: 51,
+            v00: 63,
+            v02: 13,
+            v41: 47,
+            v12: 39,
+            v40: 37,
+            v13: 25,
+            v22: 12,
+        },
         // kills_per_weapon: {
         //     p62: 11194,
         //     p67: 14949,
@@ -466,38 +467,38 @@ export const stats: Player[] = [
         //     p104: 22,
         //     p126: 7,
         // },
-        // distance_driven: {
-        //     v30: 1178026.766998,
-        //     v40: 92827.4421,
-        //     v41: 94602.733534,
-        //     v13: 22267.385834,
-        //     v22: 4745.73127,
-        //     v01: 5679.571554,
-        //     v23: 3697.86209,
-        //     v21: 77401.50805,
-        //     v20: 18144.502678,
-        //     v00: 6107.319386,
-        //     v12: 7146.956084,
-        //     v10: 24416.772744,
-        //     v02: 3610.975506,
-        //     v11: 9674.69426,
-        // },
-        // distance_driven_count: {
-        //     v30: 5586,
-        //     v40: 90,
-        //     v41: 71,
-        //     v13: 64,
-        //     v22: 13,
-        //     v01: 38,
-        //     v23: 16,
-        //     v21: 106,
-        //     v20: 45,
-        //     v00: 37,
-        //     v12: 19,
-        //     v10: 79,
-        //     v02: 30,
-        //     v11: 33,
-        // },
+        distance_driven: {
+            v30: 1178026.766998,
+            v40: 92827.4421,
+            v41: 94602.733534,
+            v13: 22267.385834,
+            v22: 4745.73127,
+            v01: 5679.571554,
+            v23: 3697.86209,
+            v21: 77401.50805,
+            v20: 18144.502678,
+            v00: 6107.319386,
+            v12: 7146.956084,
+            v10: 24416.772744,
+            v02: 3610.975506,
+            v11: 9674.69426,
+        },
+        distance_driven_count: {
+            v30: 5586,
+            v40: 90,
+            v41: 71,
+            v13: 64,
+            v22: 13,
+            v01: 38,
+            v23: 16,
+            v21: 106,
+            v20: 45,
+            v00: 37,
+            v12: 19,
+            v10: 79,
+            v02: 30,
+            v11: 33,
+        },
         losses: {
             m10: 68,
             m00: 607,
@@ -651,8 +652,8 @@ export const stats: Player[] = [
         // frame_rate_count: 15652,
         // ping_time: 2779028,
         // ping_time_count: 16250,
-        // self_destructs: { v40: 5, v30: 46, v41: 7 },
-        // scuds_launched: 139,
+        self_destructs: { v40: 5, v30: 46, v41: 7 },
+        scuds_launched: 139,
         gamesELO: 2030.64,
         killsELO: 1889,
         zombie_kills: 1280,
@@ -720,9 +721,77 @@ export const stats: Player[] = [
                     faker.helpers.maybe(() =>
                         faker.number.int({ min: 1, max: 10_000 }),
                     ) || null,
+                scuds_launched:
+                    faker.helpers.maybe(() =>
+                        faker.number.int({ min: 1, max: 10_000 }),
+                    ) || null,
                 zombie_kills: faker.number.int(1000),
                 zombie_deaths: faker.number.int(100),
                 zombie_wins: faker.number.int(100),
+                self_destructs:
+                    faker.helpers.maybe(() => ({
+                        // random choice of vehicles
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.TankLv1]: faker.number.int(20),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.APCLv1]: faker.number.int(20),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.HeliLv1]: faker.number.int(20),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.Jet1Fin]: faker.number.int(20),
+                        })),
+                    })) || null,
+                distance_driven:
+                    faker.helpers.maybe(() => ({
+                        // random choice of vehicles
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.TankLv1]: faker.number.float(1_000_000),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.APCLv1]: faker.number.int(1_000_000),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.HeliLv1]: faker.number.int(1_000_000),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.Jet1Fin]: faker.number.int(1_000_000),
+                        })),
+                    })) || null,
+                distance_driven_count:
+                    faker.helpers.maybe(() => ({
+                        // random choice of vehicles
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.TankLv1]: faker.number.int(100),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.APCLv1]: faker.number.int(100),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.HeliLv1]: faker.number.int(100),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.Jet1Fin]: faker.number.int(100),
+                        })),
+                    })) || null,
+                kills_per_vehicle:
+                    faker.helpers.maybe(() => ({
+                        // random choice of vehicles
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.TankLv1]: faker.number.int(1000),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.APCLv1]: faker.number.int(1000),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.HeliLv1]: faker.number.int(1000),
+                        })),
+                        ...faker.helpers.maybe(() => ({
+                            [Vehicle.Jet1Fin]: faker.number.int(1000),
+                        })),
+                    })) || null,
                 damage_dealt:
                     faker.helpers.maybe(() => ({
                         // random choice of weapons
