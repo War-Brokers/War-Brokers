@@ -670,10 +670,7 @@ export const stats: Player[] = [
             return {
                 uid: faker.database.mongodbObjectId(),
                 nick,
-                nicklower:
-                    faker.helpers.maybe(() => nick.toLowerCase(), {
-                        probability: 0.99,
-                    }) || null,
+                nicklower: nick.toLocaleLowerCase(),
                 level,
                 xp: level * 1000, // it's wrong but it works
                 coins:
