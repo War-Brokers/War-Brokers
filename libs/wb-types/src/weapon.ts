@@ -46,13 +46,13 @@ export enum Weapon {
     UNKNOWN_WEAPON_97 = "p97",
     LMG = "p98",
     UNKNOWN_WEAPON_103 = "p103",
-    UNKNOWN_WEAPON_104 = "p104",
-    UNKNOWN_WEAPON_105 = "p105",
+    AKSMG = "p104",
+    AutoSniper = "p105",
     UNKNOWN_WEAPON_101 = "p101",
     UNKNOWN_WEAPON_110 = "p110",
     LaserTripMine = "p111",
     UNKNOWN_WEAPON_112 = "p112",
-    UNKNOWN_WEAPON_126 = "p126",
+    G3A3 = "p126",
 }
 
 export const weaponIDSchema = z.nativeEnum(Weapon)
