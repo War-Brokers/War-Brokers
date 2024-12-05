@@ -49,9 +49,9 @@ export enum Weapon {
     AKSMG = "p104",
     AutoSniper = "p105",
     RubberChicken = "p101",
-    UNKNOWN_WEAPON_110 = "p110",
+    ImplosionGrenade = "p110",
     LaserTripMine = "p111",
-    UNKNOWN_WEAPON_112 = "p112",
+    ConcussionGrenade = "p112",
     G3A3 = "p126",
 }
 
