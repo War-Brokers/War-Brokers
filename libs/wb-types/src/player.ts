@@ -49,21 +49,23 @@ export const playerSchema = z.object({
     kills_per_vehicle: z.record(vehicleSchema, z.number().int()).or(z.null()),
 
     // Weapon Stats
-    // shots_fired_unzoomed: z.record(weaponIDSchema, z.number().int()),
-    // shots_fired_zoomed: z.record(weaponIDSchema, z.number().int()),
+    shots_fired_unzoomed: z
+        .record(weaponIDSchema, z.number().int())
+        .or(z.null()),
+    shots_fired_zoomed: z.record(weaponIDSchema, z.number().int()).or(z.null()),
 
-    // shots_hit_unzoomed: z.record(weaponIDSchema, z.number().int()),
-    // shots_hit_zoomed: z.record(weaponIDSchema, z.number().int()),
+    shots_hit_unzoomed: z.record(weaponIDSchema, z.number().int()).or(z.null()),
+    shots_hit_zoomed: z.record(weaponIDSchema, z.number().int()).or(z.null()),
 
     damage_dealt: z.record(weaponIDSchema, z.number()).or(z.null()),
-    // damage_received: z.record(weaponIDSchema, z.number()),
+    damage_received: z.record(weaponIDSchema, z.number()).or(z.null()),
 
     // most_kills_between_deaths: z.record(weaponIDSchema, z.number().int()),
     // most_kills_in_round: z.record(weaponIDSchema, z.number().int()),
 
-    // kills_per_weapon: z.record(weaponIDSchema, z.number().int()),
-    // deaths: z.record(weaponIDSchema, z.number().int()),
-    // headshots: z.record(weaponIDSchema, z.number().int()),
+    kills_per_weapon: z.record(weaponIDSchema, z.number().int()).or(z.null()),
+    deaths: z.record(weaponIDSchema, z.number().int()).or(z.null()),
+    headshots: z.record(weaponIDSchema, z.number().int()).or(z.null()),
     // longest_kill: z.record(weaponIDSchema, z.number()),
 
     // Flags
