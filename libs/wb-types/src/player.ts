@@ -1,8 +1,18 @@
 import z from "zod"
 
-import { gameModeIDSchema } from "./gameMode"
-import { vehicleSchema } from "./vehicle"
-import { weaponIDSchema } from "./weapon"
+import type { Digit } from "./digit"
+
+const gameModeIDSchema = z.custom<`m${Digit}${Digit}`>((val) =>
+    /^m\d\d$/g.test(val as string),
+)
+
+const vehicleSchema = z.custom<
+    `v${Digit}${Digit}` | `v${Digit}${Digit}${Digit}`
+>((val) => /^v\d\d\d?$/g.test(val as string))
+
+const weaponIDSchema = z.custom<
+    `p${Digit}${Digit}` | `p${Digit}${Digit}${Digit}`
+>((val) => /^p\d\d\d?$/g.test(val as string))
 
 // todo: add more stats
 export const playerSchema = z.object({
@@ -39,21 +49,23 @@ export const playerSchema = z.object({
     kills_per_vehicle: z.record(vehicleSchema, z.number().int()).or(z.null()),
 
     // Weapon Stats
-    // shots_fired_unzoomed: z.record(weaponIDSchema, z.number().int()),
-    // shots_fired_zoomed: z.record(weaponIDSchema, z.number().int()),
+    shots_fired_unzoomed: z
+        .record(weaponIDSchema, z.number().int())
+        .or(z.null()),
+    shots_fired_zoomed: z.record(weaponIDSchema, z.number().int()).or(z.null()),
 
-    // shots_hit_unzoomed: z.record(weaponIDSchema, z.number().int()),
-    // shots_hit_zoomed: z.record(weaponIDSchema, z.number().int()),
+    shots_hit_unzoomed: z.record(weaponIDSchema, z.number().int()).or(z.null()),
+    shots_hit_zoomed: z.record(weaponIDSchema, z.number().int()).or(z.null()),
 
     damage_dealt: z.record(weaponIDSchema, z.number()).or(z.null()),
-    // damage_received: z.record(weaponIDSchema, z.number()),
+    damage_received: z.record(weaponIDSchema, z.number()).or(z.null()),
 
     // most_kills_between_deaths: z.record(weaponIDSchema, z.number().int()),
     // most_kills_in_round: z.record(weaponIDSchema, z.number().int()),
 
-    // kills_per_weapon: z.record(weaponIDSchema, z.number().int()),
-    // deaths: z.record(weaponIDSchema, z.number().int()),
-    // headshots: z.record(weaponIDSchema, z.number().int()),
+    kills_per_weapon: z.record(weaponIDSchema, z.number().int()).or(z.null()),
+    deaths: z.record(weaponIDSchema, z.number().int()).or(z.null()),
+    headshots: z.record(weaponIDSchema, z.number().int()).or(z.null()),
     // longest_kill: z.record(weaponIDSchema, z.number()),
 
     // Flags
@@ -66,7 +78,7 @@ export const playerSchema = z.object({
     steam: z.boolean().or(z.null()).optional(),
 
     // Time
-    time: z.number().describe("UNIX timestamp of last session"),
+    time: z.number().int().describe("UNIX timestamp of last session"),
     // join_date: z.string().describe("YY-MM-DD formatted date or 0"),
     // last_seen: z.string().describe("YY-MM-DD formatted date or 0"),
     joinTime: z
