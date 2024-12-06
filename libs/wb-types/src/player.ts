@@ -1,8 +1,18 @@
 import z from "zod"
 
-import { gameModeIDSchema } from "./gameMode"
-import { vehicleSchema } from "./vehicle"
-import { weaponIDSchema } from "./weapon"
+import type { Digit } from "./digit"
+
+const gameModeIDSchema = z.custom<`m${Digit}${Digit}`>((val) =>
+    /^m\d\d$/g.test(val as string),
+)
+
+const vehicleSchema = z.custom<
+    `v${Digit}${Digit}` | `v${Digit}${Digit}${Digit}`
+>((val) => /^v\d\d\d?$/g.test(val as string))
+
+const weaponIDSchema = z.custom<
+    `p${Digit}${Digit}` | `p${Digit}${Digit}${Digit}`
+>((val) => /^p\d\d\d?$/g.test(val as string))
 
 // todo: add more stats
 export const playerSchema = z.object({
