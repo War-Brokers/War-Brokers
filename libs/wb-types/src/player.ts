@@ -78,7 +78,7 @@ export const playerSchema = z.object({
     steam: z.boolean().or(z.null()).optional(),
 
     // Time
-    time: z.number().describe("UNIX timestamp of last session"),
+    time: z.number().int().describe("UNIX timestamp of last session"),
     // join_date: z.string().describe("YY-MM-DD formatted date or 0"),
     // last_seen: z.string().describe("YY-MM-DD formatted date or 0"),
     joinTime: z

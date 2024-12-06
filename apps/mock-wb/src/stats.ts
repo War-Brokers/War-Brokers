@@ -965,11 +965,14 @@ export const stats: Player[] = [
                     })) || null,
                 banned: false,
                 steam: faker.helpers.arrayElement([true, false, null]),
-                time: faker.date.past({ years: 1 }).getTime() / 1000,
-                joinTime:
+                time: Math.floor(
+                    faker.date.past({ years: 1 }).getTime() / 1000,
+                ),
+                joinTime: Math.floor(
                     faker.helpers.maybe(
                         () => faker.date.past({ years: 5 }).getTime() / 1000,
                     ) || 0,
+                ),
             } satisfies Player
         },
         { count: 10_000 - 1 },
