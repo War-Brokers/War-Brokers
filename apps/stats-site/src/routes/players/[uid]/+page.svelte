@@ -38,19 +38,19 @@
     <Stat title="Level" data={player.level} />
     <Stat
         title="XP"
-        data={player.xp}
+        data={player.xp.toLocaleString("en-US")}
         _id="xp-percentile"
         percentile={xpPercentile}
     />
     <Stat
         title="Kills Elo"
-        data={player.killsELO}
+        data={player.killsELO.toFixed(2)}
         _id="kills-elo-percentile"
         percentile={killsEloPercentile}
     />
     <Stat
         title="Games Elo"
-        data={player.gamesELO}
+        data={player.gamesELO.toFixed(2)}
         _id="games-elo-percentile"
         percentile={gamesEloPercentile}
     />
