@@ -14,13 +14,6 @@
 
     export let data: PageData
     const { killsEloRanking, gamesEloRanking, xpRanking } = data
-
-    /**
-     * https://stackoverflow.com/a/2901298/12979111
-     */
-    function numberWithCommas(x: number): string {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-    }
 </script>
 
 <Title title="Leaderboard" />
@@ -42,7 +35,7 @@
                 {/each}
             {:then killsEloRanking}
                 {#each killsEloRanking as { uid, nick, killsELO }, i (uid)}
-                    <Row rank={i + 1} {nick} {uid} stat={killsELO} />
+                    <Row rank={i + 1} {nick} {uid} stat={killsELO.toFixed(2)} />
                 {/each}
                 <ViewMore href="/leaderboard/killsELO" />
             {/await}
@@ -63,7 +56,7 @@
                 {/each}
             {:then gamesEloRanking}
                 {#each gamesEloRanking as { uid, nick, gamesELO }, i (uid)}
-                    <Row rank={i + 1} {nick} {uid} stat={gamesELO} />
+                    <Row rank={i + 1} {nick} {uid} stat={gamesELO.toFixed(2)} />
                 {/each}
                 <ViewMore href="/leaderboard/gamesELO" />
             {/await}
@@ -89,7 +82,7 @@
                         rank={i + 1}
                         {nick}
                         {uid}
-                        stat={numberWithCommas(xp)}
+                        stat={xp.toLocaleString("en-US")}
                         stat2={level}
                     />
                 {/each}
