@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker"
 import { GameMode } from "@warbrokers/types/src/gameMode"
-import { xp2lv } from "@warbrokers/types/src/level"
+import { xp2lvl } from "@warbrokers/types/src/level"
 import type { Player } from "@warbrokers/types/src/player"
 import { Vehicle } from "@warbrokers/types/src/vehicle"
 import { Weapon } from "@warbrokers/types/src/weapon"
@@ -673,7 +673,7 @@ export const stats: Player[] = [
                 uid: faker.database.mongodbObjectId(),
                 nick,
                 nicklower: nick.toLocaleLowerCase(),
-                level: xp2lv(xp),
+                level: xp2lvl(xp),
                 xp,
                 coins:
                     faker.helpers.maybe(() =>
@@ -732,13 +732,13 @@ export const stats: Player[] = [
                     faker.helpers.maybe(() => ({
                         // random choice of vehicles
                         ...faker.helpers.maybe(() => ({
-                            [Vehicle.TankLv1]: faker.number.int(20),
+                            [Vehicle.TankLvl1]: faker.number.int(20),
                         })),
                         ...faker.helpers.maybe(() => ({
-                            [Vehicle.APCLv1]: faker.number.int(20),
+                            [Vehicle.APCLvl1]: faker.number.int(20),
                         })),
                         ...faker.helpers.maybe(() => ({
-                            [Vehicle.HeliLv1]: faker.number.int(20),
+                            [Vehicle.HeliLvl1]: faker.number.int(20),
                         })),
                         ...faker.helpers.maybe(() => ({
                             [Vehicle.Jet1Fin]: faker.number.int(20),
@@ -748,13 +748,13 @@ export const stats: Player[] = [
                     faker.helpers.maybe(() => ({
                         // random choice of vehicles
                         ...faker.helpers.maybe(() => ({
-                            [Vehicle.TankLv1]: faker.number.float(1_000_000),
+                            [Vehicle.TankLvl1]: faker.number.float(1_000_000),
                         })),
                         ...faker.helpers.maybe(() => ({
-                            [Vehicle.APCLv1]: faker.number.int(1_000_000),
+                            [Vehicle.APCLvl1]: faker.number.int(1_000_000),
                         })),
                         ...faker.helpers.maybe(() => ({
-                            [Vehicle.HeliLv1]: faker.number.int(1_000_000),
+                            [Vehicle.HeliLvl1]: faker.number.int(1_000_000),
                         })),
                         ...faker.helpers.maybe(() => ({
                             [Vehicle.Jet1Fin]: faker.number.int(1_000_000),
@@ -764,13 +764,13 @@ export const stats: Player[] = [
                     faker.helpers.maybe(() => ({
                         // random choice of vehicles
                         ...faker.helpers.maybe(() => ({
-                            [Vehicle.TankLv1]: faker.number.int(100),
+                            [Vehicle.TankLvl1]: faker.number.int(100),
                         })),
                         ...faker.helpers.maybe(() => ({
-                            [Vehicle.APCLv1]: faker.number.int(100),
+                            [Vehicle.APCLvl1]: faker.number.int(100),
                         })),
                         ...faker.helpers.maybe(() => ({
-                            [Vehicle.HeliLv1]: faker.number.int(100),
+                            [Vehicle.HeliLvl1]: faker.number.int(100),
                         })),
                         ...faker.helpers.maybe(() => ({
                             [Vehicle.Jet1Fin]: faker.number.int(100),
@@ -780,13 +780,13 @@ export const stats: Player[] = [
                     faker.helpers.maybe(() => ({
                         // random choice of vehicles
                         ...faker.helpers.maybe(() => ({
-                            [Vehicle.TankLv1]: faker.number.int(1000),
+                            [Vehicle.TankLvl1]: faker.number.int(1000),
                         })),
                         ...faker.helpers.maybe(() => ({
-                            [Vehicle.APCLv1]: faker.number.int(1000),
+                            [Vehicle.APCLvl1]: faker.number.int(1000),
                         })),
                         ...faker.helpers.maybe(() => ({
-                            [Vehicle.HeliLv1]: faker.number.int(1000),
+                            [Vehicle.HeliLvl1]: faker.number.int(1000),
                         })),
                         ...faker.helpers.maybe(() => ({
                             [Vehicle.Jet1Fin]: faker.number.int(1000),

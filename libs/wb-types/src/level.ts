@@ -1,7 +1,7 @@
 /**
  * @see https://war-brokers.fandom.com/wiki/Experience
  */
-export function xp2lv(xp: number) {
+export function xp2lvl(xp: number) {
     if (xp >= 250_000) return Math.floor((xp + 350_000) / 25_000)
     if (xp >= 102_000) return Math.floor((xp + 108_000) / 15_000)
     if (xp >= 87_000) return 13
