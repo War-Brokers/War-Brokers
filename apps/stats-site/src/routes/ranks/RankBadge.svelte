@@ -4,7 +4,7 @@
     export let rank: Rank
 </script>
 
-<div class="flex flex-col items-center rounded-xl p-8">
+<div class="flex flex-col items-center rounded-xl p-7">
     <img
         width="256"
         height="256"

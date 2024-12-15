@@ -7,6 +7,7 @@
 <Title title="Ranks" />
 
 <div class="flex flex-wrap justify-center">
+    <RankBadge rank="Ascended" />
     <RankBadge rank="Godlike" />
     <RankBadge rank="Legendary" />
     <RankBadge rank="Master" />

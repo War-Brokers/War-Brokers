@@ -4,10 +4,12 @@ import pro from "$lib/assets/ranks/shield-gold-10.png"
 import master from "$lib/assets/ranks/shield-gold-11.png"
 import godlike from "$lib/assets/ranks/shield-platinum-12.png"
 import legendary from "$lib/assets/ranks/shield-ruby-12.png"
+import ascended from "$lib/assets/ranks/shield-sapphire-12.png"
 import competent from "$lib/assets/ranks/shield-silver-3.png"
 import novice from "$lib/assets/ranks/shield-unranked.png"
 
 export type Rank =
+    | "Ascended"
     | "Godlike"
     | "Legendary"
     | "Master"
@@ -18,6 +20,7 @@ export type Rank =
     | "Novice"
 
 export const rank2iconMap: { [key in Rank]: string } = {
+    Ascended: ascended,
     Godlike: godlike,
     Legendary: legendary,
     Master: master,
@@ -29,6 +32,7 @@ export const rank2iconMap: { [key in Rank]: string } = {
 }
 
 export const rank2percentileMap: { [key in Rank]: number } = {
+    Ascended: 99.95,
     Godlike: 99.9,
     Legendary: 99.5,
     Master: 98,
@@ -52,6 +56,7 @@ export function percentile2rank(percentile: number): {
     if (percentile > rank2percentileMap["Master"]) rank = "Master"
     if (percentile > rank2percentileMap["Legendary"]) rank = "Legendary"
     if (percentile > rank2percentileMap["Godlike"]) rank = "Godlike"
+    if (percentile > rank2percentileMap["Ascended"]) rank = "Ascended"
 
-    return { rank: rank, icon: rank2iconMap[rank] }
+    return { rank, icon: rank2iconMap[rank] }
 }
