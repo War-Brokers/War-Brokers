@@ -42,7 +42,7 @@
                     rank={i + offset + 1}
                     {nick}
                     {uid}
-                    stat={xp}
+                    stat={xp.toLocaleString("en-US")}
                     stat2={level}
                 />
             {/each}
