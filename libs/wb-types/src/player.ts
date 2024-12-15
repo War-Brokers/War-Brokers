@@ -15,7 +15,7 @@ const weaponIDSchema = z.custom<
     | `p${Digit}` // invalid weapon code, but the API returns it from time to time
     | `p${Digit}${Digit}`
     | `p${Digit}${Digit}${Digit}`
->((val) => /^p\d\d?\d?$/g.test(val as string))
+>((val) => /^p\d?\d?\d?$/g.test(val as string))
 
 // todo: add more stats
 export const playerSchema = z.object({
