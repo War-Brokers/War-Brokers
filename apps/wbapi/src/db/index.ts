@@ -3,6 +3,7 @@ import postgres from "postgres"
 
 import { env } from "@/index"
 
+import deletePlayer from "./deletePlayer"
 import getDBPlayerCount from "./getDBPlayerCount"
 import getPercentile from "./getPercentile"
 import getSquadMembers from "./getSquadMembers"
@@ -21,6 +22,7 @@ export async function initDB() {
 
     return {
         setPlayer: setPlayer(db),
+        deletePlayer: deletePlayer(db),
         searchPlayerByName: searchPlayerByName(db),
         getSquads: getSquads(db),
         getSquadMembers: getSquadMembers(db),

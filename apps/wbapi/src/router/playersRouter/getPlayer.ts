@@ -34,6 +34,11 @@ export default (tag: string) =>
 
             const player = res.data
 
+            if (player.banned) {
+                db.deletePlayer(player.uid)
+                throw PlayerNotFoundTRPCError(uid)
+            }
+
             db.setPlayer(player)
 
             return player
