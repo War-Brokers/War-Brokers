@@ -60,6 +60,7 @@
         "wbapi",
         "WBDB",
         "wbtimeline",
+        "wbwc",
         "WINIT",
         "xwayland",
         "zadd",

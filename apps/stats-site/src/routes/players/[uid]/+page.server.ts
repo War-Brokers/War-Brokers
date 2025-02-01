@@ -5,6 +5,7 @@ import xss from "xss"
 import trpc from "$lib/trpc"
 
 import type { PageServerLoad } from "./$types"
+import { getPlayerBadges } from "./badge"
 
 export const load = (async ({ params }) => {
     const { uid } = params
@@ -19,6 +20,7 @@ export const load = (async ({ params }) => {
 
     return {
         player: player,
+        badges: getPlayerBadges(player.uid),
         xpPercentile: trpc.players.percentile.xp.query({ uid }),
         killsEloPercentile: trpc.players.percentile.killsElo.query({ uid }),
         gamesEloPercentile: trpc.players.percentile.gamesElo.query({ uid }),

@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { Popover } from "flowbite-svelte"
+
     import A from "$lib/components/A.svelte"
     import Stat from "$lib/components/stat.svelte"
     import Title from "$lib/components/title.svelte"
@@ -8,6 +10,7 @@
     export let data: PageData
     const {
         player,
+        badges,
         playingSince,
         xpPercentile,
         killsEloPercentile,
@@ -24,7 +27,7 @@
     {player.nick}
 </h1>
 
-<div class="mb-10 flex w-24">
+<div class="mb-5 flex w-24">
     <span class="whitespace-nowrap font-bold dark:text-gray-400">
         Playing Since
     </span>
@@ -32,6 +35,26 @@
     <span class="whitespace-nowrap font-black">
         {playingSince}
     </span>
+</div>
+
+<div>
+    {#each badges as { id, date, imageURL, name }}
+        <div {id} class="mb-10 inline-block">
+            <img title={name} src={imageURL} alt={name} />
+        </div>
+        <Popover
+            triggeredBy="#{id}"
+            class="space-y-2 p-3 text-sm font-light dark:border-gray-600 dark:bg-gray-900"
+            placement="top-start"
+        >
+            <div class="flex flex-col items-center justify-center">
+                <span class="mb-1 font-medium text-gray-900 dark:text-white">
+                    {name}
+                </span>
+                {date}
+            </div>
+        </Popover>
+    {/each}
 </div>
 
 <div class="flex w-full flex-wrap gap-10">
