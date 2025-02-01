@@ -1,8 +1,6 @@
 import { type Region } from "@warbrokers/types/src/region"
 
-// I literally don't know what this number is.
-// Anything from 200 to 283 works, but nothing higher or lower.
-export const mysteryNumber = 283
+export const probablyAPIVersion = 301
 
 /**
  * useless for us
@@ -20,17 +18,17 @@ export function playersOnlineURL() {
 }
 
 export function twitchStreamsURL() {
-    return `https://store1.warbrokers.io/${mysteryNumber}/get_twitch_streams.php` as const
+    return `https://store1.warbrokers.io/${probablyAPIVersion}/get_twitch_streams.php` as const
 }
 
 export function serverListURL(location: Region) {
-    return `https://store1.warbrokers.io/${mysteryNumber}/server_list.php?location=${location}` as const
+    return `https://store1.warbrokers.io/${probablyAPIVersion}/server_list.php?location=${location}` as const
 }
 
 export function playerListURL() {
-    return `https://store1.warbrokers.io/${mysteryNumber}/get_player_list.php` as const
+    return `https://store1.warbrokers.io/${probablyAPIVersion}/get_player_list.php` as const
 }
 
 export function changelogURL() {
-    return `https://store1.warbrokers.io/${mysteryNumber}/motd.php` as const
+    return `https://store1.warbrokers.io/${probablyAPIVersion}/motd.php` as const
 }
