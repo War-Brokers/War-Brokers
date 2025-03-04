@@ -40,6 +40,8 @@
         "nixos",
         "nixpkgs",
         "openapi",
+        "pompy",
+        "pompydev",
         "predeploy",
         "REMAGEN",
         "respawn",
