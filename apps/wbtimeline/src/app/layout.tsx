@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <head>
                 <script
                     defer
-                    src="https://umami.pompydev.com/script.js"
+                    src="https://umami.pompy.dev/script.js"
                     data-website-id="b89b983d-e8ac-4d78-8103-48b94b58d3bb"
                 ></script>
                 <link
