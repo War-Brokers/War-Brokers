@@ -1,5 +1,29 @@
 # Contribution guide
 
+## Contributor standard
+
+All WBP contributors are expected to:
+
+- join the [WBP Discord server][discord-invite]
+- link their GitHub account to their Discord account
+- create a `README.md` file documenting how to set up their project
+- sign their git commits (see [GitHub documentation](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification))
+
+## Getting started with git for new contributors
+
+Get familiar with the following git concepts:
+
+- [repository](https://www.atlassian.com/git/tutorials/setting-up-a-repository)
+- [branch](https://www.atlassian.com/git/tutorials/using-branches)
+- [commit](https://www.atlassian.com/git/tutorials/saving-changes/git-commit)
+- [pull request](https://www.atlassian.com/git/tutorials/making-a-pull-request)
+- [rebase](https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase)
+- [diff](https://www.atlassian.com/git/tutorials/saving-changes/git-diff)
+
+Armed with these knowledge, you should be able to resolve problems such as merge
+conflicts and use tools such as
+[lazygit](https://github.com/jesseduffield/lazygit) more effectively.
+
 ## Online infrastructure
 
 ![Infrastructure Diagram](./.github/img/infra.png)
@@ -8,7 +32,7 @@
 
 Everything in this repository is put there under the assumption that the viewer
 is a developer. If you are **NOT** a developer, but would like to contribute to
-the project, head over to our [discord server][discord-invite] and share your
+the project, head over to our [Discord server][discord-invite] and share your
 suggestions and bug reports with us!
 
 If you are a developer who want to get their hands dirty, begin by familiarizing
