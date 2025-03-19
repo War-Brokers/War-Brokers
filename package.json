@@ -8,17 +8,12 @@
         "lint": "prettier . --check && turbo run lint --parallel",
         "test:e2e": "turbo run test:e2e --parallel",
         "test:unit": "turbo run test:unit --parallel",
-        "clean": "turbo run clean --parallel && rm -rf .turbo node_modules",
-        "husky": "husky"
+        "clean": "turbo run clean --parallel && rm -rf .turbo node_modules"
     },
     "devDependencies": {
-        "@commitlint/cli": "19.6.0",
-        "@commitlint/config-conventional": "19.6.0",
-        "@commitlint/types": "19.5.0",
         "@types/eslint": "9.6.1",
         "@types/node": "22.10.1",
         "eslint": "8.57.1",
-        "husky": "9.1.7",
         "prettier": "3.4.1",
         "prettier-plugin-svelte": "3.3.2",
         "prettier-plugin-tailwindcss": "0.6.9",
