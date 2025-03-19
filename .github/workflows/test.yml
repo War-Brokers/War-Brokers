@@ -37,4 +37,7 @@ jobs:
           DATABASE_URL: "postgresql://localhost:5432/postgres"
           EOF
 
+      - run: pnpm install
+        shell: devenv shell bash -- -e {0}
+
       - run: devenv test
