@@ -61,6 +61,8 @@ export enum Weapon {
     LaserTripMine = "p111",
     ConcussionGrenade = "p112",
     G3A3 = "p126",
+    MarksmansRifle = "p128",
+    Mutant = "p129",
 }
 
 export const weaponIDSchema = z.nativeEnum(Weapon)
@@ -126,4 +128,6 @@ export const WeaponName: { [key in Weapon]: string } = {
     [Weapon.LaserTripMine]: "Laser Trip Mine",
     [Weapon.ConcussionGrenade]: "Concussion Grenade",
     [Weapon.G3A3]: "G3A3",
+    [Weapon.MarksmansRifle]: "Marksman's Rifle",
+    [Weapon.Mutant]: "Mutant",
 }
