@@ -54,6 +54,10 @@
   };
 
   # https://devenv.sh/processes
+  process = {
+    manager.implementation = "process-compose";
+    managers.process-compose.tui.enable = false;
+  };
   processes = {
     # todo: https://f1bonacc1.github.io/process-compose/health wbapi health check
     dev = {
