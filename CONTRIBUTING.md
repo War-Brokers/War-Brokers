@@ -72,14 +72,14 @@ can help you if you get stuck at any point.
 
 ## Getting started for real
 
-Simply clone the repository, install devenv, and run `devenv up`. It will
-automagically build and launch the following services for you.
-
-- Start testing server
-  - http://localhost:5432 - WBAPI postgres DB
-  - http://localhost:4000 - WB DB
-  - http://localhost:5000 - wbapi
-  - http://localhost:5173 - stats site
-  - http://localhost:3000 - wbtimeline
+1. Clone this git repository
+2. [setup devenv](https://devenv.sh/getting-started/)
+3. Create `apps/wbapi/.env` (you can simply copy `apps/wbapi/.env.example` for testing locally)
+4. Run `devenv up` to automagically build and launch the following services
+   - http://localhost:5432 - WBAPI postgres DB
+   - http://localhost:4000 - WB DB
+   - http://localhost:5000 - wbapi
+   - http://localhost:5173 - stats site
+   - http://localhost:3000 - wbtimeline
 
 [discord-invite]: https://discord.com/invite/synPSeuNFK
