@@ -22,5 +22,5 @@ jobs:
         with:
           GH_PAT: ${{ secrets.DEVELOPOMP_PAT }}
           CONFIG_PATH: .github/sync-readme.yml
-          ASSIGNEES: developomp
+          ASSIGNEES: pompydev
           COMMIT_PREFIX: "chore: "

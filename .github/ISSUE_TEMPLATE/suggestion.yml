@@ -3,7 +3,7 @@ title: "suggestion: "
 description: feature requests and stuff
 labels: ["type:suggestion", "meta:needs-review"]
 assignees:
-  - developomp
+  - pompydev
 
 body:
   - type: markdown

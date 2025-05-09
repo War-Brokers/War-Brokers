@@ -12,7 +12,7 @@
 [![contributing](https://img.shields.io/badge/contributing-yellow?style=for-the-badge)](https://github.com/War-Brokers/War-Brokers/blob/master/CONTRIBUTING.md)
 [![license](https://img.shields.io/github/license/War-Brokers/War-Brokers?style=for-the-badge&color=yellow)](./LICENSE)
 
-WBP (War Brokers Projects) is a collection of [@developomp][developomp]'s\*
+WBP (War Brokers Projects) is a collection of [pomp][pomp]'s\*
 [War Brokers](https://warbrokers.io) related projects.
 
 \*: also known as [`[LP] POMP`][lp-pomp] in-game
@@ -29,7 +29,7 @@ WBP (War Brokers Projects) is a collection of [@developomp][developomp]'s\*
 | [WB Timeline][wbtimeline] | a website that lists various events happened in the War Brokers community in a chronological order |       Stable       |
 |  [War Brokers Mods][wbm]  |                             An unofficial utility mod for War Brokers                              |      Archived      |
 
-[developomp]: https://github.com/developomp
+[pomp]: https://github.com/pompydev
 [lp-pomp]: https://stats.wbpjs.com/players/5d2ead35d142affb05757778
 [wbuiv2]: https://github.com/War-Brokers/wbuiv2
 [stats-site]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site

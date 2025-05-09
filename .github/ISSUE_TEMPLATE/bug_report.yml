@@ -3,7 +3,7 @@ title: "bug: "
 description: File a bug report
 labels: ["type:bug", "meta:needs-review"]
 assignees:
-  - developomp
+  - pompydev
 
 body:
   - type: markdown

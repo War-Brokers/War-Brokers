@@ -6,8 +6,8 @@ export default function Header() {
             <h1 className="text-5xl font-bold">War Brokers Timeline</h1>
             <span>
                 Made by{" "}
-                <Link href="https://github.com/developomp">
-                    [LP] POMP (developomp)
+                <Link href="https://github.com/pompydev">
+                    pompydev ([LP] POMP)
                 </Link>
             </span>
         </header>
