@@ -96,7 +96,7 @@ export const WeaponName: { [key in Weapon]: string } = {
     [Weapon.Minigun]: "Minigun",
     [Weapon.GrenadeLauncher]: "Grenade Launcher",
     [Weapon.SmokeGrenade]: "Smoke Grenade",
-    [Weapon.Jet1Rockets]: "Jet (1 Find) Rockets",
+    [Weapon.Jet1Rockets]: "Jet (1 Fin) Rockets",
     [Weapon.Jet1Homing]: "Jet (1 Fin) Homing",
     [Weapon.Jet1MachineGun]: "Jet (1 Fin) Machine Gun",
     [Weapon.Jet2Rockets]: "Jet (2 Fin) Rockets",
