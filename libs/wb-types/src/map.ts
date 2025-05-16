@@ -66,7 +66,7 @@ export const MapName: { [key in WBMap]: string } = {
     [WBMap.Escape]: "Escape",
     [WBMap.SouthWest]: "SouthWest",
     [WBMap.Remagen]: "Remagen",
-    // 9
+    [WBMap.BattleRoyale]: "Battle Royale Map",
     // 10
     // 11
     // 12
@@ -74,7 +74,7 @@ export const MapName: { [key in WBMap]: string } = {
     [WBMap.Tomb]: "Tomb",
     [WBMap.TheSomme]: "The Somme",
     // 16
-    // 17
+    [WBMap.DeadEndCity]: "Dead End City",
     [WBMap.Tribute]: "Tribute",
     [WBMap.CyberTribute]: "Cyber Tribute",
     [WBMap.Moonbase]: "Moonbase",
@@ -84,7 +84,7 @@ export const MapName: { [key in WBMap]: string } = {
     [WBMap.SkullIsland]: "Skull Island",
     [WBMap.Hangar]: "Hangar",
     // 26
-    // 27
+    [WBMap.Quarry]: "Quarry",
     [WBMap.DwarfDungeon]: "Dwarf's Dungeon",
     [WBMap.Kitchen]: "Kitchen",
     [WBMap.Test]: "Test",
