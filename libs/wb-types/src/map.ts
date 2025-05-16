@@ -85,7 +85,7 @@ export const MapName: { [key in WBMap]: string } = {
     [WBMap.Hangar]: "Hangar",
     // 26
     [WBMap.Quarry]: "Quarry",
-    [WBMap.DwarfDungeon]: "Dwarf's Dungeon",
+    [WBMap.DwarfDungeon]: "Dwarf Dungeon",
     [WBMap.Kitchen]: "Kitchen",
     [WBMap.Test]: "Test",
     [WBMap.Frontier]: "Frontier",
@@ -104,7 +104,7 @@ export const MapName: { [key in WBMap]: string } = {
     [WBMap.Cologne]: "Cologne",
     // 45
     // 46
-    [WBMap.GoldMine]: "Gole Mine",
+    [WBMap.GoldMine]: "Gold Mine",
     [WBMap.Resort]: "Resort",
     [WBMap.GoldMineV2]: "Gold Mine V2",
     // 50
