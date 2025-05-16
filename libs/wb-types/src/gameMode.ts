@@ -22,7 +22,7 @@ export enum GameMode {
 export const gameModeIDSchema = z.nativeEnum(GameMode)
 
 export const gameModeName: { [key in GameMode]: string } = {
-    [GameMode.DeathMatch]: "Death Match",
+    [GameMode.DeathMatch]: "Team Death Match",
     [GameMode.DemolitionDerby]: "Demolition Derby",
     [GameMode.ProtectLeader]: "Protect Leader",
     [GameMode.ResourceCapture]: "Resource Capture",
@@ -32,10 +32,10 @@ export const gameModeName: { [key in GameMode]: string } = {
     [GameMode.CapturePoint]: "Capture Point",
     [GameMode.VehicleEscort]: "Vehicle Escort",
     [GameMode.PackageDrop]: "Package Drop",
-    [GameMode.ScudLaunch]: "Scud Launch",
-    [GameMode.BattleRoyale]: "BattleRoyale",
+    [GameMode.ScudLaunch]: "Missile Launch/Bomb Disposal",
+    [GameMode.BattleRoyale]: "Battle Royale",
     [GameMode.Competitive]: "Competitive",
-    [GameMode.LobbyCompetitive]: "Lobby Competitive",
-    [GameMode.LobbyBR]: "Lobby Battle Royale",
-    [GameMode.Count]: "Count",
+    [GameMode.LobbyCompetitive]: "Competitive (Lobby)",
+    [GameMode.LobbyBR]: "Battle Royale (Lobby)",
+    [GameMode.Count]: "Gun Game",
 }
