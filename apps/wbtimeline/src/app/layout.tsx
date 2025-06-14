@@ -20,9 +20,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <html lang="en" className="dark h-full bg-[#2d2a38] text-gray-100">
             <head>
                 <script
+                    src="https://rybbit.pompy.dev/api/script.js"
+                    data-site-id="1"
+                    data-web-vitals="true"
                     defer
-                    src="https://umami.pompy.dev/script.js"
-                    data-website-id="b89b983d-e8ac-4d78-8103-48b94b58d3bb"
                 ></script>
                 <link
                     rel="shortcut icon"
