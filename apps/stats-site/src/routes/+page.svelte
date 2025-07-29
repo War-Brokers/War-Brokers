@@ -51,12 +51,3 @@
         </A>
     </div>
 </div>
-
-<div class="mt-12">
-    <h2 class="text-3xl font-black">Summer Speed Tournament this July!</h2>
-
-    <span class="my-2 block">
-        Join the <A href="https://discord.gg/HpKKUSYmAv">Discord server</A> and sign
-        up now!
-    </span>
-</div>
