@@ -1,6 +1,7 @@
 export enum badgeName {
     WBWC = "wbwc",
     WBWCPerf = "wbwc-perf",
+    WBS2025 = "wbs-2025",
 }
 
 export type Badge = {
@@ -23,6 +24,12 @@ export const badges: Badge[] = [
         date: "January 27, 2025",
         imageURL: "/badges/wbwc-perf.avif",
     },
+    {
+        id: badgeName.WBS2025,
+        name: "2025 Summer Speed Event",
+        date: "July 29, 2025",
+        imageURL: "/badges/wbs-2025.avif",
+    },
 ]
 
 export const badgedPlayers: { [key in string]: badgeName[] } = {
@@ -37,6 +44,8 @@ export const badgedPlayers: { [key in string]: badgeName[] } = {
     "5eb8e123bfea712e33e513f7": [badgeName.WBWCPerf, badgeName.WBWC], // Rocket
     "5ebf59cad142af697d790467": [badgeName.WBWCPerf], // VorteX
     "5ea0725cbfea71f973046cf9": [badgeName.WBWCPerf], // Kindness
+
+    "67046f87fe3c7a264e4b45cb": [badgeName.WBS2025], // Lone Wolf
 }
 
 export function getPlayerBadges(playerUID: string): Badge[] {
