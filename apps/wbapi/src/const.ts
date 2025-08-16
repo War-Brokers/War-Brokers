@@ -1,6 +1,6 @@
 import { type Region } from "@warbrokers/types/src/region"
 
-export const probablyAPIVersion = 303
+export const probablyAPIVersion = 305
 
 /**
  * useless for us
