@@ -37,7 +37,7 @@ WBP (War Brokers Projects) is a collection of [pomp][pomp]'s\*
 [zod]: https://github.com/colinhacks/zod
 [wbapi]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbapi
 [wbtimeline]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbtimeline
-[wbm]: https://github.com/War-Brokers-Mods
+[wbm]: https://git.pompy.dev/war-brokers-mods
 
 ## Sponsors
 
