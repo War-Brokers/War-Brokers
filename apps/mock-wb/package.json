@@ -24,7 +24,7 @@
         "@types/express": "5.0.0",
         "@types/node": "22.10.1",
         "@warbrokers/eslint-config": "workspace:*",
-        "tsup": "8.3.5"
+        "tsup": "8.5.1"
     },
     "engines": {
         "pnpm": ">=9.0",
