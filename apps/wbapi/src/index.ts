@@ -3,6 +3,7 @@ import "dotenv/config"
 import { createExpressMiddleware } from "@trpc/server/adapters/express"
 import cors from "cors"
 import express from "express"
+import rateLimit from "express-rate-limit"
 import swaggerUi from "swagger-ui-express"
 import { createOpenApiExpressMiddleware } from "trpc-openapi"
 
@@ -28,6 +29,17 @@ export const db = await initDB()
 const app = express()
 
 app.use(cors())
+
+app.use(
+    /^\/(?!api-docs|ping).*$/,
+    rateLimit({
+        windowMs: 1000 * 60, // 1 minute
+        max: 20, // requests per windowMs per IP
+        standardHeaders: true,
+        legacyHeaders: false,
+        skip: (req) => (req.ip || req.socket.remoteAddress) === "192.168.1.1",
+    }),
+)
 
 // API documentations
 app.use("/api-docs", swaggerUi.serve)
