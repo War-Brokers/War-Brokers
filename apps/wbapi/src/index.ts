@@ -12,6 +12,7 @@ import { appRouter } from "@/router"
 import { createContext } from "@/trpc"
 
 import { initDB } from "./db"
+import { isPrivate } from "./private"
 
 export const env = {
     /* eslint-disable turbo/no-undeclared-env-vars */
@@ -41,8 +42,8 @@ app.use(
         standardHeaders: true,
         legacyHeaders: false,
         skip: (req) => {
-            console.log(req.ip, req.socket.remoteAddress)
-            return (req.ip || req.socket.remoteAddress) === "192.168.1.1"
+            console.log(req.header("X-Forwarded-For"))
+            return isPrivate(req.header("X-Forwarded-For"))
         },
     }),
 )
