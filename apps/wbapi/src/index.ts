@@ -40,7 +40,10 @@ app.use(
         max: 20, // requests per windowMs per IP
         standardHeaders: true,
         legacyHeaders: false,
-        skip: (req) => (req.ip || req.socket.remoteAddress) === "192.168.1.1",
+        skip: (req) => {
+            console.log(req.ip, req.socket.remoteAddress)
+            return (req.ip || req.socket.remoteAddress) === "192.168.1.1"
+        },
     }),
 )
 
