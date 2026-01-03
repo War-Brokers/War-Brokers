@@ -28,6 +28,9 @@ export const db = await initDB()
 // fastify
 const app = express()
 
+// Trust proxy to handle X-Forwarded-For header properly
+app.set("trust proxy", "192.168.1.1")
+
 app.use(cors())
 
 app.use(
