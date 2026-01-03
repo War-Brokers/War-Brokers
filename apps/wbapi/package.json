@@ -14,7 +14,7 @@
     },
     "dependencies": {
         "@warbrokers/types": "workspace:*",
-        "@trpc/server": "10.45.2",
+        "@trpc/server": "10.45.4",
         "cors": "2.8.5",
         "dotenv": "16.4.5",
         "drizzle-orm": "0.36.4",
