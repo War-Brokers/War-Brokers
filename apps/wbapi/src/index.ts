@@ -41,10 +41,7 @@ app.use(
         max: 20, // requests per windowMs per IP
         standardHeaders: true,
         legacyHeaders: false,
-        skip: (req) => {
-            console.log(req.header("X-Forwarded-For"))
-            return isPrivate(req.header("X-Forwarded-For"))
-        },
+        skip: (req) => isPrivate(req.header("X-Forwarded-For") || req.ip),
     }),
 )
 
