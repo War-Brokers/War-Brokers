@@ -21,8 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <head>
                 <script
                     src="https://rybbit.pompy.dev/api/script.js"
-                    data-site-id="2"
-                    data-web-vitals="true"
+                    data-site-id="57d3180c2bcf"
                     defer
                 ></script>
                 <link
