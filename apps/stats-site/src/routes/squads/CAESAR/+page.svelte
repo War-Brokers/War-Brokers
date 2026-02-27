@@ -59,6 +59,11 @@
         class="whitespace-nowrap underline underline-offset-4 hover:text-orange-500"
         href="/players/6698bdf3d142af601f50256a">What! U Died ?</a
     >
+    /
+    <a
+        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-500"
+        href="/players/65cee709bfea711b1bd2fb1a">CoolCoolCool</a
+    >
 </span>
 
 <span class="mb-4 w-full text-center">
