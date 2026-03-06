@@ -2,6 +2,7 @@
     "name": "@warbrokers/types",
     "version": "0.0.0",
     "private": true,
+    "type": "module",
     "scripts": {
         "lint": "eslint src --quiet && tsc",
         "test:unit": "vitest run",
@@ -13,7 +14,7 @@
     },
     "devDependencies": {
         "@warbrokers/eslint-config": "workspace:*",
-        "eslint": "8.57.1",
+        "eslint": "9.39.3",
         "prettier": "3.5.3",
         "typescript": "5.8.3",
         "vitest": "2.1.9"

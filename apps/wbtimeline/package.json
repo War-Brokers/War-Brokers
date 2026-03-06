@@ -1,11 +1,12 @@
 {
     "name": "@warbrokers/wbtimeline",
     "version": "0.0.0",
+    "type": "module",
     "private": true,
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "lint": "next lint",
+        "lint": "eslint .",
         "clean": "rm -rf .next .turbo node_modules out"
     },
     "devDependencies": {
@@ -16,8 +17,8 @@
         "@types/react": "18.3.12",
         "@types/react-dom": "18.3.1",
         "autoprefixer": "10.4.20",
-        "eslint": "8.57.1",
-        "eslint-config-next": "15.0.3",
+        "eslint": "9.39.3",
+        "eslint-config-next": "16.1.6",
         "nanoid": "5.1.1",
         "next": "16.0.10",
         "postcss": "8.4.49",
