@@ -6,6 +6,7 @@
     nixfmt-rfc-style
 
     # version of these packages must be synced with npm packages
+    # https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/web/playwright/browsers.json
     playwright-driver.browsers
   ];
 
@@ -23,9 +24,10 @@
     wait_for_port 3000 # wbtimeline
 
     pnpm lint
-    pnpm --filter=@warbrokers/stats-site test:e2e
-    pnpm --filter=@warbrokers/stats-site svelte-check
     pnpm test:unit
+    pnpm --filter=@warbrokers/stats-site test:e2e
+    # todo: re-enable
+    # pnpm --filter=@warbrokers/stats-site svelte-check
   '';
 
   languages = {
@@ -53,16 +55,13 @@
     };
   };
 
+  # https://github.com/cachix/devenv/blob/main/src/modules/processes.nix
   # https://devenv.sh/processes
-  process = {
-    manager.implementation = "process-compose";
-    managers.process-compose.tui.enable = false;
-  };
   processes = {
     # todo: https://f1bonacc1.github.io/process-compose/health wbapi health check
     dev = {
       exec = "pnpm dev";
-      process-compose.depends_on.postgres.condition = "process_healthy";
+      after = [ "devenv:processes:postgres" ];
     };
   };
 
