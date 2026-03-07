@@ -37,7 +37,7 @@
       # sync package.json>engines versions on devenv update
 
       enable = true;
-      package = pkgs.nodejs_20;
+      package = pkgs.nodejs_24;
       pnpm.enable = true;
       pnpm.install.enable = true;
     };
