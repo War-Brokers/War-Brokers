@@ -3,21 +3,12 @@
     import QuestionMarkIcon from "flowbite-svelte-icons/QuestionCircleSolid.svelte"
 
     import A from "$lib/components/A.svelte"
-    import { percentile2rank, type Rank } from "$lib/rank"
+    import { percentile2rank } from "$lib/rank"
 
     export let title: string
     export let data: string | number
     export let _id: string | undefined = undefined
     export let percentile: Promise<number> | undefined = undefined
-
-    let rank: Rank
-    let icon: string
-
-    $: percentile?.then((value) => {
-        const res = percentile2rank(value)
-        rank = res.rank
-        icon = res.icon
-    })
 </script>
 
 <div class="flex min-w-24 flex-col">
@@ -27,6 +18,7 @@
         </span>
         {#await percentile then percentile}
             {#if percentile !== undefined}
+                {@const { rank, icon } = percentile2rank(percentile)}
                 <div class="flex items-center justify-center" id={_id}>
                     <img
                         alt="The project logo"
