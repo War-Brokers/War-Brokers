@@ -1,0 +1,5 @@
+[tools]
+cspell = "10.0.1"
+
+# todo: replace with convex
+"nix:postgresql_15" = "15.18" # same version as supabase

@@ -2,10 +2,6 @@
 # Sync with package.json.
 node = "24.18.1"
 pnpm = "9.14.4"
-cspell = "10.0.1"
-
-# todo: replace with convex
-"nix:postgresql_15" = "15.18" # same version as supabase
 
 [env]
 # PostgreSQL needs its catalog data and extension libraries at runtime.
@@ -16,12 +12,12 @@ nix = "https://github.com/jbadeau/mise-nix"
 
 [tasks.install]
 description = "Install node dependencies"
-run = "pnpm install --frozen-lockfile"
+run = "mise -E dev exec -- pnpm install --frozen-lockfile"
 
 [tasks."db:start"]
 description = "Start a local PostgreSQL database"
 run = '''
-#!/usr/bin/env bash
+#!/usr/bin/env -S mise -E dev exec -- bash
 
 set -euo pipefail
 
@@ -55,7 +51,7 @@ fi
 [tasks."db:stop"]
 description = "Stop and delete the local PostgreSQL database"
 run = '''
-#!/usr/bin/env bash
+#!/usr/bin/env -S mise -E dev exec -- bash
 
 set -euo pipefail
 
@@ -72,7 +68,7 @@ rm -rf "$data_dir"
 description = "Start dev servers"
 depends = ["install", "db:start"]
 depends_post = ["db:stop"]
-run = "pnpm dev"
+run = "mise -E dev exec -- pnpm dev"
 
 [tasks.verify]
 description = "Run all checks"
@@ -80,7 +76,7 @@ alias = "vv"
 depends = ["install", "db:start"]
 depends_post = ["db:stop"]
 run = '''
-#!/usr/bin/env bash
+#!/usr/bin/env -S mise -E dev exec -- bash
 
 set -euo pipefail
 set -m
