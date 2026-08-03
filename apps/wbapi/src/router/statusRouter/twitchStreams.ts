@@ -2,6 +2,7 @@ import { z } from "zod"
 
 import { twitchStreamsURL } from "@/const"
 import { reason2TRPCError } from "@/errors"
+import { discardResponseBody, fetchUpstream } from "@/fetch"
 import { publicProcedure } from "@/trpc"
 import { FailReason, type Result } from "@/types"
 
@@ -80,10 +81,12 @@ export function parseData(data: string): Result<Response> {
 }
 
 export async function twitchStreamCount(): Promise<Result<Response>> {
-    const res = await fetch(twitchStreamsURL())
+    const res = await fetchUpstream(twitchStreamsURL())
 
-    if (!res.ok)
+    if (!res.ok) {
+        await discardResponseBody(res)
         return { success: false, reason: FailReason.WBAPIConnectionFail }
+    }
 
     // looks like: "total,thumbnail_1,streamer_1,viewers_1,thumbnail_2,streamer_2,viewers_2,...".
     const data = await res.text()

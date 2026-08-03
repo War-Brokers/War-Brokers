@@ -1,8 +1,9 @@
 import "dotenv/config"
 
+import type { TRPCError } from "@trpc/server"
 import { createExpressMiddleware } from "@trpc/server/adapters/express"
 import cors from "cors"
-import express from "express"
+import express, { type Request } from "express"
 import rateLimit from "express-rate-limit"
 import swaggerUi from "swagger-ui-express"
 import { createOpenApiExpressMiddleware } from "trpc-openapi"
@@ -56,14 +57,44 @@ app.get(
     }),
 )
 
+function logRequestError({
+    error,
+    path,
+    req,
+}: {
+    error: TRPCError
+    path: string | undefined
+    req: Request
+}) {
+    if (error.code !== "INTERNAL_SERVER_ERROR") return
+
+    console.error(
+        `[request-error] ${req.method} ${req.originalUrl} procedure=${path ?? "unknown"}`,
+        error,
+    )
+}
+
 // Handle incoming tRPC requests
-app.use("/trpc", createExpressMiddleware({ router: appRouter, createContext }))
+app.use(
+    "/trpc",
+    createExpressMiddleware({
+        router: appRouter,
+        createContext,
+        onError: logRequestError,
+    }),
+)
 
 // Handle incoming OpenAPI requests
 app.use(
     "/",
-    createOpenApiExpressMiddleware({ router: appRouter, createContext }),
+    createOpenApiExpressMiddleware({
+        router: appRouter,
+        createContext,
+        onError: logRequestError,
+    }),
 )
 
-console.log("====> http://127.0.0.1:5000/api-docs")
-app.listen(5000)
+const server = app.listen(5000, () =>
+    console.log("====> http://127.0.0.1:5000/api-docs"),
+)
+server.on("error", (error) => console.error("[server-error]", error))

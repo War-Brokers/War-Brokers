@@ -4,6 +4,7 @@ import { z } from "zod"
 
 import { serverListURL } from "@/const"
 import { reason2TRPCError } from "@/errors"
+import { fetchUpstream } from "@/fetch"
 import { publicProcedure } from "@/trpc"
 import { FailReason, type Result } from "@/types"
 
@@ -83,7 +84,7 @@ export function parseData(data: string) {
 }
 
 export async function serverList(region: Region): Promise<Result<Response>> {
-    const res = await fetch(serverListURL(region))
+    const res = await fetchUpstream(serverListURL(region))
 
     // looks like: "serverCount,data1,data2,data3,data4,data5,data6,data1,data2,data3,data4,data5,data6...".
     const data = await res.text()

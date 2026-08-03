@@ -3,6 +3,7 @@ import { z } from "zod"
 import { playersOnlineURL } from "@/const"
 import { string2number } from "@/convert"
 import { reason2TRPCError } from "@/errors"
+import { discardResponseBody, fetchUpstream } from "@/fetch"
 import { publicProcedure } from "@/trpc"
 import type { Result } from "@/types"
 import { FailReason } from "@/types"
@@ -33,12 +34,14 @@ export default (tag: string) =>
         })
 
 export async function playersOnline(): Promise<Result<Response>> {
-    const res = await fetch(playersOnlineURL())
-    if (!res.ok)
+    const res = await fetchUpstream(playersOnlineURL())
+    if (!res.ok) {
+        await discardResponseBody(res)
         return {
             success: false,
             reason: FailReason.WBAPIConnectionFail,
         }
+    }
 
     // looks like "X,XXX"
     const raw = await res.text()

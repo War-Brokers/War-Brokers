@@ -22,6 +22,5 @@ export function isPrivate(ip: string | undefined): boolean {
             ].some((range) => range.test(ip!))
     }
 
-    console.log(ip, result ? "is private" : "is not private")
     return result
 }

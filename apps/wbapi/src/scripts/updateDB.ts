@@ -8,6 +8,7 @@
 
 import z from "zod"
 
+import { fetchUpstream } from "@/fetch"
 import { db, env } from "@/index"
 import { getPlayer } from "@/router/playersRouter/getPlayer"
 
@@ -21,7 +22,7 @@ const playerListSchema = z.array(
 )
 
 const playerListRaw = await (
-    await fetch(`${env.WB_DB_BASE}/get_player_list.php`, {
+    await fetchUpstream(`${env.WB_DB_BASE}/get_player_list.php`, {
         headers: {
             Authorization:
                 "Basic " +

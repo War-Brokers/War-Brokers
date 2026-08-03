@@ -3,6 +3,7 @@ import { playerSchema } from "@warbrokers/types/src/player"
 import { z } from "zod"
 
 import { PlayerNotFoundTRPCError, reason2TRPCError } from "@/errors"
+import { fetchUpstream } from "@/fetch"
 import { db, env } from "@/index"
 import { uid } from "@/querySchema"
 import { publicProcedure } from "@/trpc"
@@ -35,17 +36,31 @@ export default (tag: string) =>
             const player = res.data
 
             if (player.banned) {
-                db.deletePlayer(player.uid)
+                void db
+                    .deletePlayer(player.uid)
+                    .catch((error) =>
+                        console.error(
+                            `[db-error] failed to delete banned player ${player.uid}`,
+                            error,
+                        ),
+                    )
                 throw PlayerNotFoundTRPCError(uid)
             }
 
-            db.setPlayer(player)
+            void db
+                .setPlayer(player)
+                .catch((error) =>
+                    console.error(
+                        `[db-error] failed to cache player ${player.uid}`,
+                        error,
+                    ),
+                )
 
             return player
         })
 
 export async function getPlayer(uid: Player["uid"]): Promise<Result<Player>> {
-    const res = await fetch(
+    const res = await fetchUpstream(
         `${env.WB_DB_BASE}/get_player_stats.php?uid=${uid}`,
         {
             headers: {
