@@ -8,10 +8,9 @@
         "bson",
         "cachix",
         "Cheatsheets",
+        "createuser",
         "deathmatch",
         "developomp",
-        "devenv",
-        "direnv",
         "dompurify",
         "etags",
         "firelink",
@@ -21,6 +20,7 @@
         "fortawesome",
         "headshots",
         "heli",
+        "initdb",
         "Kenney",
         "leaderboard",
         "libasound",
@@ -32,22 +32,25 @@
         "linebreak",
         "marceloprado",
         "minigun",
+        "mise",
         "montudor",
         "MOONBASE",
         "msvc",
         "multisites",
         "nicklower",
-        "nixd",
-        "nixfmt",
         "nixos",
         "nixpkgs",
         "openapi",
+        "pg_isready",
+        "pgdata",
+        "pipefail",
         "pkgs",
         "pompy",
         "pompydev",
         "predeploy",
         "REMAGEN",
         "respawn",
+        "rharkor",
         "royale",
         "rxdi",
         "softprops",
@@ -79,8 +82,7 @@
         ".git/{info,lfs,logs,refs,objects}/**",
         ".git/{index,*refs,*HEAD}",
         ".vscode",
-        ".vscode-insiders",
-        ".devenv"
+        ".vscode-insiders"
     ],
 
     // editor
@@ -107,14 +109,6 @@
     "[properties]": {
         "editor.defaultFormatter": "foxundermoon.shell-format"
     },
-
-    // nix
-    "[nix]": {
-        "editor.defaultFormatter": "jnoortheen.nix-ide"
-    },
-    "nix.formatterPath": "nixfmt",
-    "nix.enableLanguageServer": true,
-    "nix.serverPath": "nixd",
 
     // eslint
     "eslint.validate": [

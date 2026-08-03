@@ -3,8 +3,8 @@
     "globalDependencies": [".prettierignore", ".prettierrc.json"],
     "tasks": {
         "dev": {
-            "dependsOn": ["^dev"],
-            "cache": false
+            "cache": false,
+            "persistent": true
         },
         "build": {
             "dependsOn": ["^build"],

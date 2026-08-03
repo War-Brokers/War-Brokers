@@ -4,10 +4,7 @@
         "vivaxy.vscode-conventional-commits",
         "streetsidesoftware.code-spell-checker",
         "github.vscode-github-actions",
-        "mkhl.direnv",
-
-        // nix
-        "jnoortheen.nix-ide",
+        "hverlin.mise-vscode",
 
         // JS / TS
         "esbenp.prettier-vscode",

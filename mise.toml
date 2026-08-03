@@ -1,0 +1,141 @@
+[tools]
+# Sync with package.json.
+node = "24.18.1"
+pnpm = "9.14.4"
+
+# todo: replace with convex
+"nix:postgresql_15" = "15.18" # same version as supabase
+
+[plugins]
+nix = "https://github.com/jbadeau/mise-nix"
+
+[tasks.install]
+description = "Install node dependencies"
+run = "pnpm install --frozen-lockfile"
+
+[tasks."db:start"]
+description = "Start a local PostgreSQL database"
+run = '''
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+data_dir="${MISE_PROJECT_ROOT}/.mise/postgres"
+
+if [[ -s "$data_dir/PG_VERSION" ]] && pg_ctl --pgdata="$data_dir" status >/dev/null 2>&1; then
+    exit 0
+fi
+
+if pg_isready --host=127.0.0.1 --port=5432 >/dev/null 2>&1; then
+    echo "Port 5432 is already used by another PostgreSQL server" >&2
+    exit 1
+fi
+
+rm -rf "$data_dir"
+mkdir -p "$data_dir"
+initdb --pgdata="$data_dir" --auth=trust --encoding=UTF8 --no-locale
+
+pg_ctl \
+    --pgdata="$data_dir" \
+    --log="$data_dir/postgres.log" \
+    --options="-h 127.0.0.1 -p 5432 -k /tmp" \
+    --wait \
+    start
+
+if [[ "${USER:-}" != postgres ]]; then
+    createuser --host=127.0.0.1 --port=5432 --username="$USER" --superuser postgres
+fi
+'''
+
+[tasks."db:stop"]
+description = "Stop and delete the local PostgreSQL database"
+run = '''
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+data_dir="${MISE_PROJECT_ROOT}/.mise/postgres"
+
+if [[ -s "$data_dir/PG_VERSION" ]] && pg_ctl --pgdata="$data_dir" status >/dev/null 2>&1; then
+    pg_ctl --pgdata="$data_dir" --mode=fast --wait stop
+fi
+
+rm -rf "$data_dir"
+'''
+
+[tasks.dev]
+description = "Start dev servers"
+depends = ["install", "db:start"]
+depends_post = ["db:stop"]
+run = "pnpm dev"
+
+[tasks.verify]
+description = "Run all checks"
+alias = "vv"
+depends = ["install", "db:start"]
+depends_post = ["db:stop"]
+run = '''
+#!/usr/bin/env bash
+
+set -euo pipefail
+set -m
+
+export DATABASE_URL="postgresql://postgres@localhost:5432/postgres"
+
+# set PLAYWRIGHT_BROWSERS_PATH
+mise -E e2e install
+for reference in $(nix-store --query --references "$(mise -E e2e where nix:playwright-test)"); do
+    if [[ "$reference" == *-playwright-browsers ]]; then
+        browsers_path="$reference"
+        break
+    fi
+done
+test -n "${browsers_path:-}"
+export PLAYWRIGHT_BROWSERS_PATH="$browsers_path"
+
+pnpm dev --color &
+dev_pid=$!
+
+cleanup() {
+    status=$?
+    trap - EXIT
+    kill -INT -- "-$dev_pid" >/dev/null 2>&1 || true
+    wait "$dev_pid" >/dev/null 2>&1 || true
+
+    exit "$status"
+}
+
+trap cleanup EXIT
+
+wait_for_port() {
+    local port="$1"
+
+    for _ in {1..120}; do
+        if (echo >/dev/tcp/localhost/"$port") >/dev/null 2>&1; then
+            return 0
+        fi
+
+        if ! kill -0 "$dev_pid" >/dev/null 2>&1; then
+            echo "Development servers exited before port $port was ready" >&2
+            return 1
+        fi
+
+        sleep 0.5
+    done
+
+    echo "Timed out waiting for port $port" >&2
+    return 1
+}
+
+wait_for_port 5432 # WBAPI PostgreSQL database
+wait_for_port 4000 # Mock WB
+wait_for_port 5000 # WBAPI
+wait_for_port 5173 # Stats site
+wait_for_port 3000 # WB timeline
+
+pnpm lint
+pnpm test:unit
+pnpm --filter=@warbrokers/stats-site test:e2e
+# todo: re-enable
+# pnpm --filter=@warbrokers/stats-site svelte-check
+'''

@@ -1,11 +1,7 @@
 /_/
 
-# Devenv
-.devenv*
-devenv.local.nix
-
-# direnv
-.direnv
+# mise task state
+/.mise/
 
 # pre-commit
 .pre-commit-config.yaml

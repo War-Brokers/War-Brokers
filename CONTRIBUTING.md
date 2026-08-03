@@ -43,8 +43,7 @@ yourself with the following:
   - unit testing with [jest](https://jestjs.io)
   - end-to-end web app testing with [playwright](https://playwright.dev)
   - monorepo management with [turborepo](https://turbo.build/repo)
-  - development environment setup with [devenv](https://devenv.sh/getting-started)
-    - and by extension [direnv](https://devenv.sh/automatic-shell-activation) and [nix](https://nix.dev/tutorials/nix-language)
+  - development environment setup with [mise](https://mise.jdx.dev)
   - formatting with [prettier](https://prettier.io)
   - linting with [eslint](https://eslint.org)
   - [vscode](https://code.visualstudio.com)
@@ -72,10 +71,11 @@ can help you if you get stuck at any point.
 
 ## Getting started for real
 
-1. Clone this git repository
-2. [setup devenv](https://devenv.sh/getting-started/)
-3. Create `apps/wbapi/.env` (you can simply copy `apps/wbapi/.env.example` for testing locally)
-4. Run `devenv up` to automagically build and launch the following services
+1. Clone this git repository.
+2. [Install mise](https://mise.jdx.dev/installing-mise.html) and [Nix](https://nixos.org/download/).
+3. Create `apps/wbapi/.env` (you can simply copy `apps/wbapi/.env.example` for testing locally).
+4. Run `mise install` to install Node.js, pnpm, and PostgreSQL.
+5. Run `mise dev` to install dependencies and launch the following services:
    - http://localhost:5432 - WBAPI postgres DB
    - http://localhost:4000 - WB DB
    - http://localhost:5000 - wbapi

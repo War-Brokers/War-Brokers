@@ -3,7 +3,7 @@
     "private": true,
     "scripts": {
         "turbo": "turbo",
-        "dev": "turbo run dev --parallel",
+        "dev": "turbo run dev",
         "build": "turbo run build --parallel --cache-dir=.turbo",
         "lint": "prettier . --check && turbo run lint --parallel",
         "test:e2e": "turbo run test:e2e --parallel",
@@ -16,7 +16,7 @@
         "prettier": "3.5.3",
         "prettier-plugin-svelte": "3.3.3",
         "prettier-plugin-tailwindcss": "0.6.11",
-        "turbo": "2.5.3",
+        "turbo": "2.10.8",
         "typescript": "5.8.3"
     },
     "pnpm": {

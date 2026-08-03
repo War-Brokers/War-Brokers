@@ -1,0 +1,2 @@
+[tools]
+"nix:playwright-test" = "1.57.0" # Sync with "@playwright/test" package versions.

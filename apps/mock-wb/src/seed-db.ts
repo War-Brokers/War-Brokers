@@ -4,7 +4,7 @@ import { stats } from "./stats"
 
 export async function seedDB() {
     const sql = postgres(
-        "postgresql://localhost:5432/postgres",
+        "postgresql://postgres@localhost:5432/postgres",
         // Disable prefetch as it is not supported for "Transaction" pool mode
         { prepare: false },
     )

@@ -1,4 +1,3 @@
-# https://devenv.sh/integrations/github-actions
 name: Run Tests
 
 on:
@@ -9,35 +8,13 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
-    permissions:
-      # permissions required for nix caching to work properly
-      id-token: write
-      contents: read
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: cachix/install-nix-action@v30
-      - uses: cachix/cachix-action@v15
+      - uses: actions/checkout@v7
+      - uses: cachix/install-nix-action@v31 # Required for the nix plugin.
+      - uses: jdx/mise-action@v4
         with:
-          name: devenv
-      - uses: DeterminateSystems/flakehub-cache-action@main
-
-      - name: Install devenv.sh
-        run: nix profile install nixpkgs#devenv
-
-      - name: Cache turbo build
-        uses: dtinth/setup-github-actions-caching-for-turbo@v1
-
-      - name: Create .env file
-        run: |
-          cat > ./apps/wbapi/.env<< EOF
-          WB_DB_ID: id
-          WB_DB_PW: pw
-          WB_DB_BASE: http://localhost:4000
-          DATABASE_URL: "postgresql://localhost:5432/postgres"
-          EOF
-
-      - run: pnpm install
-        shell: devenv shell bash -- -e {0}
-
-      - run: devenv test
+          version: 2026.7.5
+          experimental: true # Required for the nix plugin.
+      - run: cp apps/wbapi/.env.example apps/wbapi/.env
+      - uses: rharkor/caching-for-turbo@v2.5.1
+      - run: mise run verify
