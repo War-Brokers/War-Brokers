@@ -92,22 +92,11 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit"
     },
-    "[dotenv]": {
-        "editor.defaultFormatter": "foxundermoon.shell-format"
-    },
-    "[shellscript]": {
-        "editor.defaultFormatter": "foxundermoon.shell-format"
-    },
-    "[ignore]": {
+    "[shellscript][ignore][dotenv][properties]": {
         "editor.defaultFormatter": "foxundermoon.shell-format"
     },
     "[svelte]": {
         "editor.defaultFormatter": "svelte.svelte-vscode"
-    },
-
-    // npmrc
-    "[properties]": {
-        "editor.defaultFormatter": "foxundermoon.shell-format"
     },
 
     // eslint
