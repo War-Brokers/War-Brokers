@@ -1,6 +1,5 @@
 import { error } from "@sveltejs/kit"
 import dayjs from "dayjs"
-import xss from "xss"
 
 import trpc from "$lib/trpc"
 
@@ -13,10 +12,6 @@ export const load = (async ({ params }) => {
     if (!uid) error(404, "Not Found")
 
     const player = await trpc.players.getPlayer.query({ uid })
-
-    // prevent XSS (hopefully)
-    player.nick = xss(player.nick)
-    player.nicklower = xss(player.nicklower)
 
     return {
         player: player,

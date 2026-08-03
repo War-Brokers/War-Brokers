@@ -16,10 +16,6 @@
         "clean": "rm -rf node_modules .svelte-kit .turbo *.timestamp-*"
     },
     "devDependencies": {
-        "@warbrokers/eslint-config": "workspace:*",
-        "@warbrokers/playwright-config": "workspace:*",
-        "@warbrokers/types": "workspace:*",
-        "@warbrokers/wbapi": "workspace:*",
         "@playwright/test": "1.57.0",
         "@sveltejs/adapter-node": "5.4.0",
         "@sveltejs/kit": "2.49.0",
@@ -30,6 +26,10 @@
         "@types/lodash": "4.17.13",
         "@typescript-eslint/eslint-plugin": "8.56.1",
         "@typescript-eslint/parser": "8.56.1",
+        "@warbrokers/eslint-config": "workspace:*",
+        "@warbrokers/playwright-config": "workspace:*",
+        "@warbrokers/types": "workspace:*",
+        "@warbrokers/wbapi": "workspace:*",
         "autoprefixer": "10.4.20",
         "dayjs": "1.11.13",
         "eslint": "9.39.3",
@@ -55,7 +55,6 @@
         "typescript-eslint": "8.56.1",
         "vite": "5.4.21",
         "vitest": "2.1.9",
-        "xss": "1.0.15",
         "zod": "3.23.8"
     },
     "engines": {
