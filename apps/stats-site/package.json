@@ -9,7 +9,7 @@
         "preview": "vite preview",
         "test:unit": "vitest run",
         "test:e2e": "playwright test",
-        "lint": "eslint .",
+        "lint": "svelte-kit sync && eslint .",
         "typecheck": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "svelte-check": "svelte-check --threshold error",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
