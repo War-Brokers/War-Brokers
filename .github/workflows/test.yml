@@ -15,6 +15,7 @@ jobs:
         with:
           version: 2026.7.5
           experimental: true # Required for the nix plugin.
+          cache: false # Nix-backed tools contain runner-local /nix/store symlinks.
       - run: cp apps/wbapi/.env.example apps/wbapi/.env
       - uses: rharkor/caching-for-turbo@v2.5.1
       - run: mise run verify
