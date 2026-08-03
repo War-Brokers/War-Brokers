@@ -83,6 +83,7 @@ set -m
 
 # static analysis
 cspell .
+pnpm fmt:check --color
 pnpm lint --color
 pnpm typecheck --color
 pnpm test:unit --color
