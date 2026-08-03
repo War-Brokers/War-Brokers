@@ -133,8 +133,8 @@ wait_for_port 5000 # WBAPI
 wait_for_port 5173 # Stats site
 wait_for_port 3000 # WB timeline
 
-pnpm lint
-pnpm test:unit
+pnpm lint --color
+pnpm test:unit --color
 pnpm --filter=@warbrokers/stats-site test:e2e
 # todo: re-enable
 # pnpm --filter=@warbrokers/stats-site svelte-check
