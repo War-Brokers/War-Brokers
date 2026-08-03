@@ -22,11 +22,11 @@ export function createConfig(config: Config): PlaywrightTestConfig {
         fullyParallel: true,
 
         use: {
-            // Use baseURL so to make navigations relative.
+            // Use baseURL so to make navigation relative.
             // More information: https://playwright.dev/docs/api/class-testoptions#test-options-base-url
             baseURL: `http://localhost:${config.port}`,
 
-            // Retry a test if its failing with enabled tracing. This allows you to analyse the DOM, console logs, network traffic etc.
+            // Retry a test if its failing with enabled tracing. This allows you to analyze the DOM, console logs, network traffic etc.
             // More information: https://playwright.dev/docs/trace-viewer
             trace: "retry-with-trace",
 

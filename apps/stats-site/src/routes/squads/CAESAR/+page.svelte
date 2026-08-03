@@ -69,7 +69,7 @@
 <span class="mb-4 w-full text-center">
     <h3 class="mb-1 text-xl font-black">Requirements</h3>
     <ul class="font-bold">
-        <li>Burning will to improuve</li>
+        <li>Burning will to improve</li>
         <li>Be chivalrous</li>
         <li>Level 25 or above</li>
     </ul>
