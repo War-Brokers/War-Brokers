@@ -55,4 +55,15 @@ export default defineConfig(
             ],
         },
     },
+    {
+        files: ["**/*.{ts,tsx,mts,cts}"],
+        languageOptions: {
+            parserOptions: {
+                projectService: true,
+            },
+        },
+        rules: {
+            "@typescript-eslint/no-floating-promises": "error",
+        },
+    },
 )

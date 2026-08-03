@@ -10,6 +10,17 @@ export default defineConfig(
         ignores: [".svelte-kit/", "vite.config.ts.timestamp*"],
     },
     ...wbConfig,
+    {
+        files: ["e2e/*.ts", "playwright.config.ts"],
+        languageOptions: {
+            parserOptions: {
+                projectService: {
+                    allowDefaultProject: ["e2e/*.ts", "playwright.config.ts"],
+                },
+                tsconfigRootDir: import.meta.dirname,
+            },
+        },
+    },
     // https://github.com/sveltejs/eslint-plugin-svelte
     ...svelte.configs.recommended,
     {
