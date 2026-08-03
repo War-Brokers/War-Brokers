@@ -15,6 +15,7 @@
     },
 
     // eslint
+    "eslint.workingDirectories": [{ "mode": "auto" }],
     "eslint.validate": [
         "svelte",
         "javascript",
