@@ -68,7 +68,7 @@ rm -rf "$data_dir"
 description = "Start dev servers"
 depends = ["install", "db:start"]
 depends_post = ["db:stop"]
-run = "mise -E dev exec -- pnpm dev"
+run = "mise -E dev exec -- pnpm dev --color"
 
 [tasks.verify]
 description = "Run all checks"
