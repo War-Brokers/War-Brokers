@@ -84,9 +84,8 @@ set -m
 # static analysis
 cspell .
 pnpm lint --color
+pnpm typecheck --color
 pnpm test:unit --color
-# todo: re-enable
-# pnpm --filter=@warbrokers/stats-site svelte-check
 
 # set PLAYWRIGHT_BROWSERS_PATH
 mise -E e2e install

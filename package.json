@@ -6,6 +6,7 @@
         "dev": "turbo run dev",
         "build": "turbo run build --parallel --cache-dir=.turbo",
         "lint": "prettier . --check && turbo run lint --parallel",
+        "typecheck": "turbo run typecheck",
         "test:e2e": "turbo run test:e2e --parallel",
         "test:unit": "turbo run test:unit --parallel",
         "clean": "turbo run clean --parallel && rm -rf .turbo node_modules"

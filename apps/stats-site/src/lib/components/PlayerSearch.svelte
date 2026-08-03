@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { TRPCClientError } from "@trpc/client"
-    import type { AppRouter } from "@warbrokers/wbapi/build/router"
+    import type { AppRouter } from "@warbrokers/wbapi/build/src/router"
     import debounce from "lodash/debounce"
     import { Pulse } from "svelte-loading-spinners"
     import type { ZodIssue } from "zod"

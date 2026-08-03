@@ -7,7 +7,8 @@
     "scripts": {
         "dev": "pnpm build && node .",
         "build": "rm -rf build && tsup",
-        "lint": "eslint . && tsc --noEmit",
+        "lint": "eslint .",
+        "typecheck": "tsc --noEmit",
         "clean": "rm -rf .turbo build node_modules"
     },
     "dependencies": {

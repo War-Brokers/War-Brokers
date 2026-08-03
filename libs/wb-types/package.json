@@ -4,7 +4,8 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "lint": "eslint src --quiet && tsc",
+        "lint": "eslint src --quiet",
+        "typecheck": "tsc --noEmit",
         "test:unit": "vitest run",
         "vitest": "vitest",
         "clean": "rm -rf .turbo node_modules"

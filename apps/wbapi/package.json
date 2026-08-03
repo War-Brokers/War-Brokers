@@ -9,7 +9,8 @@
         "build": "rm -rf build && tsup && tsc --emitDeclarationOnly",
         "start:dev": "NODE_ENV=development node .",
         "start:prod": "node .",
-        "lint": "eslint . && tsc --noEmit",
+        "lint": "eslint .",
+        "typecheck": "tsc --noEmit",
         "test:unit": "jest",
         "clean": "rm -rf .turbo build node_modules *.log"
     },

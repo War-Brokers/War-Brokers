@@ -6,6 +6,7 @@
     "main": "eslint.config.js",
     "scripts": {
         "lint": "eslint eslint.config.js",
+        "typecheck": "tsc --noEmit --allowJs --checkJs --skipLibCheck --module NodeNext --moduleResolution NodeNext --target ES2022 eslint.config.js",
         "clean": "rm -rf .turbo node_modules"
     },
     "devDependencies": {

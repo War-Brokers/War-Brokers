@@ -18,6 +18,7 @@
             ]
         },
         "lint": { "dependsOn": ["^lint"] },
+        "typecheck": { "dependsOn": ["^build", "^typecheck"] },
         "test:e2e": {
             "env": [
                 "PLAYWRIGHT_BROWSERS_PATH",

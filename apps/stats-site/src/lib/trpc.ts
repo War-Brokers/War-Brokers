@@ -1,5 +1,5 @@
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client"
-import type { AppRouter } from "@warbrokers/wbapi/build/router"
+import type { AppRouter } from "@warbrokers/wbapi/build/src/router"
 
 import { dev } from "$app/environment"
 
