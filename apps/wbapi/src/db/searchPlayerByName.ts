@@ -13,6 +13,7 @@ export default (db: PostgresJsDatabase) => {
             .select({
                 uid: players.uid,
                 nick: players.nick,
+                squad: players.squad,
             })
             .from(players)
             // I know this is shit code but it does its job and is quite performant

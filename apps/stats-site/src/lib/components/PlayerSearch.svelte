@@ -88,12 +88,19 @@
                 } absolute top-20 h-96 max-h-96 w-full overflow-auto rounded-lg py-4 dark:bg-gray-600`}
             >
                 <div class="relative h-full overflow-y-scroll">
-                    {#each searchResult as { nick, uid } (uid)}
+                    {#each searchResult as { nick, squad, uid } (uid)}
                         <a
                             href="/players/{uid}"
                             class="flex w-full flex-col p-2 hover:dark:bg-gray-700"
                         >
-                            <b class="text-lg">{nick}</b>
+                            <b class="text-lg">
+                                {#if squad}
+                                    <span class="text-orange-500"
+                                        >[{squad}]</span
+                                    >
+                                {/if}
+                                {nick}
+                            </b>
                             <p class="text-md dark:text-gray-400">{uid}</p>
                         </a>
                     {/each}

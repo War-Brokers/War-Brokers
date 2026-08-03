@@ -9,6 +9,7 @@ import { publicProcedure } from "@/trpc"
 export const responseSchema = z.array(
     z.object({
         nick: playerSchema.shape.nick,
+        squad: playerSchema.shape.squad,
         uid: playerSchema.shape.uid,
     }),
 )
