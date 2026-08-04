@@ -15,7 +15,8 @@
         <div>
             made by <A href="/players/5d2ead35d142affb05757778">POMP</A>
         </div>
-        <div>
+        <div class="flex items-center gap-6">
+            <A href="https://uptime.pompy.dev/status/wbp">Status</A>
             <a
                 href="https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site"
             >
