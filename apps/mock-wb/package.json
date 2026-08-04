@@ -25,6 +25,7 @@
         "@types/express": "5.0.0",
         "@types/node": "24.13.3",
         "@warbrokers/eslint-config": "workspace:*",
+        "@warbrokers/typescript-config": "workspace:*",
         "tsup": "8.5.1"
     },
     "engines": {

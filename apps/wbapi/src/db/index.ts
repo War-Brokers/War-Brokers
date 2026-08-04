@@ -13,7 +13,7 @@ import { getGamesEloRanking, getKillsEloRanking, getXPRanking } from "./ranking"
 import searchPlayerByName from "./searchPlayerByName"
 import setPlayer from "./setPlayer"
 
-export async function initDB() {
+export function initDB() {
     const client = postgres(env.DATABASE_URL, {
         connection: { statement_timeout: upstreamTimeoutMs },
         // Disable prefetch as it is not supported for "Transaction" pool mode

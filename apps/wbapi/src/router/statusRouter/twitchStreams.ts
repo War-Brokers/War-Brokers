@@ -61,14 +61,21 @@ export function parseData(data: string): Result<Response> {
     }
 
     for (let i = 1; i < entries.length; i += 3) {
+        const thumbnail = entries[i]
+        const streamer = entries[i + 1]
+        const viewers = entries[i + 2]
+
+        if (
+            thumbnail === undefined ||
+            streamer === undefined ||
+            viewers === undefined
+        )
+            return { success: false, reason: FailReason.SchemaValidationFail }
+
         const parseResult = streamSchema.safeParse({
-            thumbnail: entries[i],
-            streamer: entries[i + 1],
-            viewers: Number(
-                entries[i + 2]
-                    // remove comma
-                    .replace(/,/g, ""),
-            ),
+            thumbnail,
+            streamer,
+            viewers: Number(viewers.replace(/,/g, "")),
         })
 
         if (!parseResult.success)

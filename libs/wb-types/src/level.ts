@@ -18,5 +18,5 @@ export function xp2lvl(xp: number) {
     if (xp >= 500) return 2
     if (xp >= 100) return 1
 
-    throw `XP can not be lower than 100 but got ${xp}`
+    throw new RangeError(`XP can not be lower than 100 but got ${xp}`)
 }

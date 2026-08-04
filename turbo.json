@@ -1,6 +1,7 @@
 {
     "$schema": "https://turbo.build/schema.json",
     "globalDependencies": [".prettierignore", ".prettierrc.json"],
+    "globalEnv": ["CI"],
     "tasks": {
         "dev": {
             "cache": false,

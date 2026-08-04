@@ -10,7 +10,7 @@
     export let total: Promise<number>
     export let visible: number
 
-    let maxPage = writable(-1)
+    const maxPage = writable(-1)
 
     function gotoPage(x: number) {
         $page.url.searchParams.set("page", String(x))
@@ -37,14 +37,18 @@
         <button
             class="place-self-start"
             disabled={$maxPage === -1 || currentPage <= 1}
-            on:click={() => gotoPage(currentPage - 1)}
+            on:click={() => {
+                gotoPage(currentPage - 1)
+            }}
         >
             <Icon data={arrowLeft} /> &nbsp; Previous
         </button>
         <button
             class="place-self-end"
             disabled={$maxPage === -1 || currentPage >= $maxPage}
-            on:click={() => gotoPage(currentPage + 1)}
+            on:click={() => {
+                gotoPage(currentPage + 1)
+            }}
         >
             Next &nbsp; <Icon data={arrowRight} />
         </button>

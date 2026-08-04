@@ -1,0 +1,4 @@
+{
+    "extends": "@warbrokers/typescript-config/node.json",
+    "include": ["index.ts"]
+}

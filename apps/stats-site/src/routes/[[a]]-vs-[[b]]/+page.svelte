@@ -53,10 +53,14 @@
     }
 
     function formatPageTitle(
-        a: Awaited<PageData["a"]> = undefined,
-        b: Awaited<PageData["b"]> = undefined,
+        a?: Awaited<PageData["a"]>,
+        b?: Awaited<PageData["b"]>,
     ) {
         return `${formatPlayerName(a)} vs ${formatPlayerName(b)}`
+    }
+
+    function routeUid(value: unknown): string {
+        return typeof value === "string" ? value : ""
     }
 
     /**
@@ -167,7 +171,9 @@
                                 ? 'order-first'
                                 : ''}"
                             aria-label={`Edit player ${side.toUpperCase()}`}
-                            on:click={() => clearPlayer(side, a?.uid, b?.uid)}
+                            on:click={() => {
+                                clearPlayer(side, a?.uid, b?.uid)
+                            }}
                         >
                             <EditSolid size="md" aria-hidden="true" />
                         </Button>
@@ -176,10 +182,10 @@
                             inputId="player-{side}-search"
                             label="Search Player {side.toUpperCase()}"
                             placeholder="Search Player {side.toUpperCase()}"
-                            resultHref={(uid) =>
+                            resultHref={(uid: string) =>
                                 side === "a"
-                                    ? `/${uid}-vs-${data.bUid ?? ""}`
-                                    : `/${data.aUid ?? ""}-vs-${uid}`}
+                                    ? `/${uid}-vs-${routeUid(data.bUid)}`
+                                    : `/${routeUid(data.aUid)}-vs-${uid}`}
                         />
                     {/if}
                 </div>

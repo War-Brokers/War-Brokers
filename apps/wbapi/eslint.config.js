@@ -8,12 +8,4 @@ export default [
             globals: { jest: true },
         },
     },
-    {
-        files: ["**/*.ts"],
-        languageOptions: {
-            parserOptions: {
-                projectService: true,
-            },
-        },
-    },
 ]

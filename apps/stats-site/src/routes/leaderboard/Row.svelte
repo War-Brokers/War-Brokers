@@ -4,8 +4,8 @@
     export let rank: number
     export let nick: string
     export let uid: string
-    export let stat: unknown
-    export let stat2: unknown | undefined = undefined
+    export let stat: string | number
+    export let stat2: string | number | undefined = undefined
 </script>
 
 <tr class="whitespace-nowrap p-9 hover:bg-slate-900">

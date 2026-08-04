@@ -9,14 +9,6 @@ export default [
         },
     },
     {
-        files: ["**/*.ts"],
-        languageOptions: {
-            parserOptions: {
-                projectService: true,
-            },
-        },
-    },
-    {
         rules: {
             "@typescript-eslint/no-explicit-any": "off",
         },

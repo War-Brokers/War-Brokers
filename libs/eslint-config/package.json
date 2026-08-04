@@ -6,12 +6,13 @@
     "main": "eslint.config.js",
     "scripts": {
         "lint": "eslint eslint.config.js",
-        "typecheck": "tsc --noEmit --allowJs --checkJs --skipLibCheck --module NodeNext --moduleResolution NodeNext --target ES2022 eslint.config.js",
+        "typecheck": "tsc --noEmit",
         "clean": "rm -rf .turbo node_modules"
     },
     "devDependencies": {
         "@eslint/js": "10.0.0",
         "@types/eslint__js": "8.42.3",
+        "@warbrokers/typescript-config": "workspace:*",
         "eslint": "9.39.3",
         "eslint-config-prettier": "10.1.8",
         "eslint-config-turbo": "2.8.13",

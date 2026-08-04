@@ -30,6 +30,7 @@
     },
     "devDependencies": {
         "@warbrokers/eslint-config": "workspace:*",
+        "@warbrokers/typescript-config": "workspace:*",
         "@swc/core": "1.9.3",
         "@types/cors": "2.8.17",
         "@types/express": "5.0.0",

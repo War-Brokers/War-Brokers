@@ -36,15 +36,15 @@ app.get("/latest_daily.txt", (req, res) => {
 
 // todo: incomplete
 app.get("/get_daily_stats.php", (req, res) => {
-    const uid = req.query.uid
-    if (!uid) {
+    const uid = req.query["uid"]
+    if (typeof uid !== "string" || !uid) {
         res.send(
             'Please provide a UID. Like this: <a href="/get_daily_stats.php?uid=000000000000000000000001">/get_daily_stats.php?uid=000000000000000000000001</a>',
         )
         return
     }
 
-    const data = dailyStats.find((e) => e.uid === String(uid))
+    const data = dailyStats.find((e) => e.uid === uid)
     if (!data) {
         res.send(`No data for player: ${uid}`)
         return
@@ -54,15 +54,12 @@ app.get("/get_daily_stats.php", (req, res) => {
 })
 
 app.get("/get_player_list.php", (req, res) => {
+    const fields = req.query["squad"]
+        ? (["nick", "nicklower", "uid", "squad"] as const)
+        : (["nick", "nicklower", "uid"] as const)
+
     res.json([
-        ...stats.map((x) =>
-            pick(x, [
-                "nick",
-                "nicklower",
-                "uid",
-                req.query.squad ? "squad" : "",
-            ]),
-        ),
+        ...stats.map((player) => pick(player, fields)),
         {
             nick: "end_of_list",
             uid: "000000000000000000000000",
@@ -71,15 +68,15 @@ app.get("/get_player_list.php", (req, res) => {
 })
 
 app.get("/get_player_stats.php", (req, res) => {
-    const uid = req.query.uid
-    if (!uid) {
+    const uid = req.query["uid"]
+    if (typeof uid !== "string" || !uid) {
         res.send(
             'Please provide a UID. Like this: <a href="/get_player_stats.php?uid=000000000000000000000001">/get_player_stats.php?uid=000000000000000000000001</a>',
         )
         return
     }
 
-    const data = stats.find((e) => e.uid === String(uid))
+    const data = stats.find((e) => e.uid === uid)
     if (!data) {
         res.send(`No data for player: ${uid}`)
         return

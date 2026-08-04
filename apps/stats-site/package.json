@@ -31,6 +31,7 @@
         "@warbrokers/eslint-config": "workspace:*",
         "@warbrokers/playwright-config": "workspace:*",
         "@warbrokers/types": "workspace:*",
+        "@warbrokers/typescript-config": "workspace:*",
         "@warbrokers/wbapi": "workspace:*",
         "autoprefixer": "10.4.20",
         "dayjs": "1.11.13",

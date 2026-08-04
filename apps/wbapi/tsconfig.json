@@ -1,14 +1,14 @@
 {
+    "extends": "@warbrokers/typescript-config/base.json",
     "compilerOptions": {
         // generation related
         "outDir": "build",
         "declaration": true,
 
         // regular configs
-        "strict": true,
+        "rootDir": ".",
         "skipLibCheck": true,
         "resolveJsonModule": true,
-        "esModuleInterop": true,
         "types": ["node", "jest"],
 
         // node version related

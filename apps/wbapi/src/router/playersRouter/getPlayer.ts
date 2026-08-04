@@ -35,26 +35,12 @@ export default (tag: string) =>
 
             const player = res.data
 
-            if (player.banned) {
-                void db
-                    .deletePlayer(player.uid)
-                    .catch((error) =>
-                        console.error(
-                            `[db-error] failed to delete banned player ${player.uid}`,
-                            error,
-                        ),
-                    )
-                throw PlayerNotFoundTRPCError(uid)
-            }
-
-            void db
-                .setPlayer(player)
-                .catch((error) =>
-                    console.error(
-                        `[db-error] failed to cache player ${player.uid}`,
-                        error,
-                    ),
+            void db.setPlayer(player).catch((error: unknown) => {
+                console.error(
+                    `[db-error] failed to cache player ${player.uid}`,
+                    error,
                 )
+            })
 
             return player
         })
@@ -83,8 +69,7 @@ export async function getPlayer(uid: Player["uid"]): Promise<Result<Player>> {
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let raw: any
+    let raw: unknown
     const res2 = res.clone()
     try {
         raw = await res.json()
@@ -104,12 +89,22 @@ error:`,
         }
     }
 
-    // this check works on both null and undefined values because JS
-    if (raw["time_alive_longest"] != null)
-        raw["time_alive_longest"] = Number(raw["time_alive_longest"])
+    const rawRecordResult = z.record(z.unknown()).safeParse(raw)
+    if (rawRecordResult.success) {
+        const rawRecord = rawRecordResult.data
 
-    if (raw["nicklower"] === null)
-        raw["nicklower"] = raw["nick"].toLocaleLowerCase()
+        // this check works on both null and undefined values because JS
+        if (rawRecord["time_alive_longest"] != null)
+            rawRecord["time_alive_longest"] = Number(
+                rawRecord["time_alive_longest"],
+            )
+
+        const nick = rawRecord["nick"]
+        if (rawRecord["nicklower"] === null && typeof nick === "string")
+            rawRecord["nicklower"] = nick.toLocaleLowerCase()
+
+        raw = rawRecord
+    }
 
     const parseResult = playerSchema.safeParse(raw)
     if (!parseResult.success) {

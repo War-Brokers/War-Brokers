@@ -11,7 +11,9 @@ test("does not wait forever when the upstream API stops responding", async () =>
             new Promise((_resolve, reject) => {
                 init?.signal?.addEventListener(
                     "abort",
-                    () => reject(init.signal?.reason),
+                    () => {
+                        reject(new Error("Request aborted"))
+                    },
                     { once: true },
                 )
             }),
@@ -26,9 +28,11 @@ test("does not wait forever when the upstream API stops responding", async () =>
 
         const result = await Promise.race([
             request,
-            new Promise<"timed out">((resolve) =>
-                setTimeout(() => resolve("timed out"), 100),
-            ),
+            new Promise<"timed out">((resolve) => {
+                setTimeout(() => {
+                    resolve("timed out")
+                }, 100)
+            }),
         ])
 
         expect(result).toBe("rejected")

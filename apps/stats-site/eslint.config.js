@@ -1,9 +1,10 @@
 import tsParser from "@typescript-eslint/parser"
-import wbConfig from "@warbrokers/eslint-config"
+import wbConfig, { strictTypeCheckedRules } from "@warbrokers/eslint-config"
 import { defineConfig } from "eslint/config"
 import svelte from "eslint-plugin-svelte"
 import globals from "globals"
 import svelteParser from "svelte-eslint-parser"
+import tseslint from "typescript-eslint"
 
 export default defineConfig(
     {
@@ -25,6 +26,7 @@ export default defineConfig(
     ...svelte.configs.recommended,
     {
         languageOptions: {
+            ecmaVersion: "latest",
             globals: {
                 ...globals.browser,
                 ...globals.node,
@@ -43,13 +45,18 @@ export default defineConfig(
         languageOptions: {
             parser: svelteParser,
             parserOptions: {
+                extraFileExtensions: [".svelte"],
                 parser: tsParser,
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
             },
         },
-    },
-    {
+        plugins: {
+            "@typescript-eslint": tseslint.plugin,
+        },
         rules: {
-            "import/no-unresolved": ["error", { ignore: ["\\$app/.*"] }],
+            ...strictTypeCheckedRules,
+            "no-unused-vars": "off",
             "@typescript-eslint/no-unused-vars": [
                 "error",
                 {
@@ -58,6 +65,11 @@ export default defineConfig(
                     caughtErrorsIgnorePattern: "^_",
                 },
             ],
+        },
+    },
+    {
+        rules: {
+            "import/no-unresolved": ["error", { ignore: ["\\$app/.*"] }],
 
             // todo: re-enable
             "svelte/no-navigation-without-resolve": "off",

@@ -35,9 +35,11 @@ export const UnknownTRPCError = new TRPCError({
 
 export function reason2TRPCError(reason: FailReason) {
     switch (reason) {
+        case FailReason.SchemaValidationFail:
+        case FailReason.PlayerNotFound:
+        case FailReason.WBDBConnectionFail:
         case FailReason.WBAPIConnectionFail:
-            return UnknownTRPCError
-        default:
+        case FailReason.DBMirrorConnectionFail:
             return UnknownTRPCError
     }
 }

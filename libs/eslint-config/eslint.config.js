@@ -6,13 +6,42 @@ import eslintPluginSimpleSort from "eslint-plugin-simple-import-sort"
 import globals from "globals"
 import ts from "typescript-eslint"
 
+const typeScriptFiles = ["**/*.{ts,tsx,mts,cts}"]
+
+/** @type {import("eslint").Linter.RulesRecord} */
+const requestedTypeCheckedRules = {
+    "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/no-unnecessary-condition": "error",
+    "@typescript-eslint/no-unsafe-type-assertion": "error",
+    "@typescript-eslint/restrict-template-expressions": [
+        "error",
+        { allowNumber: true },
+    ],
+    "@typescript-eslint/switch-exhaustiveness-check": [
+        "error",
+        {
+            allowDefaultCaseForExhaustiveSwitch: false,
+            considerDefaultExhaustiveForUnions: false,
+        },
+    ],
+}
+
+export const strictTypeCheckedRules = Object.assign(
+    {},
+    ...ts.configs.strictTypeChecked.map((config) => config.rules ?? {}),
+    requestedTypeCheckedRules,
+)
+
 export default defineConfig(
     {
         ignores: ["dist/", "build/", ".turbo/", "node_modules/"],
     },
     ...turboConfig,
     js.configs.recommended,
-    ...ts.configs.recommended,
+    ...ts.configs.strictTypeChecked.map((config) => ({
+        ...config,
+        files: typeScriptFiles,
+    })),
     eslintPluginImport.flatConfigs.recommended,
     {
         settings: {
@@ -35,6 +64,7 @@ export default defineConfig(
     {
         files: ["**/*.{js,ts,tsx,jsx,mjs,cjs}"],
         languageOptions: {
+            ecmaVersion: "latest",
             globals: {
                 ...globals.node,
                 ...globals.es2021,
@@ -44,6 +74,16 @@ export default defineConfig(
             "import/first": "error",
             "import/newline-after-import": "error",
             "import/no-duplicates": "error",
+        },
+    },
+    {
+        files: typeScriptFiles,
+        languageOptions: {
+            parserOptions: {
+                projectService: true,
+            },
+        },
+        rules: {
             "@typescript-eslint/consistent-type-imports": "error",
             "@typescript-eslint/no-unused-vars": [
                 "error",
@@ -53,17 +93,7 @@ export default defineConfig(
                     caughtErrorsIgnorePattern: "^_",
                 },
             ],
-        },
-    },
-    {
-        files: ["**/*.{ts,tsx,mts,cts}"],
-        languageOptions: {
-            parserOptions: {
-                projectService: true,
-            },
-        },
-        rules: {
-            "@typescript-eslint/no-floating-promises": "error",
+            ...requestedTypeCheckedRules,
         },
     },
 )

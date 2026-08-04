@@ -13,7 +13,7 @@ const getPlayerData = (uid: string | undefined) => {
     }
 }
 
-export const load = (async ({ params }) => {
+export const load = (({ params }) => {
     const a = getPlayerData(params.a)
     const b = getPlayerData(params.b)
 

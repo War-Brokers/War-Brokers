@@ -69,6 +69,9 @@ importers:
       '@warbrokers/eslint-config':
         specifier: workspace:*
         version: link:../../libs/eslint-config
+      '@warbrokers/typescript-config':
+        specifier: workspace:*
+        version: link:../../libs/typescript-config
       tsup:
         specifier: 8.5.1
         version: 8.5.1(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@1.21.6)(postcss@8.5.3)(typescript@6.0.3)(yaml@2.6.0)
@@ -117,6 +120,9 @@ importers:
       '@warbrokers/types':
         specifier: workspace:*
         version: link:../../libs/wb-types
+      '@warbrokers/typescript-config':
+        specifier: workspace:*
+        version: link:../../libs/typescript-config
       '@warbrokers/wbapi':
         specifier: workspace:*
         version: link:../wbapi
@@ -256,6 +262,9 @@ importers:
       '@warbrokers/eslint-config':
         specifier: workspace:*
         version: link:../../libs/eslint-config
+      '@warbrokers/typescript-config':
+        specifier: workspace:*
+        version: link:../../libs/typescript-config
       concurrently:
         specifier: 9.1.0
         version: 9.1.0
@@ -298,6 +307,9 @@ importers:
       '@warbrokers/eslint-config':
         specifier: workspace:*
         version: link:../../libs/eslint-config
+      '@warbrokers/typescript-config':
+        specifier: workspace:*
+        version: link:../../libs/typescript-config
       autoprefixer:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.4.49)
@@ -340,6 +352,9 @@ importers:
       '@types/eslint__js':
         specifier: 8.42.3
         version: 8.42.3
+      '@warbrokers/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
       eslint:
         specifier: 9.39.3
         version: 9.39.3(jiti@1.21.6)
@@ -385,9 +400,20 @@ importers:
       '@types/node':
         specifier: 24.13.3
         version: 24.13.3
+      '@warbrokers/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@warbrokers/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      eslint:
+        specifier: 9.39.3
+        version: 9.39.3(jiti@1.21.6)
       typescript:
         specifier: 6.0.3
         version: 6.0.3
+
+  libs/typescript-config: {}
 
   libs/wb-types:
     dependencies:
@@ -398,6 +424,9 @@ importers:
       '@warbrokers/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
+      '@warbrokers/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
       eslint:
         specifier: 9.39.3
         version: 9.39.3(jiti@1.21.6)

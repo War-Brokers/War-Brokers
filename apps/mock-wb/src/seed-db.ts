@@ -35,7 +35,7 @@ export async function seedDB() {
     await sql`CREATE INDEX IF NOT EXISTS level_index ON players USING btree (level)`
 
     const total = stats.length
-    for (let i = 0; i < total; i++) {
+    for (const [i, stat] of stats.entries()) {
         const {
             uid,
             nick,
@@ -47,7 +47,7 @@ export async function seedDB() {
             coins,
             number_of_jumps,
             steam,
-        } = stats[i]
+        } = stat
         if ((i + 1) % 100 === 0)
             console.log(
                 `seeding ${(100 * (i + 1)) / total}% complete (${i + 1} / ${total})`,

@@ -30,11 +30,12 @@
         >
     > = {}
 
-    onMount(async () => {
-        regions.map(
-            async (region) =>
-                (data[region] = await trpc.status.serverList.query({ region })),
-        )
+    onMount(() => {
+        for (const region of regions) {
+            void trpc.status.serverList.query({ region }).then((servers) => {
+                data[region] = servers
+            })
+        }
     })
 </script>
 

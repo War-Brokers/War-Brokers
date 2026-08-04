@@ -15,17 +15,24 @@ import { createContext } from "@/trpc"
 import { initDB } from "./db"
 import { isPrivate } from "./private"
 
+function requireEnv(name: string, value: string | undefined): string {
+    if (value === undefined)
+        throw new Error(`Missing required environment variable: ${name}`)
+
+    return value
+}
+
 export const env = {
     /* eslint-disable turbo/no-undeclared-env-vars */
-    WB_DB_ID: process.env.WB_DB_ID as string,
-    WB_DB_PW: process.env.WB_DB_PW as string,
-    WB_DB_BASE: process.env.WB_DB_BASE as string,
+    WB_DB_ID: requireEnv("WB_DB_ID", process.env["WB_DB_ID"]),
+    WB_DB_PW: requireEnv("WB_DB_PW", process.env["WB_DB_PW"]),
+    WB_DB_BASE: requireEnv("WB_DB_BASE", process.env["WB_DB_BASE"]),
 
-    DATABASE_URL: process.env.DATABASE_URL as string,
+    DATABASE_URL: requireEnv("DATABASE_URL", process.env["DATABASE_URL"]),
     /* eslint-enable turbo/no-undeclared-env-vars */
 }
 
-export const db = await initDB()
+export const db = initDB()
 
 // fastify
 const app = express()
@@ -96,7 +103,9 @@ app.use(
     }),
 )
 
-const server = app.listen(5000, () =>
-    console.log("====> http://127.0.0.1:5000/api-docs"),
-)
-server.on("error", (error) => console.error("[server-error]", error))
+const server = app.listen(5000, () => {
+    console.log("====> http://127.0.0.1:5000/api-docs")
+})
+server.on("error", (error) => {
+    console.error("[server-error]", error)
+})

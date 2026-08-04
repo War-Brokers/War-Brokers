@@ -17,12 +17,6 @@ export default (db: PostgresJsDatabase) => {
             .where(isNotNull(players.killsELO))
             .orderBy(desc(players.killsELO))
             .limit(limit)
-            .offset(offset) as Promise<
-            {
-                uid: string
-                nick: string
-                killsELO: number
-            }[]
-        >
+            .offset(offset)
     }) satisfies RankingFunc
 }

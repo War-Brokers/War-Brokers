@@ -2,20 +2,20 @@ import z from "zod"
 
 import type { Digit } from "./digit"
 
-const gameModeIDSchema = z.custom<`m${Digit}${Digit}`>((val) =>
-    /^m\d\d$/g.test(val as string),
+const gameModeIDSchema = z.custom<`m${Digit}${Digit}`>(
+    (val) => typeof val === "string" && /^m\d\d$/.test(val),
 )
 
 const vehicleSchema = z.custom<
     `v${Digit}${Digit}` | `v${Digit}${Digit}${Digit}`
->((val) => /^v\d\d\d?$/g.test(val as string))
+>((val) => typeof val === "string" && /^v\d\d\d?$/.test(val))
 
 const weaponIDSchema = z.custom<
     | `p` // invalid weapon code, but the API returns it from time to time
     | `p${Digit}` // invalid weapon code, but the API returns it from time to time
     | `p${Digit}${Digit}`
     | `p${Digit}${Digit}${Digit}`
->((val) => /^p\d?\d?\d?$/g.test(val as string))
+>((val) => typeof val === "string" && /^p\d?\d?\d?$/.test(val))
 
 // todo: add more stats
 export const playerSchema = z.object({

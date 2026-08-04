@@ -39,7 +39,18 @@ test("rank popover does not shift the mobile layout", async ({ page }) => {
 
     expect(layouts).toHaveLength(1)
 
-    const layout = JSON.parse(layouts[0] ?? "{}")
+    const layout: unknown = JSON.parse(layouts[0] ?? "{}")
+
+    if (
+        typeof layout !== "object" ||
+        layout === null ||
+        !("tooltipX" in layout) ||
+        typeof layout.tooltipX !== "number" ||
+        !("tooltipRight" in layout) ||
+        typeof layout.tooltipRight !== "number"
+    ) {
+        throw new Error("Expected numeric tooltip bounds")
+    }
 
     expect(layout).toMatchObject({
         documentWidth: 392,

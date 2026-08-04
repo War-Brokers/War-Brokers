@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { page } from "$app/stores"
     import Title from "$lib/components/title.svelte"
 </script>

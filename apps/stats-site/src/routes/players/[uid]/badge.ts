@@ -49,6 +49,9 @@ export const badgedPlayers: { [key in string]: badgeName[] } = {
 }
 
 export function getPlayerBadges(playerUID: string): Badge[] {
-    if (!(playerUID in badgedPlayers)) return []
-    return badges.filter(({ id }) => badgedPlayers[playerUID].includes(id))
+    const playerBadges = badgedPlayers[playerUID]
+
+    if (!playerBadges) return []
+
+    return badges.filter(({ id }) => playerBadges.includes(id))
 }

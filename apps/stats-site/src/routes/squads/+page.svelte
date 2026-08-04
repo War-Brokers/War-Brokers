@@ -9,7 +9,12 @@
     export let data: PageData
     const { squads } = data
 
-    let searchTerm = writable("")
+    const searchTerm = writable("")
+    const handleSearchInput = debounce((event: Event) => {
+        if (event.target instanceof HTMLInputElement) {
+            searchTerm.set(event.target.value)
+        }
+    }, 100)
 </script>
 
 <Title title="Squads" />
@@ -29,7 +34,7 @@
         aria-required="false"
         class="rounded-full border-none bg-gray-600 px-6 text-lg leading-7 text-gray-200 placeholder:text-gray-400 focus:ring-0"
         placeholder="Squad Name"
-        on:input={debounce((e) => searchTerm.set(e.target.value || ""), 100)}
+        on:input={handleSearchInput}
     />
 </form>
 

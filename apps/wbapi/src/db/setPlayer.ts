@@ -15,8 +15,8 @@ export default (db: PostgresJsDatabase) => {
             xp: player.xp,
             squad: player.squad,
             coins: player.coins,
-            steam: player.steam,
             number_of_jumps: player.number_of_jumps,
+            ...(player.steam === undefined ? {} : { steam: player.steam }),
         }
 
         return await db

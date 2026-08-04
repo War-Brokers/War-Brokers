@@ -21,7 +21,7 @@ const playerListSchema = z.array(
     }),
 )
 
-const playerListRaw = await (
+const playerListRaw: unknown = await (
     await fetchUpstream(`${env.WB_DB_BASE}/get_player_list.php`, {
         headers: {
             Authorization:
@@ -35,12 +35,12 @@ const playerListRaw = await (
 const playerListResult = playerListSchema.safeParse(playerListRaw)
 
 if (!playerListResult.success) {
-    console.error(`Failed to parse player list.
-raw:
-${playerListRaw}
-
-error:
-${playerListResult.error}`)
+    console.error(
+        "Failed to parse player list.\nraw:",
+        playerListRaw,
+        "\n\nerror:",
+        playerListResult.error,
+    )
     process.exit(1)
 }
 

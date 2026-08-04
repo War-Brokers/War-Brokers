@@ -19,7 +19,7 @@ interface Props {
 export default function Entry(props: Props) {
     return (
         <section
-            className={`entry ml-[6.56rem] mr-4 p-4 lg:ml-4 ${props.className}`}
+            className={`entry ml-[6.56rem] mr-4 p-4 lg:ml-4 ${props.className ?? ""}`}
         >
             <div className="icon absolute flex aspect-square w-14 items-center justify-center rounded-full border-[3px] border-solid border-white bg-gray-900">
                 {icon(props.category)}
@@ -71,4 +71,6 @@ function media(media: string) {
             </div>
         )
     }
+
+    return null
 }

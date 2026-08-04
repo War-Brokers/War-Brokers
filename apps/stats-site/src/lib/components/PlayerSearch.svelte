@@ -1,9 +1,6 @@
 <script lang="ts">
-    import type { TRPCClientError } from "@trpc/client"
-    import type { AppRouter } from "@warbrokers/wbapi/build/src/router"
     import debounce from "lodash/debounce"
     import { Pulse } from "svelte-loading-spinners"
-    import type { ZodIssue } from "zod"
 
     import trpc from "$lib/trpc"
 
@@ -19,11 +16,32 @@
     export let label = "Player search"
     export let placeholder = "Player Search"
 
+    function getIssueCode(error: unknown): string | undefined {
+        if (!(error instanceof Error)) return undefined
+
+        try {
+            const issues: unknown = JSON.parse(error.message)
+            if (!Array.isArray(issues)) return undefined
+
+            const issue: unknown = issues[0]
+            if (
+                typeof issue !== "object" ||
+                issue === null ||
+                !("code" in issue) ||
+                typeof issue.code !== "string"
+            ) {
+                return undefined
+            }
+
+            return issue.code
+        } catch {
+            return undefined
+        }
+    }
+
     export let handleSearchInput = debounce(async (e: Event) => {
         searching = true
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const text: string = e.target?.value
+        const text = e.target instanceof HTMLInputElement ? e.target.value : ""
 
         if (!text) {
             searchResult = []
@@ -36,17 +54,9 @@
             searchResult = await trpc.players.searchByName.query({
                 query: text,
             })
-        } catch (_e) {
-            let e = (
-                JSON.parse(
-                    (_e as TRPCClientError<AppRouter>).message,
-                )[0] as ZodIssue
-            ).code
-
-            switch (e) {
-                case "too_small":
-                    searchError = "nickname must be at least 2 letters long"
-                    break
+        } catch (error: unknown) {
+            if (getIssueCode(error) === "too_small") {
+                searchError = "nickname must be at least 2 letters long"
             }
 
             searching = false
@@ -65,7 +75,7 @@
         class="flex h-12 w-full min-w-0 max-w-[36rem] items-center justify-center rounded-full pr-3 sm:pr-7 dark:bg-gray-600"
     >
         <div
-            class={`${!searching && "opacity-0"} ml-2 flex h-5 w-5 shrink-0 items-center justify-center sm:ml-3 sm:h-7 sm:w-7`}
+            class={`${searching ? "" : "opacity-0"} ml-2 flex h-5 w-5 shrink-0 items-center justify-center sm:ml-3 sm:h-7 sm:w-7`}
         >
             <Pulse size="28" color="#d1d5db" unit="px" duration="1s" />
         </div>
@@ -81,17 +91,21 @@
                 class="my-auto h-full w-full min-w-0 border-none bg-transparent text-lg leading-7 focus:ring-0 dark:text-gray-200"
                 {placeholder}
                 on:input={handleSearchInput}
-                on:focus={/**/ async () =>
-                    setTimeout(() => (opened = true), 200)}
-                on:blur={/* */ async () =>
-                    setTimeout(() => (opened = false), 200)}
+                on:focus={() => {
+                    setTimeout(() => {
+                        opened = true
+                    }, 200)
+                }}
+                on:blur={() => {
+                    setTimeout(() => {
+                        opened = false
+                    }, 200)
+                }}
             />
 
             <div
                 id="{inputId}-results"
-                class={`${
-                    !(opened && searchResult.length > 0) && "hidden"
-                } absolute top-20 h-96 max-h-96 w-full overflow-auto rounded-lg py-4 dark:bg-gray-600`}
+                class={`${opened && searchResult.length > 0 ? "" : "hidden"} absolute top-20 h-96 max-h-96 w-full overflow-auto rounded-lg py-4 dark:bg-gray-600`}
             >
                 <div class="relative h-full overflow-y-scroll">
                     {#each searchResult as { nick, squad, uid } (uid)}

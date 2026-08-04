@@ -1,49 +1,72 @@
 import { parse } from "csv-parse/sync"
 import { stringify } from "csv-stringify/sync"
 
+type CsvRow = Record<string, string>
+type UnknownRecord = Record<string, unknown>
+
+function isRecord(value: unknown): value is UnknownRecord {
+    return typeof value === "object" && value !== null
+}
+
+function isCsvRows(value: unknown): value is CsvRow[] {
+    return (
+        Array.isArray(value) &&
+        value.every(
+            (row: unknown) =>
+                isRecord(row) &&
+                !Array.isArray(row) &&
+                Object.values(row).every((field) => typeof field === "string"),
+        )
+    )
+}
+
 /**
  * https://stackoverflow.com/a/53739792
  */
-export function flattenObject(ob: any): any {
-    const toReturn: any = {}
+export function flattenObject(ob: UnknownRecord): UnknownRecord {
+    const toReturn: UnknownRecord = {}
 
-    for (const i in ob) {
-        if (!Object.prototype.hasOwnProperty.call(ob, i)) continue
-
-        if (typeof ob[i] == "object" && ob[i] !== null) {
-            const flatObject = flattenObject(ob[i])
-            for (const x in flatObject) {
-                if (!Object.prototype.hasOwnProperty.call(flatObject, x))
-                    continue
-
-                toReturn[i + "." + x] = flatObject[x]
+    for (const [key, value] of Object.entries(ob)) {
+        if (isRecord(value)) {
+            const flatObject = flattenObject(value)
+            for (const [nestedKey, nestedValue] of Object.entries(flatObject)) {
+                toReturn[`${key}.${nestedKey}`] = nestedValue
             }
         } else {
-            toReturn[i] = ob[i]
+            toReturn[key] = value
         }
     }
 
     return toReturn
 }
 
-export function parseCsv(csvString: string) {
-    return parse(csvString, {
+export function parseCsv(csvString: string): CsvRow[] {
+    const rows: unknown = parse(csvString, {
         columns: true,
         skip_empty_lines: true,
     })
+
+    if (!isCsvRows(rows)) {
+        throw new TypeError("Expected CSV records with string values")
+    }
+
+    return rows
 }
 
-function isEmpty(obj: object) {
+function isEmpty(value: unknown) {
     // this function is only meant to be run on objects
-    if (typeof obj !== "object") return false
+    if (typeof value !== "object") return false
+    if (value === null) return true
 
-    for (const prop in obj) if (Object.hasOwn(obj, prop)) return false
-
-    return true
+    return Object.keys(value).length === 0
 }
 
-export function pick(obj: any, attr: string[], deleteEmpty: boolean = true) {
-    const newObj: any = {}
+export function pick<T extends object, Key extends keyof T>(
+    obj: T,
+    attr: readonly Key[],
+    deleteEmpty: boolean = true,
+): Partial<Pick<T, Key>> {
+    const newObj: Partial<Pick<T, Key>> = {}
 
     for (const key of attr)
         if (Object.prototype.hasOwnProperty.call(obj, key))
@@ -52,7 +75,7 @@ export function pick(obj: any, attr: string[], deleteEmpty: boolean = true) {
     return newObj
 }
 
-export function csvStringify(obj: any[]) {
+export function csvStringify(obj: readonly UnknownRecord[]): string {
     return stringify(
         obj.map((x) => flattenObject(x)),
         {
