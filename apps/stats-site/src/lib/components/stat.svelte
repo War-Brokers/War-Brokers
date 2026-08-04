@@ -5,6 +5,7 @@
 
     import A from "$lib/components/A.svelte"
     import { percentile2rank } from "$lib/rank"
+    import { cn } from "$lib/utils"
 
     export let title: string
     export let data: string | number
@@ -81,14 +82,13 @@
 </script>
 
 <div
-    class="flex flex-col"
-    class:min-w-24={!compact}
-    class:min-w-0={compact}
-    class:w-full={compact}
-    class:items-center={compact}
+    class={cn(
+        "flex flex-col",
+        compact ? "w-full min-w-0 items-center" : "min-w-24",
+    )}
 >
     {#if title || percentile}
-        <div class="flex w-full" class:justify-center={compact}>
+        <div class={cn("flex w-full", compact && "justify-center")}>
             {#if title}
                 <span class="whitespace-nowrap font-bold dark:text-gray-400">
                     {title}
@@ -184,9 +184,9 @@
         </div>
     {/if}
     <span
-        class="font-black {compact
-            ? 'w-full break-words sm:text-2xl'
-            : 'text-2xl'}"
-        class:text-center={compact}>{data}</span
+        class={cn(
+            "font-black",
+            compact ? "w-full break-words text-center sm:text-2xl" : "text-2xl",
+        )}>{data}</span
     >
 </div>

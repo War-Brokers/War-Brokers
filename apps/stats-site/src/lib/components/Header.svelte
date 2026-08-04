@@ -1,6 +1,8 @@
 <script lang="ts">
     import { Hamburger } from "svelte-hamburgers"
 
+    import { cn } from "$lib/utils"
+
     let open = false
     const links = [
         { name: "Home", path: "/" },
@@ -40,7 +42,10 @@
     </div>
 
     <div
-        class={`${open ? "h-[192px]" : "h-0"} flex flex-col overflow-hidden transition-[height] ease-linear md:hidden dark:bg-gray-700`}
+        class={cn(
+            "flex flex-col overflow-hidden transition-[height] ease-linear md:hidden dark:bg-gray-700",
+            open ? "h-[192px]" : "h-0",
+        )}
     >
         {#each links as { name, path } (path)}
             <a href={path} class="min-h-[48px] hover:text-orange-500">{name}</a>

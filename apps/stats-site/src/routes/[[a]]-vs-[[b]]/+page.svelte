@@ -7,6 +7,7 @@
     import PlayerSearch from "$lib/components/PlayerSearch.svelte"
     import Stat from "$lib/components/stat.svelte"
     import Title from "$lib/components/title.svelte"
+    import { cn } from "$lib/utils"
 
     import type { PageData } from "./$types"
 
@@ -146,10 +147,12 @@
             {#each sides as side (side)}
                 {@const player = side === "a" ? a : b}
                 <div
-                    class="flex min-h-12 min-w-0 items-center gap-2 {side ===
-                    'a'
-                        ? 'justify-end text-end'
-                        : 'justify-start text-start'}"
+                    class={cn(
+                        "flex min-h-12 min-w-0 items-center gap-2",
+                        side === "a"
+                            ? "justify-end text-end"
+                            : "justify-start text-start",
+                    )}
                 >
                     {#if player}
                         <A href="/players/{player.uid}">
@@ -166,10 +169,10 @@
                             type="button"
                             size="xs"
                             color="none"
-                            class="shrink-0 rounded-none p-2.5 text-gray-400 transition-[color,transform] duration-150 focus-within:ring-0 hover:text-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 active:scale-[0.96] dark:hover:text-orange-400 {side ===
-                            'a'
-                                ? 'order-first'
-                                : ''}"
+                            class={cn(
+                                "shrink-0 rounded-none p-2.5 text-gray-400 transition-[color,transform] duration-150 focus-within:ring-0 hover:text-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 active:scale-[0.96] dark:hover:text-orange-400",
+                                side === "a" && "order-first",
+                            )}
                             aria-label={`Edit player ${side.toUpperCase()}`}
                             on:click={() => {
                                 clearPlayer(side, a?.uid, b?.uid)
@@ -224,12 +227,15 @@
                                     ? stat.aWinChance
                                     : stat.bWinChance}
                             <div
-                                class="{side === 'a'
-                                    ? 'col-start-1 sm:row-start-1'
-                                    : 'col-start-2 sm:col-start-3 sm:row-start-1'} row-start-2 flex min-w-0 flex-col items-center justify-center rounded-xl px-1 py-3 text-center sm:px-2 {leader ===
-                                side
-                                    ? 'bg-orange-50 text-orange-800 ring-1 ring-inset ring-orange-200 dark:bg-orange-950/30 dark:text-orange-200 dark:ring-orange-800'
-                                    : 'text-gray-900 dark:text-gray-100'}"
+                                class={cn(
+                                    "row-start-2 flex min-w-0 flex-col items-center justify-center rounded-xl px-1 py-3 text-center sm:px-2",
+                                    side === "a"
+                                        ? "col-start-1 sm:row-start-1"
+                                        : "col-start-2 sm:col-start-3 sm:row-start-1",
+                                    leader === side
+                                        ? "bg-orange-50 text-orange-800 ring-1 ring-inset ring-orange-200 dark:bg-orange-950/30 dark:text-orange-200 dark:ring-orange-800"
+                                        : "text-gray-900 dark:text-gray-100",
+                                )}
                             >
                                 <Stat
                                     compact
