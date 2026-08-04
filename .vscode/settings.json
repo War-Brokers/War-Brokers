@@ -2,6 +2,7 @@
     // editor
     "editor.formatOnSave": true,
     "cSpell.import": ["${workspaceFolder}/cspell.yaml"],
+    "editor.rulers": [80],
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "js/ts.tsdk.path": "node_modules/typescript/lib",
     "editor.codeActionsOnSave": {
