@@ -11,6 +11,73 @@
     export let _id: string | undefined = undefined
     export let percentile: Promise<number> | undefined = undefined
     export let compact = false
+
+    const chart = {
+        baseline: 68,
+        height: 50,
+        left: 8,
+        width: 224,
+        zRange: 3.5,
+    }
+
+    function percentileToZ(percentile: number): number {
+        const probability = Math.max(0.0001, Math.min(0.9999, percentile / 100))
+        const value = probability * 2 - 1
+        const coefficient = 0.147
+        const logarithm = Math.log(1 - value * value)
+        const first = 2 / (Math.PI * coefficient) + logarithm / 2
+
+        return (
+            Math.sign(value) *
+            Math.SQRT2 *
+            Math.sqrt(
+                Math.sqrt(first * first - logarithm / coefficient) - first,
+            )
+        )
+    }
+
+    function bellCurve(percentile: number): {
+        areaPath: string
+        curvePath: string
+        markerX: number
+        markerY: number
+    } {
+        const point = (z: number): [number, number] => [
+            chart.left +
+                ((z + chart.zRange) / (chart.zRange * 2)) * chart.width,
+            chart.baseline - Math.exp(-(z * z) / 2) * chart.height,
+        ]
+        const z = Math.max(
+            -chart.zRange,
+            Math.min(chart.zRange, percentileToZ(percentile)),
+        )
+        const steps = 80
+        const curvePoints = Array.from({ length: steps + 1 }, (_, index) =>
+            point(-chart.zRange + (index / steps) * chart.zRange * 2),
+        )
+        const areaSteps = Math.max(
+            1,
+            Math.ceil(((z + chart.zRange) / (chart.zRange * 2)) * steps),
+        )
+        const areaPoints = Array.from({ length: areaSteps + 1 }, (_, index) =>
+            point(-chart.zRange + (index / areaSteps) * (z + chart.zRange)),
+        )
+        const [markerX, markerY] = point(z)
+        const pointsToPath = (points: [number, number][]) =>
+            points
+                .map(
+                    ([x, y], index) =>
+                        `${index === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`,
+                )
+                .join(" ")
+
+        return {
+            areaPath: `M${chart.left},${chart.baseline} ${areaPoints.map(([x, y]) => `L${x.toFixed(2)},${y.toFixed(2)}`).join(" ")} L${markerX.toFixed(2)},${chart.baseline} Z`,
+            curvePath: pointsToPath(curvePoints),
+            markerX,
+            markerY,
+        }
+    }
 </script>
 
 <div
@@ -43,7 +110,7 @@
                     </div>
                     <Popover
                         triggeredBy="#{_id}"
-                        class="w-72 max-w-[calc(100vw-2rem)] space-y-2 p-3 text-sm font-light dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400"
+                        class="w-72 max-w-[calc(100vw-2rem)] space-y-3 p-3 text-sm font-light dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400"
                         {...{ middlewares: [flip(), shift({ padding: 16 })] }}
                         placement="top-start"
                     >
@@ -59,6 +126,47 @@
                                 class="aspect-square w-16 text-gray-200"
                             />
                         </div>
+                        {@const curve = bellCurve(percentile)}
+                        <svg
+                            class="h-24 w-full overflow-visible"
+                            viewBox="0 0 240 88"
+                            role="img"
+                        >
+                            <title>
+                                Bell curve showing this player at the
+                                {percentile.toFixed(3)} percentile
+                            </title>
+                            <path
+                                d={`${curve.curvePath} L${chart.left + chart.width},${chart.baseline} L${chart.left},${chart.baseline} Z`}
+                                class="fill-gray-100 dark:fill-gray-800"
+                            />
+                            <path
+                                d={curve.areaPath}
+                                class="fill-primary-200 dark:fill-primary-900"
+                            />
+                            <path
+                                d={curve.curvePath}
+                                class="fill-none stroke-gray-500 dark:stroke-gray-400"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+                            <line
+                                x1={curve.markerX}
+                                x2={curve.markerX}
+                                y1="8"
+                                y2={chart.baseline}
+                                class="stroke-primary-700 dark:stroke-primary-400"
+                                stroke-width="2"
+                                stroke-dasharray="3 3"
+                            />
+                            <circle
+                                cx={curve.markerX}
+                                cy={curve.markerY}
+                                r="4"
+                                class="fill-primary-700 dark:fill-primary-400 stroke-white dark:stroke-gray-900"
+                                stroke-width="2"
+                            />
+                        </svg>
                         <h3 class="font-medium text-gray-900 dark:text-white">
                             better than
                             <span class="font-black">
