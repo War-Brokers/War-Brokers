@@ -17,6 +17,8 @@ words:
     - deathmatch
     - developomp
     - dompurify
+    - esbuild
+    - esrap
     - Español
     - etags
     - firelink
@@ -67,6 +69,7 @@ words:
     - REMAGEN
     - respawn
     - rharkor
+    - rollup
     - royale
     - rxdi
     - softprops

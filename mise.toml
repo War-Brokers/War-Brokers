@@ -1,7 +1,7 @@
 [tools]
 # Sync with package.json.
-node = "24.18.1"
-pnpm = "9.14.4"
+node = "26.6.0"
+pnpm = "11.20.0"
 
 [env]
 # PostgreSQL needs its catalog data and extension libraries at runtime.

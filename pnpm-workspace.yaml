@@ -1,3 +1,21 @@
 packages:
     - "apps/*"
     - "libs/*"
+
+minimumReleaseAge: 10080 # 7 days
+
+overrides:
+    esrap: 1.2.3
+    glob: 10.5.0
+    rollup: 4.34.9
+    zod-to-json-schema: 3.23.3
+
+allowBuilds:
+    "@parcel/watcher@2.6.0": true
+    "@scarf/scarf@1.4.0": false
+    "@swc/core@1.9.3": true
+    "esbuild@0.21.5": true
+    "esbuild@0.27.0": true
+    "esbuild@0.27.7": true
+    "sharp@0.34.5": true
+    "unrs-resolver@1.12.2": true
