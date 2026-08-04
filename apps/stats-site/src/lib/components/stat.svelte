@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { flip, shift } from "@floating-ui/dom"
     import { Popover } from "flowbite-svelte"
     import QuestionMarkIcon from "flowbite-svelte-icons/QuestionCircleSolid.svelte"
 
@@ -42,7 +43,8 @@
                     </div>
                     <Popover
                         triggeredBy="#{_id}"
-                        class="space-y-2 p-3 text-sm font-light dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400"
+                        class="w-72 max-w-[calc(100vw-2rem)] space-y-2 p-3 text-sm font-light dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400"
+                        {...{ middlewares: [flip(), shift({ padding: 16 })] }}
                         placement="top-start"
                     >
                         <div class="flex flex-col items-center justify-center">
