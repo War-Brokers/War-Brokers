@@ -4,16 +4,22 @@ const suffix = " - War Brokers Stats"
 
 test("should have proper title", async ({ page }) => {
     await page.goto("/")
-    expect(await page.title()).toEqual("Home" + suffix)
+    await expect(page).toHaveTitle("Home" + suffix)
 
     await page.goto("/players/5d2ead35d142affb05757778")
-    expect(await page.title()).toEqual("[LP] POMP" + suffix)
+    await expect(page).toHaveTitle("[LP] POMP" + suffix)
 
     // todo: add squad page title
 
+    await page.goto("/-vs-")
+    await expect(page).toHaveTitle("? vs ?" + suffix)
+
+    await page.goto("/5d2ead35d142affb05757778-vs-")
+    await expect(page).toHaveTitle("[LP] POMP vs ?" + suffix)
+
     await page.goto("/404")
-    expect(await page.title()).toEqual("404 Not Found" + suffix)
+    await expect(page).toHaveTitle("404 Not Found" + suffix)
 
     await page.goto("/path/that/does/not/exist")
-    expect(await page.title()).toEqual("404 Not Found" + suffix)
+    await expect(page).toHaveTitle("404 Not Found" + suffix)
 })

@@ -20,12 +20,20 @@
 
 <Title title="{player.squad && `[${player.squad}] `}{player.nick}" />
 
-<h1 class="mx-auto mb-10 text-4xl font-black">
-    {#if player.squad}
-        <A href="/squads/{player.squad}">[{player.squad}]</A>
-    {/if}
-    {player.nick}
-</h1>
+<div class="mb-10 flex w-full flex-col items-center justify-center">
+    <h1 class="mx-auto mb-4 text-4xl font-black">
+        {#if player.squad}
+            <A href="/squads/{player.squad}">[{player.squad}]</A>
+        {/if}
+        {player.nick}
+    </h1>
+    <A
+        href="/{player.uid}-vs-"
+        class="text-xs font-black uppercase tracking-wider"
+    >
+        vs
+    </A>
+</div>
 
 <div class="mb-5 flex w-24">
     <span class="whitespace-nowrap font-bold dark:text-gray-400">

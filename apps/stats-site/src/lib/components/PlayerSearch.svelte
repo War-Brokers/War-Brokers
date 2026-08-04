@@ -14,6 +14,11 @@
     > = []
     let searchError = ""
 
+    export let resultHref = (uid: string) => `/players/${uid}`
+    export let inputId = "player-search"
+    export let label = "Player search"
+    export let placeholder = "Player Search"
+
     export let handleSearchInput = debounce(async (e: Event) => {
         searching = true
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -53,27 +58,28 @@
     }, 300)
 </script>
 
-<div class="flex w-full flex-col items-center">
+<div class="flex w-full flex-col items-center text-start font-normal">
     <form
         on:submit|preventDefault={() => {}}
         novalidate={true}
-        class="flex h-12 w-full min-w-0 max-w-[36rem] items-center justify-center rounded-full pr-7 dark:bg-gray-600"
+        class="flex h-12 w-full min-w-0 max-w-[36rem] items-center justify-center rounded-full pr-3 sm:pr-7 dark:bg-gray-600"
     >
         <div
-            class={`${!searching && "opacity-0"} ml-3 flex h-7 w-7 items-center justify-center`}
+            class={`${!searching && "opacity-0"} ml-2 flex h-5 w-5 shrink-0 items-center justify-center sm:ml-3 sm:h-7 sm:w-7`}
         >
             <Pulse size="28" color="#d1d5db" unit="px" duration="1s" />
         </div>
-        <div class="relative flex w-full flex-col">
+        <div class="relative flex w-full min-w-0 flex-col">
             <input
                 required
                 type="search"
-                id="player-search"
+                id={inputId}
                 autocomplete="off"
                 maxlength="20"
                 aria-required="false"
-                class="my-auto h-full border-none bg-transparent text-lg leading-7 focus:ring-0 dark:text-gray-200"
-                placeholder="Player Search"
+                aria-label={label}
+                class="my-auto h-full w-full min-w-0 border-none bg-transparent text-lg leading-7 focus:ring-0 dark:text-gray-200"
+                {placeholder}
                 on:input={handleSearchInput}
                 on:focus={/**/ async () =>
                     setTimeout(() => (opened = true), 200)}
@@ -82,7 +88,7 @@
             />
 
             <div
-                id="search-results"
+                id="{inputId}-results"
                 class={`${
                     !(opened && searchResult.length > 0) && "hidden"
                 } absolute top-20 h-96 max-h-96 w-full overflow-auto rounded-lg py-4 dark:bg-gray-600`}
@@ -90,18 +96,16 @@
                 <div class="relative h-full overflow-y-scroll">
                     {#each searchResult as { nick, squad, uid } (uid)}
                         <a
-                            href="/players/{uid}"
+                            href={resultHref(uid)}
                             class="flex w-full flex-col p-2 hover:dark:bg-gray-700"
                         >
                             <b class="text-lg">
                                 {#if squad}
-                                    <span class="text-orange-500"
-                                        >[{squad}]</span
-                                    >
+                                    <span class="text-gray-400">[{squad}]</span>
                                 {/if}
                                 {nick}
                             </b>
-                            <p class="text-md dark:text-gray-400">{uid}</p>
+                            <p class="text-base dark:text-gray-400">{uid}</p>
                         </a>
                     {/each}
                 </div>
@@ -109,7 +113,7 @@
         </div>
     </form>
     <p
-        class={`${searchError === "" ? "invisible" : "visible"} max-w-[36rem] text-red-500`}
+        class={`${searchError === "" ? "invisible" : "visible"} max-w-[36rem] text-base text-red-500`}
     >
         {searchError || "invisible string to prevent layout shift"}
     </p>
