@@ -91,6 +91,8 @@ app.use(
         router: appRouter,
         createContext,
         onError: logRequestError,
+        maxBodySize: undefined,
+        responseMeta: undefined,
     }),
 )
 

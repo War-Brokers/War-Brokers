@@ -11,6 +11,7 @@
     },
     "devDependencies": {
         "@eslint/js": "10.0.0",
+        "@types/eslint__js": "8.42.3",
         "eslint": "9.39.3",
         "eslint-config-prettier": "10.1.8",
         "eslint-config-turbo": "2.8.13",
@@ -21,7 +22,7 @@
         "eslint-plugin-simple-import-sort": "12.1.1",
         "eslint-plugin-turbo": "2.8.13",
         "globals": "17.4.0",
-        "typescript": "5.8.3",
-        "typescript-eslint": "8.56.1"
+        "typescript": "6.0.3",
+        "typescript-eslint": "8.66.0"
     }
 }

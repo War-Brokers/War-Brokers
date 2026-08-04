@@ -9,15 +9,15 @@
         "skipLibCheck": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
+        "types": ["node", "jest"],
 
         // node version related
-        "moduleResolution": "Node",
+        "moduleResolution": "bundler",
         "module": "es2022",
         "lib": ["ES2022", "DOM"], // trpc needs the DOM lib
         "target": "ES2022",
 
         // path related
-        "baseUrl": ".",
         "paths": {
             "@/*": ["./src/*"]
         }

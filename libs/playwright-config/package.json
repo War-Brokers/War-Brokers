@@ -5,11 +5,12 @@
     "private": true,
     "main": "index.ts",
     "scripts": {
-        "typecheck": "tsc --noEmit --skipLibCheck --module NodeNext --moduleResolution NodeNext --target ES2022 index.ts",
+        "typecheck": "tsc --noEmit --skipLibCheck --module NodeNext --moduleResolution NodeNext --target ES2022 --types node index.ts",
         "clean": "rm -rf .turbo node_modules"
     },
     "devDependencies": {
         "@playwright/test": "1.57.0",
-        "typescript": "5.8.3"
+        "@types/node": "24.13.3",
+        "typescript": "6.0.3"
     }
 }

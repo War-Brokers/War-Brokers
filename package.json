@@ -13,13 +13,13 @@
         "clean": "turbo run clean --parallel && rm -rf .turbo node_modules"
     },
     "devDependencies": {
-        "@types/node": "22.10.1",
+        "@types/node": "24.13.3",
         "eslint": "9.39.3",
         "prettier": "3.5.3",
         "prettier-plugin-svelte": "3.3.3",
         "prettier-plugin-tailwindcss": "0.6.11",
         "turbo": "2.10.8",
-        "typescript": "5.8.3"
+        "typescript": "6.0.3"
     },
     "pnpm": {
         "overrides": {
