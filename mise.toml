@@ -7,9 +7,6 @@ pnpm = "9.14.4"
 # PostgreSQL needs its catalog data and extension libraries at runtime.
 MISE_NIX_LINK_PATHS = "bin,sbin,lib,share/postgresql,share/man,share/info,share/doc,share/bash-completion,share/zsh,share/fish"
 
-[plugins]
-nix = "https://github.com/jbadeau/mise-nix"
-
 [tasks.install]
 description = "Install node dependencies"
 run = "mise -E dev exec -- pnpm install --frozen-lockfile"
