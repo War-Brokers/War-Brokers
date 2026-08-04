@@ -38,7 +38,7 @@
             case "as-is":
                 return value.toString()
             case "integer":
-                return Math.round(value).toString()
+                return value.toLocaleString("en-US")
             case "decimal":
                 return value.toFixed(2)
         }
