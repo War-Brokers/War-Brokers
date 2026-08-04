@@ -21,6 +21,8 @@ export function createConfig(config: Config): PlaywrightTestConfig {
 
         fullyParallel: true,
 
+        retries: process.env.CI ? 2 : 0,
+
         use: {
             // Use baseURL so to make navigation relative.
             // More information: https://playwright.dev/docs/api/class-testoptions#test-options-base-url
