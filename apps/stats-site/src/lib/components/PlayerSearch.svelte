@@ -7,9 +7,7 @@
 
     let opened = false
     let searching = false
-    let searchResult: Awaited<
-        ReturnType<typeof trpc.players.searchByName.query>
-    > = []
+    let searchResult: Awaited<ReturnType<typeof trpc.players.searchByName.query>> = []
     let searchError = ""
 
     export let resultHref = (uid: string) => `/players/${uid}`
@@ -73,7 +71,7 @@
     <form
         on:submit|preventDefault={() => {}}
         novalidate={true}
-        class="flex h-12 w-full min-w-0 max-w-[36rem] items-center justify-center rounded-full pr-3 sm:pr-7 dark:bg-gray-600"
+        class="flex h-12 w-full min-w-0 max-w-[36rem] items-center justify-center rounded-full pr-3 dark:bg-gray-600 sm:pr-7"
     >
         <div
             class={cn(

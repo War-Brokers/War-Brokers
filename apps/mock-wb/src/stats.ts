@@ -676,9 +676,7 @@ export const stats: Player[] = [
                 level: xp2lvl(xp),
                 xp,
                 coins:
-                    faker.helpers.maybe(() =>
-                        faker.number.int({ min: 0, max: 100_000 }),
-                    ) || null,
+                    faker.helpers.maybe(() => faker.number.int({ min: 0, max: 100_000 })) || null,
                 squad:
                     faker.helpers.maybe(() =>
                         faker.helpers.arrayElement([
@@ -718,13 +716,9 @@ export const stats: Player[] = [
                         })),
                     })) || null,
                 number_of_jumps:
-                    faker.helpers.maybe(() =>
-                        faker.number.int({ min: 1, max: 10_000 }),
-                    ) || null,
+                    faker.helpers.maybe(() => faker.number.int({ min: 1, max: 10_000 })) || null,
                 scuds_launched:
-                    faker.helpers.maybe(() =>
-                        faker.number.int({ min: 1, max: 10_000 }),
-                    ) || null,
+                    faker.helpers.maybe(() => faker.number.int({ min: 1, max: 10_000 })) || null,
                 zombie_kills: faker.number.int(1000),
                 zombie_deaths: faker.number.int(100),
                 zombie_wins: faker.number.int(100),
@@ -965,13 +959,9 @@ export const stats: Player[] = [
                     })) || null,
                 banned: false,
                 steam: faker.helpers.arrayElement([true, false, null]),
-                time: Math.floor(
-                    faker.date.past({ years: 1 }).getTime() / 1000,
-                ),
+                time: Math.floor(faker.date.past({ years: 1 }).getTime() / 1000),
                 joinTime: Math.floor(
-                    faker.helpers.maybe(
-                        () => faker.date.past({ years: 5 }).getTime() / 1000,
-                    ) || 0,
+                    faker.helpers.maybe(() => faker.date.past({ years: 5 }).getTime() / 1000) || 0,
                 ),
             } satisfies Player
         },
@@ -980,5 +970,4 @@ export const stats: Player[] = [
 ]
 
 // todo: incomplete
-export const dailyStats: (Pick<Player, "uid" | "nick" | "nicklower"> &
-    Partial<Player>)[] = []
+export const dailyStats: (Pick<Player, "uid" | "nick" | "nicklower"> & Partial<Player>)[] = []

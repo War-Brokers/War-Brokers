@@ -37,12 +37,7 @@
             {/each}
         {:then killsEloRanking}
             {#each killsEloRanking as { uid, nick, killsELO }, i (uid)}
-                <Row
-                    rank={i + offset + 1}
-                    {nick}
-                    {uid}
-                    stat={killsELO.toFixed(2)}
-                />
+                <Row rank={i + offset + 1} {nick} {uid} stat={killsELO.toFixed(2)} />
             {/each}
         {/await}
     </tbody>

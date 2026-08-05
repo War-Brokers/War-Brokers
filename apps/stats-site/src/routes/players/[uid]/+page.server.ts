@@ -19,9 +19,7 @@ export const load = (async ({ params }) => {
         xpPercentile: trpc.players.percentile.xp.query({ uid }),
         killsEloPercentile: trpc.players.percentile.killsElo.query({ uid }),
         gamesEloPercentile: trpc.players.percentile.gamesElo.query({ uid }),
-        playingSince: dayjs(MongoDBObjectId2Date(player.uid)).format(
-            "MMMM D, YYYY",
-        ),
+        playingSince: dayjs(MongoDBObjectId2Date(player.uid)).format("MMMM D, YYYY"),
     }
 }) satisfies PageServerLoad
 

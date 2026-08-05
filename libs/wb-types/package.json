@@ -17,7 +17,6 @@
         "@warbrokers/eslint-config": "workspace:*",
         "@warbrokers/typescript-config": "workspace:*",
         "eslint": "9.39.3",
-        "prettier": "3.5.3",
         "typescript": "6.0.3",
         "vitest": "2.1.9"
     }

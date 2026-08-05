@@ -3,9 +3,7 @@ import trpc from "$lib/trpc"
 import type { PageServerLoad } from "./$types"
 
 export const load = (async () => {
-    const res = await fetch(
-        "https://discord.com/api/v10/invites/2fsar34APa?with_counts=true",
-    )
+    const res = await fetch("https://discord.com/api/v10/invites/2fsar34APa?with_counts=true")
     const invite: unknown = await res.json()
 
     if (

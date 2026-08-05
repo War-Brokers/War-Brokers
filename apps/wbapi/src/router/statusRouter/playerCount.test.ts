@@ -3,9 +3,7 @@ import { playerCount } from "./playerCount"
 test("does not wait forever when the upstream API stops responding", async () => {
     const originalFetch = globalThis.fetch
     const timeoutController = new AbortController()
-    const timeoutSpy = jest
-        .spyOn(AbortSignal, "timeout")
-        .mockReturnValue(timeoutController.signal)
+    const timeoutSpy = jest.spyOn(AbortSignal, "timeout").mockReturnValue(timeoutController.signal)
     globalThis.fetch = jest.fn(
         (_input: string | URL | Request, init?: RequestInit) =>
             new Promise((_resolve, reject) => {

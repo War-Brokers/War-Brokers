@@ -8,9 +8,7 @@ export function fetchUpstream(
     init: RequestInit = {},
 ): Promise<Response> {
     const timeoutSignal = AbortSignal.timeout(upstreamTimeoutMs)
-    const signal = init.signal
-        ? AbortSignal.any([init.signal, timeoutSignal])
-        : timeoutSignal
+    const signal = init.signal ? AbortSignal.any([init.signal, timeoutSignal]) : timeoutSignal
 
     return fetch(input, { ...init, signal })
 }

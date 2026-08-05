@@ -23,8 +23,7 @@ export default (tag: string) =>
             openapi: {
                 method: "GET",
                 path: "/status/twitchStreams",
-                description:
-                    "Gets a list of all available War Brokers twitch streams",
+                description: "Gets a list of all available War Brokers twitch streams",
                 tags: [tag],
             },
         })
@@ -65,11 +64,7 @@ export function parseData(data: string): Result<Response> {
         const streamer = entries[i + 1]
         const viewers = entries[i + 2]
 
-        if (
-            thumbnail === undefined ||
-            streamer === undefined ||
-            viewers === undefined
-        )
+        if (thumbnail === undefined || streamer === undefined || viewers === undefined)
             return { success: false, reason: FailReason.SchemaValidationFail }
 
         const parseResult = streamSchema.safeParse({
@@ -78,8 +73,7 @@ export function parseData(data: string): Result<Response> {
             viewers: Number(viewers.replace(/,/g, "")),
         })
 
-        if (!parseResult.success)
-            return { success: false, reason: FailReason.SchemaValidationFail }
+        if (!parseResult.success) return { success: false, reason: FailReason.SchemaValidationFail }
 
         result.streams.push(parseResult.data)
     }

@@ -31,9 +31,7 @@
         return (
             Math.sign(value) *
             Math.SQRT2 *
-            Math.sqrt(
-                Math.sqrt(first * first - logarithm / coefficient) - first,
-            )
+            Math.sqrt(Math.sqrt(first * first - logarithm / coefficient) - first)
         )
     }
 
@@ -44,32 +42,22 @@
         markerY: number
     } {
         const point = (z: number): [number, number] => [
-            chart.left +
-                ((z + chart.zRange) / (chart.zRange * 2)) * chart.width,
+            chart.left + ((z + chart.zRange) / (chart.zRange * 2)) * chart.width,
             chart.baseline - Math.exp(-(z * z) / 2) * chart.height,
         ]
-        const z = Math.max(
-            -chart.zRange,
-            Math.min(chart.zRange, percentileToZ(percentile)),
-        )
+        const z = Math.max(-chart.zRange, Math.min(chart.zRange, percentileToZ(percentile)))
         const steps = 80
         const curvePoints = Array.from({ length: steps + 1 }, (_, index) =>
             point(-chart.zRange + (index / steps) * chart.zRange * 2),
         )
-        const areaSteps = Math.max(
-            1,
-            Math.ceil(((z + chart.zRange) / (chart.zRange * 2)) * steps),
-        )
+        const areaSteps = Math.max(1, Math.ceil(((z + chart.zRange) / (chart.zRange * 2)) * steps))
         const areaPoints = Array.from({ length: areaSteps + 1 }, (_, index) =>
             point(-chart.zRange + (index / areaSteps) * (z + chart.zRange)),
         )
         const [markerX, markerY] = point(z)
         const pointsToPath = (points: [number, number][]) =>
             points
-                .map(
-                    ([x, y], index) =>
-                        `${index === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`,
-                )
+                .map(([x, y], index) => `${index === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`)
                 .join(" ")
 
         return {
@@ -81,12 +69,7 @@
     }
 </script>
 
-<div
-    class={cn(
-        "flex flex-col",
-        compact ? "w-full min-w-0 items-center" : "min-w-24",
-    )}
->
+<div class={cn("flex flex-col", compact ? "w-full min-w-0 items-center" : "min-w-24")}>
     {#if title || percentile}
         <div class={cn("flex w-full", compact && "justify-center")}>
             {#if title}
@@ -97,10 +80,7 @@
             {#await percentile then percentile}
                 {#if percentile !== undefined}
                     {@const { rank, icon } = percentile2rank(percentile)}
-                    <div
-                        class="ms-1.5 flex items-center justify-center"
-                        id={_id}
-                    >
+                    <div class="ms-1.5 flex items-center justify-center" id={_id}>
                         <img
                             alt="The project logo"
                             src={icon}
@@ -115,9 +95,7 @@
                         placement="top-start"
                     >
                         <div class="flex flex-col items-center justify-center">
-                            <h3
-                                class="text-center font-black dark:text-gray-200"
-                            >
+                            <h3 class="text-center font-black dark:text-gray-200">
                                 {rank}
                             </h3>
                             <img
@@ -127,11 +105,7 @@
                             />
                         </div>
                         {@const curve = bellCurve(percentile)}
-                        <svg
-                            class="h-24 w-full overflow-visible"
-                            viewBox="0 0 240 88"
-                            role="img"
-                        >
+                        <svg class="h-24 w-full overflow-visible" viewBox="0 0 240 88" role="img">
                             <title>
                                 Bell curve showing this player at the
                                 {percentile.toFixed(3)} percentile
@@ -163,7 +137,7 @@
                                 cx={curve.markerX}
                                 cy={curve.markerY}
                                 r="4"
-                                class="fill-primary-700 dark:fill-primary-400 stroke-white dark:stroke-gray-900"
+                                class="fill-primary-700 stroke-white dark:fill-primary-400 dark:stroke-gray-900"
                                 stroke-width="2"
                             />
                         </svg>

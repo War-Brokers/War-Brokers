@@ -14,8 +14,7 @@ export function parsePage(
     if (str.length > MAX_DIGIT) return defaultValue
 
     for (const char of str)
-        if (!["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(char))
-            return defaultValue
+        if (!["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(char)) return defaultValue
 
     const page = parseInt(str)
 

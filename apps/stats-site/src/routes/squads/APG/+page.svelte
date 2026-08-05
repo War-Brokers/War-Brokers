@@ -18,37 +18,24 @@
 </h2>
 <span class="mx-auto mb-10 text-xl font-black">
     Squad Leader :
-    <a
-        class="underline underline-offset-4 hover:text-orange-500"
-        href="/players/{squadLeader.uid}"
-    >
+    <a class="underline underline-offset-4 hover:text-orange-500" href="/players/{squadLeader.uid}">
         {squadLeader.nick}
     </a>
 </span>
 
-<div
-    class="mb-10 flex w-full flex-col items-center justify-center gap-36 lg:flex-row"
->
+<div class="mb-10 flex w-full flex-col items-center justify-center gap-36 lg:flex-row">
     <div class="flex grow basis-0 items-center justify-center">
         <img src={SquadEmblem} alt="APG squad emblem" />
     </div>
     <div class="grow basis-0">
         <h3 class="mb-2 text-xl font-black">Requirements</h3>
-        <ol
-            type="I"
-            class="mb-2 list-inside font-normal"
-            style="list-style-type:upper-roman"
-        >
+        <ol type="I" class="mb-2 list-inside font-normal" style="list-style-type:upper-roman">
             <li>
-                You must be higher than <span class="font-black">
-                    Level 73
-                </span>
+                You must be higher than <span class="font-black"> Level 73 </span>
             </li>
             <li>
                 You must have a
-                <span class="font-black">
-                    Kills ELO better than 96% of players
-                </span>
+                <span class="font-black"> Kills ELO better than 96% of players </span>
             </li>
             <li>
                 You must have a
@@ -59,20 +46,16 @@
                 <span class="font-black">one type of vehicle</span>
             </li>
             <li>
-                You must <span class="font-black">be respectful</span> of others
-                and act mature
+                You must <span class="font-black">be respectful</span> of others and act mature
             </li>
         </ol>
         <p class="mb-5 text-slate-400">
-            <span class="font-black text-slate-400">Note:</span> The chances of acceptance
-            SIGNIFICANTLY drop if you don't meet these criteria.
+            <span class="font-black text-slate-400">Note:</span> The chances of acceptance SIGNIFICANTLY
+            drop if you don't meet these criteria.
         </p>
 
         <div class="w-fit">
-            <A
-                class="text-2xl font-bold"
-                href="https://forms.gle/STUdYz6KuVFijVJ57"
-            >
+            <A class="text-2xl font-bold" href="https://forms.gle/STUdYz6KuVFijVJ57">
                 <div class="animate-bounce">Apply Now!</div>
             </A>
         </div>

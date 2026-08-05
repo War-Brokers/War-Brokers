@@ -21,10 +21,7 @@
         "lint": { "dependsOn": ["^build", "^lint"] },
         "typecheck": { "dependsOn": ["^build", "^typecheck"] },
         "test:e2e": {
-            "env": [
-                "PLAYWRIGHT_BROWSERS_PATH",
-                "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"
-            ],
+            "env": ["PLAYWRIGHT_BROWSERS_PATH", "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"],
             "dependsOn": ["^test:e2e"]
         },
         "test:unit": { "dependsOn": ["^test:unit"] },

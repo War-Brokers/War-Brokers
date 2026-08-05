@@ -24,12 +24,9 @@ export default (tags: string[]) =>
             const res = await db.getPercentile("killsELO", uid)
 
             if (!res.success) {
-                if (res.reason === FailReason.PlayerNotFound)
-                    throw PlayerNotFoundTRPCError(uid)
+                if (res.reason === FailReason.PlayerNotFound) throw PlayerNotFoundTRPCError(uid)
 
-                console.error(
-                    `/players/percentile/killsElo?uid=${uid} failed: ${res.reason}`,
-                )
+                console.error(`/players/percentile/killsElo?uid=${uid} failed: ${res.reason}`)
                 throw reason2TRPCError(res.reason)
             }
 

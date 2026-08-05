@@ -8,10 +8,7 @@ import type { PageServerLoad } from "./$types"
 const LIMIT = 50
 
 export const load = (({ url }) => {
-    const { page, offset, invalidated } = parsePage(
-        url.searchParams.get("page"),
-        LIMIT,
-    )
+    const { page, offset, invalidated } = parsePage(url.searchParams.get("page"), LIMIT)
 
     if (invalidated) redirect(301, `?page=${page}`)
 

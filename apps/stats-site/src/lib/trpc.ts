@@ -6,9 +6,7 @@ import { dev } from "$app/environment"
 export default createTRPCProxyClient<AppRouter>({
     links: [
         httpBatchLink({
-            url: dev
-                ? "http://127.0.0.1:5000/trpc"
-                : "https://wbapi.wbpjs.com/trpc",
+            url: dev ? "http://127.0.0.1:5000/trpc" : "https://wbapi.wbpjs.com/trpc",
         }),
     ],
 })

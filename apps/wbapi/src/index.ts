@@ -16,8 +16,7 @@ import { initDB } from "./db"
 import { isPrivate } from "./private"
 
 function requireEnv(name: string, value: string | undefined): string {
-    if (value === undefined)
-        throw new Error(`Missing required environment variable: ${name}`)
+    if (value === undefined) throw new Error(`Missing required environment variable: ${name}`)
 
     return value
 }

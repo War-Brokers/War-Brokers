@@ -23,15 +23,9 @@ test("shows searchbox for missing player B", async ({ page }) => {
     const comparison = page.getByRole("region", {
         name: "Players to compare",
     })
-    await expect(
-        comparison.getByRole("link", { name: "[LP] POMP" }),
-    ).toBeVisible()
-    await expect(
-        comparison.getByRole("searchbox", { name: "Search Player A" }),
-    ).toHaveCount(0)
-    await expect(
-        comparison.getByRole("searchbox", { name: "Search Player B" }),
-    ).toBeVisible()
+    await expect(comparison.getByRole("link", { name: "[LP] POMP" })).toBeVisible()
+    await expect(comparison.getByRole("searchbox", { name: "Search Player A" })).toHaveCount(0)
+    await expect(comparison.getByRole("searchbox", { name: "Search Player B" })).toBeVisible()
 })
 
 test("shows searchbox for missing player A", async ({ page }) => {
@@ -40,15 +34,9 @@ test("shows searchbox for missing player A", async ({ page }) => {
     const comparison = page.getByRole("region", {
         name: "Players to compare",
     })
-    await expect(
-        comparison.getByRole("link", { name: "[LP] POMP" }),
-    ).toBeVisible()
-    await expect(
-        comparison.getByRole("searchbox", { name: "Search Player A" }),
-    ).toBeVisible()
-    await expect(
-        comparison.getByRole("searchbox", { name: "Search Player B" }),
-    ).toHaveCount(0)
+    await expect(comparison.getByRole("link", { name: "[LP] POMP" })).toBeVisible()
+    await expect(comparison.getByRole("searchbox", { name: "Search Player A" })).toBeVisible()
+    await expect(comparison.getByRole("searchbox", { name: "Search Player B" })).toHaveCount(0)
 })
 
 test("shows searchbox for invalid player UID", async ({ page }) => {
@@ -62,9 +50,7 @@ test("shows searchbox for invalid player UID", async ({ page }) => {
             name: "Search Player A",
         }),
     ).toBeVisible()
-    await expect(
-        comparison.getByRole("link", { name: "[LP] POMP" }),
-    ).toBeVisible()
+    await expect(comparison.getByRole("link", { name: "[LP] POMP" })).toBeVisible()
 })
 
 for (const side of ["A", "B"] as const) {
@@ -75,12 +61,8 @@ for (const side of ["A", "B"] as const) {
             name: "Players to compare",
         })
 
-        await comparison
-            .getByRole("button", { name: `Edit player ${side}` })
-            .click()
+        await comparison.getByRole("button", { name: `Edit player ${side}` }).click()
 
-        await expect(page).toHaveURL(
-            side === "A" ? `/-vs-${pompUID}` : `/${pompUID}-vs-`,
-        )
+        await expect(page).toHaveURL(side === "A" ? `/-vs-${pompUID}` : `/${pompUID}-vs-`)
     })
 }

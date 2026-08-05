@@ -1,8 +1,5 @@
 {
-    "extends": [
-        "@warbrokers/typescript-config/base.json",
-        "./.svelte-kit/tsconfig.json"
-    ],
+    "extends": ["@warbrokers/typescript-config/base.json", "./.svelte-kit/tsconfig.json"],
     "compilerOptions": {
         "allowJs": true,
         "checkJs": true,

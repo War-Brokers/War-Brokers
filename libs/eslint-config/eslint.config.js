@@ -13,10 +13,7 @@ const requestedTypeCheckedRules = {
     "@typescript-eslint/no-floating-promises": "error",
     "@typescript-eslint/no-unnecessary-condition": "error",
     "@typescript-eslint/no-unsafe-type-assertion": "error",
-    "@typescript-eslint/restrict-template-expressions": [
-        "error",
-        { allowNumber: true },
-    ],
+    "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
     "@typescript-eslint/switch-exhaustiveness-check": [
         "error",
         {

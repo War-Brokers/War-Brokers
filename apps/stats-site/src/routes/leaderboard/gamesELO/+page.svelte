@@ -37,12 +37,7 @@
             {/each}
         {:then getGamesEloRanking}
             {#each getGamesEloRanking as { uid, nick, gamesELO }, i (uid)}
-                <Row
-                    rank={i + offset + 1}
-                    {nick}
-                    {uid}
-                    stat={gamesELO.toFixed(2)}
-                />
+                <Row rank={i + offset + 1} {nick} {uid} stat={gamesELO.toFixed(2)} />
             {/each}
         {/await}
     </tbody>

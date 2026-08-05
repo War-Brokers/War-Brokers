@@ -17,9 +17,7 @@
 <b class="mb-10 text-center"><i>"Res, non verba"</i></b>
 
 <span class="w-full text-center text-xl font-black">Squad Leaders</span>
-<span
-    class="text-s mx-auto mb-10 inline-flex flex-wrap justify-center gap-1 font-bold"
->
+<span class="text-s mx-auto mb-10 inline-flex flex-wrap justify-center gap-1 font-bold">
     <a
         class="whitespace-nowrap underline underline-offset-4 hover:text-orange-500"
         href="/players/600722c9bfea71503dbd4905">Colonel Grant</a

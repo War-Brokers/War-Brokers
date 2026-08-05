@@ -25,10 +25,7 @@ const playerListRaw: unknown = await (
     await fetchUpstream(`${env.WB_DB_BASE}/get_player_list.php`, {
         headers: {
             Authorization:
-                "Basic " +
-                Buffer.from(`${env.WB_DB_ID}:${env.WB_DB_PW}`).toString(
-                    "base64",
-                ),
+                "Basic " + Buffer.from(`${env.WB_DB_ID}:${env.WB_DB_PW}`).toString("base64"),
         },
     })
 ).json()
@@ -59,9 +56,7 @@ for (const { uid } of playerList) {
 
     await db.setPlayer(playerResult.data)
 
-    console.log(
-        `${100 * (++i / playerCount)}% complete (${i} / ${playerCount})\n`,
-    )
+    console.log(`${100 * (++i / playerCount)}% complete (${i} / ${playerCount})\n`)
 }
 
 console.log("done!")

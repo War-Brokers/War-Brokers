@@ -1,8 +1,4 @@
-import {
-    defineConfig,
-    devices,
-    type PlaywrightTestConfig,
-} from "@playwright/test"
+import { defineConfig, devices, type PlaywrightTestConfig } from "@playwright/test"
 
 export interface Config {
     port: number

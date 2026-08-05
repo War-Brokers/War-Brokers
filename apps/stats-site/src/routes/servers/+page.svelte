@@ -64,11 +64,7 @@
             {:then servers}
                 {#if servers}
                     {#each servers as { playerCount, maxPlayers }, i (i)}
-                        <Row
-                            name={`${region}_${i}`}
-                            {playerCount}
-                            {maxPlayers}
-                        />
+                        <Row name={`${region}_${i}`} {playerCount} {maxPlayers} />
                     {/each}
                 {/if}
             {/await}

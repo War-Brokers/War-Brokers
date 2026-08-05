@@ -8,9 +8,7 @@ test("rank popover does not shift the mobile layout", async ({ page }) => {
 
     await page.locator("#games-elo-percentile").click()
     await expect(page.getByRole("tooltip")).toBeVisible()
-    await expect(
-        page.getByRole("img", { name: /Bell curve showing this player/ }),
-    ).toBeVisible()
+    await expect(page.getByRole("img", { name: /Bell curve showing this player/ })).toBeVisible()
 
     const layouts = await page.evaluate(async () => {
         const samples: string[] = []

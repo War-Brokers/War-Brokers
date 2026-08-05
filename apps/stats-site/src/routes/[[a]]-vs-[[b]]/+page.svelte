@@ -53,10 +53,7 @@
         return "?"
     }
 
-    function formatPageTitle(
-        a?: Awaited<PageData["a"]>,
-        b?: Awaited<PageData["b"]>,
-    ) {
+    function formatPageTitle(a?: Awaited<PageData["a"]>, b?: Awaited<PageData["b"]>) {
         return `${formatPlayerName(a)} vs ${formatPlayerName(b)}`
     }
 
@@ -81,15 +78,11 @@
         }
 
         if (rank === "kills-elo") {
-            return player === "a"
-                ? data.aKillsEloPercentile
-                : data.bKillsEloPercentile
+            return player === "a" ? data.aKillsEloPercentile : data.bKillsEloPercentile
         }
 
         if (rank === "games-elo") {
-            return player === "a"
-                ? data.aGamesEloPercentile
-                : data.bGamesEloPercentile
+            return player === "a" ? data.aGamesEloPercentile : data.bGamesEloPercentile
         }
 
         return undefined
@@ -134,24 +127,18 @@
 
 {#await Promise.all([playerOrUndefined(data.a), playerOrUndefined(data.b)])}
     <Title title={formatPageTitle()} />
-    <p class="w-full text-center text-gray-500 dark:text-gray-400">
-        Loading...
-    </p>
+    <p class="w-full text-center text-gray-500 dark:text-gray-400">Loading...</p>
 {:then [a, b]}
     <Title title={formatPageTitle(a, b)} />
 
     <section class="mx-auto w-full max-w-4xl" aria-label="Players to compare">
-        <div
-            class="relative mt-3 grid grid-cols-2 items-start gap-12 text-2xl font-black"
-        >
+        <div class="relative mt-3 grid grid-cols-2 items-start gap-12 text-2xl font-black">
             {#each sides as side (side)}
                 {@const player = side === "a" ? a : b}
                 <div
                     class={cn(
                         "flex min-h-12 min-w-0 items-center gap-2",
-                        side === "a"
-                            ? "justify-end text-end"
-                            : "justify-start text-start",
+                        side === "a" ? "justify-end text-end" : "justify-start text-start",
                     )}
                 >
                     {#if player}
@@ -205,27 +192,21 @@
 
     {#if a && b}
         {@const stats = comparisonStats(a, b)}
-        <section
-            class="mx-auto mt-10 w-full max-w-4xl"
-            aria-labelledby="stats-title"
-        >
+        <section class="mx-auto mt-10 w-full max-w-4xl" aria-labelledby="stats-title">
             <ul class="flex flex-col gap-3" role="list">
                 {#each stats as stat (stat.label)}
                     {@const leader = getLeader(stat.a, stat.b)}
                     <li
-                        class="grid grid-cols-2 items-stretch gap-1 rounded-2xl bg-gray-50 p-2 sm:min-h-24 sm:grid-cols-[minmax(0,1fr)_minmax(4rem,7rem)_minmax(0,1fr)] sm:gap-4 sm:p-3 dark:bg-gray-900"
+                        class="grid grid-cols-2 items-stretch gap-1 rounded-2xl bg-gray-50 p-2 dark:bg-gray-900 sm:min-h-24 sm:grid-cols-[minmax(0,1fr)_minmax(4rem,7rem)_minmax(0,1fr)] sm:gap-4 sm:p-3"
                     >
                         <h3
-                            class="col-span-2 col-start-1 row-start-1 flex items-center justify-start px-2 py-2 text-start text-xs font-bold text-gray-500 sm:col-span-1 sm:col-start-2 sm:justify-center sm:px-0 sm:py-0 sm:text-center sm:text-sm dark:text-gray-400"
+                            class="col-span-2 col-start-1 row-start-1 flex items-center justify-start px-2 py-2 text-start text-xs font-bold text-gray-500 dark:text-gray-400 sm:col-span-1 sm:col-start-2 sm:justify-center sm:px-0 sm:py-0 sm:text-center sm:text-sm"
                         >
                             {stat.label}
                         </h3>
 
                         {#each sides as side (side)}
-                            {@const winChance =
-                                side === "a"
-                                    ? stat.aWinChance
-                                    : stat.bWinChance}
+                            {@const winChance = side === "a" ? stat.aWinChance : stat.bWinChance}
                             <div
                                 class={cn(
                                     "row-start-2 flex min-w-0 flex-col items-center justify-center rounded-xl px-1 py-3 text-center sm:px-2",
@@ -240,21 +221,15 @@
                                 <Stat
                                     compact
                                     title=""
-                                    data={formatValue(
-                                        stat,
-                                        side === "a" ? stat.a : stat.b,
-                                    )}
-                                    _id={stat.rank
-                                        ? `${side}-${stat.rank}-percentile`
-                                        : undefined}
+                                    data={formatValue(stat, side === "a" ? stat.a : stat.b)}
+                                    _id={stat.rank ? `${side}-${stat.rank}-percentile` : undefined}
                                     percentile={percentile(side, stat.rank)}
                                 />
                                 {#if winChance !== undefined}
                                     <span
                                         class="mt-0.5 text-xs font-bold text-gray-500 dark:text-gray-400"
                                     >
-                                        {winChance.toFixed(2)}% chance of
-                                        winning
+                                        {winChance.toFixed(2)}% chance of winning
                                     </span>
                                 {/if}
                             </div>

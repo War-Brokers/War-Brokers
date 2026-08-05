@@ -21,11 +21,7 @@
 
 <h2 class="mb-10 w-full text-center text-3xl font-black">Squads</h2>
 
-<form
-    on:submit|preventDefault={() => {}}
-    novalidate={true}
-    class="mb-5 flex h-12 w-full gap-4"
->
+<form on:submit|preventDefault={() => {}} novalidate={true} class="mb-5 flex h-12 w-full gap-4">
     <input
         id="squad-search"
         type="search"
@@ -43,9 +39,7 @@
         Loading...
     {:then squads}
         {#each squads as squadName}
-            {#if squadName
-                .toLocaleLowerCase()
-                .includes($searchTerm.toLocaleLowerCase())}
+            {#if squadName.toLocaleLowerCase().includes($searchTerm.toLocaleLowerCase())}
                 <a
                     href={`/squads/${squadName}`}
                     class="w-full rounded-lg p-4 font-bold dark:bg-gray-900"

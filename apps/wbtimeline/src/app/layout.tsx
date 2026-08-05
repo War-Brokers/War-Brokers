@@ -11,8 +11,7 @@ config.autoAddCss = false
 
 export const metadata: Metadata = {
     title: "War Brokers Timeline",
-    description:
-        "Various events happened in the War Brokers community in a chronological order.",
+    description: "Various events happened in the War Brokers community in a chronological order.",
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -24,11 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                     data-site-id="57d3180c2bcf"
                     defer
                 ></script>
-                <link
-                    rel="shortcut icon"
-                    type="image/svg+xml"
-                    href="/favicon.svg"
-                />
+                <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg" />
             </head>
             <body>{children}</body>
         </html>

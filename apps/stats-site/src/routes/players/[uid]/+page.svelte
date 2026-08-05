@@ -8,14 +8,8 @@
     import type { PageData } from "./$types"
 
     export let data: PageData
-    const {
-        player,
-        badges,
-        playingSince,
-        xpPercentile,
-        killsEloPercentile,
-        gamesEloPercentile,
-    } = data
+    const { player, badges, playingSince, xpPercentile, killsEloPercentile, gamesEloPercentile } =
+        data
 </script>
 
 <Title title="{player.squad && `[${player.squad}] `}{player.nick}" />
@@ -27,18 +21,11 @@
         {/if}
         {player.nick}
     </h1>
-    <A
-        href="/{player.uid}-vs-"
-        class="text-xs font-black uppercase tracking-wider"
-    >
-        vs
-    </A>
+    <A href="/{player.uid}-vs-" class="text-xs font-black uppercase tracking-wider">vs</A>
 </div>
 
 <div class="mb-5 flex w-24">
-    <span class="whitespace-nowrap font-bold dark:text-gray-400">
-        Playing Since
-    </span>
+    <span class="whitespace-nowrap font-bold dark:text-gray-400"> Playing Since </span>
     &nbsp;
     <span class="whitespace-nowrap font-black">
         {playingSince}

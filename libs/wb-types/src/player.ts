@@ -6,9 +6,9 @@ const gameModeIDSchema = z.custom<`m${Digit}${Digit}`>(
     (val) => typeof val === "string" && /^m\d\d$/.test(val),
 )
 
-const vehicleSchema = z.custom<
-    `v${Digit}${Digit}` | `v${Digit}${Digit}${Digit}`
->((val) => typeof val === "string" && /^v\d\d\d?$/.test(val))
+const vehicleSchema = z.custom<`v${Digit}${Digit}` | `v${Digit}${Digit}${Digit}`>(
+    (val) => typeof val === "string" && /^v\d\d\d?$/.test(val),
+)
 
 const weaponIDSchema = z.custom<
     | `p` // invalid weapon code, but the API returns it from time to time
@@ -46,15 +46,11 @@ export const playerSchema = z.object({
     // Vehicle Stats
     self_destructs: z.record(vehicleSchema, z.number().int()).or(z.null()),
     distance_driven: z.record(vehicleSchema, z.number()).or(z.null()),
-    distance_driven_count: z
-        .record(vehicleSchema, z.number().int())
-        .or(z.null()),
+    distance_driven_count: z.record(vehicleSchema, z.number().int()).or(z.null()),
     kills_per_vehicle: z.record(vehicleSchema, z.number().int()).or(z.null()),
 
     // Weapon Stats
-    shots_fired_unzoomed: z
-        .record(weaponIDSchema, z.number().int())
-        .or(z.null()),
+    shots_fired_unzoomed: z.record(weaponIDSchema, z.number().int()).or(z.null()),
     shots_fired_zoomed: z.record(weaponIDSchema, z.number().int()).or(z.null()),
 
     shots_hit_unzoomed: z.record(weaponIDSchema, z.number().int()).or(z.null()),
@@ -75,19 +71,14 @@ export const playerSchema = z.object({
     // guest: z.boolean().optional(),
     banned: z
         .literal(false)
-        .describe(
-            "Whether the user is banned or not. Doesn't seem to be used. Is always false",
-        ),
+        .describe("Whether the user is banned or not. Doesn't seem to be used. Is always false"),
     steam: z.boolean().or(z.null()).optional(),
 
     // Time
     time: z.number().int().describe("UNIX timestamp of last session"),
     // join_date: z.string().describe("YY-MM-DD formatted date or 0"),
     // last_seen: z.string().describe("YY-MM-DD formatted date or 0"),
-    joinTime: z
-        .number()
-        .int()
-        .describe("UNIX timestamp of join date & time (could be 0)"),
+    joinTime: z.number().int().describe("UNIX timestamp of join date & time (could be 0)"),
     // ping_time: z.number().int().or(z.null()),
     // ping_time_count: z.number().int(),
     // frame_rate: z.number(),

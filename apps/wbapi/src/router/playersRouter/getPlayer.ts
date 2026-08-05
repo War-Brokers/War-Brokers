@@ -28,41 +28,29 @@ export default (tag: string) =>
             const res = await getPlayer(uid)
 
             if (!res.success) {
-                if (res.reason === FailReason.WBDBConnectionFail)
-                    throw PlayerNotFoundTRPCError(uid)
+                if (res.reason === FailReason.WBDBConnectionFail) throw PlayerNotFoundTRPCError(uid)
                 throw reason2TRPCError(res.reason)
             }
 
             const player = res.data
 
             void db.setPlayer(player).catch((error: unknown) => {
-                console.error(
-                    `[db-error] failed to cache player ${player.uid}`,
-                    error,
-                )
+                console.error(`[db-error] failed to cache player ${player.uid}`, error)
             })
 
             return player
         })
 
 export async function getPlayer(uid: Player["uid"]): Promise<Result<Player>> {
-    const res = await fetchUpstream(
-        `${env.WB_DB_BASE}/get_player_stats.php?uid=${uid}`,
-        {
-            headers: {
-                Authorization:
-                    "Basic " +
-                    Buffer.from(`${env.WB_DB_ID}:${env.WB_DB_PW}`).toString(
-                        "base64",
-                    ),
-            },
+    const res = await fetchUpstream(`${env.WB_DB_BASE}/get_player_stats.php?uid=${uid}`, {
+        headers: {
+            Authorization:
+                "Basic " + Buffer.from(`${env.WB_DB_ID}:${env.WB_DB_PW}`).toString("base64"),
         },
-    )
+    })
 
     if (!res.ok) {
-        console.error(
-            `failed to get player stats of ${uid}. DB responded: "${await res.text()}"`,
-        )
+        console.error(`failed to get player stats of ${uid}. DB responded: "${await res.text()}"`)
         return {
             success: false,
             reason: FailReason.WBDBConnectionFail,
@@ -95,9 +83,7 @@ error:`,
 
         // this check works on both null and undefined values because JS
         if (rawRecord["time_alive_longest"] != null)
-            rawRecord["time_alive_longest"] = Number(
-                rawRecord["time_alive_longest"],
-            )
+            rawRecord["time_alive_longest"] = Number(rawRecord["time_alive_longest"])
 
         const nick = rawRecord["nick"]
         if (rawRecord["nicklower"] === null && typeof nick === "string")

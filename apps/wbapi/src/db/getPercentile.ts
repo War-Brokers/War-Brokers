@@ -21,9 +21,7 @@ export default (db: PostgresJsDatabase) => {
             const subQuery = db
                 .select({
                     uid: players.uid,
-                    n: sql<number>`RANK() OVER (ORDER BY ${players[key]} ASC)`.as(
-                        "n",
-                    ),
+                    n: sql<number>`RANK() OVER (ORDER BY ${players[key]} ASC)`.as("n"),
                 })
                 .from(players)
                 .as("sq")
@@ -45,9 +43,7 @@ export default (db: PostgresJsDatabase) => {
         }
 
         {
-            const [count] = await db
-                .select({ N: sql<number>`count(*)` })
-                .from(players)
+            const [count] = await db.select({ N: sql<number>`count(*)` }).from(players)
 
             if (!count) throw new Error("Player count query returned no rows")
 

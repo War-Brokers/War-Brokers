@@ -2,7 +2,7 @@
     // editor
     "editor.formatOnSave": true,
     "cSpell.import": ["${workspaceFolder}/cspell.yaml"],
-    "editor.rulers": [80],
+    "editor.rulers": [100],
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "js/ts.tsdk.path": "node_modules/typescript/lib",
     "editor.codeActionsOnSave": {
@@ -17,22 +17,11 @@
 
     // eslint
     "eslint.workingDirectories": [{ "mode": "auto" }],
-    "eslint.validate": [
-        "svelte",
-        "javascript",
-        "typescript",
-        "javascriptreact",
-        "typescriptreact"
-    ],
+    "eslint.validate": ["svelte", "javascript", "typescript", "javascriptreact", "typescriptreact"],
 
     // tailwind
     "css.customData": [".vscode/tailwind.json"], // https://github.com/tailwindlabs/tailwindcss/discussions/5258#discussioncomment-1979394
-    "tailwindCSS.classAttributes": [
-        "class",
-        "className",
-        ".*Style*",
-        "tdClass"
-    ],
+    "tailwindCSS.classAttributes": ["class", "className", ".*Style*", "tdClass"],
     "editor.quickSuggestions": {
         "strings": true
     },
