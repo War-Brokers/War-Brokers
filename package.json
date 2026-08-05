@@ -6,7 +6,7 @@
         "dev": "turbo run dev",
         "build": "turbo run build --parallel --cache-dir=.turbo",
         "fmt:check": "prettier . --check",
-        "lint": "turbo run lint --parallel",
+        "lint": "turbo run lint",
         "typecheck": "turbo run typecheck",
         "test:e2e": "turbo run test:e2e --parallel",
         "test:unit": "turbo run test:unit --parallel",

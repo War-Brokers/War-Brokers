@@ -18,7 +18,7 @@
                 ".svelte-kit/**"
             ]
         },
-        "lint": { "dependsOn": ["^lint"] },
+        "lint": { "dependsOn": ["^build", "^lint"] },
         "typecheck": { "dependsOn": ["^build", "^typecheck"] },
         "test:e2e": {
             "env": [
