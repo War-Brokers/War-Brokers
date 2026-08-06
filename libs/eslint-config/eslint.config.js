@@ -90,6 +90,15 @@ export default defineConfig(
                     caughtErrorsIgnorePattern: "^_",
                 },
             ],
+            "no-restricted-syntax": [
+                "error",
+                {
+                    selector:
+                        "ExpressionStatement > CallExpression[callee.type='MemberExpression'][callee.property.name=/^(catch|then)$/]",
+                    message:
+                        "Prefix promise chains that are intentionally not awaited with `void`.",
+                },
+            ],
             ...requestedTypeCheckedRules,
         },
     },
