@@ -2,6 +2,11 @@ import postgres from "postgres"
 
 import { stats } from "./stats"
 
+// PostgreSQL's bind-protocol limit is 65,535 parameters per statement.
+// We're using 11 parameters per row: floor(65,535 / 11) = 5,957 rows
+// We're using batch size of 5000 to make the number look nice.
+const BATCH_SIZE = 5000
+
 export async function seedDB() {
     const sql = postgres(
         "postgresql://postgres@localhost:5432/postgres",
@@ -35,13 +40,25 @@ export async function seedDB() {
     await sql`CREATE INDEX IF NOT EXISTS level_index ON players USING btree (level)`
 
     const total = stats.length
-    for (const [i, stat] of stats.entries()) {
-        const { uid, nick, level, xp, squad, killsELO, gamesELO, coins, number_of_jumps, steam } =
-            stat
-        if ((i + 1) % 100 === 0)
-            console.log(`seeding ${(100 * (i + 1)) / total}% complete (${i + 1} / ${total})`)
+    for (let start = 0; start < total; start += BATCH_SIZE) {
+        const batch = stats.slice(start, start + BATCH_SIZE).map((stat) => ({
+            uid: stat.uid,
+            nick: stat.nick,
+            nicklower: stat.nick.toLocaleLowerCase(),
+            level: stat.level,
+            xp: stat.xp,
+            squad: stat.squad,
+            killsELO: stat.killsELO,
+            gamesELO: stat.gamesELO,
+            coins: stat.coins,
+            number_of_jumps: stat.number_of_jumps,
+            steam: stat.steam === undefined ? null : stat.steam,
+        }))
 
-        await sql`INSERT INTO players VALUES (${uid}, ${nick}, ${nick.toLocaleLowerCase()}, ${level}, ${xp}, ${squad}, ${killsELO}, ${gamesELO}, ${coins}, ${number_of_jumps}, ${steam === undefined ? null : steam})`
+        await sql`INSERT INTO players ${sql(batch)}`
+
+        const inserted = Math.min(start + BATCH_SIZE, total)
+        console.log(`seeding ${100 * (inserted / total)}% complete (${inserted} / ${total})`)
     }
 
     console.log("seeding complete!")
