@@ -86,8 +86,7 @@ pnpm typecheck --color
 pnpm test:unit --color
 
 # set PLAYWRIGHT_BROWSERS_PATH
-mise -E e2e install
-for reference in $(nix-store --query --references "$(mise -E e2e where nix:playwright-test)"); do
+for reference in $(nix-store --query --references "$(mise -E dev where nix:playwright-test)"); do
     if [[ "$reference" == *-playwright-browsers ]]; then
         browsers_path="$reference"
         break

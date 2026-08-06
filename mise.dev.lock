@@ -4,6 +4,10 @@
 version = "10.0.1"
 backend = "npm:cspell"
 
+[[tools."nix:playwright-test"]]
+version = "1.57.0"
+backend = "nix:playwright-test"
+
 [[tools."nix:postgresql_15"]]
 version = "15.18"
 backend = "nix:postgresql_15"
