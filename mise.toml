@@ -83,7 +83,7 @@ run = "mise -E dev exec -- pnpm -F wbapi db:studio"
 
 [tasks.dev]
 description = "Start dev servers"
-depends = ["install", "db:start"]
+depends = ["db:migrate"]
 depends_post = ["db:stop"]
 run = "mise -E dev exec -- pnpm dev --color"
 
