@@ -8,6 +8,6 @@ export default (db: PostgresJsDatabase) => {
             await db.selectDistinct({ squad: players.squad }).from(players).orderBy(players.squad)
         )
             .map(({ squad }) => squad)
-            .filter((x) => x) // remove empty string
+            .filter((squad): squad is string => Boolean(squad)) // remove null and empty string
     }
 }

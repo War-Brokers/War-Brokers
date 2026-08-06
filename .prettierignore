@@ -1,6 +1,7 @@
 _/*
 **/.turbo/
 **/build/
+**/drizzle/
 **/.svelte-kit/
 **/*.timestamp-*
 pnpm-lock.yaml

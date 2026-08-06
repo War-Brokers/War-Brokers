@@ -1,6 +1,7 @@
 version: "0.2"
 useGitignore: true
 ignorePaths:
+    - apps/wbapi/drizzle/**
     - pnpm-lock.yaml
 words:
     - 0bsolete

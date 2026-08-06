@@ -61,6 +61,26 @@ fi
 rm -rf "$data_dir"
 '''
 
+[tasks."db:generate"]
+description = "drizzle-kit generate"
+depends = ["install", "db:start"]
+run = "mise -E dev exec -- pnpm -F wbapi db:generate"
+
+[tasks."db:migrate"]
+description = "drizzle-kit migrate"
+depends = ["install", "db:start"]
+run = "mise -E dev exec -- pnpm -F wbapi db:migrate"
+
+[tasks."db:push"]
+description = "drizzle-kit push"
+depends = ["install", "db:start"]
+run = "mise -E dev exec -- pnpm -F wbapi db:push"
+
+[tasks."db:studio"]
+description = "drizzle-kit studio"
+depends = ["install", "db:start"]
+run = "mise -E dev exec -- pnpm -F wbapi db:studio"
+
 [tasks.dev]
 description = "Start dev servers"
 depends = ["install", "db:start"]
@@ -97,6 +117,7 @@ export PLAYWRIGHT_BROWSERS_PATH="$browsers_path"
 
 # start dev server for E2E testing
 export DATABASE_URL="postgresql://postgres@localhost:5432/postgres"
+pnpm -F wbapi db:migrate
 pnpm dev --color &
 dev_pid=$!
 

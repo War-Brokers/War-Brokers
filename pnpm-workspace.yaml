@@ -14,8 +14,10 @@ allowBuilds:
     "@parcel/watcher@2.6.0": true
     "@scarf/scarf@1.4.0": false
     "@swc/core@1.9.3": true
+    "esbuild@0.18.20": true
     "esbuild@0.21.5": true
+    "esbuild@0.25.12": true
     "esbuild@0.27.0": true
-    "esbuild@0.27.7": true
+    "esbuild@0.28.1": true
     "sharp@0.34.5": true
     "unrs-resolver@1.12.2": true
