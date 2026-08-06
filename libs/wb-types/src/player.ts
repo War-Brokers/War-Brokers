@@ -30,7 +30,7 @@ export const playerSchema = z.object({
     level: z.number().int().gte(1),
     xp: z.number().int().gte(100),
     coins: z.number().int().or(z.null()),
-    squad: z.string(),
+    squad: z.string().or(z.null()),
     killsELO: z.number(),
     gamesELO: z.number(),
 

@@ -89,6 +89,8 @@ error:`,
         if (rawRecord["nicklower"] === null && typeof nick === "string")
             rawRecord["nicklower"] = nick.toLocaleLowerCase()
 
+        if (rawRecord["squad"] === "") rawRecord["squad"] = null
+
         raw = rawRecord
     }
 
