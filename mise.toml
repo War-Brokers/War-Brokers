@@ -85,7 +85,7 @@ run = "mise -E dev exec -- pnpm -F wbapi db:studio"
 description = "Start dev servers"
 depends = ["db:migrate"]
 depends_post = ["db:stop"]
-run = "mise -E dev exec -- pnpm dev --color"
+run = "mise -E dev exec -- pnpm dev:workspace --color"
 
 [tasks.verify]
 description = "Run all checks"
@@ -118,7 +118,7 @@ export PLAYWRIGHT_BROWSERS_PATH="$browsers_path"
 # start dev server for E2E testing
 export DATABASE_URL="postgresql://postgres@localhost:5432/postgres"
 pnpm -F wbapi db:migrate
-pnpm dev --color &
+pnpm dev:workspace --color &
 dev_pid=$!
 
 cleanup() {

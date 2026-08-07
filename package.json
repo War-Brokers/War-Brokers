@@ -3,7 +3,8 @@
     "private": true,
     "scripts": {
         "turbo": "turbo",
-        "dev": "turbo run dev",
+        "dev": "mise run dev",
+        "dev:workspace": "turbo run dev",
         "build": "turbo run build --parallel --cache-dir=.turbo",
         "fmt:check": "prettier . --check",
         "lint": "turbo run lint",
