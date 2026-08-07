@@ -10,7 +10,7 @@
     import type { PageData } from "./$types"
 
     export let data: PageData
-    const { distribution, playersOnline, twitchStreams } = data
+    const { distribution, playerCount, playersOnline, twitchStreams } = data
     const distributionUpdatedAt = distribution.then((value) => value.updatedAt)
     const distributionCacheUpdateIntervalHours = distribution.then(
         (value) => value.cacheUpdateIntervalHours,
@@ -82,6 +82,19 @@
 
 <section class="mt-12" aria-labelledby="distribution-title">
     <h2 id="distribution-title" class="mb-6 text-2xl font-bold text-gray-100">Global Statistics</h2>
+
+    <div class="mb-6">
+        <span class="font-bold dark:text-gray-400">Players tracked</span>
+        <h2 class="text-2xl font-black">
+            {#await playerCount}
+                ...
+            {:then playerCount}
+                {playerCount.toLocaleString("en-US")}
+            {:catch _}
+                <span class="dark:text-red-600">ERROR</span>
+            {/await}
+        </h2>
+    </div>
 
     <div class="grid gap-6">
         {#each charts as chart}
