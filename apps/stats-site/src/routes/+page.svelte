@@ -3,13 +3,41 @@
     import arrowRight from "svelte-awesome/icons/arrowRight"
 
     import A from "$lib/components/A.svelte"
+    import Distribution from "$lib/components/Distribution.svelte"
     import PlayerSearch from "$lib/components/PlayerSearch.svelte"
     import Title from "$lib/components/title.svelte"
 
     import type { PageData } from "./$types"
 
     export let data: PageData
-    const { playersOnline, twitchStreams } = data
+    const { distribution, playersOnline, twitchStreams } = data
+    const distributionUpdatedAt = distribution.then((value) => value.updatedAt)
+    const distributionCacheUpdateIntervalHours = distribution.then(
+        (value) => value.cacheUpdateIntervalHours,
+    )
+
+    const charts = [
+        {
+            statistic: "gamesElo",
+            title: "Games Elo",
+            unit: "Elo",
+        },
+        {
+            statistic: "killsElo",
+            title: "Kills Elo",
+            unit: "Elo",
+        },
+        {
+            statistic: "level",
+            title: "Level",
+            unit: "levels",
+        },
+        {
+            statistic: "xp",
+            title: "XP",
+            unit: "XP",
+        },
+    ] as const
 </script>
 
 <Title title="Home" />
@@ -51,3 +79,21 @@
         </A>
     </div>
 </div>
+
+<section class="mt-12" aria-labelledby="distribution-title">
+    <h2 id="distribution-title" class="mb-6 text-2xl font-bold text-gray-100">Global Statistics</h2>
+
+    <div class="grid gap-6">
+        {#each charts as chart}
+            <Distribution
+                id={`distribution-${chart.statistic}`}
+                title={chart.title}
+                data={distribution.then((value) => value[chart.statistic])}
+                updatedAt={distributionUpdatedAt}
+                cacheUpdateIntervalHours={distributionCacheUpdateIntervalHours}
+                countLabel="Players"
+                compactTooltip={chart.statistic === "xp"}
+            />
+        {/each}
+    </div>
+</section>

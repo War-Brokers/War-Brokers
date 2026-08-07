@@ -5,6 +5,12 @@ import { upstreamTimeoutMs } from "@/fetch"
 import { env } from "@/index"
 
 import deletePlayer from "./deletePlayer"
+import {
+    getGamesEloDistribution,
+    getKillsEloDistribution,
+    getLevelDistribution,
+    getXPDistribution,
+} from "./distribution"
 import getDBPlayerCount from "./getDBPlayerCount"
 import getPercentile from "./getPercentile"
 import getSquadMembers from "./getSquadMembers"
@@ -29,6 +35,11 @@ export function initDB() {
         getSquadMembers: getSquadMembers(db),
         getPercentile: getPercentile(db),
         getDBPlayerCount: getDBPlayerCount(db),
+
+        getKillsEloDistribution: getKillsEloDistribution(db),
+        getGamesEloDistribution: getGamesEloDistribution(db),
+        getXPDistribution: getXPDistribution(db),
+        getLevelDistribution: getLevelDistribution(db),
 
         getKillsEloRanking: getKillsEloRanking(db),
         getGamesEloRanking: getGamesEloRanking(db),

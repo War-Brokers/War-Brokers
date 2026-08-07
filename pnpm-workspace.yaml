@@ -5,7 +5,7 @@ packages:
 minimumReleaseAge: 10080 # 7 days
 
 overrides:
-    esrap: 1.2.3
+    esrap: 2.1.0
     glob: 10.5.0
     rollup: 4.34.9
     zod-to-json-schema: 3.23.3

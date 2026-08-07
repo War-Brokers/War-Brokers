@@ -13,6 +13,7 @@ import { appRouter } from "@/router"
 import { createContext } from "@/trpc"
 
 import { initDB } from "./db"
+import { startDistributionCache } from "./distributionCache"
 import { isPrivate } from "./private"
 
 function requireEnv(name: string, value: string | undefined): string {
@@ -32,6 +33,8 @@ export const env = {
 }
 
 export const db = initDB()
+
+startDistributionCache()
 
 // fastify
 const app = express()
