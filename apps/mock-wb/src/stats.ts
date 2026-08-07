@@ -1,9 +1,79 @@
-import { faker } from "@faker-js/faker"
+import { type Distributor, exponentialDistributor, faker } from "@faker-js/faker"
 import { GameMode } from "@warbrokers/types/src/gameMode"
 import { xp2lvl } from "@warbrokers/types/src/level"
 import type { Player } from "@warbrokers/types/src/player"
 import { Vehicle } from "@warbrokers/types/src/vehicle"
 import { Weapon } from "@warbrokers/types/src/weapon"
+
+const normalDistributor = (mean: number, standardDeviation: number): Distributor => {
+    return (randomizer) => {
+        let value: number
+
+        do {
+            const magnitude = Math.sqrt(-2 * Math.log(1 - randomizer.next()))
+            const standardNormal = magnitude * Math.cos(2 * Math.PI * randomizer.next())
+            value = mean + standardNormal * standardDeviation
+        } while (value < 0 || value > 1)
+
+        return value
+    }
+}
+
+const spikedNormalDistributor = (
+    min: number,
+    max: number,
+    mean: number,
+    standardDeviation: number,
+    weightedBuckets: readonly (readonly [start: number, probability: number])[],
+): Distributor => {
+    const normal = normalDistributor((mean - min) / (max - min), standardDeviation / (max - min))
+
+    return (randomizer) => {
+        const selection = randomizer.next()
+        let cumulativeProbability = 0
+
+        for (const [start, probability] of weightedBuckets) {
+            cumulativeProbability += probability
+            if (selection < cumulativeProbability) {
+                return (start - min + randomizer.next() * 25) / (max - min)
+            }
+        }
+
+        return normal(randomizer)
+    }
+}
+
+const truncatedParetoDistributor = (minimum: number, shape: number): Distributor => {
+    const maximumSurvivalProbability = minimum ** shape
+
+    return (randomizer) => {
+        const value =
+            minimum / (1 - randomizer.next() * (1 - maximumSurvivalProbability)) ** (1 / shape)
+
+        return (value - minimum) / (1 - minimum)
+    }
+}
+
+// Preserve the live service's large cluster around the default 1500 ELO while retaining normal tails.
+const gamesEloDistributor = spikedNormalDistributor(500, 3500, 1500, 350, [
+    [1450, 0.07],
+    [1475, 0.12],
+    [1500, 0.29],
+    [1525, 0.07],
+    [1550, 0.04],
+])
+const killsEloDistributor = spikedNormalDistributor(1100, 2250, 1500, 175, [
+    [1400, 0.017],
+    [1425, 0.027],
+    [1450, 0.05],
+    [1475, 0.161],
+    [1500, 0.178],
+    [1525, 0.032],
+    [1550, 0.024],
+])
+// Roughly 90% of players have less than one million XP; experienced players form a long tail.
+const newPlayerXpDistributor = exponentialDistributor({ base: 100_000 })
+const experiencedPlayerXpDistributor = truncatedParetoDistributor(0.01, 0.84)
 
 export const stats: Player[] = [
     {
@@ -667,7 +737,21 @@ export const stats: Player[] = [
             const nick = faker.string.alphanumeric({
                 length: { min: 2, max: 20 },
             })
-            const xp = faker.number.int({ min: 100, max: 100_000_000 })
+            const xp =
+                faker.helpers.maybe(
+                    () =>
+                        faker.number.int({
+                            min: 1_000_000,
+                            max: 100_000_000,
+                            distributor: experiencedPlayerXpDistributor,
+                        }),
+                    { probability: 0.104 },
+                ) ??
+                faker.number.int({
+                    min: 100,
+                    max: 999_999,
+                    distributor: newPlayerXpDistributor,
+                })
 
             return {
                 uid: faker.database.mongodbObjectId(),
@@ -687,8 +771,16 @@ export const stats: Player[] = [
                             "SQUAD4",
                         ]),
                     ) || "",
-                killsELO: faker.number.float({ min: 1000, max: 3000 }),
-                gamesELO: faker.number.float({ min: 1000, max: 3000 }),
+                killsELO: faker.number.float({
+                    min: 1100,
+                    max: 2250,
+                    distributor: killsEloDistributor,
+                }),
+                gamesELO: faker.number.float({
+                    min: 500,
+                    max: 3500,
+                    distributor: gamesEloDistributor,
+                }),
                 wins:
                     faker.helpers.maybe(() => ({
                         // random choice of game modes
