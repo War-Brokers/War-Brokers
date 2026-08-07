@@ -30,11 +30,20 @@
         </div>
 
         <div class="md:hidden">
-            <Hamburger --color="#eee" bind:open />
+            <Hamburger
+                --color="#eee"
+                bind:open
+                title="Primary navigation"
+                ariaLabel="Primary navigation"
+                ariaControls="primary-navigation"
+            />
         </div>
     </div>
 
-    <div
+    <nav
+        id="primary-navigation"
+        aria-label="Primary"
+        inert={!open}
         class={cn(
             "flex flex-col overflow-hidden transition-[height] ease-linear dark:bg-gray-700 md:hidden",
             open ? "h-[192px]" : "h-0",
@@ -43,5 +52,5 @@
         {#each links as { name, path } (path)}
             <a href={path} class="min-h-[48px] hover:text-orange-500">{name}</a>
         {/each}
-    </div>
+    </nav>
 </header>
