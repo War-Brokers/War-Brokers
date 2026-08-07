@@ -20,11 +20,12 @@
         },
         "lint": { "dependsOn": ["^build", "^lint"] },
         "typecheck": { "dependsOn": ["^build", "^typecheck"] },
+        "transit": { "dependsOn": ["^transit"] },
         "test:e2e": {
             "env": ["PLAYWRIGHT_BROWSERS_PATH", "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"],
-            "dependsOn": ["^test:e2e"]
+            "cache": false
         },
-        "test:unit": { "dependsOn": ["^test:unit"] },
+        "test:unit": { "dependsOn": ["transit"] },
         "clean": {
             "cache": false
         }

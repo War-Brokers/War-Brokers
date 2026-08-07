@@ -5,13 +5,13 @@
         "turbo": "turbo",
         "dev": "mise run dev",
         "dev:workspace": "turbo run dev",
-        "build": "turbo run build --parallel --cache-dir=.turbo",
+        "build": "turbo run build --cache-dir=.turbo",
         "fmt:check": "prettier . --check",
         "lint": "turbo run lint",
         "typecheck": "turbo run typecheck",
-        "test:e2e": "turbo run test:e2e --parallel",
-        "test:unit": "turbo run test:unit --parallel",
-        "clean": "turbo run clean --parallel && rm -rf .turbo node_modules"
+        "test:e2e": "turbo run test:e2e",
+        "test:unit": "turbo run test:unit",
+        "clean": "turbo run clean && rm -rf .turbo node_modules"
     },
     "devDependencies": {
         "@types/node": "24.13.3",
