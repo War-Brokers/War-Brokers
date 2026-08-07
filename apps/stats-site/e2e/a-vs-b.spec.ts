@@ -40,7 +40,9 @@ test("shows searchbox for missing player A", async ({ page }) => {
 })
 
 test("shows searchbox for invalid player UID", async ({ page }) => {
-    await page.goto(`/invalid-vs-${pompUID}`)
+    const response = await page.goto(`/invalid-vs-${pompUID}`)
+    expect(response?.status()).toBe(200)
+    expect(await response?.text()).not.toContain("Internal Error")
 
     const comparison = page.getByRole("region", {
         name: "Players to compare",

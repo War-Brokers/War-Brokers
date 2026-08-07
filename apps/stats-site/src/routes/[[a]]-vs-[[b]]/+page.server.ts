@@ -2,14 +2,18 @@ import trpc from "$lib/trpc"
 
 import type { PageServerLoad } from "./$types"
 
+const uidPattern = /^[0-9a-fA-F]{24}$/
+
+const optional = <T>(promise: Promise<T>) => promise.catch(() => undefined)
+
 const getPlayerData = (uid: string | undefined) => {
-    if (!uid) return
+    if (!uid || !uidPattern.test(uid)) return
 
     return {
-        player: trpc.players.getPlayer.query({ uid }),
-        xpPercentile: trpc.players.percentile.xp.query({ uid }),
-        killsEloPercentile: trpc.players.percentile.killsElo.query({ uid }),
-        gamesEloPercentile: trpc.players.percentile.gamesElo.query({ uid }),
+        player: optional(trpc.players.getPlayer.query({ uid })),
+        xpPercentile: optional(trpc.players.percentile.xp.query({ uid })),
+        killsEloPercentile: optional(trpc.players.percentile.killsElo.query({ uid })),
+        gamesEloPercentile: optional(trpc.players.percentile.gamesElo.query({ uid })),
     }
 }
 

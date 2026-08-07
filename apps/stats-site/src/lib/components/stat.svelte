@@ -10,7 +10,7 @@
     export let title: string
     export let data: string | number
     export let _id: string | undefined = undefined
-    export let percentile: Promise<number> | undefined = undefined
+    export let percentile: Promise<number | undefined> | undefined = undefined
     export let compact = false
 
     const chart = {

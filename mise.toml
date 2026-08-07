@@ -159,4 +159,10 @@ wait_for_port 5173 # Stats site
 wait_for_port 3000 # WB timeline
 
 pnpm --filter=@warbrokers/stats-site test:e2e
+
+if ! kill -0 "$dev_pid" >/dev/null 2>&1; then
+    echo "Development servers exited during E2E testing" >&2
+    wait "$dev_pid"
+    exit 1
+fi
 '''

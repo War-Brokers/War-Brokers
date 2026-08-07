@@ -16,6 +16,7 @@
     type Side = "a" | "b"
     const sides = ["a", "b"] as const satisfies Side[]
     type Leader = Side | "tie" | undefined
+    type ComparisonPlayer = NonNullable<Awaited<PageData["a"]>>
 
     type ComparisonStat = {
         label: string
@@ -96,10 +97,7 @@
         return 100 * probability
     }
 
-    function comparisonStats(
-        a: Awaited<NonNullable<PageData["a"]>>,
-        b: Awaited<NonNullable<PageData["b"]>>,
-    ): ComparisonStat[] {
+    function comparisonStats(a: ComparisonPlayer, b: ComparisonPlayer): ComparisonStat[] {
         return [
             { label: "Level", format: "integer", a: a.level, b: b.level },
             { label: "XP", rank: "xp", format: "integer", a: a.xp, b: b.xp },
