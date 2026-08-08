@@ -15,7 +15,7 @@
 
     type Side = "a" | "b"
     const sides = ["a", "b"] as const satisfies Side[]
-    type Leader = Side | "tie" | undefined
+    type Leader = Side | "tie"
     type ComparisonPlayer = NonNullable<Awaited<PageData["a"]>>
 
     type ComparisonStat = {
@@ -190,51 +190,86 @@
 
     {#if a && b}
         {@const stats = comparisonStats(a, b)}
-        <section class="mx-auto mt-10 w-full max-w-4xl" aria-labelledby="stats-title">
-            <ul class="flex flex-col gap-3" role="list">
-                {#each stats as stat (stat.label)}
-                    {@const leader = getLeader(stat.a, stat.b)}
-                    <li
-                        class="grid grid-cols-2 items-stretch gap-1 rounded-2xl bg-gray-50 p-2 dark:bg-gray-900 sm:min-h-24 sm:grid-cols-[minmax(0,1fr)_minmax(4rem,7rem)_minmax(0,1fr)] sm:gap-4 sm:p-3"
-                    >
-                        <h3
-                            class="col-span-2 col-start-1 row-start-1 flex items-center justify-start px-2 py-2 text-start text-xs font-bold text-gray-500 dark:text-gray-400 sm:col-span-1 sm:col-start-2 sm:justify-center sm:px-0 sm:py-0 sm:text-center sm:text-sm"
-                        >
-                            {stat.label}
-                        </h3>
+        <div class="mx-auto mt-10 w-full max-w-4xl">
+            <table class="w-full table-fixed border-separate border-spacing-y-3">
+                <caption class="sr-only">Player statistics comparison</caption>
+                <colgroup>
+                    <col class="w-[43%]" />
+                    <col class="w-[14%]" />
+                    <col class="w-[43%]" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th id="player-a-column" scope="col" class="sr-only">
+                            {formatPlayerName(a)}
+                        </th>
+                        <th scope="col" class="sr-only">Statistic</th>
+                        <th id="player-b-column" scope="col" class="sr-only">
+                            {formatPlayerName(b)}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {#each stats as stat (stat.label)}
+                        {@const leader = getLeader(stat.a, stat.b)}
+                        {@const statHeaderId = `stat-${stat.label.toLowerCase().replaceAll(" ", "-")}`}
+                        <tr>
+                            {#each sides as side (side)}
+                                {@const winChance =
+                                    side === "a" ? stat.aWinChance : stat.bWinChance}
+                                <td
+                                    headers={`player-${side}-column ${statHeaderId}`}
+                                    class={cn(
+                                        "px-1 py-3 text-center align-middle sm:px-2",
+                                        side === "a" ? "rounded-s-2xl" : "rounded-e-2xl",
+                                        leader === side
+                                            ? "bg-orange-50 text-orange-800 ring-1 ring-inset ring-orange-200 dark:bg-orange-950/30 dark:text-orange-200 dark:ring-orange-800"
+                                            : "bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100",
+                                    )}
+                                >
+                                    <div class="flex min-w-0 flex-col items-center justify-center">
+                                        <span
+                                            class="mb-1 text-[0.625rem] font-black uppercase tracking-wider"
+                                        >
+                                            {leader === "tie"
+                                                ? "Tied"
+                                                : leader === side
+                                                  ? "Higher"
+                                                  : "Lower"}
+                                        </span>
+                                        <Stat
+                                            compact
+                                            title=""
+                                            data={formatValue(stat, side === "a" ? stat.a : stat.b)}
+                                            _id={stat.rank
+                                                ? `${side}-${stat.rank}-percentile`
+                                                : undefined}
+                                            percentile={percentile(side, stat.rank)}
+                                        />
+                                        {#if winChance !== undefined}
+                                            <span
+                                                class="mt-0.5 text-xs font-bold text-gray-500 dark:text-gray-400"
+                                            >
+                                                {winChance.toFixed(2)}% chance of winning
+                                            </span>
+                                        {/if}
+                                    </div>
+                                </td>
 
-                        {#each sides as side (side)}
-                            {@const winChance = side === "a" ? stat.aWinChance : stat.bWinChance}
-                            <div
-                                class={cn(
-                                    "row-start-2 flex min-w-0 flex-col items-center justify-center rounded-xl px-1 py-3 text-center sm:px-2",
-                                    side === "a"
-                                        ? "col-start-1 sm:row-start-1"
-                                        : "col-start-2 sm:col-start-3 sm:row-start-1",
-                                    leader === side
-                                        ? "bg-orange-50 text-orange-800 ring-1 ring-inset ring-orange-200 dark:bg-orange-950/30 dark:text-orange-200 dark:ring-orange-800"
-                                        : "text-gray-900 dark:text-gray-100",
-                                )}
-                            >
-                                <Stat
-                                    compact
-                                    title=""
-                                    data={formatValue(stat, side === "a" ? stat.a : stat.b)}
-                                    _id={stat.rank ? `${side}-${stat.rank}-percentile` : undefined}
-                                    percentile={percentile(side, stat.rank)}
-                                />
-                                {#if winChance !== undefined}
-                                    <span
-                                        class="mt-0.5 text-xs font-bold text-gray-500 dark:text-gray-400"
+                                {#if side === "a"}
+                                    <th
+                                        id={statHeaderId}
+                                        scope="row"
+                                        class="bg-gray-50 px-1 py-3 text-center text-xs font-bold text-gray-500 dark:bg-gray-900 dark:text-gray-400 sm:px-2 sm:text-sm"
                                     >
-                                        {winChance.toFixed(2)}% chance of winning
-                                    </span>
+                                        {stat.label}
+                                    </th>
                                 {/if}
-                            </div>
-                        {/each}
-                    </li>
-                {/each}
-            </ul>
-        </section>
+                            {/each}
+                        </tr>
+                    {/each}
+                </tbody>
+            </table>
+        </div>
     {/if}
 {/await}

@@ -68,3 +68,22 @@ for (const side of ["A", "B"] as const) {
         await expect(page).toHaveURL(side === "A" ? `/-vs-${pompUID}` : `/${pompUID}-vs-`)
     })
 }
+
+test("associates comparison values with each player and statistic", async ({ page }) => {
+    await page.goto(`/${pompUID}-vs-${pompUID}`)
+
+    const table = page.getByRole("table", { name: "Player statistics comparison" })
+    await expect(table).toBeVisible()
+    await expect(table.getByRole("columnheader", { name: "[LP] POMP" })).toHaveCount(2)
+
+    const levelRow = table.getByRole("row").filter({
+        has: page.getByRole("rowheader", { name: "Level" }),
+    })
+    const levelValues = levelRow.getByRole("cell")
+
+    await expect(levelValues).toHaveCount(2)
+    await expect(levelValues.nth(0)).toHaveAttribute("headers", "player-a-column stat-level")
+    await expect(levelValues.nth(1)).toHaveAttribute("headers", "player-b-column stat-level")
+    await expect(levelValues.getByText("Tied", { exact: true })).toHaveCount(2)
+    await expect(levelValues.getByText("Tied", { exact: true }).first()).toBeVisible()
+})

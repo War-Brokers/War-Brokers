@@ -9,16 +9,16 @@
         @apply h-2;
     }
 
-    :global(th) {
+    :where(table) :global(th) {
         @apply bg-slate-700 py-10 text-left;
     }
 
-    :global(td),
-    :global(th) {
+    :where(table) :global(td),
+    :where(table) :global(th) {
         @apply py-2;
     }
 
-    :global(tr:nth-child(even)) {
+    :where(table) :global(tr:nth-child(even)) {
         @apply bg-slate-700;
     }
 </style>
