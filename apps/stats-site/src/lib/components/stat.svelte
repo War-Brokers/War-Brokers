@@ -80,7 +80,7 @@
             {#await percentile then percentile}
                 {#if percentile !== undefined}
                     {@const { rank, icon } = percentile2rank(percentile)}
-                    <div class="ms-1.5 flex items-center justify-center" id={_id}>
+                    <div class={cn("flex items-center justify-center", title && "ms-1.5")} id={_id}>
                         <img
                             alt="The project logo"
                             src={icon}
