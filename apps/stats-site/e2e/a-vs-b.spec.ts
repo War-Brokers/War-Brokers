@@ -2,14 +2,14 @@ import { expect, test } from "@playwright/test"
 
 const pompUID = "5d2ead35d142affb05757778"
 
-test("shows a searchbox for two missing players", async ({ page }) => {
+test("shows a combobox for two missing players", async ({ page }) => {
     await page.goto("/-vs-")
 
     const comparison = page.getByRole("region", { name: "Players to compare" })
-    const playerASearch = comparison.getByRole("searchbox", {
+    const playerASearch = comparison.getByRole("combobox", {
         name: "Search Player A",
     })
-    const playerBSearch = comparison.getByRole("searchbox", {
+    const playerBSearch = comparison.getByRole("combobox", {
         name: "Search Player B",
     })
 
@@ -17,29 +17,29 @@ test("shows a searchbox for two missing players", async ({ page }) => {
     await expect(playerBSearch).toBeVisible()
 })
 
-test("shows searchbox for missing player B", async ({ page }) => {
+test("shows combobox for missing player B", async ({ page }) => {
     await page.goto(`/${pompUID}-vs-`)
 
     const comparison = page.getByRole("region", {
         name: "Players to compare",
     })
     await expect(comparison.getByRole("link", { name: "[LP] POMP" })).toBeVisible()
-    await expect(comparison.getByRole("searchbox", { name: "Search Player A" })).toHaveCount(0)
-    await expect(comparison.getByRole("searchbox", { name: "Search Player B" })).toBeVisible()
+    await expect(comparison.getByRole("combobox", { name: "Search Player A" })).toHaveCount(0)
+    await expect(comparison.getByRole("combobox", { name: "Search Player B" })).toBeVisible()
 })
 
-test("shows searchbox for missing player A", async ({ page }) => {
+test("shows combobox for missing player A", async ({ page }) => {
     await page.goto(`/-vs-${pompUID}`)
 
     const comparison = page.getByRole("region", {
         name: "Players to compare",
     })
     await expect(comparison.getByRole("link", { name: "[LP] POMP" })).toBeVisible()
-    await expect(comparison.getByRole("searchbox", { name: "Search Player A" })).toBeVisible()
-    await expect(comparison.getByRole("searchbox", { name: "Search Player B" })).toHaveCount(0)
+    await expect(comparison.getByRole("combobox", { name: "Search Player A" })).toBeVisible()
+    await expect(comparison.getByRole("combobox", { name: "Search Player B" })).toHaveCount(0)
 })
 
-test("shows searchbox for invalid player UID", async ({ page }) => {
+test("shows combobox for invalid player UID", async ({ page }) => {
     const response = await page.goto(`/invalid-vs-${pompUID}`)
     expect(response?.status()).toBe(200)
     expect(await response?.text()).not.toContain("Internal Error")
@@ -48,7 +48,7 @@ test("shows searchbox for invalid player UID", async ({ page }) => {
         name: "Players to compare",
     })
     await expect(
-        comparison.getByRole("searchbox", {
+        comparison.getByRole("combobox", {
             name: "Search Player A",
         }),
     ).toBeVisible()

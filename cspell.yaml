@@ -6,6 +6,7 @@ ignorePaths:
 words:
     - 0bsolete
     - aarch
+    - activedescendant
     - AKSMG
     - alsa
     - APIV
@@ -16,11 +17,12 @@ words:
     - createuser
     - Criss
     - deathmatch
+    - describedby
     - developomp
     - dompurify
     - esbuild
-    - esrap
     - Español
+    - esrap
     - etags
     - firelink
     - firestore
