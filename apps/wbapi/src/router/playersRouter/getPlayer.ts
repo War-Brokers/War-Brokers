@@ -28,7 +28,7 @@ export default (tag: string) =>
             const res = await getPlayer(uid)
 
             if (!res.success) {
-                if (res.reason === FailReason.WBDBConnectionFail) throw PlayerNotFoundTRPCError(uid)
+                if (res.reason === FailReason.PlayerNotFound) throw PlayerNotFoundTRPCError(uid)
                 throw reason2TRPCError(res.reason)
             }
 
@@ -42,30 +42,56 @@ export default (tag: string) =>
         })
 
 export async function getPlayer(uid: Player["uid"]): Promise<Result<Player>> {
-    const res = await fetchUpstream(`${env.WB_DB_BASE}/get_player_stats.php?uid=${uid}`, {
-        headers: {
-            Authorization:
-                "Basic " + Buffer.from(`${env.WB_DB_ID}:${env.WB_DB_PW}`).toString("base64"),
-        },
-    })
-
-    if (!res.ok) {
-        console.error(`failed to get player stats of ${uid}. DB responded: "${await res.text()}"`)
+    let res: Response
+    try {
+        res = await fetchUpstream(`${env.WB_DB_BASE}/get_player_stats.php?uid=${uid}`, {
+            headers: {
+                Authorization:
+                    "Basic " + Buffer.from(`${env.WB_DB_ID}:${env.WB_DB_PW}`).toString("base64"),
+            },
+        })
+    } catch (error) {
+        console.error(`failed to get player stats of ${uid}`, error)
         return {
             success: false,
             reason: FailReason.WBDBConnectionFail,
         }
     }
 
-    let raw: unknown
-    const res2 = res.clone()
+    let responseBody: string
     try {
-        raw = await res.json()
+        responseBody = await res.text()
+    } catch (error) {
+        console.error(`failed to read player stats of ${uid}`, error)
+        return {
+            success: false,
+            reason: FailReason.WBDBConnectionFail,
+        }
+    }
+
+    if (!res.ok) {
+        console.error(`failed to get player stats of ${uid}. DB responded: "${responseBody}"`)
+        return {
+            success: false,
+            reason: FailReason.WBDBConnectionFail,
+        }
+    }
+
+    if (res.status === 200 && responseBody === `No data for player: ${uid}`) {
+        return {
+            success: false,
+            reason: FailReason.PlayerNotFound,
+        }
+    }
+
+    let raw: unknown
+    try {
+        raw = JSON.parse(responseBody)
     } catch (e) {
         console.error(
             `/players/getPlayer?uid=${uid} failed to retrieve data from DB.
 raw:
-${await res2.text()}
+${responseBody}
 
 error:`,
             e,

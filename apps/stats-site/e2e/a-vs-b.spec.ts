@@ -47,11 +47,30 @@ test("shows combobox for invalid player UID", async ({ page }) => {
     const comparison = page.getByRole("region", {
         name: "Players to compare",
     })
+    const playerSearch = comparison.getByRole("combobox", { name: "Search Player A" })
+    const errorMessage = comparison.locator("#player-a-search-message")
+    await expect(playerSearch).toBeVisible()
+    await expect(playerSearch).toHaveAttribute("aria-describedby", "player-a-search-message")
+    await expect(playerSearch).toHaveAttribute("aria-invalid", "true")
+    await expect(errorMessage).toHaveText('Player UID "invalid" is invalid.')
+    await expect(errorMessage).toBeVisible()
+    await expect(comparison.getByRole("link", { name: "[LP] POMP" })).toBeVisible()
+
+    const playerSearchBounds = await playerSearch.boundingBox()
+    const errorMessageBounds = await errorMessage.boundingBox()
+    if (!playerSearchBounds || !errorMessageBounds)
+        throw new Error("Comparison state is not visible")
+    expect(playerSearchBounds.y).toBeLessThan(errorMessageBounds.y)
+})
+
+test("explains when a player was not found", async ({ page }) => {
+    await page.goto(`/000000000000000000000000-vs-${pompUID}`)
+
+    const comparison = page.getByRole("region", { name: "Players to compare" })
     await expect(
-        comparison.getByRole("combobox", {
-            name: "Search Player A",
-        }),
+        comparison.getByText('No player was found with UID "000000000000000000000000".'),
     ).toBeVisible()
+    await expect(comparison.getByRole("combobox", { name: "Search Player A" })).toBeVisible()
     await expect(comparison.getByRole("link", { name: "[LP] POMP" })).toBeVisible()
 })
 

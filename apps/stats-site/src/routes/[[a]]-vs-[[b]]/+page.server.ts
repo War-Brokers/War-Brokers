@@ -1,16 +1,17 @@
 import trpc from "$lib/trpc"
 
 import type { PageServerLoad } from "./$types"
-
-const uidPattern = /^[0-9a-fA-F]{24}$/
+import { isValidPlayerUid, loadPlayerSlot } from "./playerSlot"
 
 const optional = <T>(promise: Promise<T>) => promise.catch(() => undefined)
 
 const getPlayerData = (uid: string | undefined) => {
-    if (!uid || !uidPattern.test(uid)) return
+    const slot = loadPlayerSlot(uid, (uid) => trpc.players.getPlayer.query({ uid }))
+
+    if (!isValidPlayerUid(uid)) return { slot }
 
     return {
-        player: optional(trpc.players.getPlayer.query({ uid })),
+        slot,
         xpPercentile: optional(trpc.players.percentile.xp.query({ uid })),
         killsEloPercentile: optional(trpc.players.percentile.killsElo.query({ uid })),
         gamesEloPercentile: optional(trpc.players.percentile.gamesElo.query({ uid })),
@@ -24,13 +25,13 @@ export const load = (({ params }) => {
     return {
         aUid: params.a,
         bUid: params.b,
-        a: a?.player,
-        b: b?.player,
-        aXpPercentile: a?.xpPercentile,
-        bXpPercentile: b?.xpPercentile,
-        aKillsEloPercentile: a?.killsEloPercentile,
-        bKillsEloPercentile: b?.killsEloPercentile,
-        aGamesEloPercentile: a?.gamesEloPercentile,
-        bGamesEloPercentile: b?.gamesEloPercentile,
+        a: a.slot,
+        b: b.slot,
+        aXpPercentile: a.xpPercentile,
+        bXpPercentile: b.xpPercentile,
+        aKillsEloPercentile: a.killsEloPercentile,
+        bKillsEloPercentile: b.killsEloPercentile,
+        aGamesEloPercentile: a.gamesEloPercentile,
+        bGamesEloPercentile: b.gamesEloPercentile,
     }
 }) satisfies PageServerLoad

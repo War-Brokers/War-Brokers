@@ -10,13 +10,14 @@
     import { cn } from "$lib/utils"
 
     import type { PageData } from "./$types"
+    import type { PlayerSlot } from "./playerSlot"
 
     export let data: PageData
 
     type Side = "a" | "b"
     const sides = ["a", "b"] as const satisfies Side[]
     type Leader = Side | "tie"
-    type ComparisonPlayer = NonNullable<Awaited<PageData["a"]>>
+    type ComparisonPlayer = Extract<PlayerSlot, { status: "found" }>["player"]
 
     type ComparisonStat = {
         label: string
@@ -46,7 +47,7 @@
         }
     }
 
-    function formatPlayerName(player: Awaited<PageData["a"]>) {
+    function formatPlayerName(player: ComparisonPlayer | undefined) {
         if (player) {
             if (player.squad) return `[${player.squad}] ${player.nick}`
             return player.nick
@@ -54,19 +55,30 @@
         return "?"
     }
 
-    function formatPageTitle(a?: Awaited<PageData["a"]>, b?: Awaited<PageData["b"]>) {
+    function formatPageTitle(a?: ComparisonPlayer, b?: ComparisonPlayer) {
         return `${formatPlayerName(a)} vs ${formatPlayerName(b)}`
+    }
+
+    function playerFromSlot(slot: PlayerSlot): ComparisonPlayer | undefined {
+        return slot.status === "found" ? slot.player : undefined
+    }
+
+    function playerSlotError(slot: PlayerSlot): string | undefined {
+        switch (slot.status) {
+            case "invalid":
+                return `Player UID "${slot.uid}" is invalid.`
+            case "not-found":
+                return `No player was found with UID "${slot.uid}".`
+            case "unavailable":
+                return "Failed to load stats for this player."
+            case "found":
+            case "empty":
+                return undefined
+        }
     }
 
     function routeUid(value: unknown): string {
         return typeof value === "string" ? value : ""
-    }
-
-    /**
-     * Prevent an invalid UID from making the page empty.
-     */
-    function playerOrUndefined(player: PageData["a"]) {
-        return player?.catch(() => undefined)
     }
 
     function clearPlayer(side: Side, aUid?: string, bUid?: string) {
@@ -123,15 +135,18 @@
     }
 </script>
 
-{#await Promise.all([playerOrUndefined(data.a), playerOrUndefined(data.b)])}
+{#await Promise.all([data.a, data.b])}
     <Title title={formatPageTitle()} />
     <p class="w-full text-center text-gray-500 dark:text-gray-400">Loading...</p>
-{:then [a, b]}
+{:then [aSlot, bSlot]}
+    {@const a = playerFromSlot(aSlot)}
+    {@const b = playerFromSlot(bSlot)}
     <Title title={formatPageTitle(a, b)} />
 
     <section class="mx-auto w-full max-w-4xl" aria-label="Players to compare">
         <div class="relative mt-3 grid grid-cols-2 items-start gap-12 text-2xl font-black">
             {#each sides as side (side)}
+                {@const slot = side === "a" ? aSlot : bSlot}
                 {@const player = side === "a" ? a : b}
                 <div
                     class={cn(
@@ -166,15 +181,18 @@
                             <EditSolid size="md" aria-hidden="true" />
                         </Button>
                     {:else}
-                        <PlayerSearch
-                            inputId="player-{side}-search"
-                            label="Search Player {side.toUpperCase()}"
-                            placeholder="Search Player {side.toUpperCase()}"
-                            resultHref={(uid: string) =>
-                                side === "a"
-                                    ? `/${uid}-vs-${routeUid(data.bUid)}`
-                                    : `/${routeUid(data.aUid)}-vs-${uid}`}
-                        />
+                        <div class="flex w-full min-w-0 flex-col gap-2 text-start">
+                            <PlayerSearch
+                                inputId="player-{side}-search"
+                                label="Search Player {side.toUpperCase()}"
+                                placeholder="Search Player {side.toUpperCase()}"
+                                error={playerSlotError(slot)}
+                                resultHref={(uid: string) =>
+                                    side === "a"
+                                        ? `/${uid}-vs-${routeUid(data.bUid)}`
+                                        : `/${routeUid(data.aUid)}-vs-${uid}`}
+                            />
+                        </div>
                     {/if}
                 </div>
 

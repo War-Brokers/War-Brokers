@@ -1,4 +1,5 @@
 import { fetchUpstream } from "@/fetch"
+import { FailReason } from "@/types"
 
 import { getPlayer } from "./getPlayer"
 
@@ -82,5 +83,52 @@ test("preserves a non-empty squad", async () => {
     expect(result).toMatchObject({
         success: true,
         data: { squad: playerData.squad },
+    })
+})
+
+test("treats an HTTP 404 as unavailable", async () => {
+    mockedFetchUpstream.mockResolvedValue(new Response("Not found", { status: 404 }))
+
+    await expect(getPlayer(playerData.uid)).resolves.toEqual({
+        success: false,
+        reason: FailReason.WBDBConnectionFail,
+    })
+})
+
+test("identifies the upstream missing-player response", async () => {
+    mockedFetchUpstream.mockResolvedValue(new Response(`No data for player: ${playerData.uid}`))
+
+    await expect(getPlayer(playerData.uid)).resolves.toEqual({
+        success: false,
+        reason: FailReason.PlayerNotFound,
+    })
+})
+
+test("requires an exact HTTP 200 missing-player response", async () => {
+    mockedFetchUpstream.mockResolvedValue(
+        new Response(`No data for player: ${playerData.uid}`, { status: 201 }),
+    )
+
+    await expect(getPlayer(playerData.uid)).resolves.toEqual({
+        success: false,
+        reason: FailReason.SchemaValidationFail,
+    })
+})
+
+test("treats an unsuccessful upstream response as unavailable", async () => {
+    mockedFetchUpstream.mockResolvedValue(new Response("Unavailable", { status: 503 }))
+
+    await expect(getPlayer(playerData.uid)).resolves.toEqual({
+        success: false,
+        reason: FailReason.WBDBConnectionFail,
+    })
+})
+
+test("treats an upstream network rejection as unavailable", async () => {
+    mockedFetchUpstream.mockRejectedValue(new TypeError("fetch failed"))
+
+    await expect(getPlayer(playerData.uid)).resolves.toEqual({
+        success: false,
+        reason: FailReason.WBDBConnectionFail,
     })
 })

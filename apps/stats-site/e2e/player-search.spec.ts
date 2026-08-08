@@ -202,7 +202,7 @@ test("player search exposes short, loading, empty, result, and error states", as
     await expect(status).toHaveText('No players found for "none".')
 
     await input.fill("fail")
-    await expect(playerSearch.getByText("Unable to search players. Try again.")).toBeVisible()
+    await expect(page.locator("#player-a-search-message")).toBeVisible()
     await expect(status).toHaveText("Unable to search players. Try again.")
     await expect(input).toHaveAttribute("aria-describedby", "player-a-search-message")
 })

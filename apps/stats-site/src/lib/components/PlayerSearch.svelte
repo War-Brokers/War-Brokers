@@ -21,14 +21,25 @@
     let searchResults: SearchResult[] = []
     let highlightedIndex = -1
     let latestRequest = 0
+    let errorMessage: string | undefined
 
     export let resultHref = (uid: string) => `/players/${uid}`
     export let inputId = "player-search"
     export let label = "Player search"
     export let placeholder = "Player Search"
+    export let error: string | undefined = undefined
 
     $: highlightedResult = highlightedIndex >= 0 ? searchResults[highlightedIndex] : undefined
     $: activeOptionId = highlightedResult ? optionId(highlightedResult.uid) : undefined
+    $: if (state === "error") {
+        errorMessage = "Unable to search players. Try again."
+    } else if (state === "empty") {
+        errorMessage = `No players found for "${query}".`
+    } else if (state === "short") {
+        errorMessage = "Enter at least 2 characters."
+    } else {
+        errorMessage = error
+    }
 
     const runSearch = debounce(async (text: string, requestId: number) => {
         if (requestId !== latestRequest) return
@@ -56,7 +67,7 @@
         }
 
         highlightedIndex = -1
-        open = focused && !dismissed
+        open = state === "results" && focused && !dismissed
     }, 300)
 
     function optionId(uid: string) {
@@ -183,7 +194,7 @@
     function reopenCompletedSearch() {
         focused = true
         dismissed = false
-        open = state === "results" || state === "empty" || state === "error"
+        open = state === "results"
     }
 
     onMount(() => {
@@ -232,9 +243,8 @@
                 aria-expanded={open && state === "results"}
                 aria-controls={state === "results" ? `${inputId}-results` : undefined}
                 aria-activedescendant={open && state === "results" ? activeOptionId : undefined}
-                aria-describedby={state === "short" || state === "error"
-                    ? `${inputId}-message`
-                    : undefined}
+                aria-describedby={errorMessage ? `${inputId}-message` : undefined}
+                aria-invalid={errorMessage ? "true" : undefined}
                 aria-label={label}
                 class="my-auto h-full w-full min-w-0 border-none bg-transparent text-lg leading-7 focus:ring-0 dark:text-gray-200"
                 {placeholder}
@@ -260,15 +270,7 @@
             >
                 {#if state === "loading"}
                     <p class="px-4 py-2">Searching players...</p>
-                {:else if state === "empty"}
-                    <p class="px-4 py-2">
-                        No players found for "{query}".
-                    </p>
-                {:else if state === "error"}
-                    <p id={`${inputId}-message`} class="px-4 py-2 text-red-500">
-                        Unable to search players. Try again.
-                    </p>
-                {:else}
+                {:else if state === "results"}
                     <div
                         id={`${inputId}-results`}
                         role="listbox"
@@ -306,11 +308,9 @@
         </div>
     </search>
 
-    {#if state === "short"}
-        <p id={`${inputId}-message`} class="min-h-6 max-w-[36rem] text-base">
-            Enter at least 2 characters.
-        </p>
-    {/if}
+    <span id={`${inputId}-message`} class="min-h-6 max-w-[36rem] text-base text-red-500">
+        {errorMessage}
+    </span>
 
     <p role="status" aria-live="polite" aria-atomic="true" class="sr-only">
         {announcement}
