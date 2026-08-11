@@ -2,7 +2,7 @@
 version: alpha
 name: War Brokers Stats
 colors:
-  # flowbite overwrites tailwindCSS color palette. The colors below are the overridden colors.
+  # Flowbite overrides the Tailwind CSS color palette. The colors below are the overridden colors.
   canvas: "#1f2937" # gray-800
   surface: "#111827" # gray-900
   surface-raised: "#374151" # gray-700

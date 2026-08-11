@@ -114,10 +114,7 @@
                                 d={`${curve.curvePath} L${chart.left + chart.width},${chart.baseline} L${chart.left},${chart.baseline} Z`}
                                 class="fill-gray-100 dark:fill-gray-800"
                             />
-                            <path
-                                d={curve.areaPath}
-                                class="fill-primary-200 dark:fill-primary-900"
-                            />
+                            <path d={curve.areaPath} class="fill-orange-200 dark:fill-orange-900" />
                             <path
                                 d={curve.curvePath}
                                 class="fill-none stroke-gray-500 dark:stroke-gray-400"
@@ -129,7 +126,7 @@
                                 x2={curve.markerX}
                                 y1="8"
                                 y2={chart.baseline}
-                                class="stroke-primary-700 dark:stroke-primary-400"
+                                class="stroke-orange-700 dark:stroke-orange-400"
                                 stroke-width="2"
                                 stroke-dasharray="3 3"
                             />
@@ -137,7 +134,7 @@
                                 cx={curve.markerX}
                                 cy={curve.markerY}
                                 r="4"
-                                class="fill-primary-700 stroke-white dark:fill-primary-400 dark:stroke-gray-900"
+                                class="fill-orange-700 stroke-white dark:fill-orange-400 dark:stroke-gray-900"
                                 stroke-width="2"
                             />
                         </svg>
