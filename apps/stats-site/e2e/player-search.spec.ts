@@ -179,14 +179,18 @@ test("player search exposes short, loading, empty, result, and error states", as
 
     await input.fill("p")
     await expect(page.getByText("Enter at least 2 characters.")).toBeVisible()
+    await expect(input).not.toHaveAttribute("aria-invalid", "true")
     await page.waitForTimeout(400)
     expect(requestCount).toBe(0)
 
     await input.fill("slow")
-    await expect(playerSearch.getByText("Searching players...")).toBeVisible()
+    const loadingResults = playerSearch.locator('[aria-busy="true"]')
+    await expect(loadingResults).toBeVisible()
+    await expect(loadingResults).toHaveClass(/animate-pulse/)
+    await expect(loadingResults.getByText("Searching players...")).toHaveCount(0)
     await expect(status).toHaveText("Searching players...")
     await input.press("Escape")
-    await expect(playerSearch.getByText("Searching players...")).toBeHidden()
+    await expect(loadingResults).toBeHidden()
 
     slowSearchResponse.resolve()
 
@@ -198,13 +202,19 @@ test("player search exposes short, loading, empty, result, and error states", as
     await expect(playerSearch.getByRole("listbox")).toBeVisible()
 
     await input.fill("none")
-    await expect(playerSearch.getByText('No players found for "none".')).toBeVisible()
+    await expect(page.locator("#player-a-search-message")).toHaveText(
+        'No players found for "none".',
+    )
+    await expect(page.locator("#player-a-search-message")).toHaveClass(/text-gray-400/)
+    await expect(input).not.toHaveAttribute("aria-invalid", "true")
     await expect(status).toHaveText('No players found for "none".')
 
     await input.fill("fail")
     await expect(page.locator("#player-a-search-message")).toBeVisible()
+    await expect(page.locator("#player-a-search-message")).toHaveClass(/text-red-400/)
     await expect(status).toHaveText("Unable to search players. Try again.")
     await expect(input).toHaveAttribute("aria-describedby", "player-a-search-message")
+    await expect(input).toHaveAttribute("aria-invalid", "true")
 })
 
 test("player search ignores responses for superseded queries", async ({ page }) => {

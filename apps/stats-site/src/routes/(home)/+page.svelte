@@ -8,13 +8,21 @@
     import Title from "$lib/components/title.svelte"
 
     import type { PageData } from "./$types"
+    import Metric from "./Metric.svelte"
 
     export let data: PageData
-    const { distribution, playerCount, playersOnline, twitchStreams } = data
+    const {
+        distribution,
+        playerCount: _playerCount,
+        playersOnline,
+        twitchStreams: _twitchStreams,
+    } = data
     const distributionUpdatedAt = distribution.then((value) => value.updatedAt)
     const distributionCacheUpdateIntervalHours = distribution.then(
         (value) => value.cacheUpdateIntervalHours,
     )
+    const playerCount = _playerCount.then((value) => value.toLocaleString("en-US"))
+    const twitchStreams = _twitchStreams.then((value) => value.total)
 
     const charts = [
         {
@@ -47,53 +55,29 @@
 </div>
 
 <div class="flex flex-wrap gap-10">
-    <div>
-        <span class="font-bold dark:text-gray-400">Players online</span>
-        <h2 class="text-2xl font-black">
-            {#await playersOnline}
-                ...
-            {:then playersOnline}
-                {playersOnline}
-            {:catch _}
-                <span class="dark:text-red-600">ERROR</span>
-            {/await}
-        </h2>
+    <Metric label="Players online" value={playersOnline}>
         <A href="/servers">
             Browse Servers &nbsp; <Icon data={arrowRight} />
         </A>
-    </div>
+    </Metric>
 
-    <div>
-        <span class="font-bold dark:text-gray-400">Twitch streams</span>
-        <h2 class="text-2xl font-black">
-            {#await twitchStreams}
-                ...
-            {:then { total }}
-                {total}
-            {:catch _}
-                <span class="dark:text-red-600">ERROR</span>
-            {/await}
-        </h2>
+    <Metric label="Twitch streams" value={twitchStreams}>
         <A href="https://www.twitch.tv/warbrokers">
             Watch Live &nbsp; <Icon data={arrowRight} />
         </A>
-    </div>
+    </Metric>
 </div>
 
 <section class="mt-12" aria-labelledby="distribution-title">
     <h2 id="distribution-title" class="mb-6 text-2xl font-bold text-gray-100">Global Statistics</h2>
+    <p class="sr-only" role="status" aria-atomic="true">
+        {#await distribution catch _}
+            Global statistics failed to load.
+        {/await}
+    </p>
 
     <div class="mb-6">
-        <span class="font-bold dark:text-gray-400">Players tracked</span>
-        <h2 class="text-2xl font-black">
-            {#await playerCount}
-                ...
-            {:then playerCount}
-                {playerCount.toLocaleString("en-US")}
-            {:catch _}
-                <span class="dark:text-red-600">ERROR</span>
-            {/await}
-        </h2>
+        <Metric label="Players tracked" value={playerCount} />
     </div>
 
     <div class="grid gap-6">

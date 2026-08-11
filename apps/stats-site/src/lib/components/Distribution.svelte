@@ -90,7 +90,14 @@
         class="flex flex-col gap-1 border-b border-gray-700 px-4 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:px-6"
     >
         <h3 class="text-lg font-semibold text-gray-100">{title}</h3>
-        {#await Promise.all( [updatedAt, cacheUpdateIntervalHours] ) then [updatedAt, cacheUpdateIntervalHours]}
+        {#await Promise.all([updatedAt, cacheUpdateIntervalHours])}
+            <span class="skeleton-reveal" aria-busy="true">
+                <span
+                    class="block h-3 w-52 max-w-full animate-pulse rounded bg-gray-700 motion-reduce:animate-none"
+                    aria-hidden="true"
+                ></span>
+            </span>
+        {:then [updatedAt, cacheUpdateIntervalHours]}
             {@const now = Date.now()}
             {@const hoursAgo = Math.max(0, Math.floor((now - Date.parse(updatedAt)) / 3_600_000))}
             {@const refreshesInHours = Math.max(
@@ -106,20 +113,25 @@
                 >, refreshes in {refreshesInHours}
                 {refreshesInHours === 1 ? "hour" : "hours"}
             </span>
+        {:catch _}
+            <span class="text-xs text-red-400">Update time unavailable</span>
         {/await}
     </header>
 
     {#await data}
-        <figure class="px-2 py-5 sm:px-4" aria-busy="true">
-            <div class="pb-2">
-                <div class="h-72 rounded-md bg-gray-800/40"></div>
+        <figure class="animate-pulse px-2 py-5 motion-reduce:animate-none sm:px-4" aria-busy="true">
+            <div class="skeleton-reveal pb-2">
+                <div class="h-72 rounded-md bg-gray-800/60" aria-hidden="true"></div>
             </div>
-            <figcaption class="sr-only">Loading {title} chart.</figcaption>
+            <figcaption class="sr-only">{title} chart</figcaption>
         </figure>
     {:then { buckets, bucketSize }}
         {#if buckets.length === 0}
-            <p class="flex h-[21rem] items-center justify-center px-4 text-sm text-gray-400">
-                No distribution data available.
+            <p
+                class="flex min-h-[21rem] items-center justify-center px-4 text-sm text-gray-400"
+                role="status"
+            >
+                No {title} distribution data is available.
             </p>
         {:else}
             {@const completeBuckets = fillMissingBuckets(buckets, bucketSize)}
@@ -201,6 +213,10 @@
             </figure>
         {/if}
     {:catch _}
-        <p class="flex h-[21rem] items-center justify-center px-4 text-sm text-red-600">ERROR</p>
+        <p
+            class="flex min-h-[21rem] items-center justify-center px-4 text-sm font-bold text-red-400"
+        >
+            Failed to load
+        </p>
     {/await}
 </article>

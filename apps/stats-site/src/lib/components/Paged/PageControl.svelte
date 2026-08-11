@@ -27,16 +27,33 @@
 </script>
 
 <div class="mb-2 flex flex-col">
-    {#await total then playerCount}
+    {#await total}
+        <div
+            class="skeleton-reveal flex min-h-7 w-full items-center justify-center"
+            aria-busy="true"
+        >
+            <span
+                class="h-5 w-32 animate-pulse rounded bg-slate-500 motion-reduce:animate-none"
+                aria-hidden="true"
+            ></span>
+        </div>
+    {:then playerCount}
         <span class="w-full text-center">
             page <b>{currentPage}</b> of <b>{setMaxPage(playerCount)}</b>
+        </span>
+    {:catch _}
+        <span
+            class="flex min-h-7 w-full items-center justify-center text-sm text-red-400"
+            role="status"
+        >
+            Page count unavailable.
         </span>
     {/await}
 
     <div class="buttons flex w-full justify-between">
         <button
             class="place-self-start"
-            disabled={$maxPage === -1 || currentPage <= 1}
+            disabled={currentPage <= 1}
             on:click={() => {
                 gotoPage(currentPage - 1)
             }}

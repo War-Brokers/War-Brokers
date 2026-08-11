@@ -18,8 +18,8 @@ test("should have proper title", async ({ page }) => {
     await expect(page).toHaveTitle("[LP] POMP vs ?" + suffix)
 
     await page.goto("/404")
-    await expect(page).toHaveTitle("404 Not Found" + suffix)
+    await expect(page).toHaveTitle("404 Page not found" + suffix)
 
     await page.goto("/path/that/does/not/exist")
-    await expect(page).toHaveTitle("404 Not Found" + suffix)
+    await expect(page).toHaveTitle("404 Page not found" + suffix)
 })

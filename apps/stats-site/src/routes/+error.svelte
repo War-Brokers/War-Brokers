@@ -1,11 +1,27 @@
 <script lang="ts">
     import { page } from "$app/stores"
+    import A from "$lib/components/A.svelte"
     import Title from "$lib/components/title.svelte"
+
+    $: notFound = $page.status === 404
+    $: heading = notFound ? "Page not found" : "Unable to load this page"
+    $: description = notFound
+        ? "The page may have moved or the address may be incorrect."
+        : "The requested page is currently unavailable."
 </script>
 
 {#if $page.error}
-    <Title title={`${$page.status} ${$page.error.message}`} />
+    <Title title={`${$page.status} ${heading}`} />
 
-    <h1 class="mb-2 text-5xl font-black">{$page.status}</h1>
-    <span class="text-lg">{$page.error.message}</span>
+    <section aria-labelledby="error-title">
+        <p class="mb-2 text-5xl font-black tabular-nums">{$page.status}</p>
+        <h1 id="error-title" class="text-2xl font-bold">{heading}</h1>
+        <p class="mt-2 max-w-xl text-gray-300">{description}</p>
+        <div class="mt-6 flex flex-wrap gap-6">
+            <A href="/">Return home</A>
+            {#if !notFound}
+                <A href="https://uptime.pompy.dev/status/wbp">View service status</A>
+            {/if}
+        </div>
+    </section>
 {/if}

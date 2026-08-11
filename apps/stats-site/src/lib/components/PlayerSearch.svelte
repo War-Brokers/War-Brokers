@@ -1,7 +1,6 @@
 <script lang="ts">
     import debounce from "lodash/debounce"
     import { onDestroy, onMount, tick } from "svelte"
-    import { Pulse } from "svelte-loading-spinners"
 
     import { goto } from "$app/navigation"
     import trpc from "$lib/trpc"
@@ -21,7 +20,8 @@
     let searchResults: SearchResult[] = []
     let highlightedIndex = -1
     let latestRequest = 0
-    let errorMessage: string | undefined
+    let message: string | undefined
+    let messageIsError = false
 
     export let resultHref = (uid: string) => `/players/${uid}`
     export let inputId = "player-search"
@@ -32,14 +32,17 @@
     $: highlightedResult = highlightedIndex >= 0 ? searchResults[highlightedIndex] : undefined
     $: activeOptionId = highlightedResult ? optionId(highlightedResult.uid) : undefined
     $: if (state === "error") {
-        errorMessage = "Unable to search players. Try again."
+        message = "Unable to search players. Try again."
     } else if (state === "empty") {
-        errorMessage = `No players found for "${query}".`
+        message = `No players found for "${query}".`
     } else if (state === "short") {
-        errorMessage = "Enter at least 2 characters."
+        message = "Enter at least 2 characters."
+    } else if (state === "idle") {
+        message = error
     } else {
-        errorMessage = error
+        message = undefined
     }
+    $: messageIsError = state === "error" || (state === "idle" && Boolean(error))
 
     const runSearch = debounce(async (text: string, requestId: number) => {
         if (requestId !== latestRequest) return
@@ -218,103 +221,111 @@
 </script>
 
 <div bind:this={rootElement} class="flex w-full flex-col items-center text-start font-normal">
-    <search
-        aria-label={label}
-        class="flex h-12 w-full min-w-0 max-w-[36rem] items-center justify-center rounded-full pr-3 dark:bg-gray-600 sm:pr-7"
-    >
+    <search aria-label={label} class="flex w-full flex-col items-center">
         <div
-            aria-hidden="true"
-            class="ml-2 flex h-5 w-5 shrink-0 items-center justify-center sm:ml-3 sm:h-7 sm:w-7"
+            class="flex h-12 w-full min-w-0 max-w-[36rem] items-center justify-center rounded-full pr-3 dark:bg-gray-600 sm:pr-7"
         >
-            {#if state === "loading"}
-                <Pulse size="28" color="#d1d5db" unit="px" duration="1s" />
-            {/if}
-        </div>
-        <div class="relative flex w-full min-w-0 flex-col">
-            <input
-                bind:value={query}
-                type="search"
-                id={inputId}
-                autocomplete="off"
-                maxlength="20"
-                role="combobox"
-                aria-autocomplete="list"
-                aria-haspopup="listbox"
-                aria-expanded={open && state === "results"}
-                aria-controls={state === "results" ? `${inputId}-results` : undefined}
-                aria-activedescendant={open && state === "results" ? activeOptionId : undefined}
-                aria-describedby={errorMessage ? `${inputId}-message` : undefined}
-                aria-invalid={errorMessage ? "true" : undefined}
-                aria-label={label}
-                class="my-auto h-full w-full min-w-0 border-none bg-transparent text-lg leading-7 focus:ring-0 dark:text-gray-200"
-                {placeholder}
-                on:input={handleInput}
-                on:keydown={handleKeydown}
-                on:compositionstart={handleCompositionStart}
-                on:compositionend={handleCompositionEnd}
-                on:focus={reopenCompletedSearch}
-                on:click={reopenCompletedSearch}
-                on:blur={() => {
-                    focused = false
-                    highlightedIndex = -1
-                    open = false
-                }}
-            />
+            <div aria-hidden="true" class="ml-2 h-5 w-5 shrink-0 sm:ml-3 sm:h-7 sm:w-7"></div>
+            <div class="relative flex w-full min-w-0 flex-col">
+                <input
+                    bind:value={query}
+                    type="search"
+                    id={inputId}
+                    autocomplete="off"
+                    maxlength="20"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-haspopup="listbox"
+                    aria-expanded={open && state === "results"}
+                    aria-controls={state === "results" ? `${inputId}-results` : undefined}
+                    aria-activedescendant={open && state === "results" ? activeOptionId : undefined}
+                    aria-describedby={message ? `${inputId}-message` : undefined}
+                    aria-invalid={messageIsError ? "true" : undefined}
+                    aria-label={label}
+                    class="my-auto h-full w-full min-w-0 border-none bg-transparent text-lg leading-7 focus:ring-0 dark:text-gray-200"
+                    {placeholder}
+                    on:input={handleInput}
+                    on:keydown={handleKeydown}
+                    on:compositionstart={handleCompositionStart}
+                    on:compositionend={handleCompositionEnd}
+                    on:focus={reopenCompletedSearch}
+                    on:click={reopenCompletedSearch}
+                    on:blur={() => {
+                        focused = false
+                        highlightedIndex = -1
+                        open = false
+                    }}
+                />
 
-            <div
-                aria-busy={state === "loading"}
-                class={cn(
-                    "absolute top-20 h-96 max-h-96 w-full overflow-auto rounded-lg py-4 dark:bg-gray-600",
-                    !open && "hidden",
-                )}
-            >
-                {#if state === "loading"}
-                    <p class="px-4 py-2">Searching players...</p>
-                {:else if state === "results"}
-                    <div
-                        id={`${inputId}-results`}
-                        role="listbox"
-                        aria-label={`${label} results`}
-                        class="relative h-full overflow-y-scroll"
-                    >
-                        {#each searchResults as { nick, squad, uid }, index (uid)}
-                            <a
-                                id={optionId(uid)}
-                                href={resultHref(uid)}
-                                role="option"
-                                tabindex="-1"
-                                aria-selected={highlightedIndex === index}
-                                class={cn(
-                                    "flex w-full flex-col p-2 hover:dark:bg-gray-700",
-                                    highlightedIndex === index && "dark:bg-gray-700",
-                                )}
-                                on:pointerdown|preventDefault
-                                on:mouseenter={() => {
-                                    setHighlightedIndex(index)
-                                }}
-                            >
-                                <b class="text-lg">
-                                    {#if squad}
-                                        <span class="text-gray-400">[{squad}]</span>
-                                    {/if}
-                                    {nick}
-                                </b>
-                                <p class="text-base dark:text-gray-400">{uid}</p>
-                            </a>
-                        {/each}
-                    </div>
-                {/if}
+                <div
+                    aria-busy={state === "loading"}
+                    class={cn(
+                        "absolute top-20 h-96 max-h-96 w-full overflow-auto rounded-lg py-4 dark:bg-gray-600",
+                        state === "loading" && "animate-pulse motion-reduce:animate-none",
+                        !open && "hidden",
+                    )}
+                >
+                    {#if state === "loading"}
+                        <div class="skeleton-reveal space-y-4 px-2" aria-hidden="true">
+                            {#each { length: 4 } as _}
+                                <div class="space-y-2 p-2">
+                                    <div class="h-5 w-32 rounded bg-gray-500"></div>
+                                    <div class="h-4 w-48 max-w-full rounded bg-gray-500"></div>
+                                </div>
+                            {/each}
+                        </div>
+                    {:else if state === "results"}
+                        <div
+                            id={`${inputId}-results`}
+                            role="listbox"
+                            aria-label={`${label} results`}
+                            class="relative h-full overflow-y-scroll"
+                        >
+                            {#each searchResults as { nick, squad, uid }, index (uid)}
+                                <a
+                                    id={optionId(uid)}
+                                    href={resultHref(uid)}
+                                    role="option"
+                                    tabindex="-1"
+                                    aria-selected={highlightedIndex === index}
+                                    class={cn(
+                                        "flex w-full flex-col p-2 hover:dark:bg-gray-700",
+                                        highlightedIndex === index && "dark:bg-gray-700",
+                                    )}
+                                    on:pointerdown|preventDefault
+                                    on:mouseenter={() => {
+                                        setHighlightedIndex(index)
+                                    }}
+                                >
+                                    <b class="text-lg">
+                                        {#if squad}
+                                            <span class="text-gray-400">[{squad}]</span>
+                                        {/if}
+                                        {nick}
+                                    </b>
+                                    <p class="text-base dark:text-gray-400">{uid}</p>
+                                </a>
+                            {/each}
+                        </div>
+                    {/if}
+                </div>
             </div>
         </div>
+
+        <span
+            id={`${inputId}-message`}
+            class={cn(
+                "min-h-6 max-w-[36rem] text-base",
+                messageIsError ? "text-red-400" : "text-gray-400",
+            )}
+        >
+            {message}
+        </span>
+
+        <p role="status" aria-live="polite" aria-atomic="true" class="sr-only">
+            {announcement}
+        </p>
     </search>
-
-    <span id={`${inputId}-message`} class="min-h-6 max-w-[36rem] text-base text-red-500">
-        {errorMessage}
-    </span>
-
-    <p role="status" aria-live="polite" aria-atomic="true" class="sr-only">
-        {announcement}
-    </p>
 </div>
 
 <style lang="postcss">

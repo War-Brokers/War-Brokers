@@ -106,3 +106,25 @@ test("associates comparison values with each player and statistic", async ({ pag
     await expect(levelValues.getByText("Tied", { exact: true })).toHaveCount(2)
     await expect(levelValues.getByText("Tied", { exact: true }).first()).toBeVisible()
 })
+
+test("loading skeleton reserves the resolved comparison height", async ({ page }) => {
+    await page.goto(`/${pompUID}-vs-${pompUID}`, { waitUntil: "commit" })
+
+    const pendingHeight = await page
+        .getByRole("region", { name: "Player comparison" })
+        .evaluate((element) => element.getBoundingClientRect().height)
+
+    const table = page.getByRole("table", { name: "Player statistics comparison" })
+    await expect(table).toBeVisible()
+
+    const resolvedHeight = await table.evaluate((element) => {
+        const playerHeader = document.querySelector<HTMLElement>(
+            'section[aria-label="Players to compare"]',
+        )
+        if (!playerHeader) throw new Error("Expected the resolved player comparison header")
+
+        return element.getBoundingClientRect().bottom - playerHeader.getBoundingClientRect().top
+    })
+
+    expect(Math.abs(resolvedHeight - pendingHeight)).toBeLessThanOrEqual(1)
+})

@@ -137,7 +137,27 @@
 
 {#await Promise.all([data.a, data.b])}
     <Title title={formatPageTitle()} />
-    <p class="w-full text-center text-gray-500 dark:text-gray-400">Loading...</p>
+    <section
+        class="mx-auto w-full max-w-4xl animate-pulse motion-reduce:animate-none"
+        aria-busy="true"
+        aria-label="Player comparison"
+    >
+        <div
+            class="skeleton-reveal mt-3 grid min-h-16 grid-cols-2 items-center gap-12 sm:min-h-12"
+            aria-hidden="true"
+        >
+            <div class="ms-auto h-8 w-32 max-w-full rounded bg-gray-600"></div>
+            <div class="h-8 w-32 max-w-full rounded bg-gray-600"></div>
+        </div>
+        {#if data.aUid && data.bUid}
+            <div class="skeleton-reveal mt-10 flex flex-col gap-3 py-6" aria-hidden="true">
+                <div class="h-[4.25rem] rounded-2xl bg-gray-900 sm:h-[4.75rem]"></div>
+                <div class="h-24 rounded-2xl bg-gray-900 sm:h-[6.5rem]"></div>
+                <div class="h-32 rounded-2xl bg-gray-900 sm:h-[7.5rem]"></div>
+                <div class="h-32 rounded-2xl bg-gray-900 sm:h-[7.5rem]"></div>
+            </div>
+        {/if}
+    </section>
 {:then [aSlot, bSlot]}
     {@const a = playerFromSlot(aSlot)}
     {@const b = playerFromSlot(bSlot)}

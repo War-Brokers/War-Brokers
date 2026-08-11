@@ -1,7 +1,4 @@
 <script lang="ts">
-    import debounce from "lodash/debounce"
-    import { writable } from "svelte/store"
-
     import Title from "$lib/components/title.svelte"
 
     import type { PageData } from "./$types"
@@ -9,12 +6,7 @@
     export let data: PageData
     const { squads } = data
 
-    const searchTerm = writable("")
-    const handleSearchInput = debounce((event: Event) => {
-        if (event.target instanceof HTMLInputElement) {
-            searchTerm.set(event.target.value)
-        }
-    }, 100)
+    let searchTerm = ""
 </script>
 
 <Title title="Squads" />
@@ -28,18 +20,45 @@
         maxlength="20"
         autocomplete="off"
         aria-required="false"
-        class="rounded-full border-none bg-gray-600 px-6 text-lg leading-7 text-gray-200 placeholder:text-gray-400 focus:ring-0"
+        bind:value={searchTerm}
+        class="min-w-0 rounded-full border-none bg-gray-600 px-6 text-lg leading-7 text-gray-200 placeholder:text-gray-400 focus:ring-0"
         placeholder="Squad Name"
-        on:input={handleSearchInput}
     />
 </form>
 
-<div class="flex flex-col items-center gap-5">
+<div class="flex min-h-96 flex-col items-center gap-5">
     {#await squads}
-        Loading...
+        <div class="skeleton-reveal w-full" aria-busy="true">
+            <div class="flex w-full animate-pulse flex-col gap-5 motion-reduce:animate-none">
+                {#each { length: 6 } as _}
+                    <div class="h-14 w-full rounded-lg bg-gray-700" aria-hidden="true"></div>
+                {/each}
+            </div>
+        </div>
     {:then squads}
-        {#each squads as squadName}
-            {#if squadName.toLocaleLowerCase().includes($searchTerm.toLocaleLowerCase())}
+        {@const filteredSquads = squads.filter((squadName) =>
+            squadName.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()),
+        )}
+        {#if squads.length === 0}
+            <p class="flex min-h-48 items-center text-gray-400" role="status">
+                No squads are available.
+            </p>
+        {:else if filteredSquads.length === 0}
+            <div
+                class="flex min-h-48 flex-col items-center justify-center gap-4 text-center"
+                role="status"
+            >
+                <p class="text-gray-400">No squads match “{searchTerm}”.</p>
+                <button
+                    type="button"
+                    class="rounded-md bg-slate-600 px-4 py-2 font-medium hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+                    on:click={() => {
+                        searchTerm = ""
+                    }}>Clear search</button
+                >
+            </div>
+        {:else}
+            {#each filteredSquads as squadName}
                 <a
                     href={`/squads/${squadName}`}
                     class="w-full rounded-lg p-4 font-bold dark:bg-gray-900"
@@ -48,8 +67,12 @@
                         {squadName}
                     </div>
                 </a>
-            {/if}
-        {/each}
+            {/each}
+        {/if}
+    {:catch _}
+        <p class="flex min-h-48 items-center font-bold text-red-400" role="status">
+            Failed to load
+        </p>
     {/await}
 </div>
 
