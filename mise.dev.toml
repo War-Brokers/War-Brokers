@@ -1,9 +1,7 @@
 [tools]
 cspell = "10.0.1"
 "nix:playwright-test" = "1.57.0" # Sync with "@playwright/test" package versions.
-
-# todo: replace with convex
-"nix:postgresql_15" = "15.18" # same version as supabase
+"nix:postgresql_18" = "18.4" # https://www.nixhub.io/packages/postgresql_18
 
 [plugins]
 nix = "https://github.com/jbadeau/mise-nix"

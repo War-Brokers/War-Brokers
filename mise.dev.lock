@@ -8,6 +8,6 @@ backend = "npm:cspell"
 version = "1.57.0"
 backend = "nix:playwright-test"
 
-[[tools."nix:postgresql_15"]]
-version = "15.18"
-backend = "nix:postgresql_15"
+[[tools."nix:postgresql_18"]]
+version = "18.4"
+backend = "nix:postgresql_18"
