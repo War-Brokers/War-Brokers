@@ -257,6 +257,8 @@ test("player search waits for IME composition to finish", async ({ page }) => {
     await input.focus()
     await input.dispatchEvent("compositionstart")
     await input.evaluate((element) => {
+        if (!(element instanceof HTMLInputElement)) throw new Error("Expected search input")
+
         element.value = "玩家"
         element.dispatchEvent(
             new InputEvent("input", {

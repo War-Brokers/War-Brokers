@@ -16,7 +16,7 @@ export default defineConfig(
         languageOptions: {
             parserOptions: {
                 projectService: {
-                    allowDefaultProject: ["e2e/*.ts", "playwright.config.ts"],
+                    allowDefaultProject: ["playwright.config.ts"],
                 },
                 tsconfigRootDir: import.meta.dirname,
             },
