@@ -9,7 +9,11 @@ test("should have proper title", async ({ page }) => {
     await page.goto("/players/5d2ead35d142affb05757778")
     await expect(page).toHaveTitle("[LP] POMP" + suffix)
 
-    // todo: add squad page title
+    await page.goto("/squads")
+    await expect(page).toHaveTitle("Squads" + suffix)
+
+    await page.goto("/squads/LP")
+    await expect(page).toHaveTitle("Llama's Pyjamas" + suffix)
 
     await page.goto("/-vs-")
     await expect(page).toHaveTitle("? vs ?" + suffix)
