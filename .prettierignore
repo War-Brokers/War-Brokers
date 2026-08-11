@@ -1,4 +1,5 @@
 _/*
+.agents/
 **/.turbo/
 **/build/
 **/drizzle/
@@ -7,3 +8,4 @@ _/*
 pnpm-lock.yaml
 **/test-results/
 next-env.d.ts
+skills-lock.json
