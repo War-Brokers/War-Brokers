@@ -1,3 +1,5 @@
+import { enumValues } from "./enum"
+
 export enum Language {
     DE = "de", // Deutsche
     EN = "en", // English
@@ -11,3 +13,5 @@ export enum Language {
     RU = "ru", // Russian
     ZH = "zh", // Chinese
 }
+
+export const languages = enumValues(Language)

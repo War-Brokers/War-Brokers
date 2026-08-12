@@ -107,9 +107,28 @@ error:`,
     if (rawRecordResult.success) {
         const rawRecord = rawRecordResult.data
 
+        // The upstream API serializes these some numerical stats as strings and omits
+        // some values entirely. This fixes that.
+
         // this check works on both null and undefined values because JS
         if (rawRecord["time_alive_longest"] != null)
             rawRecord["time_alive_longest"] = Number(rawRecord["time_alive_longest"])
+
+        for (const field of ["most_kills_in_round", "most_kills_between_deaths", "longest_kill"]) {
+            if (!rawRecord[field]) continue
+            if (
+                typeof rawRecord[field] === "object" &&
+                Object.entries(rawRecord[field]).length <= 0
+            )
+                continue
+
+            rawRecord[field] = Object.fromEntries(
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+                Object.entries(rawRecord[field] as Record<string, string>).map(
+                    ([weapon, value]) => [weapon, Number(value)],
+                ),
+            )
+        }
 
         const nick = rawRecord["nick"]
         if (rawRecord["nicklower"] === null && typeof nick === "string")

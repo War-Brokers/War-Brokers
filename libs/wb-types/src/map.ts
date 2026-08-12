@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+import { enumValues } from "./enum"
+
 export enum WBMap {
     Desert = 0,
     NorthWest = 1,
@@ -54,6 +56,8 @@ export enum WBMap {
     Area15V2 = 50,
     DesertRedux = 51,
 }
+
+export const maps = enumValues(WBMap)
 
 export const mapIDSchema = z.nativeEnum(WBMap)
 

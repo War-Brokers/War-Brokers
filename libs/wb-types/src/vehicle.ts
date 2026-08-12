@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+import { enumValues } from "./enum"
+
 export enum Vehicle {
     TankLvl1 = "v00",
     TankLvl2 = "v01",
@@ -28,6 +30,8 @@ export enum Vehicle {
     UNKNOWN_VEHICLE_112 = "v112",
     UNKNOWN_VEHICLE_113 = "v113",
 }
+
+export const vehicles = enumValues(Vehicle)
 
 export const vehicleSchema = z.nativeEnum(Vehicle)
 

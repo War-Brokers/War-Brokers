@@ -37,10 +37,16 @@ export const playerSchema = z.object({
     // In-game stuff
     wins: z.record(gameModeIDSchema, z.number().int()).or(z.null()),
     losses: z.record(gameModeIDSchema, z.number().int()).or(z.null()),
+    number_of_capture_points: z.number().int().gte(0).optional(), // remove?
     number_of_jumps: z.number().int().or(z.null()),
     scuds_launched: z.number().int().gte(0).or(z.null()),
+    total_kills: z.number().int().gte(0).optional(), // remove?
+    kill_to_death_ratio: z.number().gte(0).optional(), // remove?
+    kills_per_minute: z.number().gte(0).optional(), // remove?
     zombie_kills: z.number().int().gte(0),
     zombie_deaths: z.number().int().gte(0),
+    zombie_time_alive: z.number().gte(0).or(z.null()).optional(),
+    zombie_time_alive_count: z.number().int().gte(0).or(z.null()).optional(),
     zombie_wins: z.number().int().gte(0),
 
     // Vehicle Stats
@@ -59,16 +65,16 @@ export const playerSchema = z.object({
     damage_dealt: z.record(weaponIDSchema, z.number()).or(z.null()),
     damage_received: z.record(weaponIDSchema, z.number()).or(z.null()),
 
-    // most_kills_between_deaths: z.record(weaponIDSchema, z.number().int()),
-    // most_kills_in_round: z.record(weaponIDSchema, z.number().int()),
+    most_kills_between_deaths: z.record(weaponIDSchema, z.number().int()).or(z.null()).optional(),
+    most_kills_in_round: z.record(weaponIDSchema, z.number().int()).or(z.null()).optional(),
 
     kills_per_weapon: z.record(weaponIDSchema, z.number().int()).or(z.null()),
     deaths: z.record(weaponIDSchema, z.number().int()).or(z.null()),
     headshots: z.record(weaponIDSchema, z.number().int()).or(z.null()),
-    // longest_kill: z.record(weaponIDSchema, z.number()),
+    longest_kill: z.record(weaponIDSchema, z.number()).or(z.null()).optional(),
 
     // Flags
-    // guest: z.boolean().optional(),
+    guest: z.boolean().optional(), // remove?
     banned: z
         .literal(false)
         .describe("Whether the user is banned or not. Doesn't seem to be used. Is always false"),
@@ -76,18 +82,16 @@ export const playerSchema = z.object({
 
     // Time
     time: z.number().int().describe("UNIX timestamp of last session"),
-    // join_date: z.string().describe("YY-MM-DD formatted date or 0"),
-    // last_seen: z.string().describe("YY-MM-DD formatted date or 0"),
+    join_date: z.string().describe("YY-MM-DD formatted date or 0").optional(), // removable?
+    last_seen: z.string().describe("YY-MM-DD formatted date or 0").optional(), // removable?
     joinTime: z.number().int().describe("UNIX timestamp of join date & time (could be 0)"),
-    // ping_time: z.number().int().or(z.null()),
-    // ping_time_count: z.number().int(),
-    // frame_rate: z.number(),
-    // frame_rate_count: z.number().int(),
-    // time_alive_count: z.number().int().gte(0).or(z.null()),
-    // time_alive_longest: z.number().or(z.null()),
-    // time_alive: z.number().gte(0).or(z.null()),
-    // zombie_time_alive_count: z.number().int().gte(0),
-    // zombie_time_alive: z.number().gte(0),
+    ping_time: z.number().int().or(z.null()).optional(),
+    ping_time_count: z.number().int().or(z.null()).optional(),
+    frame_rate: z.number().or(z.null()).optional(),
+    frame_rate_count: z.number().int().or(z.null()).optional(),
+    time_alive_count: z.number().int().gte(0).or(z.null()).optional(),
+    time_alive_longest: z.number().or(z.null()).optional(),
+    time_alive: z.number().gte(0).or(z.null()).optional(),
 })
 
 export type Player = z.infer<typeof playerSchema>

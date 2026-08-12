@@ -1,11 +1,16 @@
-import { type Distributor, faker } from "@faker-js/faker"
-import { GameMode } from "@warbrokers/types/src/gameMode"
+import assert from "node:assert/strict"
+
+import { faker } from "@faker-js/faker"
+import { gameModes } from "@warbrokers/types/src/gameMode"
 import { xp2lvl } from "@warbrokers/types/src/level"
 import type { Player } from "@warbrokers/types/src/player"
-import { Vehicle } from "@warbrokers/types/src/vehicle"
-import { Weapon } from "@warbrokers/types/src/weapon"
+import { vehicles } from "@warbrokers/types/src/vehicle"
+import { weapons } from "@warbrokers/types/src/weapon"
 
-function spikedAsymmetricLaplaceOptions({
+/**
+ * Generates option for faker.js with laplace distribution.
+ */
+function LaplaceOptions({
     min,
     max,
     mode,
@@ -20,25 +25,30 @@ function spikedAsymmetricLaplaceOptions({
     rightScale: number
     spikeProbability: number
 }) {
-    const distributor = ((randomizer) => {
-        if (randomizer.next() < spikeProbability) return (mode - min) / (max - min)
+    return {
+        min,
+        max,
+        distributor: (randomizer) => {
+            if (randomizer.next() < spikeProbability) return (mode - min) / (max - min)
 
-        let value: number
+            let value: number
 
-        do {
-            const isLeft = randomizer.next() < leftScale / (leftScale + rightScale)
-            const scale = isLeft ? leftScale : rightScale
-            const distance = -scale * Math.log(1 - randomizer.next())
-            value = mode + (isLeft ? -distance : distance)
-        } while (value < min || value > max)
+            do {
+                const isLeft = randomizer.next() < leftScale / (leftScale + rightScale)
+                const scale = isLeft ? leftScale : rightScale
+                const distance = -scale * Math.log(1 - randomizer.next())
+                value = mode + (isLeft ? -distance : distance)
+            } while (value < min || value > max)
 
-        return (value - min) / (max - min)
-    }) satisfies Distributor
-
-    return { min, max, distributor }
+            return (value - min) / (max - min)
+        },
+    } as const satisfies Parameters<typeof faker.number.float>["0"]
 }
 
-function truncatedStretchedExponentialOptions({
+/**
+ * Generates option for faker.js with exponential distribution.
+ */
+function ExponentialOptions({
     min,
     max,
     scale,
@@ -49,18 +59,124 @@ function truncatedStretchedExponentialOptions({
     scale: number
     shape: number
 }) {
+    // cumulative distribution function
     const cdf = (value: number) => 1 - Math.exp(-Math.pow(value / scale, shape))
     const minimumCdf = cdf(min)
     const maximumCdf = cdf(max)
 
-    const distributor = ((randomizer) => {
-        const probability = minimumCdf + randomizer.next() * (maximumCdf - minimumCdf)
-        const value = scale * Math.pow(-Math.log(1 - probability), 1 / shape)
+    return {
+        min,
+        max,
+        distributor: (randomizer) => {
+            const probability = minimumCdf + randomizer.next() * (maximumCdf - minimumCdf)
+            const value = scale * Math.pow(-Math.log(1 - probability), 1 / shape)
 
-        return (value - min) / (max - min)
-    }) satisfies Distributor
+            return (value - min) / (max - min)
+        },
+    } as const satisfies Parameters<typeof faker.number.float>["0"]
+}
 
-    return { min, max, distributor }
+type FakeRecordOptions<Key extends string, Value> = {
+    keys: readonly Key[]
+    fakeValue: (key: Key) => Value
+}
+
+/**
+ * Generates a value for every supplied key. Random omission can apply to each
+ * key independently or to the entire record. Empty results are `undefined`.
+ */
+function fakeRecord<const Key extends string, Value>(
+    options: FakeRecordOptions<Key, Value> & { randomOmission: "subset" },
+): Partial<Record<Key, Value>> | undefined
+function fakeRecord<const Key extends string, Value>(
+    options: FakeRecordOptions<Key, Value> & { randomOmission: "all-or-nothing" },
+): Record<Key, Value> | undefined
+function fakeRecord<const Key extends string, Value>(
+    options: FakeRecordOptions<Key, Value> & { randomOmission?: never },
+): Record<Key, Value>
+function fakeRecord({
+    keys,
+    fakeValue,
+    randomOmission,
+}: {
+    keys: readonly string[]
+    fakeValue: (...args: never[]) => unknown
+    randomOmission?: "subset" | "all-or-nothing"
+}) {
+    const generate = ({ randomSubset }: { randomSubset: boolean } = { randomSubset: false }) => {
+        const record: Record<string, unknown> = {}
+
+        for (const key of keys) {
+            if (!randomSubset || faker.datatype.boolean({ probability: 0.9 })) {
+                record[key] = Reflect.apply(fakeValue, undefined, [key])
+            }
+        }
+
+        return record
+    }
+
+    if (randomOmission === "subset") {
+        const record = generate({ randomSubset: true })
+        return Object.keys(record).length === 0 ? undefined : record
+    }
+
+    if (randomOmission === "all-or-nothing") {
+        const record = faker.helpers.maybe(() => generate(), { probability: 0.9 })
+        return record === undefined || Object.keys(record).length === 0 ? undefined : record
+    }
+
+    return generate()
+}
+
+/**
+ * Splits `total` randomly across all supplied `keys` while preserving the exact total.
+ *
+ * ```javascript
+ * distribute({ keys: ["p61", "p62", "p67"], total: 100 })
+ * ```
+ *
+ * Might return:
+ *
+ * ```javascript
+ * {
+ *     p61: 52,
+ *     p62: 31,
+ *     p67: 17,
+ * }
+ * ```
+ *
+ * and
+ *
+ * ```javascript
+ * sumStats(distribute({ keys, total })) === total // is true
+ * ```
+ *
+ * If keys is empty, it returns `{}`.
+ */
+function distribute({ keys, total }: { keys: readonly string[]; total: number }) {
+    if (keys.length === 0) return {}
+
+    const weights = keys.map(() => faker.number.float({ min: 0.01, max: 1 }))
+    const totalWeight = weights.reduce((sum, weight) => sum + weight, 0)
+    const distributed = fakeRecord({
+        keys,
+        fakeValue: (key) => {
+            const weight = weights[keys.indexOf(key)] ?? 0
+            return Math.floor((total * weight) / totalWeight)
+        },
+    })
+    const remainder = total - Object.values(distributed).reduce((total, value) => total + value, 0)
+    const firstKey = keys[0]
+
+    if (firstKey !== undefined) distributed[firstKey] = (distributed[firstKey] ?? 0) + remainder
+
+    assert.equal(
+        Object.values(distributed).reduce((sum, value) => sum + value, 0),
+        total,
+        "Distributed values must sum to the requested total",
+    )
+
+    return distributed
 }
 
 export const stats: Player[] = [
@@ -68,10 +184,10 @@ export const stats: Player[] = [
         nick: "POMP",
         nicklower: "pomp",
         level: 379,
-        xp: 9126610,
+        xp: 9127240,
         coins: 20,
         steam: true,
-        time: 1731481826,
+        time: 1742434763,
         squad: "LP",
         joinTime: 1564650224,
         banned: false,
@@ -228,9 +344,9 @@ export const stats: Player[] = [
             p98: 12,
             p104: 15,
         },
-        // time_alive: 922282.5463884,
-        // time_alive_count: 10188,
-        // time_alive_longest: "980.244",
+        time_alive: 922282.5463884,
+        time_alive_count: 10188,
+        time_alive_longest: 980.244,
         damage_dealt: {
             p62: 314732.506515,
             p09: 50486.53449,
@@ -346,104 +462,104 @@ export const stats: Player[] = [
             p104: 7,
             p126: 2,
         },
-        // longest_kill: {
-        //     p62: "1346.67",
-        //     p09: "3866.68",
-        //     p67: "3113.79",
-        //     p61: "1755.36",
-        //     p11: "3713.79",
-        //     p64: "2365.6",
-        //     p94: "255.065",
-        //     p93: "1164.89",
-        //     p55: "1952.84",
-        //     p92: "2118.82",
-        //     p53: "1707.38",
-        //     p57: "2013.09",
-        //     p74: "962.077",
-        //     p90: "2598.35",
-        //     p91: "553.67",
-        //     p71: "386.4",
-        //     p54: "1289.05",
-        //     p56: "1155.36",
-        //     p52: "1381.72",
-        //     p58: "959.728",
-        //     p68: "566.825",
-        //     p86: "1727.97",
-        //     p63: "668.506",
-        //     p76: "26.3995",
-        //     p89: "338.379",
-        //     p59: "1796.88",
-        //     p75: "649.356",
-        //     p78: "1783.81",
-        //     p83: "1867.89",
-        //     p82: "801.946",
-        //     p85: "1894.55",
-        //     p69: "3347.91",
-        //     p87: "804.76",
-        //     p65: "2614.72",
-        //     p66: "308.992",
-        //     p60: "856.09",
-        //     p79: "2582.23",
-        //     p80: "593.039",
-        //     p88: "22.8378",
-        //     p84: "1078.88",
-        //     p95: "527.065",
-        //     p98: "582.013",
-        //     p111: "323.09",
-        //     p97: "339.488",
-        //     p105: "1857.68",
-        //     p104: "82.1983",
-        //     p126: "176.259",
-        // },
-        // most_kills_between_deaths: {
-        //     p62: "36",
-        //     p09: "4",
-        //     p61: "57",
-        //     p67: "35",
-        //     p11: "3",
-        //     p64: "46",
-        //     p93: "33",
-        //     p94: "20",
-        //     p55: "6",
-        //     p92: "23",
-        //     p53: "11",
-        //     p57: "12",
-        //     p74: "3",
-        //     p90: "20",
-        //     p91: "5",
-        //     p71: "9",
-        //     p54: "5",
-        //     p56: "6",
-        //     p52: "14",
-        //     p58: "2",
-        //     p68: "51",
-        //     p86: "4",
-        //     p63: "14",
-        //     p76: "4",
-        //     p89: "27",
-        //     p59: "10",
-        //     p75: "3",
-        //     p78: "15",
-        //     p83: "5",
-        //     p82: "1",
-        //     p85: "2",
-        //     p69: "4",
-        //     p87: "2",
-        //     p65: "7",
-        //     p66: "28",
-        //     p60: "10",
-        //     p79: "26",
-        //     p80: "14",
-        //     p88: "8",
-        //     p84: "2",
-        //     p95: "26",
-        //     p98: "4",
-        //     p111: "5",
-        //     p97: "8",
-        //     p105: "8",
-        //     p104: "7",
-        //     p126: "1",
-        // },
+        longest_kill: {
+            p62: 1346.67,
+            p09: 3866.68,
+            p67: 3113.79,
+            p61: 1755.36,
+            p11: 3713.79,
+            p64: 2365.6,
+            p94: 255.065,
+            p93: 1164.89,
+            p55: 1952.84,
+            p92: 2118.82,
+            p53: 1707.38,
+            p57: 2013.09,
+            p74: 962.077,
+            p90: 2598.35,
+            p91: 553.67,
+            p71: 386.4,
+            p54: 1289.05,
+            p56: 1155.36,
+            p52: 1381.72,
+            p58: 959.728,
+            p68: 566.825,
+            p86: 1727.97,
+            p63: 668.506,
+            p76: 26.3995,
+            p89: 338.379,
+            p59: 1796.88,
+            p75: 649.356,
+            p78: 1783.81,
+            p83: 1867.89,
+            p82: 801.946,
+            p85: 1894.55,
+            p69: 3347.91,
+            p87: 804.76,
+            p65: 2614.72,
+            p66: 308.992,
+            p60: 856.09,
+            p79: 2582.23,
+            p80: 593.039,
+            p88: 22.8378,
+            p84: 1078.88,
+            p95: 527.065,
+            p98: 582.013,
+            p111: 323.09,
+            p97: 339.488,
+            p105: 1857.68,
+            p104: 82.1983,
+            p126: 176.259,
+        },
+        most_kills_between_deaths: {
+            p62: 36,
+            p09: 4,
+            p61: 57,
+            p67: 35,
+            p11: 3,
+            p64: 46,
+            p93: 33,
+            p94: 20,
+            p55: 6,
+            p92: 23,
+            p53: 11,
+            p57: 12,
+            p74: 3,
+            p90: 20,
+            p91: 5,
+            p71: 9,
+            p54: 5,
+            p56: 6,
+            p52: 14,
+            p58: 2,
+            p68: 51,
+            p86: 4,
+            p63: 14,
+            p76: 4,
+            p89: 27,
+            p59: 10,
+            p75: 3,
+            p78: 15,
+            p83: 5,
+            p82: 1,
+            p85: 2,
+            p69: 4,
+            p87: 2,
+            p65: 7,
+            p66: 28,
+            p60: 10,
+            p79: 26,
+            p80: 14,
+            p88: 8,
+            p84: 2,
+            p95: 26,
+            p98: 4,
+            p111: 5,
+            p97: 8,
+            p105: 8,
+            p104: 7,
+            p126: 1,
+        },
         shots_hit_unzoomed: {
             p09: 1571,
             p61: 14982,
@@ -564,54 +680,54 @@ export const stats: Player[] = [
             m08: 13,
             m07: 2,
         },
-        // most_kills_in_round: {
-        //     p09: "4",
-        //     p11: "3",
-        //     p61: "57",
-        //     p67: "43",
-        //     p93: "50",
-        //     p94: "24",
-        //     p55: "6",
-        //     p92: "32",
-        //     p57: "12",
-        //     p74: "3",
-        //     p71: "9",
-        //     p53: "14",
-        //     p54: "5",
-        //     p52: "14",
-        //     p58: "2",
-        //     p68: "51",
-        //     p56: "9",
-        //     p91: "4",
-        //     p62: "71",
-        //     p63: "16",
-        //     p76: "5",
-        //     p64: "49",
-        //     p89: "41",
-        //     p59: "16",
-        //     p82: "1",
-        //     p83: "3",
-        //     p86: "4",
-        //     p85: "2",
-        //     p69: "4",
-        //     p65: "10",
-        //     p66: "29",
-        //     p60: "10",
-        //     p87: "2",
-        //     p78: "25",
-        //     p90: "26",
-        //     p79: "31",
-        //     p80: "14",
-        //     p75: "3",
-        //     p88: "8",
-        //     p84: "2",
-        //     p95: "34",
-        //     p98: "4",
-        //     p111: "6",
-        //     p97: "8",
-        //     p105: "8",
-        //     p126: "1",
-        // },
+        most_kills_in_round: {
+            p09: 4,
+            p11: 3,
+            p61: 57,
+            p67: 43,
+            p93: 50,
+            p94: 24,
+            p55: 6,
+            p92: 32,
+            p57: 12,
+            p74: 3,
+            p71: 9,
+            p53: 14,
+            p54: 5,
+            p52: 14,
+            p58: 2,
+            p68: 51,
+            p56: 9,
+            p91: 4,
+            p62: 71,
+            p63: 16,
+            p76: 5,
+            p64: 49,
+            p89: 41,
+            p59: 16,
+            p82: 1,
+            p83: 3,
+            p86: 4,
+            p85: 2,
+            p69: 4,
+            p65: 10,
+            p66: 29,
+            p60: 10,
+            p87: 2,
+            p78: 25,
+            p90: 26,
+            p79: 31,
+            p80: 14,
+            p75: 3,
+            p88: 8,
+            p84: 2,
+            p95: 34,
+            p98: 4,
+            p111: 6,
+            p97: 8,
+            p105: 8,
+            p126: 1,
+        },
         shots_fired_zoomed: {
             p62: 136740,
             p67: 41646,
@@ -706,33 +822,297 @@ export const stats: Player[] = [
             m08: 23,
             m07: 11,
         },
-        // frame_rate: 1227145.1394,
-        // frame_rate_count: 15652,
-        // ping_time: 2779028,
-        // ping_time_count: 16250,
-        self_destructs: { v40: 5, v30: 46, v41: 7 },
+        frame_rate: 1227145.1394,
+        frame_rate_count: 15652,
+        ping_time: 2779028,
+        ping_time_count: 16250,
+        self_destructs: {
+            v40: 5,
+            v30: 46,
+            v41: 7,
+        },
         scuds_launched: 139,
         gamesELO: 2030.64,
         killsELO: 1889,
         zombie_kills: 1280,
         zombie_deaths: 57,
-        // zombie_time_alive: 32964.659,
-        // zombie_time_alive_count: 57,
+        zombie_time_alive: 32964.659,
+        zombie_time_alive_count: 57,
         zombie_wins: 0,
     },
     ...faker.helpers.multiple(
         () => {
-            const nick = faker.string.alphanumeric({
-                length: { min: 2, max: 20 },
-            })
+            // See libs/wb-types/src/player.ts for more info about nick length
+            const nick = faker.string.fromCharacters(
+                "0123456789" + // numbers
+                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + // upper case
+                    "abcdefghijklmnopqrstuvwxyz" + // lower case
+                    "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~" + // ASCII special characters
+                    // cspell:disable
+                    "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß" +
+                    "àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿŒœŠšŽž" +
+                    "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψω" +
+                    "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ" +
+                    "абвгдеёжзийклмнопрстуфхцчшщъыьэюя" +
+                    "אבגדהוזחטיךכלםמןנסעףפץצקרשת" +
+                    "ابتثجحخدذرزسشصضطظعغفقكلمنهوي" +
+                    "あいうえおかきくけこさしすせそたちつてとなにぬねの" +
+                    "アイウエオカキクケコサシスセソタチツテトナニヌネノ" +
+                    "中文日本語漢字한국어" +
+                    "¡¿§¶©®™°±×÷†‡•…‰′″№" +
+                    "¢£¤¥€₩₹₽₿" +
+                    "←↑→↓↔↕↖↗↘↙⇐⇑⇒⇓⇔" +
+                    "∀∂∃∅∆∇∈∉∋∏∑−√∞∧∨∩∪≈≠≤≥" +
+                    "⌘⌥⌫⏎⏏⌛⏰" +
+                    "─━│┃┌┐└┘├┤┬┴┼═║╔╗╚╝╬" +
+                    "■□▪▫▲△▶▷▼▽◀◁◆◇○●◉◎" +
+                    "★☆☀☁☂☃☎☕☘☠☢☣☮☯☸♀♂♠♡♢♣♤♥♦♧♪♫⚑⚡⚔⚙⚠" +
+                    "✓✔✕✖✚✦✧❄❖❗❓❤➕➖➗" +
+                    "😀😁😂😎🤖👻💀👽🔥💧🎃🎮🎯🏆🚀🛡🗡💣💥",
+                // cspell:enable
+                { min: 2, max: 20 },
+            )
+
+            // roughly matches actual production distribution
             const xp = faker.number.int(
-                truncatedStretchedExponentialOptions({
-                    min: 100,
-                    max: 92_000_000,
+                ExponentialOptions({
+                    min: 100, // minimum allowed xp
+                    max: 100_000_000,
                     scale: 65_000,
                     shape: 0.32,
                 }),
             )
+
+            // todo: match distribution with production
+            const weaponStats =
+                faker.helpers.maybe(
+                    () => {
+                        const totalKills = Math.floor(
+                            xp * faker.number.float({ min: 0.002, max: 0.01 }),
+                        )
+                        const totalDeaths =
+                            totalKills === 0
+                                ? faker.number.int({
+                                      min: 0,
+                                      max: Math.max(1, Math.floor(xp * 0.005)),
+                                  })
+                                : Math.max(
+                                      1,
+                                      Math.round(
+                                          totalKills / faker.number.float({ min: 0.2, max: 5 }),
+                                      ),
+                                  )
+                        const activeWeapons = faker.helpers.arrayElements(weapons, {
+                            min: totalKills > 0 || totalDeaths > 0 ? 1 : 0,
+                            max: weapons.length,
+                        })
+                        const killsPerWeapon = distribute({
+                            keys: activeWeapons,
+                            total: totalKills,
+                        })
+                        const deaths = distribute({ keys: activeWeapons, total: totalDeaths })
+                        const killsUnzoomed = fakeRecord({
+                            keys: activeWeapons,
+                            fakeValue: (weapon) =>
+                                faker.number.int({ min: 0, max: killsPerWeapon[weapon] ?? 0 }),
+                        })
+                        const killsZoomed = fakeRecord({
+                            keys: activeWeapons,
+                            fakeValue: (weapon) =>
+                                (killsPerWeapon[weapon] ?? 0) - killsUnzoomed[weapon],
+                        })
+                        const maxZeroKillShots = Math.max(100, Math.floor(Math.sqrt(xp) * 10))
+                        const fakeShots = (kills: number) => {
+                            const fired =
+                                kills === 0
+                                    ? faker.number.int(maxZeroKillShots)
+                                    : faker.number.int({ min: kills * 2, max: kills * 100 })
+                            const minimumAccuracy = fired === 0 ? 0 : Math.max(0.05, kills / fired)
+                            const hit = Math.max(
+                                kills,
+                                Math.floor(
+                                    fired * faker.number.float({ min: minimumAccuracy, max: 0.75 }),
+                                ),
+                            )
+
+                            return { fired, hit }
+                        }
+                        const unzoomed = Object.fromEntries(
+                            activeWeapons.map((weapon) => [
+                                weapon,
+                                fakeShots(killsUnzoomed[weapon]),
+                            ]),
+                        )
+                        const zoomed = Object.fromEntries(
+                            activeWeapons.map((weapon) => [weapon, fakeShots(killsZoomed[weapon])]),
+                        )
+                        const shotsFiredUnzoomed = fakeRecord({
+                            keys: activeWeapons,
+                            fakeValue: (weapon) => unzoomed[weapon]?.fired ?? 0,
+                        })
+                        const shotsFiredZoomed = fakeRecord({
+                            keys: activeWeapons,
+                            fakeValue: (weapon) => zoomed[weapon]?.fired ?? 0,
+                        })
+                        const shotsHitUnzoomed = fakeRecord({
+                            keys: activeWeapons,
+                            fakeValue: (weapon) => unzoomed[weapon]?.hit ?? 0,
+                        })
+                        const shotsHitZoomed = fakeRecord({
+                            keys: activeWeapons,
+                            fakeValue: (weapon) => zoomed[weapon]?.hit ?? 0,
+                        })
+                        const totalShotsHit = fakeRecord({
+                            keys: activeWeapons,
+                            fakeValue: (weapon) =>
+                                shotsHitUnzoomed[weapon] + shotsHitZoomed[weapon],
+                        })
+                        const killingWeapons = activeWeapons.filter(
+                            (weapon) => (killsPerWeapon[weapon] ?? 0) > 0,
+                        )
+                        const mostKillsInRound = fakeRecord({
+                            keys: killingWeapons,
+                            fakeValue: (weapon) =>
+                                faker.number.int({
+                                    min: 1,
+                                    max: Math.min(killsPerWeapon[weapon] ?? 1, 100),
+                                }),
+                        })
+
+                        return {
+                            shotsFiredUnzoomed,
+                            shotsFiredZoomed,
+                            shotsHitUnzoomed,
+                            shotsHitZoomed,
+                            damageDealt: fakeRecord({
+                                keys: activeWeapons,
+                                fakeValue: (weapon) => {
+                                    const hits = totalShotsHit[weapon]
+                                    return hits === 0
+                                        ? 0
+                                        : faker.number.float({
+                                              min: hits,
+                                              max: hits * 100,
+                                              fractionDigits: 5,
+                                          })
+                                },
+                            }),
+                            damageReceived: fakeRecord({
+                                keys: activeWeapons,
+                                fakeValue: (weapon) => {
+                                    const weaponDeaths = deaths[weapon] ?? 0
+                                    return weaponDeaths === 0
+                                        ? 0
+                                        : faker.number.float({
+                                              min: weaponDeaths,
+                                              max: weaponDeaths * 200,
+                                              fractionDigits: 5,
+                                          })
+                                },
+                            }),
+                            mostKillsBetweenDeaths: fakeRecord({
+                                keys: killingWeapons,
+                                fakeValue: (weapon) =>
+                                    faker.number.int({ min: 1, max: mostKillsInRound[weapon] }),
+                            }),
+                            mostKillsInRound,
+                            killsPerWeapon,
+                            deaths,
+                            headshots: fakeRecord({
+                                keys: activeWeapons,
+                                fakeValue: (weapon) =>
+                                    faker.number.int({ min: 0, max: totalShotsHit[weapon] }),
+                            }),
+                            longestKill: fakeRecord({
+                                keys: killingWeapons,
+                                fakeValue: () =>
+                                    faker.number.float({ min: 0, max: 4000, fractionDigits: 5 }),
+                            }),
+                            totalKills,
+                            totalDeaths,
+                        }
+                    },
+                    { probability: 0.9 },
+                ) ?? null
+            const totalKills = weaponStats?.totalKills ?? 0
+            const totalDeaths = weaponStats?.totalDeaths ?? 0
+            const vehicleStats =
+                faker.helpers.maybe(() => {
+                    const activeVehicles = faker.helpers.arrayElements(vehicles, {
+                        min: totalKills > 0 ? 1 : 0,
+                        max: vehicles.length,
+                    })
+                    const distanceDrivenCount = fakeRecord({
+                        keys: activeVehicles,
+                        fakeValue: () => faker.number.int(100),
+                    })
+
+                    return {
+                        selfDestructs: fakeRecord({
+                            keys: activeVehicles,
+                            fakeValue: () => faker.number.int(20),
+                        }),
+                        distanceDriven: fakeRecord({
+                            keys: activeVehicles,
+                            fakeValue: (vehicle) =>
+                                distanceDrivenCount[vehicle] *
+                                faker.number.float({
+                                    min: 0,
+                                    max: 10_000,
+                                    fractionDigits: 5,
+                                }),
+                        }),
+                        distanceDrivenCount,
+                        killsPerVehicle: distribute({
+                            keys: activeVehicles,
+                            total: totalKills,
+                        }),
+                    }
+                }) ?? null
+            const zombieDeaths = faker.number.int(100)
+            const zombieTimeAliveCount = faker.number.int({ min: zombieDeaths, max: 1000 })
+            const zombieTimeAlive =
+                zombieTimeAliveCount === 0
+                    ? 0
+                    : faker.number.float({
+                          min: 0,
+                          max: zombieTimeAliveCount * 1000,
+                          fractionDigits: 5,
+                      })
+            const timeAlive =
+                totalKills === 0 ? 0 : (totalKills / faker.number.float({ min: 0.05, max: 5 })) * 60
+            const timeAliveCount = timeAlive === 0 ? 0 : totalDeaths + 1
+            const averageTimeAlive = timeAliveCount === 0 ? 0 : timeAlive / timeAliveCount
+            const timeAliveLongest =
+                timeAliveCount === 0
+                    ? 0
+                    : timeAliveCount === 1
+                      ? timeAlive
+                      : faker.number.float({
+                            min: averageTimeAlive,
+                            max: Math.min(timeAlive, Math.max(averageTimeAlive * 5, 2000)),
+                            fractionDigits: 5,
+                        })
+            const pingTimeCount = faker.number.int(20_000)
+            const frameRateCount = faker.number.int(20_000)
+            const lastSession = faker.date.past({ years: 1 })
+            const joinedAt = faker.date.past({ years: 5, refDate: lastSession })
+            const formatDate = (date: Date) => date.toISOString().slice(2, 10)
+            const timeAliveFields = fakeRecord({
+                keys: [
+                    "time_alive_count",
+                    "time_alive_longest",
+                    "time_alive",
+                    "kills_per_minute",
+                ] as const,
+                fakeValue: (key) => {
+                    if (key === "time_alive_count") return timeAliveCount
+                    if (key === "time_alive_longest") return timeAliveLongest
+                    if (key === "time_alive") return timeAlive
+                    return timeAlive === 0 ? 0 : totalKills / (timeAlive / 60)
+                },
+                randomOmission: "all-or-nothing",
+            })
 
             return {
                 uid: faker.database.mongodbObjectId(),
@@ -741,19 +1121,23 @@ export const stats: Player[] = [
                 level: xp2lvl(xp),
                 xp,
                 coins:
-                    faker.helpers.maybe(() => faker.number.int({ min: 0, max: 100_000 })) || null,
+                    faker.helpers.maybe(
+                        () =>
+                            faker.number.int({
+                                min: 0,
+                                max: 1_000_000, // roughly matching production max
+                                // todo: use exponential distributor
+                            }),
+                        { probability: 0.5 }, // Default is 0.5 but we're making it explicit here.
+                    ) ?? null,
                 squad:
-                    faker.helpers.maybe(() =>
-                        faker.helpers.arrayElement([
-                            "SQUAD1",
-                            "SQUAD2",
-                            "SQUAD2",
-                            "SQUAD3",
-                            "SQUAD4",
-                        ]),
-                    ) || "",
+                    faker.helpers.maybe(
+                        () => faker.helpers.arrayElement(["SQUAD1", "SQUAD2", "SQUAD3", "SQUAD4"]),
+                        { probability: 0.8 },
+                    ) ?? "",
                 killsELO: faker.number.float(
-                    spikedAsymmetricLaplaceOptions({
+                    // roughly matches production distribution
+                    LaplaceOptions({
                         min: 1150,
                         max: 2250,
                         mode: 1500,
@@ -763,7 +1147,8 @@ export const stats: Player[] = [
                     }),
                 ),
                 gamesELO: faker.number.float(
-                    spikedAsymmetricLaplaceOptions({
+                    // roughly matches production distribution
+                    LaplaceOptions({
                         min: 550,
                         max: 3350,
                         mode: 1500,
@@ -773,279 +1158,122 @@ export const stats: Player[] = [
                     }),
                 ),
                 wins:
-                    faker.helpers.maybe(() => ({
-                        // random choice of game modes
-                        ...faker.helpers.maybe(() => ({
-                            [GameMode.DeathMatch]: faker.number.int(20),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [GameMode.BattleRoyale]: faker.number.int(20),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [GameMode.Competitive]: faker.number.int(20),
-                        })),
-                    })) || null,
+                    fakeRecord({
+                        keys: gameModes,
+                        fakeValue: () => faker.number.int(1000),
+                        randomOmission: "subset",
+                    }) ?? null,
                 losses:
-                    faker.helpers.maybe(() => ({
-                        // random choice of game modes
-                        ...faker.helpers.maybe(() => ({
-                            [GameMode.DeathMatch]: faker.number.int(20),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [GameMode.BattleRoyale]: faker.number.int(20),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [GameMode.Competitive]: faker.number.int(20),
-                        })),
-                    })) || null,
+                    fakeRecord({
+                        keys: gameModes,
+                        fakeValue: () => faker.number.int(1000),
+                        randomOmission: "subset",
+                    }) ?? null,
+                ...fakeRecord({
+                    keys: ["number_of_capture_points"] as const,
+                    fakeValue: () => faker.number.int(10_000),
+                    randomOmission: "all-or-nothing",
+                }),
                 number_of_jumps:
-                    faker.helpers.maybe(() => faker.number.int({ min: 1, max: 10_000 })) || null,
+                    faker.helpers.maybe(() => faker.number.int({ min: 1, max: 10_000 })) ?? null,
                 scuds_launched:
-                    faker.helpers.maybe(() => faker.number.int({ min: 1, max: 10_000 })) || null,
+                    faker.helpers.maybe(() => faker.number.int({ min: 1, max: 10_000 })) ?? null,
+                ...fakeRecord({
+                    keys: ["total_kills"] as const,
+                    fakeValue: () => totalKills,
+                    randomOmission: "all-or-nothing",
+                }),
+                ...fakeRecord({
+                    keys: ["kill_to_death_ratio"] as const,
+                    fakeValue: () => (totalDeaths === 0 ? totalKills : totalKills / totalDeaths),
+                    randomOmission: "all-or-nothing",
+                }),
                 zombie_kills: faker.number.int(1000),
-                zombie_deaths: faker.number.int(100),
+                zombie_deaths: zombieDeaths,
+                ...fakeRecord({
+                    keys: ["zombie_time_alive", "zombie_time_alive_count"] as const,
+                    fakeValue: (key) =>
+                        key === "zombie_time_alive" ? zombieTimeAlive : zombieTimeAliveCount,
+                    randomOmission: "all-or-nothing",
+                }),
                 zombie_wins: faker.number.int(100),
-                self_destructs:
-                    faker.helpers.maybe(() => ({
-                        // random choice of vehicles
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.TankLvl1]: faker.number.int(20),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.APCLvl1]: faker.number.int(20),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.HeliLvl1]: faker.number.int(20),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.Jet1Fin]: faker.number.int(20),
-                        })),
-                    })) || null,
-                distance_driven:
-                    faker.helpers.maybe(() => ({
-                        // random choice of vehicles
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.TankLvl1]: faker.number.float(1_000_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.APCLvl1]: faker.number.int(1_000_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.HeliLvl1]: faker.number.int(1_000_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.Jet1Fin]: faker.number.int(1_000_000),
-                        })),
-                    })) || null,
-                distance_driven_count:
-                    faker.helpers.maybe(() => ({
-                        // random choice of vehicles
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.TankLvl1]: faker.number.int(100),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.APCLvl1]: faker.number.int(100),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.HeliLvl1]: faker.number.int(100),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.Jet1Fin]: faker.number.int(100),
-                        })),
-                    })) || null,
-                kills_per_vehicle:
-                    faker.helpers.maybe(() => ({
-                        // random choice of vehicles
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.TankLvl1]: faker.number.int(1000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.APCLvl1]: faker.number.int(1000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.HeliLvl1]: faker.number.int(1000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Vehicle.Jet1Fin]: faker.number.int(1000),
-                        })),
-                    })) || null,
-                shots_fired_unzoomed:
-                    faker.helpers.maybe(() => ({
-                        // random choice of weapons
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.ARRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.AKRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SniperRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SMG]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.BGM]: faker.number.int(10_000),
-                        })),
-                    })) || null,
-                shots_fired_zoomed:
-                    faker.helpers.maybe(() => ({
-                        // random choice of weapons
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.ARRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.AKRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SniperRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SMG]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.BGM]: faker.number.int(10_000),
-                        })),
-                    })) || null,
-                shots_hit_unzoomed:
-                    faker.helpers.maybe(() => ({
-                        // random choice of weapons
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.ARRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.AKRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SniperRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SMG]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.BGM]: faker.number.int(10_000),
-                        })),
-                    })) || null,
-                shots_hit_zoomed:
-                    faker.helpers.maybe(() => ({
-                        // random choice of weapons
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.ARRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.AKRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SniperRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SMG]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.BGM]: faker.number.int(10_000),
-                        })),
-                    })) || null,
-                damage_dealt:
-                    faker.helpers.maybe(() => ({
-                        // random choice of weapons
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.ARRifle]: faker.number.int(10_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.AKRifle]: faker.number.int(10_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SniperRifle]: faker.number.int(10_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SMG]: faker.number.int(10_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.BGM]: faker.number.int(1000),
-                        })),
-                    })) || null,
-                damage_received:
-                    faker.helpers.maybe(() => ({
-                        // random choice of weapons
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.ARRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.AKRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SniperRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SMG]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.BGM]: faker.number.int(100_000),
-                        })),
-                    })) || null,
-                kills_per_weapon:
-                    faker.helpers.maybe(() => ({
-                        // random choice of weapons
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.ARRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.AKRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SniperRifle]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SMG]: faker.number.int(100_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.BGM]: faker.number.int(100_000),
-                        })),
-                    })) || null,
-                deaths:
-                    faker.helpers.maybe(() => ({
-                        // random choice of weapons
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.ARRifle]: faker.number.int(10_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.AKRifle]: faker.number.int(10_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SniperRifle]: faker.number.int(10_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SMG]: faker.number.int(10_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.BGM]: faker.number.int(10_000),
-                        })),
-                    })) || null,
-                headshots:
-                    faker.helpers.maybe(() => ({
-                        // random choice of weapons
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.ARRifle]: faker.number.int(10_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.AKRifle]: faker.number.int(10_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SniperRifle]: faker.number.int(10_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.SMG]: faker.number.int(10_000),
-                        })),
-                        ...faker.helpers.maybe(() => ({
-                            [Weapon.BGM]: faker.number.int(1000),
-                        })),
-                    })) || null,
+                self_destructs: vehicleStats?.selfDestructs ?? null,
+                distance_driven: vehicleStats?.distanceDriven ?? null,
+                distance_driven_count: vehicleStats?.distanceDrivenCount ?? null,
+                kills_per_vehicle: vehicleStats?.killsPerVehicle ?? null,
+                shots_fired_unzoomed: weaponStats?.shotsFiredUnzoomed ?? null,
+                shots_fired_zoomed: weaponStats?.shotsFiredZoomed ?? null,
+                shots_hit_unzoomed: weaponStats?.shotsHitUnzoomed ?? null,
+                shots_hit_zoomed: weaponStats?.shotsHitZoomed ?? null,
+                damage_dealt: weaponStats?.damageDealt ?? null,
+                damage_received: weaponStats?.damageReceived ?? null,
+                ...fakeRecord({
+                    keys: ["most_kills_between_deaths"] as const,
+                    fakeValue: () => weaponStats?.mostKillsBetweenDeaths ?? null,
+                    randomOmission: "all-or-nothing",
+                }),
+                ...fakeRecord({
+                    keys: ["most_kills_in_round"] as const,
+                    fakeValue: () => weaponStats?.mostKillsInRound ?? null,
+                    randomOmission: "all-or-nothing",
+                }),
+                kills_per_weapon: weaponStats?.killsPerWeapon ?? null,
+                deaths: weaponStats?.deaths ?? null,
+                headshots: weaponStats?.headshots ?? null,
+                ...fakeRecord({
+                    keys: ["longest_kill"] as const,
+                    fakeValue: () => weaponStats?.longestKill ?? null,
+                    randomOmission: "all-or-nothing",
+                }),
+                ...fakeRecord({
+                    keys: ["guest"] as const,
+                    fakeValue: () => faker.datatype.boolean(),
+                    randomOmission: "all-or-nothing",
+                }),
                 banned: false,
-                steam: faker.helpers.arrayElement([true, false, null]),
-                time: Math.floor(faker.date.past({ years: 1 }).getTime() / 1000),
-                joinTime: Math.floor(
-                    faker.helpers.maybe(() => faker.date.past({ years: 5 }).getTime() / 1000) || 0,
-                ),
+                ...fakeRecord({
+                    keys: ["steam"] as const,
+                    fakeValue: () => faker.helpers.arrayElement([true, false, null]),
+                    randomOmission: "all-or-nothing",
+                }),
+                time: Math.floor(lastSession.getTime() / 1000),
+                ...fakeRecord({
+                    keys: ["join_date"] as const,
+                    fakeValue: () => formatDate(joinedAt),
+                    randomOmission: "all-or-nothing",
+                }),
+                ...fakeRecord({
+                    keys: ["last_seen"] as const,
+                    fakeValue: () => formatDate(lastSession),
+                    randomOmission: "all-or-nothing",
+                }),
+                joinTime: Math.floor(joinedAt.getTime() / 1000),
+                ...fakeRecord({
+                    keys: ["ping_time", "ping_time_count"] as const,
+                    fakeValue: (key) =>
+                        key === "ping_time_count"
+                            ? pingTimeCount
+                            : faker.number.int({
+                                  min: pingTimeCount * 5,
+                                  max: pingTimeCount * 300,
+                              }),
+                    randomOmission: "all-or-nothing",
+                }),
+                ...fakeRecord({
+                    keys: ["frame_rate", "frame_rate_count"] as const,
+                    fakeValue: (key) =>
+                        key === "frame_rate_count"
+                            ? frameRateCount
+                            : frameRateCount === 0
+                              ? 0
+                              : faker.number.float({
+                                    min: frameRateCount * 15,
+                                    max: frameRateCount * 240,
+                                    fractionDigits: 5,
+                                }),
+                    randomOmission: "all-or-nothing",
+                }),
+                ...timeAliveFields,
             } satisfies Player
         },
         { count: 35_000 - 1 }, // minus one for pomp

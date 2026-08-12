@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+import { enumValues } from "./enum"
+
 export enum Weapon {
     AirStrike = "p09",
     BGM = "p11",
@@ -64,6 +66,8 @@ export enum Weapon {
     MarksmansRifle = "p128",
     Mutant = "p129",
 }
+
+export const weapons = enumValues(Weapon)
 
 export const weaponIDSchema = z.nativeEnum(Weapon)
 

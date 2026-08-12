@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+import { enumValues } from "./enum"
+
 export enum GameMode {
     DeathMatch = "m00",
     DemolitionDerby = "m01",
@@ -18,6 +20,8 @@ export enum GameMode {
     LobbyBR = "m14",
     Count = "m15",
 }
+
+export const gameModes = enumValues(GameMode)
 
 export const gameModeIDSchema = z.nativeEnum(GameMode)
 

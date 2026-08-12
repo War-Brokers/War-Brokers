@@ -53,7 +53,7 @@ const playerData = {
 
 const mockedFetchUpstream = jest.mocked(fetchUpstream)
 
-function mockPlayerResponse(overrides: Partial<typeof playerData> = {}) {
+function mockPlayerResponse(overrides: Partial<typeof playerData> | Record<string, unknown> = {}) {
     mockedFetchUpstream.mockResolvedValue(
         new Response(
             JSON.stringify({
@@ -83,6 +83,25 @@ test("preserves a non-empty squad", async () => {
     expect(result).toMatchObject({
         success: true,
         data: { squad: playerData.squad },
+    })
+})
+
+test("converts string weapon-stat values to numbers", async () => {
+    mockPlayerResponse({
+        most_kills_in_round: { p01: "12" },
+        most_kills_between_deaths: { p02: "8" },
+        longest_kill: { p03: "321.5" },
+    })
+
+    const result = await getPlayer(playerData.uid)
+
+    expect(result).toMatchObject({
+        success: true,
+        data: {
+            most_kills_in_round: { p01: 12 },
+            most_kills_between_deaths: { p02: 8 },
+            longest_kill: { p03: 321.5 },
+        },
     })
 })
 
