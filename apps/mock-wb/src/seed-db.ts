@@ -33,7 +33,8 @@ export async function seedDB() {
         await sql`INSERT INTO players ${sql(batch)}`
 
         const inserted = Math.min(start + BATCH_SIZE, total)
-        console.log(`seeding ${100 * (inserted / total)}% complete (${inserted} / ${total})`)
+        const progressPercent = 100 * (inserted / total)
+        console.log(`seeding ${progressPercent.toFixed(2)}% complete (${inserted} / ${total})`)
     }
 
     console.log("seeding complete!")

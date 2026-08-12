@@ -1057,7 +1057,7 @@ export const stats: Player[] = [
                 ),
             } satisfies Player
         },
-        { count: 10_000 - 1 },
+        { count: 35_000 - 1 }, // minus one for pomp
     ),
 ]
 
