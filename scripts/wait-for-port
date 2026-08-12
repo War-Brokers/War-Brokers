@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+port="${1:?Usage: wait-for-port PORT [PID]}"
+pid="${2:-}"
+
+for _ in {1..120}; do
+    if (echo >/dev/tcp/localhost/"$port") >/dev/null 2>&1; then
+        exit 0
+    fi
+
+    if [[ -n "$pid" ]] && ! kill -0 "$pid" >/dev/null 2>&1; then
+        echo "Process $pid exited before port $port was ready" >&2
+        exit 1
+    fi
+
+    sleep 0.5
+done
+
+echo "Timed out waiting for port $port" >&2
+exit 1

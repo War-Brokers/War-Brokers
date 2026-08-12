@@ -132,31 +132,11 @@ cleanup() {
 
 trap cleanup EXIT
 
-wait_for_port() {
-    local port="$1"
-
-    for _ in {1..120}; do
-        if (echo >/dev/tcp/localhost/"$port") >/dev/null 2>&1; then
-            return 0
-        fi
-
-        if ! kill -0 "$dev_pid" >/dev/null 2>&1; then
-            echo "Development servers exited before port $port was ready" >&2
-            return 1
-        fi
-
-        sleep 0.5
-    done
-
-    echo "Timed out waiting for port $port" >&2
-    return 1
-}
-
-wait_for_port 5432 # WBAPI PostgreSQL database
-wait_for_port 4000 # Mock WB
-wait_for_port 5000 # WBAPI
-wait_for_port 5173 # Stats site
-wait_for_port 3000 # WB timeline
+./scripts/wait-for-port 5432 "$dev_pid" # WBAPI PostgreSQL database
+./scripts/wait-for-port 4000 "$dev_pid" # Mock WB
+./scripts/wait-for-port 5000 "$dev_pid" # WBAPI
+./scripts/wait-for-port 5173 "$dev_pid" # Stats site
+./scripts/wait-for-port 3000 "$dev_pid" # WB timeline
 
 pnpm --filter=@warbrokers/stats-site test:e2e
 
