@@ -1,6 +1,7 @@
 <script lang="ts">
     import DiscordIcon from "flowbite-svelte-icons/DiscordSolid.svelte"
 
+    import { resolve } from "$app/paths"
     import Title from "$lib/components/title.svelte"
     import SquadEmblem from "$lib/img/squads/HF.png"
 
@@ -24,7 +25,7 @@
         {#each squadLeaders as player, i (player.uid)}
             <a
                 class="underline underline-offset-4 hover:text-orange-500"
-                href="/players/{player.uid}"
+                href={resolve("/players/[uid]", { uid: player.uid })}
             >
                 {player.nick}
             </a>
@@ -48,7 +49,7 @@
 
 <div class="flex flex-col gap-4">
     {#each members as player (player.uid)}
-        <a href="/players/{player.uid}">
+        <a href={resolve("/players/[uid]", { uid: player.uid })}>
             <div class="flex flex-col rounded-lg bg-slate-700 p-4">
                 <span class="mb-4 text-xl font-bold">{player.nick}</span>
 

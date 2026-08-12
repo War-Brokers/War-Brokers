@@ -3,6 +3,7 @@
     import { EditSolid } from "flowbite-svelte-icons"
 
     import { goto } from "$app/navigation"
+    import { resolve } from "$app/paths"
     import A from "$lib/components/A.svelte"
     import PlayerSearch from "$lib/components/PlayerSearch.svelte"
     import Stat from "$lib/components/stat.svelte"
@@ -82,7 +83,14 @@
     }
 
     function clearPlayer(side: Side, aUid?: string, bUid?: string) {
-        void goto(side === "a" ? `/-vs-${bUid ?? ""}` : `/${aUid ?? ""}-vs-`)
+        switch (side) {
+            case "a":
+                void goto(resolve("/[[a]]-vs-[[b]]", bUid ? { b: bUid } : {}))
+                break
+            case "b":
+                void goto(resolve("/[[a]]-vs-[[b]]", aUid ? { a: aUid } : {}))
+                break
+        }
     }
 
     function percentile(player: "a" | "b", rank: ComparisonStat["rank"]) {
@@ -175,7 +183,7 @@
                     )}
                 >
                     {#if player}
-                        <A href="/players/{player.uid}">
+                        <A href={resolve("/players/[uid]", { uid: player.uid })}>
                             {#if player.squad}
                                 <span class="text-gray-400">
                                     [{player.squad}]
@@ -207,10 +215,13 @@
                                 label="Search Player {side.toUpperCase()}"
                                 placeholder="Search Player {side.toUpperCase()}"
                                 error={playerSlotError(slot)}
-                                resultHref={(uid: string) =>
-                                    side === "a"
-                                        ? `/${uid}-vs-${routeUid(data.bUid)}`
-                                        : `/${routeUid(data.aUid)}-vs-${uid}`}
+                                resolvedResultHref={(uid: string) =>
+                                    resolve(
+                                        "/[[a]]-vs-[[b]]",
+                                        side === "a"
+                                            ? { a: uid, b: routeUid(data.bUid) }
+                                            : { a: routeUid(data.aUid), b: uid },
+                                    )}
                             />
                         </div>
                     {/if}

@@ -5,18 +5,23 @@
     export let class_: string
     export let target: string | undefined = undefined
     export let rel: string | undefined = undefined
+    export let external = false
 
     export { class_ as class }
-</script>
 
-<a
-    {href}
-    {target}
-    {rel}
-    class={cn(
+    $: classes = cn(
         "text-orange-500 underline-offset-4 hover:text-orange-600 hover:underline focus-visible:rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-500",
         class_,
-    )}
+    )
+</script>
+
+<!-- eslint-disable svelte/no-navigation-without-resolve -->
+<a
+    {href}
+    target={target ?? (external ? "_blank" : undefined)}
+    rel={external ? ["external", "noopener", "noreferrer", rel].filter(Boolean).join(" ") : rel}
+    class={classes}
 >
     <slot />
 </a>
+<!-- eslint-enable svelte/no-navigation-without-resolve -->

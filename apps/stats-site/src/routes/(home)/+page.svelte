@@ -2,6 +2,7 @@
     import Icon from "svelte-awesome"
     import arrowRight from "svelte-awesome/icons/arrowRight"
 
+    import { resolve } from "$app/paths"
     import A from "$lib/components/A.svelte"
     import Distribution from "$lib/components/Distribution.svelte"
     import PlayerSearch from "$lib/components/PlayerSearch.svelte"
@@ -51,18 +52,18 @@
 <Title title="Home" />
 
 <div class="mb-4 flex w-full justify-center">
-    <PlayerSearch />
+    <PlayerSearch resolvedResultHref={(uid: string) => resolve("/players/[uid]", { uid })} />
 </div>
 
 <div class="flex flex-wrap gap-10">
     <Metric label="Players online" value={playersOnline}>
-        <A href="/servers">
+        <A href={resolve("/servers")}>
             Browse Servers &nbsp; <Icon data={arrowRight} />
         </A>
     </Metric>
 
     <Metric label="Twitch streams" value={twitchStreams}>
-        <A href="https://www.twitch.tv/warbrokers">
+        <A href="https://www.twitch.tv/warbrokers" external>
             Watch Live &nbsp; <Icon data={arrowRight} />
         </A>
     </Metric>
@@ -81,7 +82,7 @@
     </div>
 
     <div class="grid gap-6">
-        {#each charts as chart}
+        {#each charts as chart (chart.statistic)}
             <Distribution
                 id={`distribution-${chart.statistic}`}
                 title={chart.title}

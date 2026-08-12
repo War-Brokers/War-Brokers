@@ -69,12 +69,7 @@ export default defineConfig(
     },
     {
         rules: {
-            "import/no-unresolved": ["error", { ignore: ["\\$app/.*"] }],
-
-            // todo: re-enable
-            "svelte/no-navigation-without-resolve": "off",
-            "svelte/require-each-key": "off",
-            "svelte/infinite-reactive-loop": "off",
+            "import/no-unresolved": ["error", { ignore: ["^\\$app/"] }],
         },
     },
 )

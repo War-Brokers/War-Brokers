@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { resolve } from "$app/paths"
     import DataHeaderCell from "$lib/components/Table/DataHeaderCell.svelte"
     import IndexHeaderCell from "$lib/components/Table/IndexHeaderCell.svelte"
     import Table from "$lib/components/Table/Table.svelte"
@@ -48,7 +49,7 @@
                     {#each killsEloRanking as { uid, nick, killsELO }, i (uid)}
                         <Row rank={i + 1} {nick} {uid} stat={killsELO.toFixed(2)} />
                     {/each}
-                    <ViewMore href="/leaderboard/killsELO" />
+                    <ViewMore href={resolve("/leaderboard/killsELO")} />
                 {/if}
             </tbody>
         {:catch _}
@@ -86,7 +87,7 @@
                     {#each gamesEloRanking as { uid, nick, gamesELO }, i (uid)}
                         <Row rank={i + 1} {nick} {uid} stat={gamesELO.toFixed(2)} />
                     {/each}
-                    <ViewMore href="/leaderboard/gamesELO" />
+                    <ViewMore href={resolve("/leaderboard/gamesELO")} />
                 {/if}
             </tbody>
         {:catch _}
@@ -131,7 +132,7 @@
                             stat2={level}
                         />
                     {/each}
-                    <ViewMore href="/leaderboard/xp" />
+                    <ViewMore href={resolve("/leaderboard/xp")} />
                 {/if}
             </tbody>
         {:catch _}

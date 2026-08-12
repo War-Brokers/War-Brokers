@@ -37,12 +37,7 @@
     </TableBodyCell>
     <TableBodyCell>
         {#if gameModeWiki.articleUrl}
-            <A
-                href={gameModeWiki.articleUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="font-medium underline"
-            >
+            <A href={gameModeWiki.articleUrl} external class="font-medium underline">
                 {gameModeName[gameMode]}
             </A>
         {:else}
@@ -51,12 +46,7 @@
     </TableBodyCell>
     <TableBodyCell>
         {#if mapWiki.articleUrl}
-            <A
-                href={mapWiki.articleUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="font-medium underline"
-            >
+            <A href={mapWiki.articleUrl} external class="font-medium underline">
                 {MapName[map]}
             </A>
             {#if mapWiki.imageUrl}

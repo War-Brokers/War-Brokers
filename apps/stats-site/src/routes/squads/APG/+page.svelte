@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { resolve } from "$app/paths"
     import A from "$lib/components/A.svelte"
     import Title from "$lib/components/title.svelte"
     import SquadEmblem from "$lib/img/squads/APG.png"
@@ -18,7 +19,10 @@
 </h2>
 <span class="mx-auto mb-10 text-xl font-black">
     Squad Leader :
-    <a class="underline underline-offset-4 hover:text-orange-500" href="/players/{squadLeader.uid}">
+    <a
+        class="underline underline-offset-4 hover:text-orange-500"
+        href={resolve("/players/[uid]", { uid: squadLeader.uid })}
+    >
         {squadLeader.nick}
     </a>
 </span>
@@ -55,7 +59,7 @@
         </p>
 
         <div class="w-fit">
-            <A class="text-2xl font-bold" href="https://forms.gle/STUdYz6KuVFijVJ57">
+            <A class="text-2xl font-bold" href="https://forms.gle/STUdYz6KuVFijVJ57" external>
                 <div class="animate-bounce">Apply Now!</div>
             </A>
         </div>
@@ -68,7 +72,7 @@
 </div>
 <div class="flex flex-col gap-4">
     {#each members as player (player.uid)}
-        <a href="/players/{player.uid}">
+        <a href={resolve("/players/[uid]", { uid: player.uid })}>
             <div class="flex flex-col rounded-lg bg-slate-700 p-4">
                 <span class="mb-4 text-xl font-bold">{player.nick}</span>
 

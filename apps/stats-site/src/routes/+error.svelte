@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { resolve } from "$app/paths"
     import { page } from "$app/stores"
     import A from "$lib/components/A.svelte"
     import Title from "$lib/components/title.svelte"
@@ -18,9 +19,9 @@
         <h1 id="error-title" class="text-2xl font-bold">{heading}</h1>
         <p class="mt-2 max-w-xl text-gray-300">{description}</p>
         <div class="mt-6 flex flex-wrap gap-6">
-            <A href="/">Return home</A>
+            <A href={resolve("/")}>Return home</A>
             {#if !notFound}
-                <A href="https://uptime.pompy.dev/status/wbp">View service status</A>
+                <A href="https://uptime.pompy.dev/status/wbp" external>View service status</A>
             {/if}
         </div>
     </section>

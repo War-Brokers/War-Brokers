@@ -3,6 +3,7 @@
     import { Popover } from "flowbite-svelte"
     import QuestionMarkIcon from "flowbite-svelte-icons/QuestionCircleSolid.svelte"
 
+    import { resolve } from "$app/paths"
     import A from "$lib/components/A.svelte"
     import { percentile2rank } from "$lib/rank"
     import { cn } from "$lib/utils"
@@ -146,7 +147,7 @@
                             of the players!
                         </h3>
                         <br />
-                        <A href="/ranks" class="flex font-medium">
+                        <A href={resolve("/ranks")} class="flex font-medium">
                             <QuestionMarkIcon class="mr-1 w-4" /> Learn More
                         </A>
                     </Popover>

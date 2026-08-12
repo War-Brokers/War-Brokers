@@ -3,6 +3,7 @@
     import { onDestroy, onMount, tick } from "svelte"
 
     import { goto } from "$app/navigation"
+    import type { ResolvedPathname } from "$app/types"
     import trpc from "$lib/trpc"
     import { cn } from "$lib/utils"
 
@@ -23,7 +24,7 @@
     let message: string | undefined
     let messageIsError = false
 
-    export let resultHref = (uid: string) => `/players/${uid}`
+    export let resolvedResultHref: (uid: string) => ResolvedPathname
     export let inputId = "player-search"
     export let label = "Player search"
     export let placeholder = "Player Search"
@@ -177,7 +178,8 @@
                 latestRequest += 1
                 runSearch.cancel()
                 open = false
-                void goto(resultHref(highlightedResult.uid))
+                // eslint-disable-next-line svelte/no-navigation-without-resolve
+                void goto(resolvedResultHref(highlightedResult.uid))
                 break
             case "Escape":
                 if (!open) return
@@ -267,7 +269,7 @@
                 >
                     {#if state === "loading"}
                         <div class="skeleton-reveal space-y-4 px-2" aria-hidden="true">
-                            {#each { length: 4 } as _}
+                            {#each { length: 4 } as _, index (index)}
                                 <div class="space-y-2 p-2">
                                     <div class="h-5 w-32 rounded bg-gray-500"></div>
                                     <div class="h-4 w-48 max-w-full rounded bg-gray-500"></div>
@@ -282,9 +284,10 @@
                             class="relative h-full overflow-y-scroll"
                         >
                             {#each searchResults as { nick, squad, uid }, index (uid)}
+                                <!-- eslint-disable svelte/no-navigation-without-resolve -->
                                 <a
                                     id={optionId(uid)}
-                                    href={resultHref(uid)}
+                                    href={resolvedResultHref(uid)}
                                     role="option"
                                     tabindex="-1"
                                     aria-selected={highlightedIndex === index}
@@ -297,6 +300,7 @@
                                         setHighlightedIndex(index)
                                     }}
                                 >
+                                    <!-- eslint-enable svelte/no-navigation-without-resolve -->
                                     <b class="text-lg">
                                         {#if squad}
                                             <span class="text-gray-400">[{squad}]</span>

@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Popover } from "flowbite-svelte"
 
+    import { resolve } from "$app/paths"
     import A from "$lib/components/A.svelte"
     import Stat from "$lib/components/stat.svelte"
     import Title from "$lib/components/title.svelte"
@@ -17,11 +18,16 @@
 <div class="mb-10 flex w-full flex-col items-center justify-center">
     <h1 class="mx-auto mb-4 text-4xl font-black">
         {#if player.squad}
-            <A href="/squads/{player.squad}">[{player.squad}]</A>
+            <A href={resolve("/squads/[squadName]", { squadName: player.squad })}
+                >[{player.squad}]</A
+            >
         {/if}
         {player.nick}
     </h1>
-    <A href="/{player.uid}-vs-" class="text-xs font-black uppercase tracking-wider">vs</A>
+    <A
+        href={resolve("/[[a]]-vs-[[b]]", { a: player.uid })}
+        class="text-xs font-black uppercase tracking-wider">vs</A
+    >
 </div>
 
 <div class="mb-5 flex w-24">
@@ -33,7 +39,7 @@
 </div>
 
 <div>
-    {#each badges as { id, date, imageURL, name }}
+    {#each badges as { id, date, imageURL, name } (id)}
         <div {id} class="mb-10 inline-block">
             <img title={name} src={imageURL} alt={name} />
         </div>

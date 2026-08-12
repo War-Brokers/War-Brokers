@@ -3,7 +3,7 @@
     export let secondaryStat = false
 </script>
 
-{#each { length: rows } as _}
+{#each { length: rows } as _, index (index)}
     <tr class="skeleton-reveal h-10" aria-hidden="true">
         <td class="pr-4">
             <div class="ms-auto h-4 w-6 rounded bg-slate-500"></div>
