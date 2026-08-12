@@ -1,8 +1,8 @@
 import { drizzle } from "drizzle-orm/postgres-js"
 import postgres from "postgres"
 
+import { env } from "@/env"
 import { upstreamTimeoutMs } from "@/fetch"
-import { env } from "@/index"
 
 import deletePlayer from "./deletePlayer"
 import {

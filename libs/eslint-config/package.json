@@ -17,9 +17,7 @@
         "eslint-config-turbo": "2.8.13",
         "eslint-import-resolver-typescript": "^4.4.4",
         "eslint-plugin-import": "2.32.0",
-        "eslint-plugin-json": "4.0.1",
         "eslint-plugin-simple-import-sort": "12.1.1",
-        "eslint-plugin-turbo": "2.8.13",
         "globals": "17.4.0",
         "typescript": "6.0.3",
         "typescript-eslint": "8.65.0"

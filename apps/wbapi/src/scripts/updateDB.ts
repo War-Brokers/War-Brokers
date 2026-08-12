@@ -8,8 +8,9 @@
 
 import z from "zod"
 
+import { env } from "@/env"
 import { fetchUpstream } from "@/fetch"
-import { db, env } from "@/index"
+import { db } from "@/index"
 import { getPlayer } from "@/router/playersRouter/getPlayer"
 
 const playerListSchema = z.array(

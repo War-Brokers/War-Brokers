@@ -7,13 +7,16 @@ jest.mock("@/fetch", () => ({
     fetchUpstream: jest.fn(),
 }))
 
-jest.mock("@/index", () => ({
-    db: { setPlayer: jest.fn() },
+jest.mock("@/env", () => ({
     env: {
         WB_DB_BASE: "https://domain.example",
         WB_DB_ID: "id",
         WB_DB_PW: "password",
     },
+}))
+
+jest.mock("@/index", () => ({
+    db: { setPlayer: jest.fn() },
 }))
 
 const playerData = {

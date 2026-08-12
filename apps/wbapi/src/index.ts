@@ -1,5 +1,3 @@
-import "dotenv/config"
-
 import type { TRPCError } from "@trpc/server"
 import { createExpressMiddleware } from "@trpc/server/adapters/express"
 import cors from "cors"
@@ -15,22 +13,6 @@ import { createContext } from "@/trpc"
 import { initDB } from "./db"
 import { startDistributionCache } from "./distributionCache"
 import { isPrivate } from "./private"
-
-function requireEnv(name: string, value: string | undefined): string {
-    if (value === undefined) throw new Error(`Missing required environment variable: ${name}`)
-
-    return value
-}
-
-export const env = {
-    /* eslint-disable turbo/no-undeclared-env-vars */
-    WB_DB_ID: requireEnv("WB_DB_ID", process.env["WB_DB_ID"]),
-    WB_DB_PW: requireEnv("WB_DB_PW", process.env["WB_DB_PW"]),
-    WB_DB_BASE: requireEnv("WB_DB_BASE", process.env["WB_DB_BASE"]),
-
-    DATABASE_URL: requireEnv("DATABASE_URL", process.env["DATABASE_URL"]),
-    /* eslint-enable turbo/no-undeclared-env-vars */
-}
 
 export const db = initDB()
 

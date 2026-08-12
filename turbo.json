@@ -5,7 +5,8 @@
     "tasks": {
         "dev": {
             "cache": false,
-            "persistent": true
+            "persistent": true,
+            "env": ["DATABASE_URL", "NODE_ENV", "WB_DB_BASE", "WB_DB_ID", "WB_DB_PW"]
         },
         "build": {
             "dependsOn": ["^build"],
