@@ -8,6 +8,13 @@
       "when": 1786017238510,
       "tag": "0000_init",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1786573713860,
+      "tag": "0001_expand_player_stats",
+      "breakpoints": true
     }
   ]
 }

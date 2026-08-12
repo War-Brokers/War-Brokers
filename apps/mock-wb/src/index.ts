@@ -24,8 +24,23 @@ app.get("/", (req, res) => {
 
 // todo: incomplete
 app.get("/latest.txt", (req, res) => {
+    /**
+     * Formats UNIX timestamp (seconds) to YY-MM-DD.
+     */
+    function formatTimestampDate(timestamp: number) {
+        return timestamp === 0 ? 0 : new Date(timestamp * 1000).toISOString().slice(2, 10)
+    }
+
     res.type("text/plain")
-    res.send(csvStringify(stats))
+    res.send(
+        csvStringify(
+            stats.map((player) => ({
+                ...player,
+                join_date: formatTimestampDate(player.joinTime),
+                last_seen: formatTimestampDate(player.time),
+            })),
+        ),
+    )
 })
 
 // todo: incomplete

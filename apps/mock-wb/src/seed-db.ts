@@ -3,16 +3,11 @@ import postgres from "postgres"
 import { stats } from "./stats"
 
 // PostgreSQL's bind-protocol limit is 65,535 parameters per statement.
-// We're using 11 parameters per row: floor(65,535 / 11) = 5,957 rows
-// We're using batch size of 5000 to make the number look nice.
-const BATCH_SIZE = 5000
+// We're using 50 parameters per row: floor(65,535 / 50) = 1,310 rows.
+const BATCH_SIZE = 1000
 
 export async function seedDB() {
-    const sql = postgres(
-        "postgresql://postgres@localhost:5432/postgres",
-        // Disable prefetch as it is not supported for "Transaction" pool mode
-        { prepare: false },
-    )
+    const sql = postgres("postgresql://postgres@localhost:5432/postgres")
 
     const total = stats.length
     for (let start = 0; start < total; start += BATCH_SIZE) {
@@ -22,12 +17,51 @@ export async function seedDB() {
             nicklower: stat.nick.toLocaleLowerCase(),
             level: stat.level,
             xp: stat.xp,
+            coins: stat.coins,
             squad: stat.squad,
             killsELO: stat.killsELO,
             gamesELO: stat.gamesELO,
-            coins: stat.coins,
+            wins: stat.wins,
+            losses: stat.losses,
+            number_of_capture_points: stat.number_of_capture_points ?? null,
             number_of_jumps: stat.number_of_jumps,
-            steam: stat.steam === undefined ? null : stat.steam,
+            scuds_launched: stat.scuds_launched,
+            total_kills: stat.total_kills ?? null,
+            kill_to_death_ratio: stat.kill_to_death_ratio ?? null,
+            kills_per_minute: stat.kills_per_minute ?? null,
+            zombie_kills: stat.zombie_kills,
+            zombie_deaths: stat.zombie_deaths,
+            zombie_time_alive: stat.zombie_time_alive ?? null,
+            zombie_time_alive_count: stat.zombie_time_alive_count ?? null,
+            zombie_wins: stat.zombie_wins,
+            self_destructs: stat.self_destructs,
+            distance_driven: stat.distance_driven,
+            distance_driven_count: stat.distance_driven_count,
+            kills_per_vehicle: stat.kills_per_vehicle,
+            shots_fired_unzoomed: stat.shots_fired_unzoomed,
+            shots_fired_zoomed: stat.shots_fired_zoomed,
+            shots_hit_unzoomed: stat.shots_hit_unzoomed,
+            shots_hit_zoomed: stat.shots_hit_zoomed,
+            damage_dealt: stat.damage_dealt,
+            damage_received: stat.damage_received,
+            most_kills_between_deaths: stat.most_kills_between_deaths ?? null,
+            most_kills_in_round: stat.most_kills_in_round ?? null,
+            kills_per_weapon: stat.kills_per_weapon,
+            deaths: stat.deaths,
+            headshots: stat.headshots,
+            longest_kill: stat.longest_kill ?? null,
+            guest: stat.guest ?? null,
+            banned: stat.banned,
+            steam: stat.steam ?? null,
+            time: stat.time,
+            joinTime: stat.joinTime,
+            ping_time: stat.ping_time ?? null,
+            ping_time_count: stat.ping_time_count ?? null,
+            frame_rate: stat.frame_rate ?? null,
+            frame_rate_count: stat.frame_rate_count ?? null,
+            time_alive_count: stat.time_alive_count ?? null,
+            time_alive_longest: stat.time_alive_longest ?? null,
+            time_alive: stat.time_alive ?? null,
         }))
 
         await sql`INSERT INTO players ${sql(batch)}`

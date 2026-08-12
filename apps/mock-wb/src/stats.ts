@@ -1097,7 +1097,6 @@ export const stats: Player[] = [
             const frameRateCount = faker.number.int(20_000)
             const lastSession = faker.date.past({ years: 1 })
             const joinedAt = faker.date.past({ years: 5, refDate: lastSession })
-            const formatDate = (date: Date) => date.toISOString().slice(2, 10)
             const timeAliveFields = fakeRecord({
                 keys: [
                     "time_alive_count",
@@ -1237,16 +1236,6 @@ export const stats: Player[] = [
                     randomOmission: "all-or-nothing",
                 }),
                 time: Math.floor(lastSession.getTime() / 1000),
-                ...fakeRecord({
-                    keys: ["join_date"] as const,
-                    fakeValue: () => formatDate(joinedAt),
-                    randomOmission: "all-or-nothing",
-                }),
-                ...fakeRecord({
-                    keys: ["last_seen"] as const,
-                    fakeValue: () => formatDate(lastSession),
-                    randomOmission: "all-or-nothing",
-                }),
                 joinTime: Math.floor(joinedAt.getTime() / 1000),
                 ...fakeRecord({
                     keys: ["ping_time", "ping_time_count"] as const,

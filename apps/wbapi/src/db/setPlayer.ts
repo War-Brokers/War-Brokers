@@ -6,28 +6,12 @@ import { players } from "@/db/schema"
 
 export default (db: PostgresJsDatabase) => {
     return async (player: Player) => {
-        const newPlayer = {
-            nick: player.nick,
-            nicklower: player.nicklower || player.nick.toLocaleLowerCase(),
-            gamesELO: player.gamesELO,
-            killsELO: player.killsELO,
-            level: player.level,
-            xp: player.xp,
-            squad: player.squad,
-            coins: player.coins,
-            number_of_jumps: player.number_of_jumps,
-            ...(player.steam === undefined ? {} : { steam: player.steam }),
-        }
-
         return await db
             .insert(players)
-            .values({
-                uid: player.uid,
-                ...newPlayer,
-            })
+            .values(player)
             .onConflictDoUpdate({
                 target: players.uid,
-                set: newPlayer,
+                set: player,
                 where: eq(players.uid, player.uid),
             })
     }

@@ -131,7 +131,7 @@ error:`,
         }
 
         const nick = rawRecord["nick"]
-        if (rawRecord["nicklower"] === null && typeof nick === "string")
+        if (!rawRecord["nicklower"] && typeof nick === "string")
             rawRecord["nicklower"] = nick.toLocaleLowerCase()
 
         if (rawRecord["squad"] === "") rawRecord["squad"] = null

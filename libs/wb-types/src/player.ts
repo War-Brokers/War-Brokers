@@ -17,7 +17,9 @@ const weaponIDSchema = z.custom<
     | `p${Digit}${Digit}${Digit}`
 >((val) => typeof val === "string" && /^p\d?\d?\d?$/.test(val))
 
-// todo: add more stats
+/**
+ * Player object as returned by `/get_player_stats.php` of WB DB.
+ */
 export const playerSchema = z.object({
     // Identity
     uid: z.string(),
@@ -82,8 +84,6 @@ export const playerSchema = z.object({
 
     // Time
     time: z.number().int().describe("UNIX timestamp of last session"),
-    join_date: z.string().describe("YY-MM-DD formatted date or 0").optional(), // removable?
-    last_seen: z.string().describe("YY-MM-DD formatted date or 0").optional(), // removable?
     joinTime: z.number().int().describe("UNIX timestamp of join date & time (could be 0)"),
     ping_time: z.number().int().or(z.null()).optional(),
     ping_time_count: z.number().int().or(z.null()).optional(),
