@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { scaleBand } from "d3-scale"
-    import { BarChart } from "layerchart"
+    import { scaleBand, scaleLinear } from "d3-scale"
+    import { Axis, BarChart, Circle, Spline } from "layerchart"
 
     import * as Chart from "$lib/components/ui/chart"
 
@@ -14,13 +14,51 @@
         bucketSize: number
     }
 
+    type ChartBucket = Bucket & {
+        playersBelow: number
+        percentile: number
+    }
+
+    type SeriesKey = Exclude<keyof ChartBucket, "start">
+
+    type DistributionMetric = {
+        key: SeriesKey
+        label: string
+        format: (value: number) => string
+        tableFormat: (value: number) => string
+    }
+
+    type DistributionVisual = {
+        metric: DistributionMetric
+        details?: DistributionMetric[]
+        colorClass: string
+    }
+
+    type DistributionChart = {
+        bar: DistributionVisual
+        line: DistributionVisual & {
+            axis: {
+                placement: "right"
+                domain: [number, number]
+                ticks: number[]
+                format: (value: number) => string
+                tickMarks: false
+            }
+        }
+    }
+
+    type DistributionChartContext = {
+        xScale: ((value: number) => number | undefined) & { bandwidth?: () => number }
+        yRange: number[]
+        tooltip: { data: unknown }
+    }
+
     type Props = {
         id: string
         title: string
         data: DistributionData | Promise<DistributionData>
         updatedAt: string | Promise<string>
         cacheUpdateIntervalHours: number | Promise<number>
-        countLabel?: string
         compactTooltip?: boolean
     }
 
@@ -30,16 +68,71 @@
         data,
         updatedAt,
         cacheUpdateIntervalHours,
-        countLabel = "Count",
         compactTooltip = false,
     }: Props = $props()
 
-    const chartConfig = $derived({
-        count: {
-            label: countLabel,
-            color: "oklch(75% 0.183 55.934)", // orange-400
+    const distributionChart = $derived({
+        bar: {
+            colorClass: "text-orange-400",
+            details: [],
+            metric: {
+                key: "count",
+                label: "Players in this bucket",
+                format: formatCount,
+                tableFormat: formatNumber,
+            },
         },
-    } as const satisfies Chart.ChartConfig)
+        line: {
+            colorClass: "text-sky-400",
+            metric: {
+                key: "percentile",
+                label: "Percentile",
+                format: formatBetterThan,
+                tableFormat: formatBetterThan,
+            },
+            details: [
+                {
+                    key: "playersBelow",
+                    label: "Players below this bucket",
+                    format: formatCount,
+                    tableFormat: formatNumber,
+                },
+            ],
+            axis: {
+                placement: "right",
+                domain: [0, 100],
+                ticks: [0, 25, 50, 75, 100],
+                format: (value: number) => `${value}%`,
+                tickMarks: false,
+            },
+        },
+    } satisfies DistributionChart)
+
+    const visualSeries: DistributionVisual[] = $derived([
+        distributionChart.bar,
+        distributionChart.line,
+    ])
+    const chartMetrics = $derived(
+        visualSeries.flatMap((series) => [...(series.details ?? []), series.metric]),
+    )
+    const chartConfig = $derived(
+        visualSeries.flatMap((series) =>
+            [...(series.details ?? []), series.metric].map((metric) => ({
+                key: metric.key,
+                label: metric.label,
+                colorClass: series.colorClass,
+                format: (value: unknown) => metric.format(Number(value)),
+            })),
+        ),
+    )
+    const barSeries = $derived([
+        {
+            key: distributionChart.bar.metric.key,
+            label: distributionChart.bar.metric.label,
+            color: "currentColor",
+            props: { class: distributionChart.bar.colorClass },
+        },
+    ])
 
     function getTickValues(buckets: Bucket[]): number[] {
         const interval = Math.max(1, Math.ceil(buckets.length / 8))
@@ -68,6 +161,23 @@
         })
     }
 
+    function addCumulativeValues(buckets: Bucket[]): ChartBucket[] {
+        const totalCount = buckets.reduce((total, bucket) => total + bucket.count, 0)
+        let playersBelow = 0
+
+        return buckets.map((bucket) => {
+            const cumulativeBucket = {
+                ...bucket,
+                playersBelow,
+                percentile: totalCount === 0 ? 0 : (playersBelow / totalCount) * 100,
+            }
+
+            playersBelow += bucket.count
+
+            return cumulativeBucket
+        })
+    }
+
     function formatBucketLabel(start: number, size: number, compact = false): string {
         const end = start + size - 1
         const format = compact
@@ -82,6 +192,60 @@
             notation: "compact",
             maximumFractionDigits: 1,
         }).format(value) satisfies string
+    }
+
+    function formatNumber(value: number): string {
+        return value.toLocaleString("en-US")
+    }
+
+    function formatCount(value: number): string {
+        return compactTooltip
+            ? formatCompact(value)
+            : value.toLocaleString("en-US", { useGrouping: "min2" })
+    }
+
+    function formatBetterThan(value: number): string {
+        const percentile = value.toLocaleString("en-US", { maximumFractionDigits: 3 })
+
+        return `better than ${percentile}%`
+    }
+
+    function isRecord(value: unknown): value is Record<string, unknown> {
+        return typeof value === "object" && value !== null
+    }
+
+    function isChartBucket(value: unknown): value is ChartBucket {
+        return (
+            isRecord(value) &&
+            typeof value["start"] === "number" &&
+            chartMetrics.every((metric) => typeof value[metric.key] === "number")
+        )
+    }
+
+    function getLineScale(range: number[]) {
+        return scaleLinear().domain(distributionChart.line.axis.domain).range(range)
+    }
+
+    function isDistributionChartContext(value: unknown): value is DistributionChartContext {
+        return typeof value !== "object" || value === null
+            ? false
+            : "xScale" in value &&
+                  typeof value.xScale === "function" &&
+                  "yRange" in value &&
+                  Array.isArray(value.yRange) &&
+                  value.yRange.every((item) => typeof item === "number") &&
+                  "tooltip" in value &&
+                  typeof value.tooltip === "object" &&
+                  value.tooltip !== null &&
+                  "data" in value.tooltip
+    }
+
+    function asDistributionChartContext(value: unknown): DistributionChartContext {
+        if (!isDistributionChartContext(value)) {
+            throw new Error("Invalid distribution chart context")
+        }
+
+        return value
     }
 </script>
 
@@ -134,27 +298,36 @@
                 No {title} distribution data is available.
             </p>
         {:else}
-            {@const completeBuckets = fillMissingBuckets(buckets, bucketSize)}
+            {@const completeBuckets = addCumulativeValues(fillMissingBuckets(buckets, bucketSize))}
             <figure class="px-2 py-5 sm:px-4">
                 <div
                     class="overflow-x-auto pb-2"
                     role="img"
-                    aria-label={`${title} histogram. Data is available in the following table.`}
+                    aria-label={`${title} histogram with a cumulative percentile line. Data is available in the following table.`}
                 >
-                    <div class="w-full">
-                        <Chart.Container {id} config={chartConfig} class="h-72 w-full">
+                    <div class="flex h-72 w-full flex-col gap-1">
+                        <div
+                            class="flex shrink-0 justify-end gap-4 px-1 text-xs text-gray-400"
+                            aria-hidden="true"
+                        >
+                            {#each [distributionChart.bar, distributionChart.line] as series, index (series.metric.key)}
+                                <span class="flex items-center gap-1.5">
+                                    <span
+                                        class={index === 1
+                                            ? `w-4 border-t-2 border-current ${series.colorClass}`
+                                            : `size-2.5 bg-current ${series.colorClass}`}
+                                    ></span>
+                                    {series.metric.label}
+                                </span>
+                            {/each}
+                        </div>
+                        <Chart.Container {id} config={chartConfig} class="min-h-0 w-full flex-1">
                             <BarChart
                                 data={completeBuckets}
                                 xScale={scaleBand().padding(0.06)}
                                 x="start"
-                                axis="x"
-                                series={[
-                                    {
-                                        key: "count",
-                                        label: chartConfig.count.label,
-                                        color: chartConfig.count.color,
-                                    },
-                                ]}
+                                padding={{ top: 4, right: 28, bottom: 20, left: 0 }}
+                                series={barSeries}
                                 props={{
                                     bars: {
                                         stroke: "none",
@@ -167,12 +340,63 @@
                                         },
                                         motion: "none",
                                     },
-                                    xAxis: {
-                                        ticks: getTickValues(completeBuckets),
-                                        format: (value) => formatCompact(Number(value)),
-                                    },
                                 }}
                             >
+                                {#snippet aboveMarks({ context })}
+                                    {@const chartContext = asDistributionChartContext(context)}
+                                    {@const lineScale = getLineScale(chartContext.yRange)}
+                                    {@const bandwidth = chartContext.xScale.bandwidth?.() ?? 0}
+                                    {@const pathData = completeBuckets
+                                        .map(
+                                            (bucket, index) =>
+                                                `${index === 0 ? "M" : "L"}${Number(chartContext.xScale(bucket.start)) + bandwidth / 2},${lineScale(bucket[distributionChart.line.metric.key])}`,
+                                        )
+                                        .join(" ")}
+                                    <Spline
+                                        {pathData}
+                                        stroke="currentColor"
+                                        strokeWidth={2}
+                                        motion="none"
+                                        class={distributionChart.line.colorClass}
+                                    />
+                                    {#if isChartBucket(chartContext.tooltip.data)}
+                                        <Circle
+                                            cx={Number(
+                                                chartContext.xScale(
+                                                    chartContext.tooltip.data.start,
+                                                ),
+                                            ) +
+                                                bandwidth / 2}
+                                            cy={lineScale(
+                                                chartContext.tooltip.data[
+                                                    distributionChart.line.metric.key
+                                                ],
+                                            )}
+                                            r={3.5}
+                                            fill="currentColor"
+                                            strokeWidth={2}
+                                            motion="none"
+                                            class={`stroke-gray-900 ${distributionChart.line.colorClass}`}
+                                        />
+                                    {/if}
+                                {/snippet}
+                                {#snippet axis({ context })}
+                                    {@const chartContext = asDistributionChartContext(context)}
+                                    <Axis
+                                        placement="bottom"
+                                        scale={chartContext.xScale}
+                                        ticks={getTickValues(completeBuckets)}
+                                        format={(value) => formatCompact(Number(value))}
+                                    />
+                                    <Axis
+                                        placement={distributionChart.line.axis.placement}
+                                        scale={getLineScale(chartContext.yRange)}
+                                        ticks={distributionChart.line.axis.ticks}
+                                        format={(value) =>
+                                            distributionChart.line.axis.format(Number(value))}
+                                        tickMarks={distributionChart.line.axis.tickMarks}
+                                    />
+                                {/snippet}
                                 {#snippet tooltip()}
                                     <Chart.Tooltip
                                         labelFormatter={(value) =>
@@ -181,9 +405,6 @@
                                                 bucketSize,
                                                 compactTooltip,
                                             )}
-                                        valueFormatter={compactTooltip
-                                            ? (value) => formatCompact(Number(value))
-                                            : undefined}
                                     />
                                 {/snippet}
                             </BarChart>
@@ -196,20 +417,28 @@
                         <thead>
                             <tr>
                                 <th scope="col">Range</th>
-                                <th scope="col">{countLabel}</th>
+                                {#each chartMetrics as metric (metric.key)}
+                                    <th scope="col">{metric.label}</th>
+                                {/each}
                             </tr>
                         </thead>
                         <tbody>
                             {#each completeBuckets as bucket (bucket.start)}
                                 <tr>
                                     <td>{formatBucketLabel(bucket.start, bucketSize)}</td>
-                                    <td>{bucket.count.toLocaleString("en-US")}</td>
+                                    {#each chartMetrics as metric (metric.key)}
+                                        <td>
+                                            {metric.tableFormat(bucket[metric.key])}
+                                        </td>
+                                    {/each}
                                 </tr>
                             {/each}
                         </tbody>
                     </table>
                 </div>
-                <figcaption class="sr-only">{title} distribution.</figcaption>
+                <figcaption class="sr-only">
+                    {title} distribution and cumulative percentile.
+                </figcaption>
             </figure>
         {/if}
     {:catch _}

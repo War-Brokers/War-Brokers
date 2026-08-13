@@ -89,7 +89,6 @@
                 data={distribution.then((value) => value[chart.statistic])}
                 updatedAt={distributionUpdatedAt}
                 cacheUpdateIntervalHours={distributionCacheUpdateIntervalHours}
-                countLabel="Players"
                 compactTooltip={chart.statistic === "xp"}
             />
         {/each}

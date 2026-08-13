@@ -1,12 +1,13 @@
 import { getContext, setContext } from "svelte"
 
-export type ChartConfig = Record<
-    string,
-    {
-        label?: string
-        color?: string
-    }
->
+export type ChartMetric = {
+    key: string
+    label: string
+    colorClass: string
+    format: (value: unknown) => string
+}
+
+export type ChartConfig = ChartMetric[]
 
 type ChartContextValue = {
     config: ChartConfig
