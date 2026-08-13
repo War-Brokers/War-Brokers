@@ -136,10 +136,17 @@
 
     function getTickValues(buckets: Bucket[]): number[] {
         const interval = Math.max(1, Math.ceil(buckets.length / 8))
-
-        return buckets
-            .filter((_, index) => index % interval === 0 || index === buckets.length - 1)
+        const ticks = buckets
+            .filter((_, index) => index % interval === 0)
             .map((bucket) => bucket.start)
+
+        const lastBucket = buckets.at(-1)
+
+        if (lastBucket && ticks.at(-1) !== lastBucket.start) {
+            ticks[ticks.length - 1] = lastBucket.start
+        }
+
+        return ticks
     }
 
     function fillMissingBuckets(buckets: Bucket[], bucketSize: number): Bucket[] {
@@ -326,7 +333,7 @@
                                 data={completeBuckets}
                                 xScale={scaleBand().padding(0.06)}
                                 x="start"
-                                padding={{ top: 4, right: 28, bottom: 20, left: 0 }}
+                                padding={{ top: 4, right: 36, bottom: 20, left: 0 }}
                                 series={barSeries}
                                 props={{
                                     bars: {
