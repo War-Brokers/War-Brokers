@@ -49,7 +49,7 @@
     </time>
 </div>
 
-<div class="mb-6 flex w-24">
+<div class="flex w-24" class:mb-1={player.steam} class:mb-6={!player.steam}>
     <span class="whitespace-nowrap font-bold dark:text-gray-400">Last Seen </span>
     &nbsp;
     <time
@@ -60,6 +60,10 @@
         {lastSeen ? `${dayjs(lastSeen).toNow(true)} ago` : "Unknown"}
     </time>
 </div>
+
+{#if player.steam}
+    <div class="mb-6 w-24 whitespace-nowrap font-black text-amber-400">STEAM USER</div>
+{/if}
 
 <div>
     {#each badges as { id, date, imageURL, name } (id)}
