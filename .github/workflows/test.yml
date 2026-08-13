@@ -20,3 +20,10 @@ jobs:
       - run: cp apps/wbapi/.env.example apps/wbapi/.env
       - uses: rharkor/caching-for-turbo@v2.5.1
       - run: mise run verify
+      - name: Upload Playwright failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-test-results
+          path: apps/stats-site/test-results
+          if-no-files-found: ignore
