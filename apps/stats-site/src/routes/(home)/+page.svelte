@@ -63,7 +63,7 @@
     </Metric>
 
     <Metric label="Twitch streams" value={twitchStreams}>
-        <A href="https://www.twitch.tv/warbrokers" external>
+        <A href="https://www.twitch.tv/directory/category/war-brokers" external>
             Watch Live &nbsp; <Icon data={arrowRight} />
         </A>
     </Metric>
