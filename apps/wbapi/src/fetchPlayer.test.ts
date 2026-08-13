@@ -122,6 +122,15 @@ test("identifies the upstream missing-player response", async () => {
     })
 })
 
+test("identifies the upstream missing-record response", async () => {
+    mockedFetchUpstream.mockResolvedValue(new Response("Error! Cannot find record"))
+
+    await expect(fetchPlayer(playerData.uid)).resolves.toEqual({
+        success: false,
+        reason: FailReason.PlayerNotFound,
+    })
+})
+
 test("requires an exact HTTP 200 missing-player response", async () => {
     mockedFetchUpstream.mockResolvedValue(
         new Response(`No data for player: ${playerData.uid}`, { status: 201 }),

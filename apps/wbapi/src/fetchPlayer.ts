@@ -43,7 +43,11 @@ export async function fetchPlayer(uid: Player["uid"]): Promise<Result<Player>> {
         }
     }
 
-    if (res.status === 200 && responseBody === `No data for player: ${uid}`) {
+    if (
+        res.status === 200 &&
+        (responseBody === `No data for player: ${uid}` ||
+            responseBody === "Error! Cannot find record")
+    ) {
         return {
             success: false,
             reason: FailReason.PlayerNotFound,

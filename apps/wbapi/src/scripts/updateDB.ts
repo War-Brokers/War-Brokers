@@ -10,6 +10,7 @@ import { readFile } from "node:fs/promises"
 
 import { initDB } from "@/db"
 import { fetchPlayer } from "@/fetchPlayer"
+import { FailReason } from "@/types"
 
 if (import.meta.main) {
     const UIDs = [
@@ -29,12 +30,16 @@ if (import.meta.main) {
         for (const uid of UIDs) {
             const playerResult = await fetchPlayer(uid)
 
-            if (!playerResult.success) {
-                console.error(`failed to parse player ${uid}: ${playerResult.reason}`)
-                process.exit(1)
+            if (playerResult.success) {
+                await db.setPlayer(playerResult.data)
+            } else {
+                if (playerResult.reason === FailReason.PlayerNotFound) {
+                    console.warn(`player ${uid} was not found; skipping`)
+                } else {
+                    console.error(`failed to parse player ${uid}: ${playerResult.reason}`)
+                    process.exit(1)
+                }
             }
-
-            await db.setPlayer(playerResult.data)
 
             const percent = 100 * (++i / playerCount)
             console.log(`[${uid}] ${percent.toFixed(2)}% complete (${i} / ${playerCount})`)
