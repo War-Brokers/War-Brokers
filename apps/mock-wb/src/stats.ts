@@ -7,6 +7,8 @@ import type { Player } from "@warbrokers/types/src/player"
 import { vehicles } from "@warbrokers/types/src/vehicle"
 import { weapons } from "@warbrokers/types/src/weapon"
 
+const NUM_STATS = 50_000 // production has around 43k as of writing
+
 /**
  * Generates option for faker.js with laplace distribution.
  */
@@ -1244,7 +1246,7 @@ export const stats: Player[] = [
                 ...timeAliveFields,
             } satisfies Player
         },
-        { count: 35_000 - 1 }, // minus one for pomp
+        { count: NUM_STATS - 1 }, // minus one for pomp
     ),
 ]
 
