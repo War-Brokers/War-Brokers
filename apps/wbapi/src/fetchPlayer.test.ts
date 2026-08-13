@@ -1,7 +1,7 @@
 import { fetchUpstream } from "@/fetch"
 import { FailReason } from "@/types"
 
-import { getPlayer } from "./getPlayer"
+import { fetchPlayer } from "./fetchPlayer"
 
 jest.mock("@/fetch", () => ({
     fetchUpstream: jest.fn(),
@@ -13,10 +13,6 @@ jest.mock("@/env", () => ({
         WB_DB_ID: "id",
         WB_DB_PW: "password",
     },
-}))
-
-jest.mock("@/index", () => ({
-    db: { setPlayer: jest.fn() },
 }))
 
 const playerData = {
@@ -70,7 +66,7 @@ function mockPlayerResponse(overrides: Partial<typeof playerData> | Record<strin
 test("replaces an empty squad with null", async () => {
     mockPlayerResponse({ squad: "" })
 
-    const result = await getPlayer(playerData.uid)
+    const result = await fetchPlayer(playerData.uid)
 
     expect(result).toMatchObject({
         success: true,
@@ -81,7 +77,7 @@ test("replaces an empty squad with null", async () => {
 test("preserves a non-empty squad", async () => {
     mockPlayerResponse()
 
-    const result = await getPlayer(playerData.uid)
+    const result = await fetchPlayer(playerData.uid)
 
     expect(result).toMatchObject({
         success: true,
@@ -96,7 +92,7 @@ test("converts string weapon-stat values to numbers", async () => {
         longest_kill: { p03: "321.5" },
     })
 
-    const result = await getPlayer(playerData.uid)
+    const result = await fetchPlayer(playerData.uid)
 
     expect(result).toMatchObject({
         success: true,
@@ -111,7 +107,7 @@ test("converts string weapon-stat values to numbers", async () => {
 test("treats an HTTP 404 as unavailable", async () => {
     mockedFetchUpstream.mockResolvedValue(new Response("Not found", { status: 404 }))
 
-    await expect(getPlayer(playerData.uid)).resolves.toEqual({
+    await expect(fetchPlayer(playerData.uid)).resolves.toEqual({
         success: false,
         reason: FailReason.WBDBConnectionFail,
     })
@@ -120,7 +116,7 @@ test("treats an HTTP 404 as unavailable", async () => {
 test("identifies the upstream missing-player response", async () => {
     mockedFetchUpstream.mockResolvedValue(new Response(`No data for player: ${playerData.uid}`))
 
-    await expect(getPlayer(playerData.uid)).resolves.toEqual({
+    await expect(fetchPlayer(playerData.uid)).resolves.toEqual({
         success: false,
         reason: FailReason.PlayerNotFound,
     })
@@ -131,7 +127,7 @@ test("requires an exact HTTP 200 missing-player response", async () => {
         new Response(`No data for player: ${playerData.uid}`, { status: 201 }),
     )
 
-    await expect(getPlayer(playerData.uid)).resolves.toEqual({
+    await expect(fetchPlayer(playerData.uid)).resolves.toEqual({
         success: false,
         reason: FailReason.SchemaValidationFail,
     })
@@ -140,7 +136,7 @@ test("requires an exact HTTP 200 missing-player response", async () => {
 test("treats an unsuccessful upstream response as unavailable", async () => {
     mockedFetchUpstream.mockResolvedValue(new Response("Unavailable", { status: 503 }))
 
-    await expect(getPlayer(playerData.uid)).resolves.toEqual({
+    await expect(fetchPlayer(playerData.uid)).resolves.toEqual({
         success: false,
         reason: FailReason.WBDBConnectionFail,
     })
@@ -149,7 +145,7 @@ test("treats an unsuccessful upstream response as unavailable", async () => {
 test("treats an upstream network rejection as unavailable", async () => {
     mockedFetchUpstream.mockRejectedValue(new TypeError("fetch failed"))
 
-    await expect(getPlayer(playerData.uid)).resolves.toEqual({
+    await expect(fetchPlayer(playerData.uid)).resolves.toEqual({
         success: false,
         reason: FailReason.WBDBConnectionFail,
     })

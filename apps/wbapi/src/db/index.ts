@@ -28,6 +28,7 @@ export function initDB() {
     const db = drizzle(client)
 
     return {
+        close: () => client.end(),
         setPlayer: setPlayer(db),
         deletePlayer: deletePlayer(db),
         searchPlayerByName: searchPlayerByName(db),

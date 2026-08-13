@@ -1,63 +1,47 @@
 /**
- * Run this script from your computer to update the WBP mirror DB with the
- * latest data from WB's own DB. Remember to use production environment
- * variables.
+ * Run this script to update the WBP mirror DB with the latest data from the official WB DB.
  *
- * deno apps/wbapi/src/scripts/updateDB.ts
+ * ```shell
+ * mise exec -C apps/wbapi -- bun src/scripts/updateDB.ts
+ * ```
  */
 
-import z from "zod"
+import { readFile } from "node:fs/promises"
 
-import { env } from "@/env"
-import { fetchUpstream } from "@/fetch"
-import { db } from "@/index"
-import { getPlayer } from "@/router/playersRouter/getPlayer"
+import { initDB } from "@/db"
+import { fetchPlayer } from "@/fetchPlayer"
 
-const playerListSchema = z.array(
-    z.object({
-        uid: z.string(),
-        nick: z.string(),
-        nicklower: z.string().optional(),
-        squad: z.string().optional(),
-    }),
-)
+if (import.meta.main) {
+    const UIDs = [
+        // Set is used to dedupe UIDs.
+        ...new Set(
+            // cspell:ignore uids
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+            JSON.parse(await readFile(new URL("uids.json", import.meta.url), "utf8")) as string[],
+        ),
+    ]
+    const playerCount = UIDs.length
 
-const playerListRaw: unknown = await (
-    await fetchUpstream(`${env.WB_DB_BASE}/get_player_list.php`, {
-        headers: {
-            Authorization:
-                "Basic " + Buffer.from(`${env.WB_DB_ID}:${env.WB_DB_PW}`).toString("base64"),
-        },
-    })
-).json()
-const playerListResult = playerListSchema.safeParse(playerListRaw)
+    const db = initDB()
 
-if (!playerListResult.success) {
-    console.error(
-        "Failed to parse player list.\nraw:",
-        playerListRaw,
-        "\n\nerror:",
-        playerListResult.error,
-    )
-    process.exit(1)
-}
+    try {
+        let i = 0
+        for (const uid of UIDs) {
+            const playerResult = await fetchPlayer(uid)
 
-const playerList = playerListResult.data
-playerList.pop() // remove { nick: "end_of_list", uid: "000000000000000000000000" }
-const playerCount = playerList.length
+            if (!playerResult.success) {
+                console.error(`failed to parse player ${uid}: ${playerResult.reason}`)
+                process.exit(1)
+            }
 
-let i = 0
-for (const { uid } of playerList) {
-    const playerResult = await getPlayer(uid)
+            await db.setPlayer(playerResult.data)
 
-    if (!playerResult.success) {
-        console.error(`failed to parse player ${uid}: ${playerResult.reason}`)
-        process.exit(1)
+            const percent = 100 * (++i / playerCount)
+            console.log(`[${uid}] ${percent.toFixed(2)}% complete (${i} / ${playerCount})`)
+        }
+
+        console.log(`${i} out of ${playerCount} done!`)
+    } finally {
+        await db.close()
     }
-
-    await db.setPlayer(playerResult.data)
-
-    console.log(`${100 * (++i / playerCount)}% complete (${i} / ${playerCount})\n`)
 }
-
-console.log("done!")
