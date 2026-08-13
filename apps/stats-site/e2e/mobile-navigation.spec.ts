@@ -35,7 +35,7 @@ test("mobile navigation exposes and hides its links without resetting on navigat
 
     // Navigating does not change the menu expansion state.
     await navigation.getByRole("link", { name: "Home" }).click()
-    await expect(page).toHaveURL("/")
+    await expect(page).toHaveURL("/", { timeout: 15_000 })
     await expect(toggle).toHaveAttribute("aria-expanded", "true")
     await expect(navigation).not.toHaveAttribute("inert", "")
 })

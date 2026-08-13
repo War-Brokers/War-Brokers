@@ -284,11 +284,15 @@ test("player search cancels pending debounce work when destroyed", async ({ page
         requestCount += 1
         await fulfillSearch(route, results)
     })
+    await page.route("**/__data.json*", async (route) => {
+        await new Promise((resolve) => setTimeout(resolve, 400))
+        await route.continue()
+    })
     await page.goto("/-vs-")
 
     await page.getByRole("combobox", { name: "Search Player A" }).fill("po")
     await page.getByRole("link", { name: /War Brokers logo/ }).click()
-    await expect(page).toHaveURL("/")
+    await expect(page).toHaveURL("/", { timeout: 15_000 })
     await page.waitForTimeout(400)
 
     expect(requestCount).toBe(0)

@@ -2,7 +2,7 @@
     import debounce from "lodash/debounce"
     import { onDestroy, onMount, tick } from "svelte"
 
-    import { goto } from "$app/navigation"
+    import { beforeNavigate, goto } from "$app/navigation"
     import type { ResolvedPathname } from "$app/types"
     import trpc from "$lib/trpc"
     import { cn } from "$lib/utils"
@@ -202,6 +202,13 @@
         open = state === "results"
     }
 
+    function cancelSearch() {
+        latestRequest += 1
+        runSearch.cancel()
+    }
+
+    beforeNavigate(cancelSearch)
+
     onMount(() => {
         function handlePointerDown(event: PointerEvent) {
             if (event.target instanceof Node && !rootElement.contains(event.target)) {
@@ -216,10 +223,7 @@
         }
     })
 
-    onDestroy(() => {
-        latestRequest += 1
-        runSearch.cancel()
-    })
+    onDestroy(cancelSearch)
 </script>
 
 <div bind:this={rootElement} class="flex w-full flex-col items-center text-start font-normal">
