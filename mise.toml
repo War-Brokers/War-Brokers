@@ -104,6 +104,7 @@ cspell .
 pnpm fmt:check --color
 pnpm lint --color
 pnpm typecheck --color
+pnpm --filter=@warbrokers/stats-site check
 pnpm test:unit --color
 
 # set PLAYWRIGHT_BROWSERS_PATH
