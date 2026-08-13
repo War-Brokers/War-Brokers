@@ -4,7 +4,7 @@
     import arrowLeft from "svelte-awesome/icons/arrowLeft"
     import arrowRight from "svelte-awesome/icons/arrowRight"
 
-    import { page } from "$app/stores"
+    import { page } from "$app/state"
 
     export let currentPage: number
     export let total: Promise<number>
@@ -13,8 +13,8 @@
     const maxPage = writable(-1)
 
     function gotoPage(x: number) {
-        $page.url.searchParams.set("page", String(x))
-        window.location.search = $page.url.searchParams.toString()
+        page.url.searchParams.set("page", String(x))
+        window.location.search = page.url.searchParams.toString()
     }
 
     function setMaxPage(playerCount: number): number {
