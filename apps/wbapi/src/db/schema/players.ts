@@ -26,12 +26,8 @@ export const players = pgTable(
 
         wins: jsonb("wins").$type<NonNullable<Player["wins"]>>(),
         losses: jsonb("losses").$type<NonNullable<Player["losses"]>>(),
-        number_of_capture_points: integer("number_of_capture_points"),
         number_of_jumps: integer("number_of_jumps"),
         scuds_launched: integer("scuds_launched"),
-        total_kills: integer("total_kills"),
-        kill_to_death_ratio: doublePrecision("kill_to_death_ratio"),
-        kills_per_minute: doublePrecision("kills_per_minute"),
         zombie_kills: integer("zombie_kills"),
         zombie_deaths: integer("zombie_deaths"),
         zombie_time_alive: doublePrecision("zombie_time_alive"),
@@ -66,7 +62,6 @@ export const players = pgTable(
         headshots: jsonb("headshots").$type<NonNullable<Player["headshots"]>>(),
         longest_kill: jsonb("longest_kill").$type<NonNullable<Player["longest_kill"]>>(),
 
-        guest: boolean("guest"),
         banned: boolean("banned"),
         steam: boolean("steam"),
 

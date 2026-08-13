@@ -1098,17 +1098,16 @@ export const stats: Player[] = [
             const lastSession = faker.date.past({ years: 1 })
             const joinedAt = faker.date.past({ years: 5, refDate: lastSession })
             const timeAliveFields = fakeRecord({
-                keys: [
-                    "time_alive_count",
-                    "time_alive_longest",
-                    "time_alive",
-                    "kills_per_minute",
-                ] as const,
+                keys: ["time_alive_count", "time_alive_longest", "time_alive"] as const,
                 fakeValue: (key) => {
-                    if (key === "time_alive_count") return timeAliveCount
-                    if (key === "time_alive_longest") return timeAliveLongest
-                    if (key === "time_alive") return timeAlive
-                    return timeAlive === 0 ? 0 : totalKills / (timeAlive / 60)
+                    switch (key) {
+                        case "time_alive_count":
+                            return timeAliveCount
+                        case "time_alive_longest":
+                            return timeAliveLongest
+                        case "time_alive":
+                            return timeAlive
+                    }
                 },
                 randomOmission: "all-or-nothing",
             })
@@ -1168,25 +1167,10 @@ export const stats: Player[] = [
                         fakeValue: () => faker.number.int(1000),
                         randomOmission: "subset",
                     }) ?? null,
-                ...fakeRecord({
-                    keys: ["number_of_capture_points"] as const,
-                    fakeValue: () => faker.number.int(10_000),
-                    randomOmission: "all-or-nothing",
-                }),
                 number_of_jumps:
                     faker.helpers.maybe(() => faker.number.int({ min: 1, max: 10_000 })) ?? null,
                 scuds_launched:
                     faker.helpers.maybe(() => faker.number.int({ min: 1, max: 10_000 })) ?? null,
-                ...fakeRecord({
-                    keys: ["total_kills"] as const,
-                    fakeValue: () => totalKills,
-                    randomOmission: "all-or-nothing",
-                }),
-                ...fakeRecord({
-                    keys: ["kill_to_death_ratio"] as const,
-                    fakeValue: () => (totalDeaths === 0 ? totalKills : totalKills / totalDeaths),
-                    randomOmission: "all-or-nothing",
-                }),
                 zombie_kills: faker.number.int(1000),
                 zombie_deaths: zombieDeaths,
                 ...fakeRecord({
@@ -1222,11 +1206,6 @@ export const stats: Player[] = [
                 ...fakeRecord({
                     keys: ["longest_kill"] as const,
                     fakeValue: () => weaponStats?.longestKill ?? null,
-                    randomOmission: "all-or-nothing",
-                }),
-                ...fakeRecord({
-                    keys: ["guest"] as const,
-                    fakeValue: () => faker.datatype.boolean(),
                     randomOmission: "all-or-nothing",
                 }),
                 banned: false,

@@ -39,12 +39,8 @@ export const playerSchema = z.object({
     // In-game stuff
     wins: z.record(gameModeIDSchema, z.number().int()).or(z.null()),
     losses: z.record(gameModeIDSchema, z.number().int()).or(z.null()),
-    number_of_capture_points: z.number().int().gte(0).optional(), // remove?
     number_of_jumps: z.number().int().or(z.null()),
     scuds_launched: z.number().int().gte(0).or(z.null()),
-    total_kills: z.number().int().gte(0).optional(), // remove?
-    kill_to_death_ratio: z.number().gte(0).optional(), // remove?
-    kills_per_minute: z.number().gte(0).optional(), // remove?
     zombie_kills: z.number().int().gte(0),
     zombie_deaths: z.number().int().gte(0),
     zombie_time_alive: z.number().gte(0).or(z.null()).optional(),
@@ -76,7 +72,6 @@ export const playerSchema = z.object({
     longest_kill: z.record(weaponIDSchema, z.number()).or(z.null()).optional(),
 
     // Flags
-    guest: z.boolean().optional(), // remove?
     banned: z
         .literal(false)
         .describe("Whether the user is banned or not. Doesn't seem to be used. Is always false"),

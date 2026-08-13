@@ -15,6 +15,13 @@
       "when": 1786573713860,
       "tag": "0001_expand_player_stats",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786607331990,
+      "tag": "0002_remove-unused",
+      "breakpoints": true
     }
   ]
 }

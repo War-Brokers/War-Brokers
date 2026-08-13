@@ -3,8 +3,8 @@ import postgres from "postgres"
 import { stats } from "./stats"
 
 // PostgreSQL's bind-protocol limit is 65,535 parameters per statement.
-// We're using 50 parameters per row: floor(65,535 / 50) = 1,310 rows.
-const BATCH_SIZE = 1000
+// We're using 45 parameters per row: floor(65,535 / 45) = 1,456 rows.
+const BATCH_SIZE = 1250
 
 export async function seedDB() {
     const sql = postgres("postgresql://postgres@localhost:5432/postgres")
@@ -23,12 +23,8 @@ export async function seedDB() {
             gamesELO: stat.gamesELO,
             wins: stat.wins,
             losses: stat.losses,
-            number_of_capture_points: stat.number_of_capture_points ?? null,
             number_of_jumps: stat.number_of_jumps,
             scuds_launched: stat.scuds_launched,
-            total_kills: stat.total_kills ?? null,
-            kill_to_death_ratio: stat.kill_to_death_ratio ?? null,
-            kills_per_minute: stat.kills_per_minute ?? null,
             zombie_kills: stat.zombie_kills,
             zombie_deaths: stat.zombie_deaths,
             zombie_time_alive: stat.zombie_time_alive ?? null,
@@ -50,7 +46,6 @@ export async function seedDB() {
             deaths: stat.deaths,
             headshots: stat.headshots,
             longest_kill: stat.longest_kill ?? null,
-            guest: stat.guest ?? null,
             banned: stat.banned,
             steam: stat.steam ?? null,
             time: stat.time,
