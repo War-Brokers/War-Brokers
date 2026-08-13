@@ -1,5 +1,4 @@
 import { error } from "@sveltejs/kit"
-import dayjs from "dayjs"
 
 import trpc from "$lib/trpc"
 
@@ -19,10 +18,5 @@ export const load = (async ({ params }) => {
         xpPercentile: trpc.players.percentile.xp.query({ uid }),
         killsEloPercentile: trpc.players.percentile.killsElo.query({ uid }),
         gamesEloPercentile: trpc.players.percentile.gamesElo.query({ uid }),
-        playingSince: dayjs(MongoDBObjectId2Date(player.uid)).format("MMMM D, YYYY"),
     }
 }) satisfies PageServerLoad
-
-function MongoDBObjectId2Date(s: string) {
-    return new Date(parseInt(s.substring(0, 8), 16) * 1000)
-}

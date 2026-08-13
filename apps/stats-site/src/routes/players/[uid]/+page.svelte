@@ -1,4 +1,7 @@
 <script lang="ts">
+    import dayjs from "dayjs"
+    import relativeTime from "dayjs/plugin/relativeTime"
+    import utc from "dayjs/plugin/utc"
     import { Popover } from "flowbite-svelte"
 
     import { resolve } from "$app/paths"
@@ -9,8 +12,16 @@
     import type { PageData } from "./$types"
 
     export let data: PageData
-    const { player, badges, playingSince, xpPercentile, killsEloPercentile, gamesEloPercentile } =
-        data
+    const { player, badges, xpPercentile, killsEloPercentile, gamesEloPercentile } = data
+
+    function MongoDBObjectId2UnixTimestamp(s: string) {
+        return parseInt(s.substring(0, 8), 16)
+    }
+
+    dayjs.extend(utc)
+    dayjs.extend(relativeTime)
+    const playingSince = dayjs.unix(MongoDBObjectId2UnixTimestamp(player.uid)).utc()
+    const lastSeen = player.time === 0 ? undefined : dayjs.unix(player.time).utc()
 </script>
 
 <Title title="{player.squad && `[${player.squad}] `}{player.nick}" />
@@ -30,12 +41,24 @@
     >
 </div>
 
-<div class="mb-5 flex w-24">
-    <span class="whitespace-nowrap font-bold dark:text-gray-400"> Playing Since </span>
+<div class="mb-1 flex w-24">
+    <span class="whitespace-nowrap font-bold dark:text-gray-400">Playing Since </span>
     &nbsp;
-    <span class="whitespace-nowrap font-black">
-        {playingSince}
-    </span>
+    <time class="whitespace-nowrap font-black" datetime={playingSince.toISOString()}>
+        {playingSince.format("MMMM D, YYYY")}
+    </time>
+</div>
+
+<div class="mb-6 flex w-24">
+    <span class="whitespace-nowrap font-bold dark:text-gray-400">Last Seen </span>
+    &nbsp;
+    <time
+        class="whitespace-nowrap font-black"
+        datetime={lastSeen?.toISOString()}
+        title={lastSeen?.format("MMMM D, YYYY")}
+    >
+        {lastSeen ? `${dayjs(lastSeen).toNow(true)} ago` : "Unknown"}
+    </time>
 </div>
 
 <div>
