@@ -58,6 +58,7 @@ words:
     - msvc
     - multisites
     - Nanderson
+    - networkidle
     - nicklower
     - nixos
     - nixpkgs
@@ -91,6 +92,7 @@ words:
     - trpc
     - tsup
     - turborepo
+    - uids
     - unranked
     - unzoomed
     - Upstash

@@ -1,6 +1,5 @@
 import { expect, test } from "@playwright/test"
 
-// cspell:ignore networkidle
 test("mobile navigation exposes and hides its links without resetting on navigation", async ({
     page,
 }) => {

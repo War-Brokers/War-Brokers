@@ -16,7 +16,6 @@ if (import.meta.main) {
     const UIDs = [
         // Set is used to dedupe UIDs.
         ...new Set(
-            // cspell:ignore uids
             // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
             JSON.parse(await readFile(new URL("uids.json", import.meta.url), "utf8")) as string[],
         ),
