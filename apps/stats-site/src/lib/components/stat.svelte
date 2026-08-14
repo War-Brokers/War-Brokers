@@ -91,7 +91,7 @@
                     </div>
                     <Popover
                         triggeredBy="#{_id}"
-                        class="w-72 max-w-[calc(100vw-2rem)] space-y-3 p-3 text-sm font-light dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400"
+                        class="z-10 w-72 max-w-[calc(100vw-2rem)] space-y-3 p-3 text-sm font-light dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400"
                         {...{ middlewares: [flip(), shift({ padding: 16 })] }}
                         placement="top-start"
                     >

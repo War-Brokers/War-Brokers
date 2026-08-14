@@ -1,19 +1,84 @@
 <script lang="ts">
     import { getChartContext, Tooltip as TooltipPrimitive } from "layerchart"
+    import type { ComponentProps } from "svelte"
 
     import { cn } from "$lib/utils"
 
     import { useChart } from "./chart-utils"
 
     const {
+        anchor = "top-left",
+        clampToContainer = false,
         labelFormatter = (value: unknown) => String(value),
+        onDataChange,
     }: {
+        anchor?: ComponentProps<typeof TooltipPrimitive.Root>["anchor"]
+        clampToContainer?: boolean
         labelFormatter?: (value: unknown) => string
+        onDataChange?: (data: unknown) => void
     } = $props()
 
     const chart = useChart()
     const context = getChartContext()
     const numberFormatter = new Intl.NumberFormat("en-US", { useGrouping: "min2" })
+    let tooltipWidth = $state(0)
+    let tooltipHeight = $state(0)
+
+    $effect(() => onDataChange?.(context.tooltip.data))
+
+    type Alignment = "start" | "center" | "end"
+    type TooltipAnchor = NonNullable<ComponentProps<typeof TooltipPrimitive.Root>["anchor"]>
+
+    function getHorizontalAlignment(value: TooltipAnchor) {
+        if (value.endsWith("left") || value === "left") return "start" as const
+        if (value.endsWith("right") || value === "right") return "end" as const
+
+        return "center" as const
+    }
+
+    function getVerticalAlignment(value: TooltipAnchor) {
+        if (value.startsWith("top")) return "start" as const
+        if (value.startsWith("bottom")) return "end" as const
+
+        return "center" as const
+    }
+
+    function clampPointerCoordinate(
+        pointer: number,
+        tooltipSize: number,
+        containerSize: number,
+        alignment: Alignment,
+    ) {
+        const alignmentOffset =
+            alignment === "center" ? tooltipSize / 2 : alignment === "end" ? tooltipSize : 0
+        const pointerOffset = alignment === "end" ? -10 : 10
+        const desiredStart = pointer + pointerOffset - alignmentOffset
+        const maximumStart = Math.max(0, containerSize - tooltipSize)
+        const clampedStart = Math.min(Math.max(0, desiredStart), maximumStart)
+
+        return clampedStart + alignmentOffset
+    }
+
+    const tooltipX = $derived(
+        clampToContainer
+            ? clampPointerCoordinate(
+                  context.tooltip.x,
+                  tooltipWidth,
+                  context.containerWidth,
+                  getHorizontalAlignment(anchor),
+              )
+            : ("pointer" as const),
+    )
+    const tooltipY = $derived(
+        clampToContainer
+            ? clampPointerCoordinate(
+                  context.tooltip.y,
+                  tooltipHeight,
+                  context.containerHeight,
+                  getVerticalAlignment(anchor),
+              )
+            : ("pointer" as const),
+    )
 
     type TooltipPayload = {
         key: string
@@ -59,7 +124,10 @@
                     value: data[series.key],
                     color: undefined,
                     name: series.label,
-                    colorClass: series.colorClass,
+                    colorClass:
+                        typeof data["colorClass"] === "string"
+                            ? data["colorClass"]
+                            : series.colorClass,
                     format: series.format,
                 },
             ]
@@ -89,12 +157,15 @@
     }
 </script>
 
-<TooltipPrimitive.Root {context} variant="none" motion="none">
+<TooltipPrimitive.Root {context} variant="none" motion="none" {anchor} x={tooltipX} y={tooltipY}>
     {#snippet children({ data, payload: rawPayload })}
         {@const fallback = parsePayload(rawPayload as unknown)}
         {@const payload = getTooltipItems(data as unknown, fallback)}
         <div
             class="grid min-w-36 gap-1.5 rounded-lg border border-gray-600 bg-gray-900 px-3 py-2 text-xs shadow-xl"
+            role="tooltip"
+            bind:clientWidth={tooltipWidth}
+            bind:clientHeight={tooltipHeight}
         >
             {#if payload[0]}
                 <div class="font-medium text-gray-100">

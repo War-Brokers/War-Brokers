@@ -10,8 +10,9 @@
     import Title from "$lib/components/title.svelte"
 
     import type { PageData } from "./$types"
+    import GameModeCharts from "./charts/GameModeCharts.svelte"
 
-    export let data: PageData
+    const { data }: { data: PageData } = $props()
     const { player, badges, xpPercentile, killsEloPercentile, gamesEloPercentile } = data
 
     function MongoDBObjectId2UnixTimestamp(s: string) {
@@ -106,3 +107,5 @@
         percentile={gamesEloPercentile}
     />
 </div>
+
+<GameModeCharts {player} />

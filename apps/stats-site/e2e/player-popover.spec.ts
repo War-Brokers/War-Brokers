@@ -58,3 +58,48 @@ test("rank popover does not shift the mobile layout", async ({ page }) => {
     expect(layout.tooltipX).toBeGreaterThanOrEqual(16)
     expect(layout.tooltipRight).toBeLessThanOrEqual(376)
 })
+
+test("rank popover draws above the wins chart", async ({ page }) => {
+    await page.setViewportSize({ width: 506, height: 466 })
+    await page.goto(`/players/${pompUID}`)
+
+    const trigger = page.locator("#games-elo-percentile")
+    await trigger.evaluate((element) => {
+        element.scrollIntoView({ block: "start" })
+    })
+    await trigger.click()
+    await expect(page.getByRole("tooltip")).toBeVisible()
+
+    const paintOrder = await page.evaluate(() => {
+        const tooltip = document.querySelector('[role="tooltip"]')
+        const chart = document.querySelector('[data-chart="wins-donut"]')
+
+        if (!(tooltip instanceof HTMLElement) || !(chart instanceof HTMLElement)) return undefined
+
+        const tooltipRect = tooltip.getBoundingClientRect()
+        const chartRect = chart.getBoundingClientRect()
+        const left = Math.ceil(Math.max(tooltipRect.left, chartRect.left))
+        const right = Math.floor(Math.min(tooltipRect.right, chartRect.right))
+        const top = Math.ceil(Math.max(tooltipRect.top, chartRect.top))
+        const bottom = Math.floor(Math.min(tooltipRect.bottom, chartRect.bottom))
+
+        for (let y = top; y < bottom; y += 2) {
+            for (let x = left; x < right; x += 2) {
+                const elements = document.elementsFromPoint(x, y)
+                const tooltipIndex = elements.findIndex((element) => tooltip.contains(element))
+                const chartIndex = elements.findIndex(
+                    (element) =>
+                        element instanceof SVGPathElement &&
+                        element.hasAttribute("data-category-key"),
+                )
+
+                if (tooltipIndex !== -1 && chartIndex !== -1) return { chartIndex, tooltipIndex }
+            }
+        }
+
+        return undefined
+    })
+
+    expect(paintOrder).toBeDefined()
+    expect(paintOrder?.tooltipIndex).toBeLessThan(paintOrder?.chartIndex ?? 0)
+})

@@ -1,0 +1,153 @@
+import { expect, type Locator, test } from "@playwright/test"
+
+const pompUID = "5d2ead35d142affb05757778"
+
+async function getArcPoint(arc: Locator, options: { rightmost?: boolean; targetX?: number } = {}) {
+    return arc.evaluate((element, options) => {
+        if (!(element instanceof SVGPathElement)) return undefined
+
+        const bounds = element.getBBox()
+        const matrix = element.getScreenCTM()
+        if (!matrix) return undefined
+        let selectedPoint: { x: number; y: number } | undefined
+
+        for (let y = bounds.y; y <= bounds.y + bounds.height; y += 2) {
+            for (let x = bounds.x; x <= bounds.x + bounds.width; x += 2) {
+                const point = new DOMPoint(x, y)
+
+                if (element.isPointInFill(point)) {
+                    const screenPoint = point.matrixTransform(matrix)
+                    if (options.targetX !== undefined) {
+                        if (
+                            !selectedPoint ||
+                            Math.abs(screenPoint.x - options.targetX) <
+                                Math.abs(selectedPoint.x - options.targetX)
+                        ) {
+                            selectedPoint = { x: screenPoint.x, y: screenPoint.y }
+                        }
+                    } else if (options.rightmost) {
+                        if (!selectedPoint || screenPoint.x > selectedPoint.x) {
+                            selectedPoint = { x: screenPoint.x, y: screenPoint.y }
+                        }
+                    } else {
+                        return { x: screenPoint.x, y: screenPoint.y }
+                    }
+                }
+            }
+        }
+
+        return selectedPoint
+    }, options)
+}
+
+test("links pie and bar hover states", async ({ page, isMobile }) => {
+    test.skip(isMobile, "Hover linking applies to pointer hover environments")
+
+    await page.goto(`/players/${pompUID}`)
+
+    const wins = page.getByRole("article", { name: "Wins by Game Mode" })
+    const teamDeathMatchArc = wins.locator('svg path[data-category-key="m00"]')
+    const battleRoyaleArc = wins.locator('svg path[data-category-key="m11"]')
+    const teamDeathMatchRow = wins.locator('li[data-category-key="m00"]')
+    const battleRoyaleRow = wins.locator('li[data-category-key="m11"]')
+
+    const teamDeathMatchPoint = await getArcPoint(teamDeathMatchArc)
+    if (!teamDeathMatchPoint) throw new Error("Team Death Match arc is not visible")
+
+    await page.mouse.move(teamDeathMatchPoint.x, teamDeathMatchPoint.y)
+    await expect(page.getByRole("tooltip")).toContainText("Team Death Match")
+    await expect(page.getByRole("tooltip")).toContainText("1,830")
+    await expect(teamDeathMatchRow).toHaveCSS("opacity", "1")
+    await expect(battleRoyaleRow).toHaveCSS("opacity", "0.3")
+
+    await battleRoyaleRow.hover()
+    await expect(teamDeathMatchArc).toHaveCSS("opacity", "0.3")
+    await expect(battleRoyaleArc).toHaveCSS("opacity", "1")
+})
+
+test("follows the pointer and clamps the pie tooltip inside its chart", async ({
+    page,
+    isMobile,
+}) => {
+    test.skip(isMobile, "Pie tooltips apply to pointer hover environments")
+
+    await page.setViewportSize({ width: 900, height: 800 })
+    await page.goto(`/players/${pompUID}`)
+
+    const wins = page.getByRole("article", { name: "Wins by Game Mode" })
+    const chart = wins.locator('[data-chart="wins-donut"]')
+    const teamDeathMatchArc = wins.locator('svg path[data-category-key="m00"]')
+    const missileLaunchArc = wins.locator('svg path[data-category-key="m10"]')
+    const missileLaunchBar = wins
+        .locator('li[data-category-key="m10"]')
+        .locator('[aria-hidden="true"]')
+    const chartBox = await chart.boundingBox()
+    if (!chartBox) throw new Error("Wins chart is not visible")
+
+    const teamDeathMatchPoint = await getArcPoint(teamDeathMatchArc, {
+        targetX: chartBox.x + chartBox.width * 0.45,
+    })
+    if (!teamDeathMatchPoint) throw new Error("Team Death Match arc is not visible")
+
+    await page.mouse.move(teamDeathMatchPoint.x, teamDeathMatchPoint.y)
+
+    const tooltip = page.getByRole("tooltip")
+    await expect(tooltip).toContainText("Team Death Match")
+
+    const followingTooltipBox = await tooltip.boundingBox()
+    if (!followingTooltipBox) throw new Error("Team Death Match tooltip is not visible")
+
+    expect(followingTooltipBox.x).toBeCloseTo(teamDeathMatchPoint.x + 10, 0)
+    expect(followingTooltipBox.y).toBeCloseTo(teamDeathMatchPoint.y + 10, 0)
+
+    const missileLaunchPoint = await getArcPoint(missileLaunchArc, { rightmost: true })
+    if (!missileLaunchPoint) throw new Error("Missile Launch arc is not visible")
+
+    await page.mouse.move(missileLaunchPoint.x, missileLaunchPoint.y)
+
+    await expect(tooltip).toContainText("Missile Launch / Bomb Disposal")
+
+    const colors = await Promise.all([
+        missileLaunchArc.evaluate((element) => getComputedStyle(element).fill),
+        missileLaunchBar.evaluate((element) => getComputedStyle(element).backgroundColor),
+        tooltip
+            .locator("span")
+            .first()
+            .evaluate((element) => getComputedStyle(element).backgroundColor),
+    ])
+    expect(new Set(colors).size).toBe(1)
+
+    const tooltipBox = await tooltip.boundingBox()
+    if (!tooltipBox) throw new Error("Missile Launch tooltip is not visible")
+
+    const chartRight = chartBox.x + chartBox.width
+    const tooltipRight = tooltipBox.x + tooltipBox.width
+    expect(missileLaunchPoint.x + 10 + tooltipBox.width).toBeGreaterThan(chartRight)
+    expect(tooltipBox.x).toBeGreaterThanOrEqual(chartBox.x)
+    expect(tooltipRight).toBeLessThanOrEqual(chartRight)
+    expect(tooltipRight).toBeCloseTo(chartRight, 0)
+})
+
+test("wins card changes from half width to full width", async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 800 })
+    await page.goto(`/players/${pompUID}`)
+
+    const gameModes = page.getByRole("region", { name: "Game Mode Statistics" })
+    const wins = gameModes.getByRole("article", { name: "Wins by Game Mode" })
+    const wideSectionBox = await gameModes.boundingBox()
+    const wideCardBox = await wins.boundingBox()
+
+    expect(wideSectionBox).not.toBeNull()
+    expect(wideCardBox).not.toBeNull()
+    expect(wideCardBox?.width).toBeLessThan((wideSectionBox?.width ?? 0) * 0.55)
+
+    await page.setViewportSize({ width: 392, height: 800 })
+
+    const narrowSectionBox = await gameModes.boundingBox()
+    const narrowCardBox = await wins.boundingBox()
+
+    expect(narrowSectionBox).not.toBeNull()
+    expect(narrowCardBox).not.toBeNull()
+    expect(narrowCardBox?.width).toBe(narrowSectionBox?.width)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(392)
+})
