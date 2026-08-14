@@ -8,12 +8,10 @@
 
     const {
         anchor = "top-left",
-        clampToContainer = false,
         labelFormatter = (value: unknown) => String(value),
         onDataChange,
     }: {
         anchor?: ComponentProps<typeof TooltipPrimitive.Root>["anchor"]
-        clampToContainer?: boolean
         labelFormatter?: (value: unknown) => string
         onDataChange?: (data: unknown) => void
     } = $props()
@@ -60,24 +58,20 @@
     }
 
     const tooltipX = $derived(
-        clampToContainer
-            ? clampPointerCoordinate(
-                  context.tooltip.x,
-                  tooltipWidth,
-                  context.containerWidth,
-                  getHorizontalAlignment(anchor),
-              )
-            : ("pointer" as const),
+        clampPointerCoordinate(
+            context.tooltip.x,
+            tooltipWidth,
+            context.containerWidth,
+            getHorizontalAlignment(anchor),
+        ),
     )
     const tooltipY = $derived(
-        clampToContainer
-            ? clampPointerCoordinate(
-                  context.tooltip.y,
-                  tooltipHeight,
-                  context.containerHeight,
-                  getVerticalAlignment(anchor),
-              )
-            : ("pointer" as const),
+        clampPointerCoordinate(
+            context.tooltip.y,
+            tooltipHeight,
+            context.containerHeight,
+            getVerticalAlignment(anchor),
+        ),
     )
 
     type TooltipPayload = {
@@ -157,15 +151,23 @@
     }
 </script>
 
-<TooltipPrimitive.Root {context} variant="none" motion="none" {anchor} x={tooltipX} y={tooltipY}>
+<TooltipPrimitive.Root
+    {context}
+    variant="none"
+    motion="none"
+    {anchor}
+    x={tooltipX}
+    y={tooltipY}
+    classes={{ root: "w-max" }}
+>
     {#snippet children({ data, payload: rawPayload })}
         {@const fallback = parsePayload(rawPayload as unknown)}
         {@const payload = getTooltipItems(data as unknown, fallback)}
         <div
             class="grid min-w-36 gap-1.5 rounded-lg border border-gray-600 bg-gray-900 px-3 py-2 text-xs shadow-xl"
             role="tooltip"
-            bind:clientWidth={tooltipWidth}
-            bind:clientHeight={tooltipHeight}
+            bind:offsetWidth={tooltipWidth}
+            bind:offsetHeight={tooltipHeight}
         >
             {#if payload[0]}
                 <div class="font-medium text-gray-100">

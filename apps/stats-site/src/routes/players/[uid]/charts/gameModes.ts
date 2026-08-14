@@ -11,7 +11,6 @@ type GameModeBreakdown = {
     id: string
     title: string
     valueLabel: string
-    totalLabel: string
     includeZero: boolean
 }
 
@@ -44,7 +43,6 @@ const breakdowns = [
         id: "wins",
         title: "Wins by Game Mode",
         valueLabel: "Wins",
-        totalLabel: "Total wins",
         includeZero: false,
     },
     // todo: re-enable when battle royale losses are tracked in WB DB
@@ -53,14 +51,9 @@ const breakdowns = [
     //     id: "losses",
     //     title: "Losses by Game Mode",
     //     valueLabel: "Losses",
-    //     totalLabel: "Total losses",
     //     includeZero: false,
     // },
 ] as const satisfies readonly GameModeBreakdown[]
-
-function formatCount(value: number) {
-    return value.toLocaleString("en-US")
-}
 
 function createGameModeBreakdown(player: GameModeStats, breakdown: GameModeBreakdown) {
     const rows = Object.entries(player[breakdown.field] ?? {})
@@ -79,11 +72,10 @@ function createGameModeBreakdown(player: GameModeStats, breakdown: GameModeBreak
         categoryLabel: "Game mode",
         categoryPlural: "game modes",
         valueLabel: breakdown.valueLabel,
-        totalLabel: breakdown.totalLabel,
         chartKind: "part-to-whole",
         rows,
-        formatValue: formatCount,
-    } satisfies CategoryBreakdownModel
+        formatValue: (value) => value.toLocaleString("en-US"),
+    } as const satisfies CategoryBreakdownModel
 }
 
 export function getGameModeBreakdowns(player: GameModeStats) {

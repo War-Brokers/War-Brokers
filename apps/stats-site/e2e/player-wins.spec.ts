@@ -40,6 +40,25 @@ async function getArcPoint(arc: Locator, options: { rightmost?: boolean; targetX
     }, options)
 }
 
+async function getArcRadii(arc: Locator) {
+    return arc.evaluate((element) => {
+        if (!(element instanceof SVGPathElement)) return undefined
+
+        const pathLength = element.getTotalLength()
+        let innerRadius = Number.POSITIVE_INFINITY
+        let outerRadius = 0
+
+        for (let index = 0; index <= 1000; index += 1) {
+            const point = element.getPointAtLength((pathLength * index) / 1000)
+            const radius = Math.hypot(point.x, point.y)
+            innerRadius = Math.min(innerRadius, radius)
+            outerRadius = Math.max(outerRadius, radius)
+        }
+
+        return { innerRadius, outerRadius }
+    })
+}
+
 test("links pie and bar hover states", async ({ page, isMobile }) => {
     test.skip(isMobile, "Hover linking applies to pointer hover environments")
 
@@ -56,13 +75,106 @@ test("links pie and bar hover states", async ({ page, isMobile }) => {
 
     await page.mouse.move(teamDeathMatchPoint.x, teamDeathMatchPoint.y)
     await expect(page.getByRole("tooltip")).toContainText("Team Death Match")
-    await expect(page.getByRole("tooltip")).toContainText("1,830")
+    await expect(page.getByRole("tooltip")).toContainText("1,830 (82.3%)")
     await expect(teamDeathMatchRow).toHaveCSS("opacity", "1")
     await expect(battleRoyaleRow).toHaveCSS("opacity", "0.3")
 
     await battleRoyaleRow.hover()
     await expect(teamDeathMatchArc).toHaveCSS("opacity", "0.3")
     await expect(battleRoyaleArc).toHaveCSS("opacity", "1")
+})
+
+test("pins and unpins highlighted bars", async ({ page }) => {
+    await page.goto(`/players/${pompUID}`)
+    await page.waitForLoadState("networkidle")
+
+    const wins = page.getByRole("article", { name: "Wins by Game Mode" })
+    const heading = wins.getByRole("heading", { name: "Wins by Game Mode" })
+    const teamDeathMatchRow = wins.locator('li[data-category-key="m00"]')
+    const battleRoyaleRow = wins.locator('li[data-category-key="m11"]')
+    const teamDeathMatchButton = teamDeathMatchRow.getByRole("button")
+
+    await expect(teamDeathMatchButton).toHaveCSS("cursor", "pointer")
+    await teamDeathMatchButton.click()
+    await heading.hover()
+
+    await expect(teamDeathMatchButton).toHaveAttribute("aria-pressed", "true")
+    await expect(teamDeathMatchRow).toHaveCSS("opacity", "1")
+    await expect(battleRoyaleRow).toHaveCSS("opacity", "0.3")
+
+    await teamDeathMatchButton.click()
+    await heading.hover()
+
+    await expect(teamDeathMatchButton).toHaveAttribute("aria-pressed", "false")
+    await expect(teamDeathMatchRow).toHaveCSS("opacity", "1")
+    await expect(battleRoyaleRow).toHaveCSS("opacity", "1")
+})
+
+test("expands a pie segment further when pinned", async ({ page, isMobile }) => {
+    test.skip(isMobile, "Pie hover sizing applies to pointer hover environments")
+
+    await page.goto(`/players/${pompUID}`)
+    await page.waitForLoadState("networkidle")
+
+    const wins = page.getByRole("article", { name: "Wins by Game Mode" })
+    const heading = wins.getByRole("heading", { name: "Wins by Game Mode" })
+    const teamDeathMatchArc = wins.locator('svg path[data-category-key="m00"]')
+    const teamDeathMatchButton = wins.locator('li[data-category-key="m00"]').getByRole("button")
+    const restingRadii = await getArcRadii(teamDeathMatchArc)
+    const arcPoint = await getArcPoint(teamDeathMatchArc)
+
+    if (restingRadii === undefined || arcPoint === undefined)
+        throw new Error("Team Death Match arc is not visible")
+
+    await expect(teamDeathMatchArc).toHaveCSS("cursor", "pointer")
+    await page.mouse.move(arcPoint.x, arcPoint.y)
+    await expect
+        .poll(async () => (await getArcRadii(teamDeathMatchArc))?.outerRadius ?? 0)
+        .toBeGreaterThan(restingRadii.outerRadius)
+    await expect
+        .poll(async () =>
+            Math.abs(
+                ((await getArcRadii(teamDeathMatchArc))?.innerRadius ?? 0) -
+                    restingRadii.innerRadius,
+            ),
+        )
+        .toBeLessThan(0.25)
+
+    const hoveredRadii = await getArcRadii(teamDeathMatchArc)
+    if (hoveredRadii === undefined) throw new Error("Team Death Match arc is not visible")
+
+    await page.mouse.click(arcPoint.x, arcPoint.y)
+    await heading.hover()
+    await expect(teamDeathMatchButton).toHaveAttribute("aria-pressed", "true")
+    await expect
+        .poll(async () => (await getArcRadii(teamDeathMatchArc))?.outerRadius ?? 0)
+        .toBeGreaterThan(hoveredRadii.outerRadius)
+    await expect
+        .poll(async () => (await getArcRadii(teamDeathMatchArc))?.innerRadius ?? 0)
+        .toBeGreaterThan(hoveredRadii.innerRadius)
+
+    const pinnedPoint = await getArcPoint(teamDeathMatchArc)
+    if (pinnedPoint === undefined) throw new Error("Pinned Team Death Match arc is not visible")
+
+    await page.mouse.click(pinnedPoint.x, pinnedPoint.y)
+    await heading.hover()
+    await expect(teamDeathMatchButton).toHaveAttribute("aria-pressed", "false")
+    await expect
+        .poll(async () =>
+            Math.abs(
+                ((await getArcRadii(teamDeathMatchArc))?.outerRadius ?? 0) -
+                    restingRadii.outerRadius,
+            ),
+        )
+        .toBeLessThan(0.25)
+    await expect
+        .poll(async () =>
+            Math.abs(
+                ((await getArcRadii(teamDeathMatchArc))?.innerRadius ?? 0) -
+                    restingRadii.innerRadius,
+            ),
+        )
+        .toBeLessThan(0.25)
 })
 
 test("follows the pointer and clamps the pie tooltip inside its chart", async ({
@@ -100,6 +212,17 @@ test("follows the pointer and clamps the pie tooltip inside its chart", async ({
     expect(followingTooltipBox.x).toBeCloseTo(teamDeathMatchPoint.x + 10, 0)
     expect(followingTooltipBox.y).toBeCloseTo(teamDeathMatchPoint.y + 10, 0)
 
+    const followingMissileLaunchPoint = await getArcPoint(missileLaunchArc, {
+        targetX: chartBox.x + chartBox.width * 0.4,
+    })
+    if (!followingMissileLaunchPoint) throw new Error("Missile Launch arc is not visible")
+
+    await page.mouse.move(followingMissileLaunchPoint.x, followingMissileLaunchPoint.y)
+    await expect(tooltip).toContainText("Missile Launch / Bomb Disposal")
+
+    const followingMissileTooltipBox = await tooltip.boundingBox()
+    if (!followingMissileTooltipBox) throw new Error("Missile Launch tooltip is not visible")
+
     const missileLaunchPoint = await getArcPoint(missileLaunchArc, { rightmost: true })
     if (!missileLaunchPoint) throw new Error("Missile Launch arc is not visible")
 
@@ -126,6 +249,7 @@ test("follows the pointer and clamps the pie tooltip inside its chart", async ({
     expect(tooltipBox.x).toBeGreaterThanOrEqual(chartBox.x)
     expect(tooltipRight).toBeLessThanOrEqual(chartRight)
     expect(tooltipRight).toBeCloseTo(chartRight, 0)
+    expect(tooltipBox.width).toBeCloseTo(followingMissileTooltipBox.width, 0)
 })
 
 test("wins card changes from half width to full width", async ({ page }) => {

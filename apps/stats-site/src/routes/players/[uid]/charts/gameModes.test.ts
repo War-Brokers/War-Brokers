@@ -27,7 +27,6 @@ describe("getGameModeBreakdowns", () => {
 
     test("creates an empty model for missing and zero-only data", () => {
         expect(getBreakdown("wins", { wins: null, losses: { m00: 0 } }).rows).toEqual([])
-        expect(getBreakdown("losses", { wins: null, losses: { m00: 0 } }).rows).toEqual([])
     })
 
     test("uses one stable color for each known game mode", () => {

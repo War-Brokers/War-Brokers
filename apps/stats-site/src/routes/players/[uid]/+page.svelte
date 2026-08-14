@@ -11,6 +11,7 @@
 
     import type { PageData } from "./$types"
     import GameModeCharts from "./charts/GameModeCharts.svelte"
+    import WeaponCharts from "./charts/WeaponCharts.svelte"
 
     const { data }: { data: PageData } = $props()
     const { player, badges, xpPercentile, killsEloPercentile, gamesEloPercentile } = data
@@ -109,3 +110,4 @@
 </div>
 
 <GameModeCharts {player} />
+<WeaponCharts {player} />
