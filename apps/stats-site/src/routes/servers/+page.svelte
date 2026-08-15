@@ -43,7 +43,7 @@
     <!-- Keyboard users need to focus this scroll region. -->
     <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
     <div
-        class="h-80 overflow-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+        class="h-80 overflow-auto border border-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 dark:bg-gray-900"
         role="region"
         aria-label={`${region} servers`}
         tabindex="0"
@@ -60,7 +60,7 @@
                 <col class="w-[30%]" />
                 <col class="w-[10%]" />
             </colgroup>
-            <TableHead class="sticky top-0 z-10">
+            <TableHead class="sticky top-0 z-10 dark:text-gray-300">
                 <TableHeadCell>Server</TableHeadCell>
                 <TableHeadCell>Team Mode</TableHeadCell>
                 <TableHeadCell>Game Mode</TableHeadCell>
@@ -90,7 +90,7 @@
                                 />
                             {/each}
                         {:else}
-                            <TableBodyRow>
+                            <TableBodyRow class="dark:bg-gray-900">
                                 <TableBodyCell colspan={5} class="h-20 text-center text-gray-400">
                                     <span role="status">No active servers in {region}.</span>
                                 </TableBodyCell>

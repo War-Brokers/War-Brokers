@@ -248,7 +248,7 @@
                     aria-describedby={message ? `${inputId}-message` : undefined}
                     aria-invalid={messageIsError ? "true" : undefined}
                     aria-label={label}
-                    class="my-auto h-full w-full min-w-0 border-none bg-transparent text-lg leading-7 focus:ring-0 dark:text-gray-200"
+                    class="my-auto h-full w-full min-w-0 border-none bg-transparent text-lg leading-7 placeholder:text-gray-300 focus:ring-0 dark:text-gray-200"
                     {placeholder}
                     on:input={handleInput}
                     on:keydown={handleKeydown}
@@ -307,11 +307,11 @@
                                     <!-- eslint-enable svelte/no-navigation-without-resolve -->
                                     <b class="text-lg">
                                         {#if squad}
-                                            <span class="text-gray-400">[{squad}]</span>
+                                            <span class="text-gray-300">[{squad}]</span>
                                         {/if}
                                         {nick}
                                     </b>
-                                    <p class="text-base dark:text-gray-400">{uid}</p>
+                                    <p class="text-base dark:text-gray-300">{uid}</p>
                                 </a>
                             {/each}
                         </div>

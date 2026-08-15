@@ -280,8 +280,8 @@ const rows = await Promise.all(
 
 console.table(rows)
 
-if (rows.filter((row) => row.SEO !== 100).length > 0) {
-    console.error("SEO must score 100 on every audited route.")
+if (rows.filter((row) => row.A11y !== 100).length > 0) {
+    console.error("Accessibility must score 100 on every audited route.")
     process.exitCode = 1
 }
 
@@ -289,6 +289,12 @@ if (rows.filter((row) => row["Best practices"] !== 100).length > 0) {
     console.error("Best practices must score 100 on every audited route.")
     process.exitCode = 1
 }
+
+if (rows.filter((row) => row.SEO !== 100).length > 0) {
+    console.error("SEO must score 100 on every audited route.")
+    process.exitCode = 1
+}
+
 
 if (rows.filter((row) => row["Agentic browsing"] !== 100).length > 0) {
     console.error("Agentic browsing must score 100 on every audited route.")

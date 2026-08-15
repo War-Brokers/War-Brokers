@@ -9,7 +9,9 @@
 <footer data-sveltekit-preload-data="hover" class="w-full dark:bg-gray-950 dark:text-gray-400">
     <div class="mx-auto flex h-28 w-full max-w-5xl items-center justify-between px-4">
         <div>
-            made by <A href={resolve("/players/[uid]", { uid: "5d2ead35d142affb05757778" })}>POMP</A
+            made by <A
+                href={resolve("/players/[uid]", { uid: "5d2ead35d142affb05757778" })}
+                class="font-semibold">POMP</A
             >
         </div>
         <div class="flex items-center gap-6">

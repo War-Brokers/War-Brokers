@@ -198,7 +198,7 @@
                             size="xs"
                             color="none"
                             class={cn(
-                                "shrink-0 rounded-none p-2.5 text-gray-400 transition-[color,transform] duration-150 focus-within:ring-0 hover:text-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 active:scale-[0.96] dark:hover:text-orange-400",
+                                "shrink-0 rounded-none p-2.5 text-gray-400 transition-[color,transform] duration-150 focus-within:ring-0 hover:text-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 active:scale-[0.96] dark:hover:text-orange-400",
                                 side === "a" && "order-first",
                             )}
                             aria-label={`Edit player ${side.toUpperCase()}`}

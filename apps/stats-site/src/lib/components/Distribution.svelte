@@ -278,7 +278,7 @@
                         3_600_000,
                 ),
             )}
-            <span class="text-xs tabular-nums text-gray-500">
+            <span class="text-xs tabular-nums text-gray-400">
                 <time datetime={updatedAt} title={updatedAt}>
                     Updated {hoursAgo} {hoursAgo === 1 ? "hour" : "hours"} ago</time
                 >, refreshes in {refreshesInHours}

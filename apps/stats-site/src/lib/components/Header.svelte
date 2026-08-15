@@ -26,7 +26,7 @@
 
         <div class="hidden gap-7 dark:bg-gray-700 md:flex">
             {#each links as { name, path } (path)}
-                <a href={resolve(path)} class="hover:text-orange-500">{name}</a>
+                <a href={resolve(path)} class="hover:text-orange-400">{name}</a>
             {/each}
         </div>
 
@@ -51,7 +51,7 @@
         )}
     >
         {#each links as { name, path } (path)}
-            <a href={resolve(path)} class="min-h-[48px] hover:text-orange-500">{name}</a>
+            <a href={resolve(path)} class="min-h-[48px] hover:text-orange-400">{name}</a>
         {/each}
     </nav>
 </header>

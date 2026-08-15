@@ -20,7 +20,7 @@
 <span class="mx-auto mb-10 text-xl font-black">
     Squad Leader :
     <a
-        class="underline underline-offset-4 hover:text-orange-500"
+        class="underline underline-offset-4 hover:text-orange-400"
         href={resolve("/players/[uid]", { uid: squadLeader.uid })}
     >
         {squadLeader.nick}
@@ -53,8 +53,8 @@
                 You must <span class="font-black">be respectful</span> of others and act mature
             </li>
         </ol>
-        <p class="mb-5 text-slate-400">
-            <span class="font-black text-slate-400">Note:</span> The chances of acceptance SIGNIFICANTLY
+        <p class="mb-5 text-gray-400">
+            <span class="font-black text-gray-400">Note:</span> The chances of acceptance SIGNIFICANTLY
             drop if you don't meet these criteria.
         </p>
 
@@ -73,7 +73,7 @@
 <div class="flex flex-col gap-4">
     {#each members as player (player.uid)}
         <a href={resolve("/players/[uid]", { uid: player.uid })}>
-            <div class="flex flex-col rounded-lg bg-slate-700 p-4">
+            <div class="flex flex-col rounded-lg bg-gray-700 p-4">
                 <span class="mb-4 text-xl font-bold">{player.nick}</span>
 
                 <div class="felx flex-row gap-4">Stats (WIP)</div>

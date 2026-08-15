@@ -24,7 +24,7 @@
     <span class="inline-flex gap-1">
         {#each squadLeaders as player, i (player.uid)}
             <a
-                class="underline underline-offset-4 hover:text-orange-500"
+                class="underline underline-offset-4 hover:text-orange-400"
                 href={resolve("/players/[uid]", { uid: player.uid })}
             >
                 {player.nick}
@@ -50,7 +50,7 @@
 <div class="flex flex-col gap-4">
     {#each members as player (player.uid)}
         <a href={resolve("/players/[uid]", { uid: player.uid })}>
-            <div class="flex flex-col rounded-lg bg-slate-700 p-4">
+            <div class="flex flex-col rounded-lg bg-gray-700 p-4">
                 <span class="mb-4 text-xl font-bold">{player.nick}</span>
 
                 <div class="felx flex-row gap-4">Stats (WIP)</div>

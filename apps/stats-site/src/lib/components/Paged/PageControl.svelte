@@ -33,7 +33,7 @@
             aria-busy="true"
         >
             <span
-                class="h-5 w-32 animate-pulse rounded bg-slate-500 motion-reduce:animate-none"
+                class="h-5 w-32 animate-pulse rounded bg-gray-500 motion-reduce:animate-none"
                 aria-hidden="true"
             ></span>
         </div>
@@ -84,7 +84,7 @@
     }
 
     button {
-        @apply flex w-32 items-center justify-center rounded-md bg-slate-500 px-4 py-2 hover:bg-slate-600 active:bg-slate-700;
+        @apply flex w-32 items-center justify-center rounded-md bg-gray-600 px-4 py-2 hover:bg-gray-700 active:bg-gray-800;
 
         &:disabled {
             visibility: hidden;

@@ -22,7 +22,7 @@
         autocomplete="off"
         aria-required="false"
         bind:value={searchTerm}
-        class="min-w-0 rounded-full border-none bg-gray-600 px-6 text-lg leading-7 text-gray-200 placeholder:text-gray-400 focus:ring-0"
+        class="min-w-0 rounded-full border-none bg-gray-600 px-6 text-lg leading-7 text-gray-200 placeholder:text-gray-300 focus:ring-0"
         placeholder="Squad Name"
     />
 </form>
@@ -52,7 +52,7 @@
                 <p class="text-gray-400">No squads match “{searchTerm}”.</p>
                 <button
                     type="button"
-                    class="rounded-md bg-slate-600 px-4 py-2 font-medium hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+                    class="rounded-md bg-gray-600 px-4 py-2 font-medium hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 active:bg-gray-800"
                     on:click={() => {
                         searchTerm = ""
                     }}>Clear search</button

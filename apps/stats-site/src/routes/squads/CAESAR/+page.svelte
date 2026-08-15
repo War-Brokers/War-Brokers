@@ -20,47 +20,47 @@
 <span class="w-full text-center text-xl font-black">Squad Leaders</span>
 <span class="text-s mx-auto mb-10 inline-flex flex-wrap justify-center gap-1 font-bold">
     <a
-        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-500"
+        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-400"
         href={resolve("/players/[uid]", { uid: "600722c9bfea71503dbd4905" })}>Colonel Grant</a
     >
     /
     <a
-        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-500"
+        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-400"
         href={resolve("/players/[uid]", { uid: "6006c985d142af9d4670c226" })}>Nyarlatoteph</a
     >
     /
     <a
-        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-500"
+        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-400"
         href={resolve("/players/[uid]", { uid: "63c8fbcfd142aff929a28ea2" })}>Colonel Fires</a
     >
     /
     <a
-        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-500"
+        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-400"
         href={resolve("/players/[uid]", { uid: "63c8ffa1d142afe031a28e1d" })}>Commander Phönix</a
     >
     /
     <a
-        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-500"
+        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-400"
         href={resolve("/players/[uid]", { uid: "5f086e2dd142afe8153aef05" })}>THE DOZER</a
     >
     /
     <a
-        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-500"
+        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-400"
         href={resolve("/players/[uid]", { uid: "63dbce11fe3c7a6a6807aa5f" })}>7|Ammo</a
     >
     /
     <a
-        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-500"
+        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-400"
         href={resolve("/players/[uid]", { uid: "638b25a0bfea713b7218483b" })}>Achilles007</a
     >
     /
     <a
-        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-500"
+        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-400"
         href={resolve("/players/[uid]", { uid: "6698bdf3d142af601f50256a" })}>What! U Died ?</a
     >
     /
     <a
-        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-500"
+        class="whitespace-nowrap underline underline-offset-4 hover:text-orange-400"
         href={resolve("/players/[uid]", { uid: "65cee709bfea711b1bd2fb1a" })}>CoolCoolCool</a
     >
 </span>
@@ -81,7 +81,7 @@
 <div class="flex flex-col gap-4">
     {#each members as player (player.uid)}
         <a href={resolve("/players/[uid]", { uid: player.uid })}>
-            <div class="flex flex-col rounded-lg bg-slate-700 p-4">
+            <div class="flex flex-col rounded-lg bg-gray-700 p-4">
                 <span class="mb-4 text-xl font-bold">{player.nick}</span>
 
                 <div class="felx flex-row gap-4">Stats (WIP)</div>

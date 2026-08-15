@@ -24,7 +24,7 @@
     }
 </script>
 
-<TableBodyRow>
+<TableBodyRow class="dark:bg-gray-900">
     <TableBodyCell>
         <div class="font-bold">{serverName}</div>
     </TableBodyCell>
