@@ -88,10 +88,68 @@ depends = ["db:migrate"]
 depends_post = ["db:stop"]
 run = "mise -E dev exec -- pnpm dev:workspace --color"
 
+[tasks."test:with-backend"]
+description = "Run a test task with local backend services"
+hide = true
+usage = 'arg "<task>"'
+depends = ["install", "db:start"]
+depends_post = ["db:stop"]
+env.PUBLIC_WBAPI_URL = "http://127.0.0.1:5000/trpc"
+run = '''
+#!/usr/bin/env -S mise -E dev exec -- bash
+
+set -euo pipefail
+set -m
+
+for reference in $(nix-store --query --references "$(mise -E dev where nix:playwright-test)"); do
+    if [[ "$reference" == *-playwright-browsers ]]; then
+        browsers_path="$reference"
+        break
+    fi
+done
+test -n "${browsers_path:-}"
+export PLAYWRIGHT_BROWSERS_PATH="$browsers_path"
+
+export DATABASE_URL="postgresql://postgres@localhost:5432/postgres"
+pnpm -F wbapi db:migrate
+pnpm turbo run dev \
+    --filter=@warbrokers/mock-wb \
+    --filter=@warbrokers/wbapi \
+    --color &
+backend_pid=$!
+
+cleanup() {
+    status=$?
+    trap - EXIT
+    kill -INT -- "-$backend_pid" >/dev/null 2>&1 || true
+    wait "$backend_pid" >/dev/null 2>&1 || true
+
+    exit "$status"
+}
+
+trap cleanup EXIT
+
+./scripts/wait-for-port 4000 "$backend_pid" # Mock WB
+./scripts/wait-for-port 5000 "$backend_pid" # WBAPI
+
+mise run "${usage_task?}"
+
+if ! kill -0 "$backend_pid" >/dev/null 2>&1; then
+    printf 'Backend services exited during browser testing.\n' >&2
+    wait "$backend_pid"
+    exit 1
+fi
+'''
+
 [tasks.lighthouse]
 description = "Audit stats site routes with Lighthouse"
 alias = "ll"
-depends = ["install"]
+wait_for = ["check:lint", "check:types"]
+run = [{ task = "test:with-backend", args = ["lighthouse:audit"] }]
+
+[tasks."lighthouse:audit"]
+description = "Run Lighthouse against local services"
+hide = true
 run = '''
 #!/usr/bin/env -S mise -E dev exec -- bash
 
@@ -114,15 +172,6 @@ readonly routes=(
     "squads|/squads"
     "squad-lp|/squads/LP"
 )
-
-for reference in $(nix-store --query --references "$(mise -E dev where nix:playwright-test)"); do
-    if [[ "$reference" == *-playwright-browsers ]]; then
-        browsers_path="$reference"
-        break
-    fi
-done
-test -n "${browsers_path:-}"
-export PLAYWRIGHT_BROWSERS_PATH="$browsers_path"
 
 CHROME_PATH="$(pnpm --filter=@warbrokers/stats-site exec node --input-type=module -e \
     "import { chromium } from '@playwright/test'; process.stdout.write(chromium.executablePath())")"
@@ -282,51 +331,43 @@ run = "mise -E dev exec -- pnpm test:unit --color"
 
 [tasks."test:e2e"]
 description = "Run end-to-end tests"
-depends = ["install", "db:start"]
-depends_post = ["db:stop"]
+wait_for = ["check:lint", "check:types", "lighthouse"]
+run = [{ task = "test:with-backend", args = ["test:e2e:run"] }]
+
+[tasks."test:e2e:run"]
+description = "Run end-to-end tests against local services"
+hide = true
 run = '''
 #!/usr/bin/env -S mise -E dev exec -- bash
 
 set -euo pipefail
 set -m
 
-# set PLAYWRIGHT_BROWSERS_PATH
-for reference in $(nix-store --query --references "$(mise -E dev where nix:playwright-test)"); do
-    if [[ "$reference" == *-playwright-browsers ]]; then
-        browsers_path="$reference"
-        break
-    fi
-done
-test -n "${browsers_path:-}"
-export PLAYWRIGHT_BROWSERS_PATH="$browsers_path"
-
-export DATABASE_URL="postgresql://postgres@localhost:5432/postgres"
-pnpm -F wbapi db:migrate
-pnpm dev:workspace --color &
-dev_pid=$!
+pnpm turbo run dev \
+    --filter=@warbrokers/stats-site \
+    --filter=@warbrokers/wbtimeline \
+    --color &
+frontend_pid=$!
 
 cleanup() {
     status=$?
     trap - EXIT
-    kill -INT -- "-$dev_pid" >/dev/null 2>&1 || true
-    wait "$dev_pid" >/dev/null 2>&1 || true
+    kill -INT -- "-$frontend_pid" >/dev/null 2>&1 || true
+    wait "$frontend_pid" >/dev/null 2>&1 || true
 
     exit "$status"
 }
 
 trap cleanup EXIT
 
-./scripts/wait-for-port 5432 "$dev_pid" # WBAPI PostgreSQL database
-./scripts/wait-for-port 4000 "$dev_pid" # Mock WB
-./scripts/wait-for-port 5000 "$dev_pid" # WBAPI
-./scripts/wait-for-port 5173 "$dev_pid" # Stats site
-./scripts/wait-for-port 3000 "$dev_pid" # WB timeline
+./scripts/wait-for-port 5173 "$frontend_pid" # Stats site
+./scripts/wait-for-port 3000 "$frontend_pid" # WB timeline
 
 pnpm --filter=@warbrokers/stats-site test:e2e
 
-if ! kill -0 "$dev_pid" >/dev/null 2>&1; then
-    echo "Development servers exited during E2E testing" >&2
-    wait "$dev_pid"
+if ! kill -0 "$frontend_pid" >/dev/null 2>&1; then
+    printf 'Frontend services exited during end-to-end testing.\n' >&2
+    wait "$frontend_pid"
     exit 1
 fi
 '''
@@ -340,6 +381,6 @@ depends = [
     "check:lint",
     "check:types",
     "test:unit",
-    "test:e2e",
     "lighthouse",
+    "test:e2e",
 ]

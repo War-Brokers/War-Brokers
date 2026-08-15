@@ -69,7 +69,7 @@ export default defineConfig(
     },
     {
         rules: {
-            "import/no-unresolved": ["error", { ignore: ["^\\$app/"] }],
+            "import/no-unresolved": ["error", { ignore: ["^\\$(?:app|env)/"] }],
         },
     },
 )
