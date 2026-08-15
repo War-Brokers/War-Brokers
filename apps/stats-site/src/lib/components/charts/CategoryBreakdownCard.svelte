@@ -5,6 +5,7 @@
     import { cn } from "$lib/utils"
 
     import type { CategoryBreakdownModel } from "./categoryBreakdown"
+    import MouseTooltipArc from "./MouseTooltipArc.svelte"
 
     const {
         model,
@@ -166,6 +167,9 @@
                                 togglePinnedCategory(data)
                             }}
                         >
+                            {#snippet arc({ props })}
+                                <MouseTooltipArc {...props} />
+                            {/snippet}
                             {#snippet tooltip()}
                                 <Chart.Tooltip
                                     labelFormatter={(value) => String(value)}
@@ -207,16 +211,17 @@
                             : "opacity-100",
                     )}
                     data-category-key={row.key}
-                    onpointerenter={() => {
-                        setHoveredRowKey(row.key)
+                    onpointerenter={(event) => {
+                        if (event.pointerType !== "touch") setHoveredRowKey(row.key)
                     }}
                 >
                     <button
                         type="button"
                         class="relative block w-full cursor-pointer text-left focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
                         aria-pressed={activePinnedCategoryKey === row.key}
-                        onfocus={() => {
-                            setHoveredRowKey(row.key)
+                        onfocus={(event) => {
+                            if (event.currentTarget.matches(":focus-visible"))
+                                setHoveredRowKey(row.key)
                         }}
                         onblur={() => {
                             setHoveredRowKey(undefined)

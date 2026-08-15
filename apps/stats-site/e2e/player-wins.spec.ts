@@ -84,6 +84,48 @@ test("links pie and bar hover states", async ({ page, isMobile }) => {
     await expect(battleRoyaleArc).toHaveCSS("opacity", "1")
 })
 
+test("uses tap instead of hover for touch input", async ({ page, isMobile }) => {
+    test.skip(!isMobile, "Touch interaction applies to touch environments")
+
+    await page.goto(`/players/${pompUID}`)
+
+    const wins = page.getByRole("article", { name: "Wins by Game Mode" })
+    const teamDeathMatchArc = wins.locator('svg path[data-category-key="m00"]')
+    const teamDeathMatchRow = wins.locator('li[data-category-key="m00"]')
+    const battleRoyaleRow = wins.locator('li[data-category-key="m11"]')
+    const teamDeathMatchButton = teamDeathMatchRow.getByRole("button")
+    const arcPoint = await getArcPoint(teamDeathMatchArc)
+
+    if (!arcPoint) throw new Error("Team Death Match arc is not visible")
+
+    await teamDeathMatchRow.dispatchEvent("pointerenter", { pointerType: "touch" })
+    await teamDeathMatchArc.dispatchEvent("pointerenter", {
+        clientX: arcPoint.x,
+        clientY: arcPoint.y,
+        pointerType: "touch",
+    })
+
+    await expect(teamDeathMatchRow).toHaveCSS("opacity", "1")
+    await expect(battleRoyaleRow).toHaveCSS("opacity", "1")
+    await expect(page.getByRole("tooltip")).toHaveCount(0)
+    expect(
+        await teamDeathMatchArc.evaluate((element) => {
+            const event = new TouchEvent("touchmove", { bubbles: true, cancelable: true })
+            element.dispatchEvent(event)
+
+            return event.defaultPrevented
+        }),
+    ).toBe(false)
+
+    await page.touchscreen.tap(arcPoint.x, arcPoint.y)
+    await expect(teamDeathMatchButton).toHaveAttribute("aria-pressed", "true")
+    await expect(battleRoyaleRow).toHaveCSS("opacity", "0.3")
+
+    await teamDeathMatchButton.tap()
+    await expect(teamDeathMatchButton).toHaveAttribute("aria-pressed", "false")
+    await expect(battleRoyaleRow).toHaveCSS("opacity", "1")
+})
+
 test("pins and unpins highlighted bars", async ({ page }) => {
     await page.goto(`/players/${pompUID}`)
     await page.waitForLoadState("networkidle")
