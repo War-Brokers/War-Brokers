@@ -9,6 +9,32 @@ const overflowingServers = Array.from({ length: 8 }, (_, index) => ({
     playerCount: index + 1,
     maxPlayers: 16,
 }))
+const sortableServers = [
+    {
+        name: "Charlie",
+        gameMode: "m11",
+        isTeams: true,
+        map: 2,
+        playerCount: 2,
+        maxPlayers: 16,
+    },
+    {
+        name: "Alpha",
+        gameMode: "m00",
+        isTeams: true,
+        map: 49,
+        playerCount: 3,
+        maxPlayers: 16,
+    },
+    {
+        name: "Bravo",
+        gameMode: "m07",
+        isTeams: false,
+        map: 0,
+        playerCount: 1,
+        maxPlayers: 16,
+    },
+]
 
 function fulfillBatchedServerLists(route: Route, data: unknown[]) {
     const procedures = decodeURIComponent(new URL(route.request().url()).pathname)
@@ -70,6 +96,22 @@ test("server tables use shaped placeholders before an empty result", async ({ pa
 
     await expect(page.getByText(/No active servers in/).first()).toBeVisible()
     await expect(busyBodies).toHaveCount(0)
+
+    const emptyTable = page.getByRole("region", { name: "USA servers" })
+    const emptyRow = emptyTable.locator("tbody tr")
+    const tableHeight = await emptyTable.evaluate((element) => element.clientHeight)
+    await expect
+        .poll(() => emptyRow.evaluate((element) => element.clientHeight))
+        .toBeGreaterThan(tableHeight - 60)
+
+    const backgroundBeforeHover = await emptyRow.evaluate(
+        (element) => getComputedStyle(element).backgroundColor,
+    )
+    await emptyRow.hover()
+    await expect
+        .poll(() => emptyRow.evaluate((element) => getComputedStyle(element).backgroundColor))
+        .toBe(backgroundBeforeHover)
+
     await expect
         .poll(() =>
             page.evaluate(() => ({
@@ -115,6 +157,111 @@ test("server tables keep a fixed height when results overflow", async ({ page })
 
     await scroller.press("End")
     await expect.poll(() => scroller.evaluate((element) => element.scrollTop)).toBeGreaterThan(0)
+})
+
+test("server tables sort by every displayed column", async ({ page }) => {
+    await page.route(serverListRoute, (route) => fulfillBatchedServerLists(route, sortableServers))
+    await page.goto("/servers")
+
+    const table = page.getByRole("region", { name: "USA servers" })
+    const serverNames = () => table.locator("tbody tr td:first-child").allTextContents()
+    await expect.poll(serverNames).toEqual(["Alpha", "Bravo", "Charlie"])
+
+    const cases = [
+        {
+            label: "Server",
+            ascending: ["Alpha", "Bravo", "Charlie"],
+            descending: ["Charlie", "Bravo", "Alpha"],
+        },
+        {
+            label: "Team Mode",
+            ascending: ["Bravo", "Charlie", "Alpha"],
+            descending: ["Charlie", "Alpha", "Bravo"],
+        },
+        {
+            label: "Game Mode",
+            ascending: ["Charlie", "Bravo", "Alpha"],
+            descending: ["Alpha", "Bravo", "Charlie"],
+        },
+        {
+            label: "Map",
+            ascending: ["Bravo", "Alpha", "Charlie"],
+            descending: ["Charlie", "Alpha", "Bravo"],
+        },
+        {
+            label: "Players",
+            ascending: ["Bravo", "Charlie", "Alpha"],
+            descending: ["Alpha", "Charlie", "Bravo"],
+        },
+    ]
+
+    for (const { label, ascending, descending } of cases) {
+        const button = table.getByRole("button", { name: `Sort by ${label}` })
+        const header = button.locator("xpath=ancestor::th")
+
+        if (label !== "Server") {
+            await button.focus()
+            await page.keyboard.press("Enter")
+        }
+        await expect(header).toHaveAttribute("aria-sort", "ascending")
+        await expect.poll(serverNames).toEqual(ascending)
+
+        await button.click()
+        await expect(header).toHaveAttribute("aria-sort", "descending")
+        await expect.poll(serverNames).toEqual(descending)
+    }
+})
+
+test("map previews render above the sticky table header", async ({ page }) => {
+    await page.route(serverListRoute, (route) => fulfillBatchedServerLists(route, sortableServers))
+    let resolveMapImageRequest!: (route: Route) => void
+    const mapImageRequest = new Promise<Route>((resolve) => {
+        resolveMapImageRequest = resolve
+    })
+    await page.route("https://war-brokers.fandom.com/wiki/Special:Redirect/file/*", (route) => {
+        resolveMapImageRequest(route)
+    })
+    await page.goto("/servers")
+
+    const table = page.getByRole("region", { name: "USA servers" })
+    const mapLink = table.getByRole("link", { name: "Gold Mine V2" })
+    await mapLink.hover()
+
+    const skeleton = page.locator('[data-slot="skeleton"]')
+    const mapImageRoute = await mapImageRequest
+    await expect(skeleton).toBeVisible()
+    await mapImageRoute.fulfill({
+        contentType: "image/svg+xml",
+        body: '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="144"></svg>',
+    })
+
+    const preview = page.getByRole("img", { name: "Gold Mine V2 preview" })
+    await expect(preview).toBeVisible()
+    await expect(skeleton).toHaveCount(0)
+
+    const popover = preview.locator("xpath=ancestor::*[@data-slot='popover-content']")
+    const header = table.locator("thead")
+    const [popoverBox, headerBox] = await Promise.all([popover.boundingBox(), header.boundingBox()])
+    if (!popoverBox || !headerBox) throw new Error("Expected visible popover and table header")
+
+    const overlap = {
+        x: Math.max(popoverBox.x, headerBox.x) + 2,
+        y: Math.max(popoverBox.y, headerBox.y) + 2,
+    }
+    expect(overlap.x).toBeLessThan(
+        Math.min(popoverBox.x + popoverBox.width, headerBox.x + headerBox.width),
+    )
+    expect(overlap.y).toBeLessThan(
+        Math.min(popoverBox.y + popoverBox.height, headerBox.y + headerBox.height),
+    )
+    await expect
+        .poll(() =>
+            popover.evaluate(
+                (element, point) => element.contains(document.elementFromPoint(point.x, point.y)),
+                overlap,
+            ),
+        )
+        .toBe(true)
 })
 
 test("a distribution failure produces one status announcement", async ({ page }) => {

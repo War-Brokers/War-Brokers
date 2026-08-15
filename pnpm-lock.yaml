@@ -84,6 +84,9 @@ importers:
       '@floating-ui/dom':
         specifier: 1.6.11
         version: 1.6.11
+      '@lucide/svelte':
+        specifier: 1.30.0
+        version: 1.30.0(svelte@5.42.3)
       '@playwright/test':
         specifier: 1.57.0
         version: 1.57.0
@@ -96,6 +99,9 @@ importers:
       '@sveltejs/vite-plugin-svelte':
         specifier: 4.0.0
         version: 4.0.0(supports-color@8.1.1)(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0))
+      '@tanstack/svelte-table':
+        specifier: 9.1.1
+        version: 9.1.1(svelte@5.42.3)
       '@trpc/client':
         specifier: 10.45.4
         version: 10.45.4(@trpc/server@10.45.4)
@@ -129,6 +135,9 @@ importers:
       autoprefixer:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.4.49)
+      bits-ui:
+        specifier: 2.18.1
+        version: 2.18.1(@internationalized/date@3.12.3)(@sveltejs/kit@2.49.0(@opentelemetry/api@1.9.1)(@sveltejs/vite-plugin-svelte@4.0.0(supports-color@8.1.1)(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3)
       clsx:
         specifier: 2.1.1
         version: 2.1.1
@@ -1644,6 +1653,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@internationalized/date@3.12.3':
+    resolution: {integrity: sha512-fuLX+3ZKLsxI73y8b01EG/WjHb6gE6weCqlfawPO27kBWGMh9G1yH6Csv1uU7/cac9H2GHmOMt6CjmuQ1aia4Q==}
+
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
@@ -1752,6 +1764,11 @@ packages:
 
   '@layerstack/utils@2.0.0-next.18':
     resolution: {integrity: sha512-EYILHpfBRYMMEahajInu9C2AXQom5IcAEdtCeucD3QIl/fdDgRbtzn6/8QW9ewumfyNZetdUvitOksmI1+gZYQ==}
+
+  '@lucide/svelte@1.30.0':
+    resolution: {integrity: sha512-KtVrqWT3BD41kf1CPaP4QTAyofw0xm5hw/JGwd76+wMk1l0ZcXskA2Wi9ANVWCsk7mGrpFo2SqL3Hl29xTkV3w==}
+    peerDependencies:
+      svelte: ^5
 
   '@napi-rs/wasm-runtime@1.1.6':
     resolution: {integrity: sha512-ZLv/JdUfkvOy9eCnnBaGfiO+XimbjebAeO+MRQqD/B+FR1tnRN0tpKSJHRbE8sFfS6aqsXZ67TQjfwfsxULVbg==}
@@ -2330,6 +2347,24 @@ packages:
       typescript:
         optional: true
 
+  '@tanstack/store@0.11.1':
+    resolution: {integrity: sha512-mzTOBhypOuDJAy/D8n2MfUZ1HFkXnmSETviRyhqEC8LUE7/IZQExOTxMANj3KjTofYTkFNpBY67qaVrT41YccA==}
+
+  '@tanstack/svelte-store@0.12.1':
+    resolution: {integrity: sha512-ZFj8gyIWHZRYLv8RHp5jhnMhvw15g86KinotrUp9RfY7ygjkU3CcaMUytIdMJ4Xzq/9GqVlAphV9gFIGKRXWSw==}
+    peerDependencies:
+      svelte: ^5.0.0
+
+  '@tanstack/svelte-table@9.1.1':
+    resolution: {integrity: sha512-hozTgoWkZu8LDIOR0fRUFcWuq4Xvwp3SMVMZDWEkpCPk1Yezf3fPTIqcsbR16NKZtNt2L6A1kZOVocQq2I627g==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      svelte: ^5.0.0
+
+  '@tanstack/table-core@9.1.1':
+    resolution: {integrity: sha512-6O3oy43CgjhdhaCtFXulXc9wYF1JRtDUAN24IGhzSrshIlT7sRhNYigmQPrfWY6EMavQNHXEfxL17PetLJqfGA==}
+    engines: {node: '>=20'}
+
   '@trpc/client@10.45.4':
     resolution: {integrity: sha512-ItpH5FMIJFt862kbAgC8hf5NJnDLo0FwEvMEX6zSLCenzWD0UH6H/fvAX1suFo1e0wcAmMhiEU1Tl6xKk/Pd1g==}
     peerDependencies:
@@ -2895,6 +2930,13 @@ packages:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
 
+  bits-ui@2.18.1:
+    resolution: {integrity: sha512-KkemzKFH4T3gt3H+P86JcnAWExjByv/6vlwjm/BoCwTPHu03yiCdxbghdJLvFReQTe0acCAiRcKfmixxD6XvlA==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@internationalized/date': ^3.8.1
+      svelte: ^5.33.0
+
   body-parser@2.3.0:
     resolution: {integrity: sha512-2cGmJupaNgg+QUwVLAucDuWuoMZ6EX9iHDRswZ5lsNYEmwPaRknMPCLZz07yTzVq/83p4o/wzbDZbBrTvGGTIw==}
     engines: {node: '>=18'}
@@ -3341,6 +3383,10 @@ packages:
   depd@2.0.0:
     resolution: {integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==}
     engines: {node: '>= 0.8'}
+
+  dequal@2.0.3:
+    resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
+    engines: {node: '>=6'}
 
   destr@2.0.5:
     resolution: {integrity: sha512-ugFTXCtDZunbzasqBxrK93Ik/DRYsO6S/fedkWEMKqt04xZ4csmnmwGDBAb07QWNaGMAmnTIemsYZCksjATwsA==}
@@ -4145,6 +4191,9 @@ packages:
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
+  inline-style-parser@0.2.7:
+    resolution: {integrity: sha512-Nb2ctOyNR8DqQoR0OwRG95uNWIC0C1lCgf5Naz5H6Ji72KZ8OcFZLz2P5sNgwlyoJ8Yif11oMuYs5pBQa86csA==}
+
   internal-slot@1.1.0:
     resolution: {integrity: sha512-4gd7VpWNQNB4UKKCFFVcp1AVv+FMOgs9NKzjHKusc8jTMhd5eL1NqQqOpE0KzMds804/yHlglp3uxgluOqAPLw==}
     engines: {node: '>= 0.4'}
@@ -4643,6 +4692,10 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
+
+  lz-string@1.5.0:
+    resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
+    hasBin: true
 
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
@@ -5363,6 +5416,15 @@ packages:
     peerDependencies:
       svelte: ^5.7.0
 
+  runed@0.35.1:
+    resolution: {integrity: sha512-2F4Q/FZzbeJTFdIS/PuOoPRSm92sA2LhzTnv6FXhCoENb3huf5+fDuNOg1LNvGOouy3u/225qxmuJvcV3IZK5Q==}
+    peerDependencies:
+      '@sveltejs/kit': ^2.21.0
+      svelte: ^5.7.0
+    peerDependenciesMeta:
+      '@sveltejs/kit':
+        optional: true
+
   rw@1.3.3:
     resolution: {integrity: sha512-PdhdWy89SiZogBLaw42zdeqtRJ//zFd2PgQavcICDUgJT5oW10QCRKbJ6bg4r0/UY2M6BWd5tkxuGFRvCkgfHQ==}
 
@@ -5613,6 +5675,9 @@ packages:
   stubborn-utils@1.0.2:
     resolution: {integrity: sha512-zOh9jPYI+xrNOyisSelgym4tolKTJCQd5GBhK0+0xJvcYDcwlOoxF/rnFKQ2KRZknXSG9jWAp66fwP6AxN9STg==}
 
+  style-to-object@1.0.14:
+    resolution: {integrity: sha512-LIN7rULI0jBscWQYaSswptyderlarFkjQ+t79nzty8tcIAceVomEVlLzH5VP4Cmsv6MtKhs7qaAiwlcp+Mgaxw==}
+
   styled-jsx@5.1.6:
     resolution: {integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==}
     engines: {node: '>= 12.0.0'}
@@ -5670,6 +5735,12 @@ packages:
     peerDependencies:
       svelte: ^5.0.0
 
+  svelte-toolbelt@0.10.6:
+    resolution: {integrity: sha512-YWuX+RE+CnWYx09yseAe4ZVMM7e7GRFZM6OYWpBKOb++s+SQ8RBIMMe+Bs/CznBMc0QPLjr+vDBxTAkozXsFXQ==}
+    engines: {node: '>=18', pnpm: '>=8.7.0'}
+    peerDependencies:
+      svelte: ^5.30.2
+
   svelte@5.42.3:
     resolution: {integrity: sha512-+8dUmdJGvKSWEfbAgIaUmpD97s1bBAGxEf6s7wQonk+HNdMmrBZtpStzRypRqrYBFUmmhaUgBHUjraE8gLqWAw==}
     engines: {node: '>=18'}
@@ -5717,6 +5788,9 @@ packages:
     engines: {node: '>= v0.10.32'}
     peerDependencies:
       express: '>=4.0.0 || >=5.0.0-beta'
+
+  tabbable@6.5.0:
+    resolution: {integrity: sha512-wieBHXygIm7OyQOu5hQlkk62/WyCFYGlWg7L6/ZCUZwx0o398Zkn4pVmMyfYhfMG8kGrj/Krt8eIk6UKC6VzwA==}
 
   tailwind-merge@2.6.1:
     resolution: {integrity: sha512-Oo6tHdpZsGpkKG88HJ8RR1rg/RdnEkQEfMoEk2x1XRI3F1AxeU+ijRXpiVUF4UbLfcxxRGw6TbUINKYdWVsQTQ==}
@@ -7041,6 +7115,10 @@ snapshots:
   '@img/sharp-win32-x64@0.34.5':
     optional: true
 
+  '@internationalized/date@3.12.3':
+    dependencies:
+      '@swc/helpers': 0.5.15
+
   '@isaacs/cliui@8.0.2':
     dependencies:
       string-width: 5.1.2
@@ -7275,6 +7353,10 @@ snapshots:
       d3-array: 3.2.4
       d3-time: 3.1.0
       d3-time-format: 4.1.0
+
+  '@lucide/svelte@1.30.0(svelte@5.42.3)':
+    dependencies:
+      svelte: 5.42.3
 
   '@napi-rs/wasm-runtime@1.1.6(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
     dependencies:
@@ -7736,6 +7818,23 @@ snapshots:
       zod: 3.23.8
     optionalDependencies:
       typescript: 6.0.3
+
+  '@tanstack/store@0.11.1': {}
+
+  '@tanstack/svelte-store@0.12.1(svelte@5.42.3)':
+    dependencies:
+      '@tanstack/store': 0.11.1
+      svelte: 5.42.3
+
+  '@tanstack/svelte-table@9.1.1(svelte@5.42.3)':
+    dependencies:
+      '@tanstack/svelte-store': 0.12.1(svelte@5.42.3)
+      '@tanstack/table-core': 9.1.1
+      svelte: 5.42.3
+
+  '@tanstack/table-core@9.1.1':
+    dependencies:
+      '@tanstack/store': 0.11.1
 
   '@trpc/client@10.45.4(@trpc/server@10.45.4)':
     dependencies:
@@ -8353,6 +8452,19 @@ snapshots:
 
   binary-extensions@2.3.0: {}
 
+  bits-ui@2.18.1(@internationalized/date@3.12.3)(@sveltejs/kit@2.49.0(@opentelemetry/api@1.9.1)(@sveltejs/vite-plugin-svelte@4.0.0(supports-color@8.1.1)(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3):
+    dependencies:
+      '@floating-ui/core': 1.8.0
+      '@floating-ui/dom': 1.8.0
+      '@internationalized/date': 3.12.3
+      esm-env: 1.2.2
+      runed: 0.35.1(@sveltejs/kit@2.49.0(@opentelemetry/api@1.9.1)(@sveltejs/vite-plugin-svelte@4.0.0(supports-color@8.1.1)(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3)
+      svelte: 5.42.3
+      svelte-toolbelt: 0.10.6(@sveltejs/kit@2.49.0(@opentelemetry/api@1.9.1)(@sveltejs/vite-plugin-svelte@4.0.0(supports-color@8.1.1)(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3)
+      tabbable: 6.5.0
+    transitivePeerDependencies:
+      - '@sveltejs/kit'
+
   body-parser@2.3.0(supports-color@8.1.1):
     dependencies:
       bytes: 3.1.2
@@ -8780,6 +8892,8 @@ snapshots:
   depd@1.1.2: {}
 
   depd@2.0.0: {}
+
+  dequal@2.0.3: {}
 
   destr@2.0.5: {}
 
@@ -9843,6 +9957,8 @@ snapshots:
 
   inherits@2.0.4: {}
 
+  inline-style-parser@0.2.7: {}
+
   internal-slot@1.1.0:
     dependencies:
       es-errors: 1.3.0
@@ -10566,6 +10682,8 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
+  lz-string@1.5.0: {}
+
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -11205,6 +11323,15 @@ snapshots:
       esm-env: 1.2.2
       svelte: 5.42.3
 
+  runed@0.35.1(@sveltejs/kit@2.49.0(@opentelemetry/api@1.9.1)(@sveltejs/vite-plugin-svelte@4.0.0(supports-color@8.1.1)(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3):
+    dependencies:
+      dequal: 2.0.3
+      esm-env: 1.2.2
+      lz-string: 1.5.0
+      svelte: 5.42.3
+    optionalDependencies:
+      '@sveltejs/kit': 2.49.0(@opentelemetry/api@1.9.1)(@sveltejs/vite-plugin-svelte@4.0.0(supports-color@8.1.1)(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0))
+
   rw@1.3.3: {}
 
   sade@1.8.1:
@@ -11531,6 +11658,10 @@ snapshots:
 
   stubborn-utils@1.0.2: {}
 
+  style-to-object@1.0.14:
+    dependencies:
+      inline-style-parser: 0.2.7
+
   styled-jsx@5.1.6(@babel/core@7.29.7(supports-color@8.1.1))(react@19.2.6):
     dependencies:
       client-only: 0.0.1
@@ -11589,6 +11720,15 @@ snapshots:
   svelte-hamburgers@5.0.0(svelte@5.42.3):
     dependencies:
       svelte: 5.42.3
+
+  svelte-toolbelt@0.10.6(@sveltejs/kit@2.49.0(@opentelemetry/api@1.9.1)(@sveltejs/vite-plugin-svelte@4.0.0(supports-color@8.1.1)(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3):
+    dependencies:
+      clsx: 2.1.1
+      runed: 0.35.1(@sveltejs/kit@2.49.0(@opentelemetry/api@1.9.1)(@sveltejs/vite-plugin-svelte@4.0.0(supports-color@8.1.1)(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3)(vite@5.4.21(@types/node@24.13.3)(sass@1.81.0)))(svelte@5.42.3)
+      style-to-object: 1.0.14
+      svelte: 5.42.3
+    transitivePeerDependencies:
+      - '@sveltejs/kit'
 
   svelte@5.42.3:
     dependencies:
@@ -11665,6 +11805,8 @@ snapshots:
     dependencies:
       express: 5.0.1(supports-color@8.1.1)
       swagger-ui-dist: 5.32.11
+
+  tabbable@6.5.0: {}
 
   tailwind-merge@2.6.1: {}
 

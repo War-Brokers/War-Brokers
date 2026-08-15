@@ -1,22 +1,24 @@
 <script lang="ts">
-    import { type GameMode, gameModeFandom, gameModeName } from "@warbrokers/types/src/gameMode"
-    import { mapFandom, MapName, type WBMap } from "@warbrokers/types/src/map"
-    import { ImagePlaceholder, Popover, TableBodyCell, TableBodyRow } from "flowbite-svelte"
-    import { CheckOutline, CloseOutline } from "flowbite-svelte-icons"
+    import Check from "@lucide/svelte/icons/check"
+    import X from "@lucide/svelte/icons/x"
+    import { gameModeFandom, gameModeName } from "@warbrokers/types/src/gameMode"
+    import { mapFandom, MapName } from "@warbrokers/types/src/map"
 
     import A from "$lib/components/A.svelte"
+    import * as Popover from "$lib/components/ui/popover"
+    import { Skeleton } from "$lib/components/ui/skeleton"
+    import * as Table from "$lib/components/ui/table"
 
-    export let serverName: string
-    export let gameMode: GameMode
-    export let isTeams: boolean
-    export let map: WBMap
-    export let playerCount: number
-    export let maxPlayers: number
+    import type { Server } from "./types"
 
-    let loadedMapImageUrl: string | null = null
+    const { server }: { server: Server } = $props()
 
-    $: gameModeWiki = gameModeFandom[gameMode]
-    $: mapWiki = mapFandom[map]
+    let loadedMapImageUrl = $state<string | null>(null)
+
+    const gameModeWiki = $derived(gameModeFandom[server.gameMode])
+    const mapWiki = $derived(mapFandom[server.map])
+    const mapArticleUrl = $derived(mapWiki.articleUrl)
+    const mapImageUrl = $derived(mapWiki.imageUrl)
 
     function finishMapImageLoad(event: Event) {
         if (!(event.currentTarget instanceof HTMLImageElement)) return
@@ -24,78 +26,88 @@
     }
 </script>
 
-<TableBodyRow class="dark:bg-gray-900">
-    <TableBodyCell>
-        <div class="font-bold">{serverName}</div>
-    </TableBodyCell>
-    <TableBodyCell>
-        {#if isTeams}
-            <CheckOutline class="text-green-500" ariaLabel="Yes" />
+<Table.Row class="even:bg-gray-900">
+    <Table.Cell><div class="font-bold">{server.name}</div></Table.Cell>
+    <Table.Cell>
+        {#if server.isTeams}
+            <Check class="text-green-500" aria-label="Yes" />
         {:else}
-            <CloseOutline class="text-red-500" ariaLabel="No" />
+            <X class="text-red-500" aria-label="No" />
         {/if}
-    </TableBodyCell>
-    <TableBodyCell>
+    </Table.Cell>
+    <Table.Cell>
         {#if gameModeWiki.articleUrl}
             <A href={gameModeWiki.articleUrl} external class="font-medium underline">
-                {gameModeName[gameMode]}
+                {gameModeName[server.gameMode]}
             </A>
         {:else}
-            {gameModeName[gameMode]}
+            {gameModeName[server.gameMode]}
         {/if}
-    </TableBodyCell>
-    <TableBodyCell>
-        {#if mapWiki.articleUrl}
-            <A href={mapWiki.articleUrl} external class="font-medium underline">
-                {MapName[map]}
-            </A>
-            {#if mapWiki.imageUrl}
-                <Popover
-                    placement="top"
-                    strategy="fixed"
-                    defaultClass="p-2"
-                    class="box-content w-64 p-0"
-                >
-                    <div
-                        class="relative aspect-video w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800"
+    </Table.Cell>
+    <Table.Cell>
+        {#if mapArticleUrl}
+            {#if mapImageUrl}
+                <Popover.Root>
+                    <Popover.Trigger openOnHover openDelay={150} closeDelay={100}>
+                        {#snippet child({ props })}
+                            <A
+                                {...props}
+                                href={mapArticleUrl}
+                                external
+                                class="font-medium underline"
+                            >
+                                {MapName[server.map]}
+                            </A>
+                        {/snippet}
+                    </Popover.Trigger>
+                    <Popover.Content
+                        side="top"
+                        trapFocus={false}
+                        class="box-content w-64 gap-0 p-2"
+                        onOpenAutoFocus={(event: Event) => {
+                            event.preventDefault()
+                        }}
                     >
-                        {#if loadedMapImageUrl !== mapWiki.imageUrl}
-                            <ImagePlaceholder
-                                imgOnly
-                                divClass="absolute inset-0 h-full w-full !max-w-none animate-pulse [&>div]:!h-full [&>div]:!w-full [&>div]:!max-w-none"
+                        <div
+                            class="relative aspect-video w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800"
+                            aria-busy={loadedMapImageUrl !== mapImageUrl}
+                        >
+                            {#if loadedMapImageUrl !== mapImageUrl}
+                                <Skeleton
+                                    class="skeleton-reveal absolute inset-0 h-full w-full rounded-lg"
+                                    aria-hidden="true"
+                                />
+                            {/if}
+                            <img
+                                src={mapImageUrl}
+                                alt={`${MapName[server.map]} preview`}
+                                width="256"
+                                height="144"
+                                loading="lazy"
+                                class="h-full w-full object-contain"
+                                class:invisible={loadedMapImageUrl !== mapImageUrl}
+                                onload={finishMapImageLoad}
+                                onerror={finishMapImageLoad}
                             />
-                        {/if}
-                        <img
-                            src={mapWiki.imageUrl}
-                            alt={`${MapName[map]} preview`}
-                            width="256"
-                            height="144"
-                            loading="lazy"
-                            class="h-full w-full object-contain"
-                            class:invisible={loadedMapImageUrl !== mapWiki.imageUrl}
-                            on:load={finishMapImageLoad}
-                            on:error={finishMapImageLoad}
-                        />
-                    </div>
-                </Popover>
+                        </div>
+                    </Popover.Content>
+                </Popover.Root>
+            {:else}
+                <A href={mapArticleUrl} external class="font-medium underline">
+                    {MapName[server.map]}
+                </A>
             {/if}
         {:else}
-            {MapName[map]}
+            {MapName[server.map]}
         {/if}
-    </TableBodyCell>
-    <TableBodyCell>
-        {#if playerCount === maxPlayers}
-            <div class="dark:text-red-500">
-                {playerCount} / {maxPlayers}
-            </div>
-        {:else if playerCount === 0}
-            <div class="dark:text-gray-400">
-                {playerCount} / {maxPlayers}
-            </div>
+    </Table.Cell>
+    <Table.Cell>
+        {#if server.playerCount === server.maxPlayers}
+            <div class="text-red-500">{server.playerCount} / {server.maxPlayers}</div>
+        {:else if server.playerCount === 0}
+            <div class="text-gray-400">{server.playerCount} / {server.maxPlayers}</div>
         {:else}
-            <div class="font-bold">
-                {playerCount} / {maxPlayers}
-            </div>
+            <div class="font-bold">{server.playerCount} / {server.maxPlayers}</div>
         {/if}
-    </TableBodyCell>
-</TableBodyRow>
+    </Table.Cell>
+</Table.Row>

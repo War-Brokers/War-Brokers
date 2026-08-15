@@ -1,27 +1,37 @@
 <script lang="ts">
+    import type { HTMLAnchorAttributes } from "svelte/elements"
+
     import { cn } from "$lib/utils"
 
-    export let href: string
-    export let class_: string
-    export let target: string | undefined = undefined
-    export let rel: string | undefined = undefined
-    export let external = false
+    type Props = Omit<HTMLAnchorAttributes, "href"> & {
+        external?: boolean
+        href: string
+    }
 
-    export { class_ as class }
+    const {
+        class: className,
+        children,
+        external = false,
+        rel,
+        target,
+        ...restProps
+    }: Props = $props()
 
-    $: classes = cn(
-        "text-orange-500 underline-offset-4 hover:text-orange-400 hover:underline focus-visible:rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-400",
-        class_,
+    const classes = $derived(
+        cn(
+            "text-orange-500 underline-offset-4 hover:text-orange-400 hover:underline focus-visible:rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-400",
+            className,
+        ),
     )
 </script>
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -->
 <a
-    {href}
+    {...restProps}
     target={target ?? (external ? "_blank" : undefined)}
     rel={external ? ["external", "noopener", "noreferrer", rel].filter(Boolean).join(" ") : rel}
     class={classes}
 >
-    <slot />
+    {@render children?.()}
 </a>
 <!-- eslint-enable svelte/no-navigation-without-resolve -->

@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { TableBodyCell, TableBodyRow } from "flowbite-svelte"
+    import * as Table from "$lib/components/ui/table"
 </script>
 
-<TableBodyRow class="skeleton-reveal dark:bg-gray-900" aria-hidden="true">
-    <TableBodyCell><div class="h-5 w-32 rounded bg-gray-600"></div></TableBodyCell>
-    <TableBodyCell><div class="h-5 w-10 rounded bg-gray-600"></div></TableBodyCell>
-    <TableBodyCell><div class="h-5 w-28 rounded bg-gray-600"></div></TableBodyCell>
-    <TableBodyCell><div class="h-5 w-28 rounded bg-gray-600"></div></TableBodyCell>
-    <TableBodyCell><div class="h-5 w-16 rounded bg-gray-600"></div></TableBodyCell>
-</TableBodyRow>
+<Table.Row class="skeleton-reveal bg-gray-900" aria-hidden="true">
+    <Table.Cell><div class="h-5 w-32 rounded bg-gray-600"></div></Table.Cell>
+    <Table.Cell><div class="h-5 w-10 rounded bg-gray-600"></div></Table.Cell>
+    <Table.Cell><div class="h-5 w-28 rounded bg-gray-600"></div></Table.Cell>
+    <Table.Cell><div class="h-5 w-28 rounded bg-gray-600"></div></Table.Cell>
+    <Table.Cell><div class="h-5 w-16 rounded bg-gray-600"></div></Table.Cell>
+</Table.Row>
