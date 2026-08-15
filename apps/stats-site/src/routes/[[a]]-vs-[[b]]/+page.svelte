@@ -1,6 +1,6 @@
 <script lang="ts">
+    import Pencil from "@lucide/svelte/icons/square-pen"
     import { Button } from "flowbite-svelte"
-    import { EditSolid } from "flowbite-svelte-icons"
 
     import { goto } from "$app/navigation"
     import { resolve } from "$app/paths"
@@ -206,7 +206,7 @@
                                 clearPlayer(side, a?.uid, b?.uid)
                             }}
                         >
-                            <EditSolid size="md" aria-hidden="true" />
+                            <Pencil class="size-5" aria-hidden="true" />
                         </Button>
                     {:else}
                         <div class="flex w-full min-w-0 flex-col gap-2 text-start">

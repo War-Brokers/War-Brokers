@@ -1,7 +1,7 @@
 <script lang="ts">
     import { autoPlacement, shift } from "@floating-ui/dom"
+    import CircleQuestionMark from "@lucide/svelte/icons/circle-question-mark"
     import { Popover } from "flowbite-svelte"
-    import QuestionMarkIcon from "flowbite-svelte-icons/QuestionCircleSolid.svelte"
 
     import { resolve } from "$app/paths"
     import A from "$lib/components/A.svelte"
@@ -151,8 +151,9 @@
                             of the players!
                         </h3>
                         <br />
-                        <A href={resolve("/ranks")} class="flex font-medium">
-                            <QuestionMarkIcon class="mr-1 w-4" /> Learn More
+                        <A href={resolve("/ranks")} class="flex items-center font-medium">
+                            <CircleQuestionMark class="mr-1 size-4 shrink-0" aria-hidden="true" />
+                            Learn More
                         </A>
                     </Popover>
                 {/if}

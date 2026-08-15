@@ -1,5 +1,5 @@
 <script lang="ts">
-    import DiscordIcon from "flowbite-svelte-icons/DiscordSolid.svelte"
+    import SiDiscord from "@icons-pack/svelte-simple-icons/icons/SiDiscord"
 
     import { resolve } from "$app/paths"
     import Title from "$lib/components/title.svelte"
@@ -19,7 +19,7 @@
     href="https://discord.gg/2fsar34APa"
     class="mx-auto flex w-fit items-center justify-center underline-offset-4 hover:underline"
 >
-    <DiscordIcon class="inline-block w-9" />
+    <SiDiscord class="size-9 shrink-0 p-2" aria-hidden="true" />
     Discord (<span><b>{serverMembersCount}</b> members</span>)
 </a>
 

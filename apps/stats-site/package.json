@@ -16,6 +16,7 @@
     },
     "devDependencies": {
         "@floating-ui/dom": "1.6.11",
+        "@icons-pack/svelte-simple-icons": "7.2.0",
         "@lucide/svelte": "1.30.0",
         "@playwright/test": "1.57.0",
         "@sveltejs/adapter-node": "5.4.0",
@@ -41,7 +42,6 @@
         "eslint-plugin-svelte": "3.15.0",
         "flowbite": "2.5.2",
         "flowbite-svelte": "0.47.4",
-        "flowbite-svelte-icons": "2.0.2",
         "globals": "17.4.0",
         "layerchart": "2.0.0-next.20",
         "lighthouse": "13.4.1",
