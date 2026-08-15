@@ -1,6 +1,5 @@
 <script lang="ts">
     import Pencil from "@lucide/svelte/icons/square-pen"
-    import { Button } from "flowbite-svelte"
 
     import { goto } from "$app/navigation"
     import { resolve } from "$app/paths"
@@ -8,6 +7,7 @@
     import PlayerSearch from "$lib/components/PlayerSearch.svelte"
     import Stat from "$lib/components/stat.svelte"
     import Title from "$lib/components/title.svelte"
+    import { Button } from "$lib/components/ui/button"
     import { cn } from "$lib/utils"
 
     import type { PageData } from "./$types"
@@ -195,14 +195,14 @@
                         </A>
                         <Button
                             type="button"
-                            size="xs"
-                            color="none"
+                            variant="ghost"
+                            size="icon-lg"
                             class={cn(
-                                "shrink-0 rounded-none p-2.5 text-gray-400 transition-[color,transform] duration-150 focus-within:ring-0 hover:text-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 active:scale-[0.96] dark:hover:text-orange-400",
+                                "rounded-none text-gray-400 transition-[color,transform] duration-150 hover:bg-transparent hover:text-orange-500 active:scale-[0.96] active:bg-transparent dark:hover:text-orange-400",
                                 side === "a" && "order-first",
                             )}
                             aria-label={`Edit player ${side.toUpperCase()}`}
-                            on:click={() => {
+                            onclick={() => {
                                 clearPlayer(side, a?.uid, b?.uid)
                             }}
                         >
