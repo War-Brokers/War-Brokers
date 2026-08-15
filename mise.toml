@@ -248,24 +248,47 @@ if (rows.filter((row) => row["Agentic browsing"] !== 100).length > 0) {
 NODE
 '''
 
-[tasks.verify]
-description = "Run all checks"
-alias = "vv"
-depends = ["install", "db:start", "lighthouse"]
+[tasks."check:spelling"]
+description = "Check spelling"
+depends = ["install"]
+run = "mise -E dev exec -- cspell ."
+
+[tasks."check:format"]
+description = "Check formatting"
+depends = ["install"]
+run = "mise -E dev exec -- pnpm fmt:check --color"
+
+[tasks."check:lint"]
+description = "Lint the workspace"
+depends = ["install"]
+run = "mise -E dev exec -- pnpm lint --color"
+
+[tasks."check:types"]
+description = "Type-check the workspace"
+depends = ["install"]
+run = '''
+#!/usr/bin/env -S mise -E dev exec -- bash
+
+set -euo pipefail
+
+pnpm typecheck --color
+pnpm --filter=@warbrokers/stats-site check
+'''
+
+[tasks."test:unit"]
+description = "Run unit tests"
+depends = ["install"]
+run = "mise -E dev exec -- pnpm test:unit --color"
+
+[tasks."test:e2e"]
+description = "Run end-to-end tests"
+depends = ["install", "db:start"]
 depends_post = ["db:stop"]
 run = '''
 #!/usr/bin/env -S mise -E dev exec -- bash
 
 set -euo pipefail
 set -m
-
-# static analysis
-cspell .
-pnpm fmt:check --color
-pnpm lint --color
-pnpm typecheck --color
-pnpm --filter=@warbrokers/stats-site check
-pnpm test:unit --color
 
 # set PLAYWRIGHT_BROWSERS_PATH
 for reference in $(nix-store --query --references "$(mise -E dev where nix:playwright-test)"); do
@@ -277,7 +300,6 @@ done
 test -n "${browsers_path:-}"
 export PLAYWRIGHT_BROWSERS_PATH="$browsers_path"
 
-# start dev server for E2E testing
 export DATABASE_URL="postgresql://postgres@localhost:5432/postgres"
 pnpm -F wbapi db:migrate
 pnpm dev:workspace --color &
@@ -308,3 +330,16 @@ if ! kill -0 "$dev_pid" >/dev/null 2>&1; then
     exit 1
 fi
 '''
+
+[tasks.verify]
+description = "Run all checks and tests"
+alias = "vv"
+depends = [
+    "check:spelling",
+    "check:format",
+    "check:lint",
+    "check:types",
+    "test:unit",
+    "test:e2e",
+    "lighthouse",
+]
