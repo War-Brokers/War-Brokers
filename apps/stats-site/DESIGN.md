@@ -65,6 +65,7 @@ updating this document in the same change.
 
 ### Loading States
 
+- Page structure should load as quickly as possible and not wait for anything. Let data stream in as they are ready.
 - Minimize layout shift.
   - Loading placeholders must reserve approximately the same space and structure as the resolved content.
   - Give media and charts an explicit aspect ratio or stable minimum height.
@@ -83,3 +84,15 @@ updating this document in the same change.
 - Never directly expose an exception, backend error message, stack trace, or other internal error details in the UI.
 - Do not silently discard errors that should be logged or reported.
 - Do not rely on color alone to convey error state.
+
+## Links
+
+- Color
+  - `orange-500` by default
+  - `orange-600` on hover
+- Show underline on hover.
+- External links
+  - should be marked as such
+    - HTML: and `rel="external noopener noreferrer"`
+    - visual:
+  - Should open in new tab (`target="_blank"`)
