@@ -20,6 +20,13 @@ jobs:
       - run: cp apps/wbapi/.env.example apps/wbapi/.env
       - uses: rharkor/caching-for-turbo@v2.5.1
       - run: mise run verify
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-reports
+          path: .mise/lighthouse
+          if-no-files-found: ignore
       - name: Upload Playwright failure artifacts
         if: failure()
         uses: actions/upload-artifact@v7

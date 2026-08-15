@@ -251,7 +251,7 @@ NODE
 [tasks.verify]
 description = "Run all checks"
 alias = "vv"
-depends = ["install", "db:start"]
+depends = ["install", "db:start", "lighthouse"]
 depends_post = ["db:stop"]
 run = '''
 #!/usr/bin/env -S mise -E dev exec -- bash
