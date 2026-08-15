@@ -73,6 +73,7 @@ words:
     - pg_isready
     - pgdata
     - Phönix
+    - pids
     - pipefail
     - pkey
     - pkgs

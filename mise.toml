@@ -137,10 +137,17 @@ fi
 pnpm turbo run build --filter=@warbrokers/stats-site --cache-dir=.turbo --color
 HOST=127.0.0.1 PORT=4173 pnpm --filter=@warbrokers/stats-site exec node build &
 server_pid=$!
+declare -A audit_pids=()
 
 cleanup() {
     status=$?
     trap - EXIT
+
+    for pid in "${!audit_pids[@]}"; do
+        kill -INT -- "-$pid" >/dev/null 2>&1 || true
+        wait "$pid" >/dev/null 2>&1 || true
+    done
+
     kill -INT -- "-$server_pid" >/dev/null 2>&1 || true
     wait "$server_pid" >/dev/null 2>&1 || true
 
@@ -153,9 +160,10 @@ trap cleanup EXIT
 rm -rf "$reports_dir"
 mkdir -p "$reports_dir"
 
-for entry in "${routes[@]}"; do
-    name="${entry%%|*}"
-    route="${entry#*|}"
+audit_route() {
+    local name="$1"
+    local route="$2"
+
     printf '\nAuditing %s\n' "$route"
     pnpm --filter=@warbrokers/stats-site exec lighthouse "${base_url}${route}" \
         --quiet \
@@ -163,7 +171,28 @@ for entry in "${routes[@]}"; do
         --output=html \
         --output=json \
         --output-path="${reports_dir}/${name}"
+}
+
+audit_status=0
+for entry in "${routes[@]}"; do
+    name="${entry%%|*}"
+    route="${entry#*|}"
+
+    audit_route "$name" "$route" &
+    audit_pids[$!]="$route"
 done
+
+for pid in "${!audit_pids[@]}"; do
+    if ! wait "$pid"; then
+        printf 'Lighthouse failed for %s.\n' "${audit_pids[$pid]}" >&2
+        audit_status=1
+    fi
+    unset 'audit_pids[$pid]'
+done
+
+if (( audit_status != 0 )); then
+    exit 1
+fi
 
 printf '\nLighthouse reports: %s\n' "$reports_dir"
 node --input-type=module - "$reports_dir" "${routes[@]}" <<'NODE'
