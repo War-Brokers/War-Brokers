@@ -88,6 +88,122 @@ depends = ["db:migrate"]
 depends_post = ["db:stop"]
 run = "mise -E dev exec -- pnpm dev:workspace --color"
 
+[tasks.lighthouse]
+description = "Audit stats site routes with Lighthouse"
+alias = "ll"
+depends = ["install"]
+run = '''
+#!/usr/bin/env -S mise -E dev exec -- bash
+
+set -euo pipefail
+set -m
+
+readonly base_url="http://127.0.0.1:4173"
+readonly player_uid="5d2ead35d142affb05757778"
+readonly reports_dir="${MISE_PROJECT_ROOT}/.mise/lighthouse"
+readonly routes=(
+    "home|/"
+    "comparison|/${player_uid}-vs-${player_uid}"
+    "leaderboard|/leaderboard"
+    "leaderboard-games-elo|/leaderboard/gamesELO"
+    "leaderboard-kills-elo|/leaderboard/killsELO"
+    "leaderboard-xp|/leaderboard/xp"
+    "player|/players/${player_uid}"
+    "ranks|/ranks"
+    "servers|/servers"
+    "squads|/squads"
+    "squad-lp|/squads/LP"
+)
+
+for reference in $(nix-store --query --references "$(mise -E dev where nix:playwright-test)"); do
+    if [[ "$reference" == *-playwright-browsers ]]; then
+        browsers_path="$reference"
+        break
+    fi
+done
+test -n "${browsers_path:-}"
+export PLAYWRIGHT_BROWSERS_PATH="$browsers_path"
+
+CHROME_PATH="$(pnpm --filter=@warbrokers/stats-site exec node --input-type=module -e \
+    "import { chromium } from '@playwright/test'; process.stdout.write(chromium.executablePath())")"
+test -x "$CHROME_PATH"
+export CHROME_PATH
+
+if (printf '' >/dev/tcp/127.0.0.1/4173) >/dev/null 2>&1; then
+    printf 'Port 4173 is already in use.\n' >&2
+    exit 1
+fi
+
+pnpm turbo run build --filter=@warbrokers/stats-site --cache-dir=.turbo --color
+HOST=127.0.0.1 PORT=4173 pnpm --filter=@warbrokers/stats-site exec node build &
+server_pid=$!
+
+cleanup() {
+    status=$?
+    trap - EXIT
+    kill -INT -- "-$server_pid" >/dev/null 2>&1 || true
+    wait "$server_pid" >/dev/null 2>&1 || true
+
+    exit "$status"
+}
+
+trap cleanup EXIT
+./scripts/wait-for-port 4173 "$server_pid"
+
+rm -rf "$reports_dir"
+mkdir -p "$reports_dir"
+
+for entry in "${routes[@]}"; do
+    name="${entry%%|*}"
+    route="${entry#*|}"
+    printf '\nAuditing %s\n' "$route"
+    pnpm --filter=@warbrokers/stats-site exec lighthouse "${base_url}${route}" \
+        --quiet \
+        --chrome-flags="--headless --no-sandbox" \
+        --output=html \
+        --output=json \
+        --output-path="${reports_dir}/${name}"
+done
+
+printf '\nLighthouse reports: %s\n' "$reports_dir"
+node --input-type=module - "$reports_dir" "${routes[@]}" <<'NODE'
+import { readFile } from "node:fs/promises"
+import { join } from "node:path"
+
+const [reportsDir, ...entries] = process.argv.slice(2)
+const rows = await Promise.all(
+    entries.map(async (entry) => {
+        const [name, route] = entry.split("|")
+        const report = JSON.parse(
+            await readFile(join(reportsDir, `${name}.report.json`), "utf8"),
+        )
+        const score = (category) => Math.round(report.categories[category].score * 100)
+        const value = (audit) => report.audits[audit].numericValue
+        const seconds = (audit) => (value(audit) / 1000).toFixed(2)
+
+        return {
+            Route: route,
+            Perf: score("performance"),
+            A11y: score("accessibility"),
+            "Best practices": score("best-practices"),
+            SEO: score("seo"),
+            "Agentic browsing": score("agentic-browsing"),
+            "FCP (s)": seconds("first-contentful-paint"),
+            "LCP (s)": seconds("largest-contentful-paint"),
+            "Speed idx (s)": seconds("speed-index"),
+            "TBT (ms)": Math.round(value("total-blocking-time")),
+            CLS: value("cumulative-layout-shift").toFixed(3),
+            "TTI (s)": seconds("interactive"),
+            "Main thread (s)": seconds("mainthread-work-breakdown"),
+            "Transfer (KiB)": Math.round(value("total-byte-weight") / 1024),
+        }
+    }),
+)
+
+console.table(rows)
+NODE
+'''
+
 [tasks.verify]
 description = "Run all checks"
 alias = "vv"
