@@ -13,7 +13,7 @@
 
 <Title title="Llama's Pyjamas" />
 
-<img src={LPEmblem} class="mx-auto w-28" alt="LP squad emblem" />
+<img src={LPEmblem} width="112" height="112" class="mx-auto" alt="LP squad emblem" />
 <h2 class="mb-4 w-full text-center text-3xl font-black">LP - Llama's Pyjamas</h2>
 <a
     href="https://discord.gg/2fsar34APa"

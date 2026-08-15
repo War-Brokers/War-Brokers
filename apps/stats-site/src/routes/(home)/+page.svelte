@@ -58,13 +58,13 @@
 <div class="flex flex-wrap gap-10">
     <Metric label="Players online" value={playersOnline}>
         <A href={resolve("/servers")}>
-            Browse Servers &nbsp; <Icon data={arrowRight} />
+            Browse Servers &nbsp; <Icon data={arrowRight} aria-hidden="true" />
         </A>
     </Metric>
 
     <Metric label="Twitch streams" value={twitchStreams}>
         <A href="https://www.twitch.tv/directory/category/war-brokers" external>
-            Watch Live &nbsp; <Icon data={arrowRight} />
+            Watch Live &nbsp; <Icon data={arrowRight} aria-hidden="true" />
         </A>
     </Metric>
 </div>

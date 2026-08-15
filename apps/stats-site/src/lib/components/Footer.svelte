@@ -14,8 +14,11 @@
         </div>
         <div class="flex items-center gap-6">
             <A href="https://uptime.pompy.dev/status/wbp" external>Status</A>
-            <a href="https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site">
-                <Icon data={github} scale={3} class="hover:text-gray-100" />
+            <a
+                href="https://github.com/War-Brokers/War-Brokers/tree/master/apps/stats-site"
+                aria-label="War Brokers Stats source code on GitHub"
+            >
+                <Icon data={github} scale={3} class="hover:text-gray-100" aria-hidden="true" />
             </a>
         </div>
     </div>

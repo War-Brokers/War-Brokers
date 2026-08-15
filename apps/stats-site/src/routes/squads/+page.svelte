@@ -31,7 +31,7 @@
     {#await squads}
         <div class="skeleton-reveal w-full" aria-busy="true">
             <div class="flex w-full animate-pulse flex-col gap-5 motion-reduce:animate-none">
-                {#each { length: 6 } as _, index (index)}
+                {#each { length: 9 } as _, index (index)}
                     <div class="h-14 w-full rounded-lg bg-gray-700" aria-hidden="true"></div>
                 {/each}
             </div>

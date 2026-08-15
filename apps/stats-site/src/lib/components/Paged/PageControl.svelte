@@ -58,7 +58,7 @@
                 gotoPage(currentPage - 1)
             }}
         >
-            <Icon data={arrowLeft} /> &nbsp; Previous
+            <Icon data={arrowLeft} aria-hidden="true" /> &nbsp; Previous
         </button>
         <button
             class="place-self-end"
@@ -67,7 +67,7 @@
                 gotoPage(currentPage + 1)
             }}
         >
-            Next &nbsp; <Icon data={arrowRight} />
+            Next &nbsp; <Icon data={arrowRight} aria-hidden="true" />
         </button>
     </div>
 </div>
