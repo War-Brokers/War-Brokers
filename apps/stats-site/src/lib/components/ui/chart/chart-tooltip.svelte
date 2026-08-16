@@ -19,10 +19,29 @@
     const chart = useChart()
     const context = getChartContext()
     const numberFormatter = new Intl.NumberFormat("en-US", { useGrouping: "min2" })
+    let tooltipElement = $state<HTMLDivElement>()
     let tooltipWidth = $state(0)
     let tooltipHeight = $state(0)
 
     $effect(() => onDataChange?.(context.tooltip.data))
+    $effect(() => {
+        const element = tooltipElement
+        if (!element) return
+
+        const updateTooltipSize = () => {
+            const bounds = element.getBoundingClientRect()
+            tooltipWidth = bounds.width
+            tooltipHeight = bounds.height
+        }
+        const observer = new ResizeObserver(updateTooltipSize)
+
+        updateTooltipSize()
+        observer.observe(element)
+
+        return () => {
+            observer.disconnect()
+        }
+    })
 
     type Alignment = "start" | "center" | "end"
     type TooltipAnchor = NonNullable<ComponentProps<typeof TooltipPrimitive.Root>["anchor"]>
@@ -166,8 +185,7 @@
         <div
             class="grid min-w-36 gap-1.5 rounded-lg border border-gray-600 bg-gray-900 px-3 py-2 text-xs shadow-xl"
             role="tooltip"
-            bind:offsetWidth={tooltipWidth}
-            bind:offsetHeight={tooltipHeight}
+            bind:this={tooltipElement}
         >
             {#if payload[0]}
                 <div class="font-medium text-gray-100">
