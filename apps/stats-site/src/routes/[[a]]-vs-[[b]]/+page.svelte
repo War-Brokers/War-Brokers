@@ -198,7 +198,7 @@
                             variant="ghost"
                             size="icon-lg"
                             class={cn(
-                                "rounded-none text-gray-400 transition-[color,transform] duration-150 hover:bg-transparent hover:text-orange-500 active:scale-[0.96] active:bg-transparent dark:hover:text-orange-400",
+                                "rounded-none text-gray-400 transition-[color,scale] duration-150 hover:bg-transparent hover:text-orange-500 active:scale-[0.96] active:bg-transparent dark:hover:text-orange-400",
                                 side === "a" && "order-first",
                             )}
                             aria-label={`Edit player ${side.toUpperCase()}`}
@@ -229,7 +229,7 @@
 
                 {#if side === "a"}
                     <span
-                        class="absolute start-1/2 top-2 -translate-x-1/2 rounded-full px-3 py-2 text-xs uppercase tracking-wider text-gray-400"
+                        class="absolute inset-s-1/2 top-2 -translate-x-1/2 rounded-full px-3 py-2 text-xs tracking-wider text-gray-400 uppercase"
                         >vs</span
                     >
                 {/if}
@@ -272,13 +272,13 @@
                                         "px-1 py-3 text-center align-middle sm:px-2",
                                         side === "a" ? "rounded-s-2xl" : "rounded-e-2xl",
                                         leader === side
-                                            ? "bg-orange-50 text-orange-800 ring-1 ring-inset ring-orange-200 dark:bg-orange-950/30 dark:text-orange-200 dark:ring-orange-800"
+                                            ? "bg-orange-50 text-orange-800 ring-1 ring-orange-200 ring-inset dark:bg-orange-950/30 dark:text-orange-200 dark:ring-orange-800"
                                             : "bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100",
                                     )}
                                 >
                                     <div class="flex min-w-0 flex-col items-center justify-center">
                                         <span
-                                            class="mb-1 text-[0.625rem] font-black uppercase tracking-wider"
+                                            class="mb-1 text-[0.625rem] font-black tracking-wider uppercase"
                                         >
                                             {leader === "tie"
                                                 ? "Tied"
@@ -309,7 +309,7 @@
                                     <th
                                         id={statHeaderId}
                                         scope="row"
-                                        class="bg-gray-50 px-1 py-3 text-center text-xs font-bold text-gray-500 dark:bg-gray-900 dark:text-gray-400 sm:px-2 sm:text-sm"
+                                        class="bg-gray-50 px-1 py-3 text-center text-xs font-bold text-gray-500 sm:px-2 sm:text-sm dark:bg-gray-900 dark:text-gray-400"
                                     >
                                         {stat.label}
                                     </th>

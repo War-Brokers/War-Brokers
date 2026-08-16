@@ -229,7 +229,7 @@
 <div bind:this={rootElement} class="flex w-full flex-col items-center text-start font-normal">
     <search aria-label={label} class="flex w-full flex-col items-center">
         <div
-            class="flex h-12 w-full min-w-0 max-w-[36rem] items-center justify-center rounded-full pr-3 dark:bg-gray-600 sm:pr-7"
+            class="flex h-12 w-full max-w-[36rem] min-w-0 items-center justify-center rounded-full pr-3 sm:pr-7 dark:bg-gray-600"
         >
             <div aria-hidden="true" class="ml-2 h-5 w-5 shrink-0 sm:ml-3 sm:h-7 sm:w-7"></div>
             <div class="relative flex w-full min-w-0 flex-col">
@@ -337,6 +337,8 @@
 </div>
 
 <style lang="postcss">
+    @reference "../../app.css";
+
     /* https://stackoverflow.com/a/9422689 */
     input[type="search"]::-webkit-search-decoration,
     input[type="search"]::-webkit-search-cancel-button,

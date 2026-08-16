@@ -74,7 +74,7 @@
     {#if title || percentile}
         <div class={cn("flex w-full", compact && "justify-center")}>
             {#if title}
-                <span class="whitespace-nowrap font-bold dark:text-gray-400">
+                <span class="font-bold whitespace-nowrap dark:text-gray-400">
                     {title}
                 </span>
             {/if}
@@ -174,7 +174,7 @@
     <span
         class={cn(
             "font-black",
-            compact ? "w-full break-words text-center sm:text-2xl" : "text-2xl",
+            compact ? "w-full text-center wrap-break-word sm:text-2xl" : "text-2xl",
         )}>{data}</span
     >
 </div>

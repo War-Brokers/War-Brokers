@@ -20,10 +20,8 @@
     "eslint.validate": ["svelte", "javascript", "typescript", "javascriptreact", "typescriptreact"],
 
     // tailwind
-    "css.customData": [".vscode/tailwind.json"], // https://github.com/tailwindlabs/tailwindcss/discussions/5258#discussioncomment-1979394
-    "tailwindCSS.classAttributes": ["class", "className", ".*Style*", "tdClass"],
-    "editor.quickSuggestions": {
-        "strings": true
+    "files.associations": {
+        "*.css": "tailwindcss"
     },
 
     // Svelte

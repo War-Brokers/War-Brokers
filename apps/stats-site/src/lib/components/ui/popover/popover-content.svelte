@@ -17,7 +17,7 @@
         {align}
         {sideOffset}
         class={cn(
-            "z-50 flex w-72 origin-[--bits-popover-content-transform-origin] flex-col gap-2.5 rounded-lg bg-gray-900 p-2.5 text-sm text-gray-100 shadow-md outline-none ring-1 ring-gray-700",
+            "z-50 flex w-72 origin-(--bits-popover-content-transform-origin) flex-col gap-2.5 rounded-lg bg-gray-900 p-2.5 text-sm text-gray-100 shadow-md ring-1 ring-gray-700 outline-hidden",
             className,
         )}
         {...restProps}

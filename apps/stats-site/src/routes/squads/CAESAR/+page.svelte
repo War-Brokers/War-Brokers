@@ -13,7 +13,7 @@
 
 <img src={CAESAREmblem} class="mx-auto w-28" alt="CAESAR squad emblem" />
 
-<h2 class="mb-10 mt-4 w-full text-center text-3xl font-black">CAESAR Squad</h2>
+<h2 class="mt-4 mb-10 w-full text-center text-3xl font-black">CAESAR Squad</h2>
 
 <b class="mb-10 text-center"><i>"Res, non verba"</i></b>
 

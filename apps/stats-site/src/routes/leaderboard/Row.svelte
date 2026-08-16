@@ -9,7 +9,7 @@
     export let stat2: string | number | undefined = undefined
 </script>
 
-<tr class="whitespace-nowrap p-9 hover:bg-gray-700">
+<tr class="p-9 whitespace-nowrap hover:bg-gray-700">
     <td class="pr-4 text-right">{rank}</td>
     <td class="pr-4 text-left">
         <A href={resolve("/players/[uid]", { uid })}>{nick}</A>

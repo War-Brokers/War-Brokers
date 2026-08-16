@@ -39,23 +39,23 @@
     </h1>
     <A
         href={resolve("/[[a]]-vs-[[b]]", { a: player.uid })}
-        class="text-xs font-black uppercase tracking-wider">vs</A
+        class="text-xs font-black tracking-wider uppercase">vs</A
     >
 </div>
 
 <div class="mb-1 flex w-24">
-    <span class="whitespace-nowrap font-bold dark:text-gray-400">Playing Since </span>
+    <span class="font-bold whitespace-nowrap dark:text-gray-400">Playing Since </span>
     &nbsp;
-    <time class="whitespace-nowrap font-black" datetime={playingSince.toISOString()}>
+    <time class="font-black whitespace-nowrap" datetime={playingSince.toISOString()}>
         {playingSince.format("MMMM D, YYYY")}
     </time>
 </div>
 
 <div class="flex w-24" class:mb-1={player.steam} class:mb-6={!player.steam}>
-    <span class="whitespace-nowrap font-bold dark:text-gray-400">Last Seen </span>
+    <span class="font-bold whitespace-nowrap dark:text-gray-400">Last Seen </span>
     &nbsp;
     <time
-        class="whitespace-nowrap font-black"
+        class="font-black whitespace-nowrap"
         datetime={lastSeen?.toISOString()}
         title={lastSeen?.format("MMMM D, YYYY")}
     >
@@ -64,7 +64,7 @@
 </div>
 
 {#if player.steam}
-    <div class="mb-6 w-24 whitespace-nowrap font-black text-amber-400">STEAM USER</div>
+    <div class="mb-6 w-24 font-black whitespace-nowrap text-amber-400">STEAM USER</div>
 {/if}
 
 <div>

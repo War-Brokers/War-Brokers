@@ -178,12 +178,12 @@
                 <div class="flex items-center justify-between gap-5 leading-none">
                     <div class="flex items-center gap-2 text-gray-400">
                         <span
-                            class={cn("size-2.5 shrink-0 rounded-sm bg-current", item.colorClass)}
+                            class={cn("size-2.5 shrink-0 rounded-xs bg-current", item.colorClass)}
                             style:background-color={item.color}
                         ></span>
                         {item.name ?? item.key}
                     </div>
-                    <span class="font-mono font-medium tabular-nums text-gray-100">
+                    <span class="font-mono font-medium text-gray-100 tabular-nums">
                         {item.format(item.value)}
                     </span>
                 </div>

@@ -13,18 +13,18 @@
     ] as const
 </script>
 
-<header class="flex flex-col pl-4 dark:bg-gray-700 md:px-4">
+<header class="flex flex-col pl-4 md:px-4 dark:bg-gray-700">
     <div class="mx-auto flex h-16 w-full max-w-5xl items-center justify-between">
         <a href={resolve("/")} class="flex items-center">
             <img width="64" height="64" src="/WBP.avif" alt="War Brokers logo" />
             <h2
-                class="invisible whitespace-nowrap text-xl font-black tracking-wide min-[330px]:visible"
+                class="invisible text-xl font-black tracking-wide whitespace-nowrap min-[330px]:visible"
             >
                 War Brokers Stats
             </h2>
         </a>
 
-        <div class="hidden gap-7 dark:bg-gray-700 md:flex">
+        <div class="hidden gap-7 md:flex dark:bg-gray-700">
             {#each links as { name, path } (path)}
                 <a href={resolve(path)} class="hover:text-orange-400">{name}</a>
             {/each}
@@ -46,7 +46,7 @@
         aria-label="Primary"
         inert={!open}
         class={cn(
-            "flex flex-col overflow-hidden transition-[height] ease-linear dark:bg-gray-700 md:hidden",
+            "flex flex-col overflow-hidden transition-[height] ease-linear md:hidden dark:bg-gray-700",
             open ? "h-[192px]" : "h-0",
         )}
     >

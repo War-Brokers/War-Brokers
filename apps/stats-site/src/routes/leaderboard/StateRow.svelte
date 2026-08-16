@@ -5,7 +5,7 @@
 </script>
 
 <tr>
-    <td {colspan} class="!p-0 text-center">
+    <td {colspan} class="p-0! text-center">
         <div
             class:text-gray-400={tone === "empty"}
             class:text-red-400={tone === "error"}

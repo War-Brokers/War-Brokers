@@ -182,10 +182,10 @@
                         class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"
                         aria-hidden="true"
                     >
-                        <strong class="text-2xl font-black tabular-nums text-gray-100">
+                        <strong class="text-2xl font-black text-gray-100 tabular-nums">
                             {model.formatValue(total)}
                         </strong>
-                        <span class="text-xs font-bold uppercase tracking-wider text-gray-400">
+                        <span class="text-xs font-bold tracking-wider text-gray-400 uppercase">
                             TOTAL
                         </span>
                     </div>
@@ -242,7 +242,7 @@
                             <span class="min-w-0 truncate text-sm font-bold text-gray-200">
                                 {row.label}
                             </span>
-                            <strong class="shrink-0 text-sm font-black tabular-nums text-gray-100">
+                            <strong class="shrink-0 text-sm font-black text-gray-100 tabular-nums">
                                 {model.formatValue(row.value)}
                             </strong>
                         </span>

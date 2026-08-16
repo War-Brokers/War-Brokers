@@ -73,11 +73,13 @@
 </div>
 
 <style lang="postcss">
+    @reference "../../../app.css";
+
     .buttons {
         @media (max-width: 300px) {
             @apply flex-col gap-2;
 
-            button {
+            & button {
                 @apply w-full;
             }
         }

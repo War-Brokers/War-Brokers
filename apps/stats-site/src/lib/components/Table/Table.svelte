@@ -5,6 +5,8 @@
 </div>
 
 <style lang="postcss">
+    @reference "../../../app.css";
+
     ::-webkit-scrollbar {
         @apply h-2;
     }

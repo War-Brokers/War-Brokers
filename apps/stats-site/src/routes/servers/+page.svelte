@@ -29,7 +29,7 @@
 <Title title="Server Browser" />
 
 {#each regions as region (region)}
-    <h2 id={`${region}-servers`} class="mb-4 mt-8 text-2xl font-black">{region}</h2>
+    <h2 id={`${region}-servers`} class="mt-8 mb-4 text-2xl font-black">{region}</h2>
 
     {#if data[region]}
         {#await data[region]}
