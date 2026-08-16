@@ -1,7 +1,11 @@
 # AGENTS.md
 
-This project is a nodejs monorepo managed by turborepo.
-Look for AGENTS.md in the sub-package when working on it for sub-project-specific instructions.
+This project is a nodejs monorepo managed by turborepo with pnpm as package manager.
+
+## Other documents
+
+- See CONTRIBUTING.md for more more information on infra and architecture.
+- Each sub-package in the monorepo may have their own AGENTS.md.
 
 ## Task Completion Requirements
 
