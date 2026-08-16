@@ -89,7 +89,7 @@
                             openDelay={150}
                             closeDelay={100}
                             class={cn(
-                                "flex items-center justify-center rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400",
+                                "flex items-center justify-center rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400",
                                 title && "ms-1.5",
                             )}
                         >

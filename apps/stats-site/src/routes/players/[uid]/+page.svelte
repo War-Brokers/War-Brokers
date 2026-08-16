@@ -76,7 +76,7 @@
                 openOnHover
                 openDelay={150}
                 closeDelay={100}
-                class="mb-10 inline-block rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+                class="mb-10 inline-block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
             >
                 <img src={imageURL} alt="" />
                 <span class="sr-only">Show details for the {name} badge</span>

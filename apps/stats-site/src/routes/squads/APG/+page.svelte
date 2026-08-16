@@ -76,7 +76,7 @@
             <div class="flex flex-col rounded-lg bg-gray-700 p-4">
                 <span class="mb-4 text-xl font-bold">{player.nick}</span>
 
-                <div class="felx flex-row gap-4">Stats (WIP)</div>
+                <div class="flex flex-row gap-4">Stats (WIP)</div>
             </div>
         </a>
     {/each}

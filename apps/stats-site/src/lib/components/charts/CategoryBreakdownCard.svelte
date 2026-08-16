@@ -217,7 +217,7 @@
                 >
                     <button
                         type="button"
-                        class="relative block w-full cursor-pointer text-left focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+                        class="relative block w-full cursor-pointer text-left focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
                         aria-pressed={activePinnedCategoryKey === row.key}
                         onfocus={(event) => {
                             if (event.currentTarget.matches(":focus-visible"))

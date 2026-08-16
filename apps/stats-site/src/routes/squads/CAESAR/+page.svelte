@@ -18,7 +18,7 @@
 <b class="mb-10 text-center"><i>"Res, non verba"</i></b>
 
 <span class="w-full text-center text-xl font-black">Squad Leaders</span>
-<span class="text-s mx-auto mb-10 inline-flex flex-wrap justify-center gap-1 font-bold">
+<span class="mx-auto mb-10 inline-flex flex-wrap justify-center gap-1 text-sm font-bold">
     <a
         class="whitespace-nowrap underline underline-offset-4 hover:text-orange-400"
         href={resolve("/players/[uid]", { uid: "600722c9bfea71503dbd4905" })}>Colonel Grant</a
@@ -84,7 +84,7 @@
             <div class="flex flex-col rounded-lg bg-gray-700 p-4">
                 <span class="mb-4 text-xl font-bold">{player.nick}</span>
 
-                <div class="felx flex-row gap-4">Stats (WIP)</div>
+                <div class="flex flex-row gap-4">Stats (WIP)</div>
             </div>
         </a>
     {/each}

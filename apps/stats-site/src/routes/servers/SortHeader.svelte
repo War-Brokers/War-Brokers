@@ -20,7 +20,7 @@
 
 <button
     type="button"
-    class="-mx-2 flex h-10 w-[calc(100%+1rem)] items-center gap-2 px-2 text-start font-medium hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-orange-400 active:bg-gray-800"
+    class="-mx-2 flex h-10 w-[calc(100%+1rem)] items-center gap-2 px-2 text-start font-medium hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-orange-400 active:bg-gray-800"
     aria-label={`Sort by ${label}`}
     onclick={(event) => {
         ontoggle(event.shiftKey)

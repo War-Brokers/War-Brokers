@@ -19,7 +19,7 @@
 
     const classes = $derived(
         cn(
-            "text-orange-500 underline-offset-4 hover:text-orange-400 hover:underline focus-visible:rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-400",
+            "text-orange-500 underline-offset-4 hover:text-orange-400 hover:underline focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-400",
             className,
         ),
     )

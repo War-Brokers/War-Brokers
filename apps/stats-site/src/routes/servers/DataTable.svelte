@@ -91,7 +91,7 @@
 <!-- Keyboard users need to focus this scroll region. -->
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <div
-    class="h-80 overflow-auto border border-gray-600 bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 [&>[data-slot=table-container]]:overflow-visible"
+    class="h-80 overflow-auto border border-gray-600 bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 [&>[data-slot=table-container]]:overflow-visible"
     role="region"
     aria-label={`${region} servers`}
     tabindex="0"

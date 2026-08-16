@@ -52,7 +52,7 @@
                 <p class="text-gray-400">No squads match “{searchTerm}”.</p>
                 <button
                     type="button"
-                    class="rounded-md bg-gray-600 px-4 py-2 font-medium hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 active:bg-gray-800"
+                    class="rounded-md bg-gray-600 px-4 py-2 font-medium hover:bg-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 active:bg-gray-800"
                     on:click={() => {
                         searchTerm = ""
                     }}>Clear search</button

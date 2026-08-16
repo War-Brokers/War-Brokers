@@ -1,6 +1,7 @@
 import tsParser from "@typescript-eslint/parser"
 import wbConfig, { strictTypeCheckedRules } from "@warbrokers/eslint-config"
 import { defineConfig } from "eslint/config"
+import betterTailwindcss from "eslint-plugin-better-tailwindcss"
 import svelte from "eslint-plugin-svelte"
 import globals from "globals"
 import svelteParser from "svelte-eslint-parser"
@@ -11,6 +12,15 @@ export default defineConfig(
         ignores: [".svelte-kit/", "vite.config.ts.timestamp*"],
     },
     ...wbConfig,
+    betterTailwindcss.configs["correctness-error"],
+    {
+        settings: {
+            "better-tailwindcss": {
+                cwd: import.meta.dirname,
+                entryPoint: "src/app.css",
+            },
+        },
+    },
     {
         files: ["e2e/*.ts", "playwright.config.ts"],
         languageOptions: {

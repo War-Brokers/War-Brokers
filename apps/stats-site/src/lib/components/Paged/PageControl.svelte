@@ -50,9 +50,9 @@
         </span>
     {/await}
 
-    <div class="buttons flex w-full justify-between">
+    <div class="flex w-full justify-between max-[300px]:flex-col max-[300px]:gap-2">
         <button
-            class="place-self-start"
+            class="place-self-start max-[300px]:w-full"
             disabled={currentPage <= 1}
             on:click={() => {
                 gotoPage(currentPage - 1)
@@ -61,7 +61,7 @@
             <Icon data={arrowLeft} aria-hidden="true" /> &nbsp; Previous
         </button>
         <button
-            class="place-self-end"
+            class="place-self-end max-[300px]:w-full"
             disabled={$maxPage === -1 || currentPage >= $maxPage}
             on:click={() => {
                 gotoPage(currentPage + 1)
@@ -74,16 +74,6 @@
 
 <style lang="postcss">
     @reference "../../../app.css";
-
-    .buttons {
-        @media (max-width: 300px) {
-            @apply flex-col gap-2;
-
-            & button {
-                @apply w-full;
-            }
-        }
-    }
 
     button {
         @apply flex w-32 items-center justify-center rounded-md bg-gray-600 px-4 py-2 hover:bg-gray-700 active:bg-gray-800;
