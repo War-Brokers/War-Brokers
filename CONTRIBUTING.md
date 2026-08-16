@@ -26,7 +26,7 @@ conflicts and use tools such as
 
 ## Online infrastructure
 
-![Infrastructure Diagram](./.github/img/infra.png)
+![Infrastructure Diagram](./.github/img/infra.excalidraw.png)
 
 ## Getting started
 
