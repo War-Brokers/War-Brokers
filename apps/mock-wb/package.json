@@ -1,9 +1,9 @@
 {
     "name": "@warbrokers/mock-wb",
     "version": "0.0.0",
-    "main": "./build/index.js",
     "private": true,
     "type": "module",
+    "main": "./build/index.js",
     "scripts": {
         "dev": "pnpm build && node .",
         "build": "rm -rf build && tsup",
@@ -28,7 +28,7 @@
         "tsup": "8.5.1"
     },
     "engines": {
-        "pnpm": "11.20.0",
-        "node": "26.6.0"
+        "node": "26.6.0",
+        "pnpm": "11.20.0"
     }
 }

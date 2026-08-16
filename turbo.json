@@ -1,6 +1,6 @@
 {
     "$schema": "https://turbo.build/schema.json",
-    "globalDependencies": [".prettierignore", ".prettierrc.json"],
+    "globalDependencies": ["oxfmt.config.ts"],
     "globalEnv": ["CI"],
     "tasks": {
         "dev": {

@@ -312,7 +312,7 @@ run = "mise -E dev exec -- cspell ."
 [tasks."check:format"]
 description = "Check formatting"
 depends = ["install"]
-run = "mise -E dev exec -- pnpm fmt:check --color"
+run = "mise -E dev exec -- pnpm fmt:check"
 
 [tasks."check:lint"]
 description = "Lint the workspace"
@@ -387,10 +387,7 @@ run = [{ task = "test:with-backend", args = ["test:browser:run"] }]
 [tasks."test:browser:run"]
 description = "Run browser tests against local services"
 hide = true
-run = [
-    { task = "lighthouse:audit" },
-    { task = "test:e2e:run" },
-]
+run = [{ task = "lighthouse:audit" }, { task = "test:e2e:run" }]
 
 [tasks.verify]
 description = "Run all checks and tests"

@@ -1,13 +1,14 @@
 {
     "name": "warbrokers",
     "private": true,
+    "type": "module",
     "scripts": {
         "turbo": "turbo",
         "dev": "mise run dev",
         "dev:workspace": "turbo run dev",
         "build": "turbo run build --cache-dir=.turbo",
-        "fmt:check": "prettier . --check",
-        "lint": "turbo run lint",
+        "fmt:check": "oxfmt --check",
+        "lint": "eslint eslint.config.js oxfmt.config.ts && turbo run lint",
         "typecheck": "turbo run typecheck",
         "test:e2e": "turbo run test:e2e",
         "test:unit": "turbo run test:unit",
@@ -15,16 +16,15 @@
     },
     "devDependencies": {
         "@types/node": "26.2.0",
+        "@warbrokers/eslint-config": "workspace:*",
         "eslint": "9.39.3",
-        "prettier": "3.9.6",
-        "prettier-plugin-svelte": "4.1.1",
-        "prettier-plugin-tailwindcss": "0.8.1",
+        "oxfmt": "0.62.0",
         "turbo": "2.10.7",
         "typescript": "6.0.3"
     },
-    "packageManager": "pnpm@11.20.0",
     "engines": {
-        "pnpm": "11.20.0",
-        "node": "26.6.0"
-    }
+        "node": "26.6.0",
+        "pnpm": "11.20.0"
+    },
+    "packageManager": "pnpm@11.20.0"
 }

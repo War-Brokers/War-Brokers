@@ -44,7 +44,7 @@ yourself with the following:
   - end-to-end web app testing with [playwright](https://playwright.dev)
   - monorepo management with [turborepo](https://turbo.build/repo)
   - development environment setup with [mise](https://mise.jdx.dev)
-  - formatting with [prettier](https://prettier.io)
+  - formatting with [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html)
   - linting with [eslint](https://eslint.org)
   - [vscode](https://code.visualstudio.com)
 - web
