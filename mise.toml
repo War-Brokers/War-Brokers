@@ -379,6 +379,19 @@ if ! kill -0 "$frontend_pid" >/dev/null 2>&1; then
 fi
 '''
 
+[tasks."test:browser"]
+description = "Run browser tests"
+wait_for = ["check:lint", "check:types"]
+run = [{ task = "test:with-backend", args = ["test:browser:run"] }]
+
+[tasks."test:browser:run"]
+description = "Run browser tests against local services"
+hide = true
+run = [
+    { task = "lighthouse:audit" },
+    { task = "test:e2e:run" },
+]
+
 [tasks.verify]
 description = "Run all checks and tests"
 alias = "vv"
@@ -388,6 +401,5 @@ depends = [
     "check:lint",
     "check:types",
     "test:unit",
-    "lighthouse",
-    "test:e2e",
+    "test:browser",
 ]
