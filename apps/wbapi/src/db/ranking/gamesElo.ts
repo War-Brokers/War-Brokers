@@ -11,6 +11,7 @@ export default (db: PostgresJsDatabase) => {
             .select({
                 uid: players.uid,
                 nick: players.nick,
+                squad: players.squad,
                 gamesELO: players.gamesELO,
             })
             .from(players)

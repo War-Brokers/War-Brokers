@@ -46,8 +46,8 @@
                         No ranked players are available.
                     </StateRow>
                 {:else}
-                    {#each killsEloRanking as { uid, nick, killsELO }, i (uid)}
-                        <Row rank={i + 1} {nick} {uid} stat={killsELO.toFixed(2)} />
+                    {#each killsEloRanking as { uid, nick, squad, killsELO }, i (uid)}
+                        <Row rank={i + 1} {nick} {squad} {uid} stat={killsELO.toFixed(2)} />
                     {/each}
                     <ViewMore href={resolve("/leaderboard/killsELO")} />
                 {/if}
@@ -84,8 +84,8 @@
                         No ranked players are available.
                     </StateRow>
                 {:else}
-                    {#each gamesEloRanking as { uid, nick, gamesELO }, i (uid)}
-                        <Row rank={i + 1} {nick} {uid} stat={gamesELO.toFixed(2)} />
+                    {#each gamesEloRanking as { uid, nick, squad, gamesELO }, i (uid)}
+                        <Row rank={i + 1} {nick} {squad} {uid} stat={gamesELO.toFixed(2)} />
                     {/each}
                     <ViewMore href={resolve("/leaderboard/gamesELO")} />
                 {/if}
@@ -123,10 +123,11 @@
                         No ranked players are available.
                     </StateRow>
                 {:else}
-                    {#each xpRanking as { uid, nick, xp, level }, i (uid)}
+                    {#each xpRanking as { uid, nick, squad, xp, level }, i (uid)}
                         <Row
                             rank={i + 1}
                             {nick}
+                            {squad}
                             {uid}
                             stat={xp.toLocaleString("en-US")}
                             stat2={level}

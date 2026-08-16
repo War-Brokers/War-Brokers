@@ -47,8 +47,8 @@
                     No ranked players are available on this page.
                 </StateRow>
             {:else}
-                {#each getGamesEloRanking as { uid, nick, gamesELO }, i (uid)}
-                    <Row rank={i + offset + 1} {nick} {uid} stat={gamesELO.toFixed(2)} />
+                {#each getGamesEloRanking as { uid, nick, squad, gamesELO }, i (uid)}
+                    <Row rank={i + offset + 1} {nick} {squad} {uid} stat={gamesELO.toFixed(2)} />
                 {/each}
             {/if}
         </tbody>

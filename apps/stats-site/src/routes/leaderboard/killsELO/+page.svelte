@@ -47,8 +47,8 @@
                     No ranked players are available on this page.
                 </StateRow>
             {:else}
-                {#each killsEloRanking as { uid, nick, killsELO }, i (uid)}
-                    <Row rank={i + offset + 1} {nick} {uid} stat={killsELO.toFixed(2)} />
+                {#each killsEloRanking as { uid, nick, squad, killsELO }, i (uid)}
+                    <Row rank={i + offset + 1} {nick} {squad} {uid} stat={killsELO.toFixed(2)} />
                 {/each}
             {/if}
         </tbody>

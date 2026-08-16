@@ -20,6 +20,7 @@ export default (tags: string[]) =>
                 z.object({
                     uid: z.string(),
                     nick: z.string(),
+                    squad: z.string().nullable(),
                     killsELO: z.number(),
                 }),
             ),

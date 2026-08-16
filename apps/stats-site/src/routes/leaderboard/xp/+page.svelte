@@ -48,10 +48,11 @@
                     No ranked players are available on this page.
                 </StateRow>
             {:else}
-                {#each XPRanking as { uid, nick, xp, level }, i (uid)}
+                {#each XPRanking as { uid, nick, squad, xp, level }, i (uid)}
                     <Row
                         rank={i + offset + 1}
                         {nick}
+                        {squad}
                         {uid}
                         stat={xp.toLocaleString("en-US")}
                         stat2={level}

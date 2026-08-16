@@ -11,6 +11,7 @@ export default (db: PostgresJsDatabase) => {
             .select({
                 uid: players.uid,
                 nick: players.nick,
+                squad: players.squad,
                 xp: players.xp,
                 level: players.level,
             })
