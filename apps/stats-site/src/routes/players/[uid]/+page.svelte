@@ -24,6 +24,11 @@
     dayjs.extend(relativeTime)
     const playingSince = dayjs.unix(MongoDBObjectId2UnixTimestamp(player.uid)).utc()
     const lastSeen = player.time === 0 ? undefined : dayjs.unix(player.time).utc()
+    const absoluteTimeFormatter = new Intl.DateTimeFormat("en-US", {
+        dateStyle: "long",
+        timeStyle: "short",
+    })
+    const localTimeZone = absoluteTimeFormatter.resolvedOptions().timeZone
 </script>
 
 <Title title="{player.squad && `[${player.squad}] `}{player.nick}" />
@@ -46,21 +51,71 @@
 <div class="mb-1 flex w-24">
     <span class="font-bold whitespace-nowrap dark:text-gray-400">Playing Since </span>
     &nbsp;
-    <time class="font-black whitespace-nowrap" datetime={playingSince.toISOString()}>
-        {playingSince.format("MMMM D, YYYY")}
-    </time>
+    <Popover.Root>
+        <Popover.Trigger
+            type="button"
+            openOnHover
+            openDelay={0}
+            closeDelay={0}
+            class="rounded-sm font-black whitespace-nowrap underline decoration-dotted underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+        >
+            <time datetime={playingSince.toISOString()}>
+                {playingSince.format("MMMM D, YYYY")}
+            </time>
+        </Popover.Trigger>
+        <Popover.Content
+            side="top"
+            align="center"
+            collisionPadding={16}
+            trapFocus={false}
+            aria-label="Playing since local date and time"
+            class="w-auto p-3 font-light whitespace-nowrap"
+            onOpenAutoFocus={(event: Event) => {
+                event.preventDefault()
+            }}
+        >
+            <time datetime={playingSince.toISOString()}>
+                {absoluteTimeFormatter.format(playingSince.toDate())} (Time zone: {localTimeZone})
+            </time>
+        </Popover.Content>
+    </Popover.Root>
 </div>
 
 <div class="flex w-24" class:mb-1={player.steam} class:mb-6={!player.steam}>
     <span class="font-bold whitespace-nowrap dark:text-gray-400">Last Seen </span>
     &nbsp;
-    <time
-        class="font-black whitespace-nowrap"
-        datetime={lastSeen?.toISOString()}
-        title={lastSeen?.format("MMMM D, YYYY")}
-    >
-        {lastSeen ? `${dayjs(lastSeen).toNow(true)} ago` : "Unknown"}
-    </time>
+    {#if lastSeen}
+        <Popover.Root>
+            <Popover.Trigger
+                type="button"
+                openOnHover
+                openDelay={0}
+                closeDelay={0}
+                class="rounded-sm font-black whitespace-nowrap underline decoration-dotted underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+            >
+                <time datetime={lastSeen.toISOString()}>
+                    {lastSeen.fromNow()}
+                </time>
+            </Popover.Trigger>
+            <Popover.Content
+                side="top"
+                align="center"
+                collisionPadding={16}
+                trapFocus={false}
+                aria-label="Last seen local date and time"
+                class="w-auto p-3 font-light whitespace-nowrap"
+                onOpenAutoFocus={(event: Event) => {
+                    event.preventDefault()
+                }}
+            >
+                <time datetime={lastSeen.toISOString()}>
+                    {absoluteTimeFormatter.format(lastSeen.toDate())} (Time zone: {localTimeZone})
+                </time>
+            </Popover.Content>
+        </Popover.Root>
+    {:else}
+        <span class="font-black whitespace-nowrap">Unknown</span>
+    {/if}
 </div>
 
 {#if player.steam}

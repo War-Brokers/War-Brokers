@@ -86,8 +86,8 @@
                             {..._id === undefined ? {} : { id: _id }}
                             type="button"
                             openOnHover
-                            openDelay={150}
-                            closeDelay={100}
+                            openDelay={0}
+                            closeDelay={0}
                             class={cn(
                                 "flex items-center justify-center rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400",
                                 title && "ms-1.5",
@@ -102,7 +102,7 @@
                             sideOffset={popoverSideOffset}
                             collisionPadding={2}
                             aria-label="{rank} rank details"
-                            class="max-h-[var(--bits-popover-content-available-height)] w-72 max-w-[calc(100vw-0.25rem)] overflow-y-auto overscroll-contain p-3 font-light text-gray-400"
+                            class="max-h-(--bits-popover-content-available-height) w-72 max-w-[calc(100vw-0.25rem)] overflow-y-auto overscroll-contain p-3 font-light text-gray-400"
                         >
                             <div class="flex flex-col items-center justify-center">
                                 <h3 class="text-center font-black text-gray-200">

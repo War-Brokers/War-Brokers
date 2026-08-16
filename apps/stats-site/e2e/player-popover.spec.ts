@@ -3,11 +3,43 @@ import { expect, test } from "@playwright/test"
 const pompUID = "5d2ead35d142affb05757778"
 const popoverSelector = '[data-slot="popover-content"]'
 
+test.use({ timezoneId: "UTC" })
+
+test("shows local date and time details for profile timestamps", async ({ page }) => {
+    await page.goto(`/players/${pompUID}`)
+    await page.waitForLoadState("networkidle")
+
+    const playingSince = page.getByText("Playing Since", { exact: true }).locator("..")
+    const playingSinceTrigger = playingSince.getByRole("button")
+    await expect(playingSinceTrigger).toHaveText("July 17, 2019")
+    await expect(playingSinceTrigger.locator("time")).toHaveAttribute(
+        "datetime",
+        "2019-07-17T05:08:05.000Z",
+    )
+    await playingSinceTrigger.hover()
+    await expect(
+        page.locator(`${popoverSelector}[aria-label="Playing since local date and time"]`),
+    ).toHaveText("July 17, 2019 at 5:08 AM (Time zone: UTC)")
+    await page.keyboard.press("Escape")
+
+    const lastSeen = page.getByText("Last Seen", { exact: true }).locator("..")
+    const lastSeenTrigger = lastSeen.getByRole("button")
+    await expect(lastSeenTrigger).toHaveText(/ago$/)
+    await expect(lastSeenTrigger.locator("time")).toHaveAttribute(
+        "datetime",
+        "2025-03-20T01:39:23.000Z",
+    )
+    await lastSeenTrigger.hover()
+    await expect(
+        page.locator(`${popoverSelector}[aria-label="Last seen local date and time"]`),
+    ).toHaveText("March 20, 2025 at 1:39 AM (Time zone: UTC)")
+})
+
 test("rank popover does not shift the mobile layout", async ({ page }) => {
     await page.setViewportSize({ width: 392, height: 900 })
     await page.goto(`/players/${pompUID}`)
 
-    await page.locator("#games-elo-percentile").click()
+    await page.locator("#games-elo-percentile").hover()
     const popover = page.locator(popoverSelector)
     await expect(popover).toBeVisible()
     await expect(popover).toHaveAttribute("data-side", /^(top|bottom)$/)
@@ -79,7 +111,7 @@ test("rank popover draws above the wins chart", async ({ page }) => {
     await trigger.evaluate((element) => {
         element.scrollIntoView({ block: "start" })
     })
-    await trigger.click()
+    await trigger.hover()
     await expect(page.locator(popoverSelector)).toBeVisible()
 
     const paintOrder = await page.evaluate(() => {

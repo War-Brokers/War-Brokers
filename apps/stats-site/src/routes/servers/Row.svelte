@@ -103,7 +103,9 @@
     </Table.Cell>
     <Table.Cell>
         {#if server.playerCount === server.maxPlayers}
-            <div class="text-red-500">{server.playerCount} / {server.maxPlayers}</div>
+            <div class="inline-block rounded-sm bg-gray-900 px-1 text-red-500">
+                {server.playerCount} / {server.maxPlayers}
+            </div>
         {:else if server.playerCount === 0}
             <div class="text-gray-400">{server.playerCount} / {server.maxPlayers}</div>
         {:else}
