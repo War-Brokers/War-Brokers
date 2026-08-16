@@ -225,7 +225,7 @@ test("follows the pointer and clamps the pie tooltip inside its chart", async ({
 }) => {
     test.skip(isMobile, "Pie tooltips apply to pointer hover environments")
 
-    await page.setViewportSize({ width: 900, height: 800 })
+    await page.setViewportSize({ width: 800, height: 800 })
     await page.goto(`/players/${pompUID}`)
 
     const wins = page.getByRole("article", { name: "Wins by Game Mode" })
@@ -239,7 +239,7 @@ test("follows the pointer and clamps the pie tooltip inside its chart", async ({
     if (!chartBox) throw new Error("Wins chart is not visible")
 
     const teamDeathMatchPoint = await getArcPoint(teamDeathMatchArc, {
-        targetX: chartBox.x + chartBox.width * 0.45,
+        targetX: chartBox.x + chartBox.width * 0.35,
     })
     if (!teamDeathMatchPoint) throw new Error("Team Death Match arc is not visible")
 
