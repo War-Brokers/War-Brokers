@@ -1,10 +1,9 @@
 <script lang="ts">
-    import { autoPlacement, shift } from "@floating-ui/dom"
     import CircleQuestionMark from "@lucide/svelte/icons/circle-question-mark"
-    import { Popover } from "flowbite-svelte"
 
     import { resolve } from "$app/paths"
     import A from "$lib/components/A.svelte"
+    import * as Popover from "$lib/components/ui/popover"
     import { percentile2rank } from "$lib/rank"
     import { cn } from "$lib/utils"
 
@@ -12,6 +11,7 @@
     export let data: string | number
     export let _id: string | undefined = undefined
     export let percentile: Promise<number | undefined> | undefined = undefined
+    export let popoverSideOffset = 4
     export let compact = false
 
     const chart = {
@@ -81,81 +81,92 @@
             {#await percentile then percentile}
                 {#if percentile !== undefined}
                     {@const { rank, icon } = percentile2rank(percentile)}
-                    <div class={cn("flex items-center justify-center", title && "ms-1.5")} id={_id}>
-                        <img
-                            alt="The project logo"
-                            src={icon}
-                            class="aspect-square w-7 text-gray-200"
-                        />
-                        <span class="sr-only">Show information</span>
-                    </div>
-                    <Popover
-                        triggeredBy="#{_id}"
-                        class="z-10 w-72 p-3 text-sm font-light dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400"
-                        {...{
-                            middlewares: [
-                                autoPlacement({ alignment: "start", padding: 16 }),
-                                shift({ crossAxis: true, padding: 16 }),
-                            ],
-                        }}
-                    >
-                        <div class="flex flex-col items-center justify-center">
-                            <h3 class="text-center font-black dark:text-gray-200">
-                                {rank}
+                    <Popover.Root>
+                        <Popover.Trigger
+                            {..._id === undefined ? {} : { id: _id }}
+                            type="button"
+                            openOnHover
+                            openDelay={150}
+                            closeDelay={100}
+                            class={cn(
+                                "flex items-center justify-center rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400",
+                                title && "ms-1.5",
+                            )}
+                        >
+                            <img alt="" src={icon} class="aspect-square w-7 text-gray-200" />
+                            <span class="sr-only">Show {rank} rank details</span>
+                        </Popover.Trigger>
+                        <Popover.Content
+                            side="bottom"
+                            align="center"
+                            sideOffset={popoverSideOffset}
+                            collisionPadding={2}
+                            aria-label="{rank} rank details"
+                            class="max-h-[var(--bits-popover-content-available-height)] w-72 max-w-[calc(100vw-0.25rem)] overflow-y-auto overscroll-contain p-3 font-light text-gray-400"
+                        >
+                            <div class="flex flex-col items-center justify-center">
+                                <h3 class="text-center font-black text-gray-200">
+                                    {rank}
+                                </h3>
+                                <img alt="" src={icon} class="aspect-square w-16 text-gray-200" />
+                            </div>
+                            {@const curve = bellCurve(percentile)}
+                            <svg
+                                class="h-24 w-full overflow-visible"
+                                viewBox="0 0 240 88"
+                                role="img"
+                            >
+                                <title>
+                                    Bell curve showing this player at the
+                                    {percentile.toFixed(3)} percentile
+                                </title>
+                                <path
+                                    d={`${curve.curvePath} L${chart.left + chart.width},${chart.baseline} L${chart.left},${chart.baseline} Z`}
+                                    class="fill-gray-100 dark:fill-gray-800"
+                                />
+                                <path
+                                    d={curve.areaPath}
+                                    class="fill-orange-200 dark:fill-orange-900"
+                                />
+                                <path
+                                    d={curve.curvePath}
+                                    class="fill-none stroke-gray-500 dark:stroke-gray-400"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                />
+                                <line
+                                    x1={curve.markerX}
+                                    x2={curve.markerX}
+                                    y1="8"
+                                    y2={chart.baseline}
+                                    class="stroke-orange-700 dark:stroke-orange-400"
+                                    stroke-width="2"
+                                    stroke-dasharray="3 3"
+                                />
+                                <circle
+                                    cx={curve.markerX}
+                                    cy={curve.markerY}
+                                    r="4"
+                                    class="fill-orange-700 stroke-white dark:fill-orange-400 dark:stroke-gray-900"
+                                    stroke-width="2"
+                                />
+                            </svg>
+                            <h3 class="font-medium text-white">
+                                better than
+                                <span class="font-black">
+                                    {percentile.toFixed(3)}%
+                                </span>
+                                of the players!
                             </h3>
-                            <img
-                                alt="The project logo"
-                                src={icon}
-                                class="aspect-square w-16 text-gray-200"
-                            />
-                        </div>
-                        {@const curve = bellCurve(percentile)}
-                        <svg class="h-24 w-full overflow-visible" viewBox="0 0 240 88" role="img">
-                            <title>
-                                Bell curve showing this player at the
-                                {percentile.toFixed(3)} percentile
-                            </title>
-                            <path
-                                d={`${curve.curvePath} L${chart.left + chart.width},${chart.baseline} L${chart.left},${chart.baseline} Z`}
-                                class="fill-gray-100 dark:fill-gray-800"
-                            />
-                            <path d={curve.areaPath} class="fill-orange-200 dark:fill-orange-900" />
-                            <path
-                                d={curve.curvePath}
-                                class="fill-none stroke-gray-500 dark:stroke-gray-400"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                            />
-                            <line
-                                x1={curve.markerX}
-                                x2={curve.markerX}
-                                y1="8"
-                                y2={chart.baseline}
-                                class="stroke-orange-700 dark:stroke-orange-400"
-                                stroke-width="2"
-                                stroke-dasharray="3 3"
-                            />
-                            <circle
-                                cx={curve.markerX}
-                                cy={curve.markerY}
-                                r="4"
-                                class="fill-orange-700 stroke-white dark:fill-orange-400 dark:stroke-gray-900"
-                                stroke-width="2"
-                            />
-                        </svg>
-                        <h3 class="font-medium text-gray-900 dark:text-white">
-                            better than
-                            <span class="font-black">
-                                {percentile.toFixed(3)}%
-                            </span>
-                            of the players!
-                        </h3>
-                        <br />
-                        <A href={resolve("/ranks")} class="flex items-center font-medium">
-                            <CircleQuestionMark class="mr-1 size-4 shrink-0" aria-hidden="true" />
-                            Learn More
-                        </A>
-                    </Popover>
+                            <A href={resolve("/ranks")} class="flex items-center font-medium">
+                                <CircleQuestionMark
+                                    class="mr-1 size-4 shrink-0"
+                                    aria-hidden="true"
+                                />
+                                Learn More
+                            </A>
+                        </Popover.Content>
+                    </Popover.Root>
                 {/if}
             {/await}
         </div>

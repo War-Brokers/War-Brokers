@@ -2,7 +2,6 @@
 version: alpha
 name: War Brokers Stats
 colors:
-  # Flowbite overrides parts of the Tailwind CSS palette. These values document the rendered colors.
   canvas: "#1f2937" # gray-800
   surface: "#111827" # gray-900
   surface-raised: "#374151" # gray-700
@@ -10,10 +9,10 @@ colors:
   text: "#f3f4f6" # gray-100
   text-muted: "#9ca3af" # gray-400
   text-on-accent: "#030712" # gray-950
-  primary: "#FF5A1F" # orange-500
-  focus: "#FF8A4C" # orange-400
-  error: "#F05252" # red-500
-  success: "#0E9F6E" # green-500
+  primary: "#f97316" # orange-500
+  focus: "#fb923c" # orange-400
+  error: "#ef4444" # red-500
+  success: "#22c55e" # green-500
   warning: "#f59e0b" # amber-500
   info: "#0ea5e9" # sky-500
 typography:
@@ -82,7 +81,6 @@ updating this document in the same change.
   - Large text, focus indicators, control boundaries, and essential graphical marks must have at least 3:1 contrast.
   - Decorative separators may have lower contrast only when they are not required to identify a control, state, or content boundary.
 - Never rely on color alone to communicate a status or interaction state.
-- Locally override Flowbite colors when a component default does not match this palette.
 - Do not add literal color values to first-party interface styles. A chart library boundary may
   use a literal only when its API requires one; add the matching Tailwind color in a comment.
 

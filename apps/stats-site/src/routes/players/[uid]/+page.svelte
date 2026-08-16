@@ -2,12 +2,12 @@
     import dayjs from "dayjs"
     import relativeTime from "dayjs/plugin/relativeTime"
     import utc from "dayjs/plugin/utc"
-    import { Popover } from "flowbite-svelte"
 
     import { resolve } from "$app/paths"
     import A from "$lib/components/A.svelte"
     import Stat from "$lib/components/stat.svelte"
     import Title from "$lib/components/title.svelte"
+    import * as Popover from "$lib/components/ui/popover"
 
     import type { PageData } from "./$types"
     import GameModeCharts from "./charts/GameModeCharts.svelte"
@@ -69,21 +69,37 @@
 
 <div>
     {#each badges as { id, date, imageURL, name } (id)}
-        <div {id} class="mb-10 inline-block">
-            <img title={name} src={imageURL} alt={name} />
-        </div>
-        <Popover
-            triggeredBy="#{id}"
-            class="space-y-2 p-3 text-sm font-light dark:border-gray-600 dark:bg-gray-900"
-            placement="top-start"
-        >
-            <div class="flex flex-col items-center justify-center">
-                <span class="mb-1 font-medium text-gray-900 dark:text-white">
-                    {name}
-                </span>
-                {date}
-            </div>
-        </Popover>
+        <Popover.Root>
+            <Popover.Trigger
+                {id}
+                type="button"
+                openOnHover
+                openDelay={150}
+                closeDelay={100}
+                class="mb-10 inline-block rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+            >
+                <img src={imageURL} alt="" />
+                <span class="sr-only">Show details for the {name} badge</span>
+            </Popover.Trigger>
+            <Popover.Content
+                side="top"
+                align="start"
+                collisionPadding={16}
+                trapFocus={false}
+                aria-label="{name} badge details"
+                class="w-auto p-3 font-light"
+                onOpenAutoFocus={(event: Event) => {
+                    event.preventDefault()
+                }}
+            >
+                <div class="flex flex-col items-center justify-center">
+                    <span class="mb-1 font-medium text-white">
+                        {name}
+                    </span>
+                    {date}
+                </div>
+            </Popover.Content>
+        </Popover.Root>
     {/each}
 </div>
 
@@ -94,18 +110,21 @@
         data={player.xp.toLocaleString("en-US")}
         _id="xp-percentile"
         percentile={xpPercentile}
+        popoverSideOffset={48}
     />
     <Stat
         title="Kills Elo"
         data={player.killsELO.toFixed(2)}
         _id="kills-elo-percentile"
         percentile={killsEloPercentile}
+        popoverSideOffset={48}
     />
     <Stat
         title="Games Elo"
         data={player.gamesELO.toFixed(2)}
         _id="games-elo-percentile"
         percentile={gamesEloPercentile}
+        popoverSideOffset={48}
     />
 </div>
 
