@@ -11,7 +11,6 @@
     },
     "devDependencies": {
         "@playwright/test": "1.57.0",
-        "@types/node": "24.13.3",
         "@warbrokers/eslint-config": "workspace:*",
         "@warbrokers/typescript-config": "workspace:*",
         "eslint": "9.39.3",

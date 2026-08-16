@@ -5,6 +5,7 @@ packages:
 minimumReleaseAge: 10080 # 7 days
 
 overrides:
+    "@types/node": 26.2.0
     esrap: 2.1.0
     glob: 10.5.0
     rollup: 4.34.9

@@ -23,13 +23,12 @@
     "devDependencies": {
         "@faker-js/faker": "10.5.0",
         "@types/express": "5.0.0",
-        "@types/node": "24.13.3",
         "@warbrokers/eslint-config": "workspace:*",
         "@warbrokers/typescript-config": "workspace:*",
         "tsup": "8.5.1"
     },
     "engines": {
-        "pnpm": ">=9.0",
-        "node": ">=24.0"
+        "pnpm": "11.20.0",
+        "node": "26.6.0"
     }
 }

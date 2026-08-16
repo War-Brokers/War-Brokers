@@ -14,7 +14,7 @@
         "clean": "turbo run clean && rm -rf .turbo node_modules"
     },
     "devDependencies": {
-        "@types/node": "24.13.3",
+        "@types/node": "26.2.0",
         "eslint": "9.39.3",
         "prettier": "3.9.6",
         "prettier-plugin-svelte": "4.1.1",
