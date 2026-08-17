@@ -167,7 +167,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
         },
         {
             id: "weapon-shots-fired",
-            title: "Shots Fired by Weapon",
+            title: "Shots Fired per Weapon",
             categoryLabel: "Weapon",
             categoryPlural: "weapons",
             valueLabel: "Shots fired",
@@ -177,7 +177,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
         },
         {
             id: "weapon-longest-kill",
-            title: "Longest Kill by Weapon",
+            title: "Longest Kill per Weapon",
             categoryLabel: "Weapon",
             categoryPlural: "weapons",
             valueLabel: "Distance",
@@ -187,7 +187,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
         },
         {
             id: "weapon-headshot-frequency",
-            title: "Headshot Frequency by Weapon",
+            title: "Headshot Frequency per Weapon",
             categoryLabel: "Weapon",
             categoryPlural: "weapons",
             valueLabel: "Headshot frequency",
@@ -197,7 +197,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
         },
         {
             id: "weapon-kills-between-deaths",
-            title: "Most Kills Between Deaths by Weapon",
+            title: "Most Kills Between Deaths per Weapon",
             categoryLabel: "Weapon",
             categoryPlural: "weapons",
             valueLabel: "Kills",
@@ -207,7 +207,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
         },
         {
             id: "weapon-kills-in-round",
-            title: "Most Kills in One Round by Weapon",
+            title: "Most Kills in One Round per Weapon",
             categoryLabel: "Weapon",
             categoryPlural: "weapons",
             valueLabel: "Kills",
@@ -217,7 +217,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
         },
         {
             id: "weapon-unzoomed-accuracy",
-            title: "Unzoomed Accuracy by Weapon",
+            title: "Unzoomed Accuracy per Weapon",
             categoryLabel: "Weapon",
             categoryPlural: "weapons",
             valueLabel: "Accuracy",
@@ -230,7 +230,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
         },
         {
             id: "weapon-zoomed-accuracy",
-            title: "Zoomed Accuracy by Weapon",
+            title: "Zoomed Accuracy per Weapon",
             categoryLabel: "Weapon",
             categoryPlural: "weapons",
             valueLabel: "Accuracy",
@@ -243,7 +243,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
         },
         {
             id: "weapon-damage-per-shot",
-            title: "Damage Dealt per Shot by Weapon",
+            title: "Damage Dealt per Shot per Weapon",
             categoryLabel: "Weapon",
             categoryPlural: "weapons",
             valueLabel: "Damage per shot",
@@ -253,7 +253,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
         },
         {
             id: "weapon-shots-per-kill",
-            title: "Shots Fired per Kill by Weapon",
+            title: "Shots Fired per Kill per Weapon",
             categoryLabel: "Weapon",
             categoryPlural: "weapons",
             valueLabel: "Shots per kill",

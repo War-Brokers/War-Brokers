@@ -12,45 +12,45 @@ test("shows weapon statistics and derived metrics", async ({ page }) => {
         weapons.getByRole("article", { name: "Kills per Weapon" }).getByRole("img"),
     ).toHaveAccessibleName("Donut chart showing 60,104 total kills distributed across 47 weapons.")
     await expect(
-        weapons.getByRole("article", { name: "Shots Fired by Weapon" }).getByRole("img"),
+        weapons.getByRole("article", { name: "Shots Fired per Weapon" }).getByRole("img"),
     ).toHaveAccessibleName(
         "Donut chart showing 947,723 total shots fired distributed across 50 weapons.",
     )
     await expect(
         weapons
-            .getByRole("article", { name: "Longest Kill by Weapon" })
+            .getByRole("article", { name: "Longest Kill per Weapon" })
             .locator('li[data-category-key="p09"]'),
     ).toContainText("1,178.6 m")
     await expect(
         weapons
-            .getByRole("article", { name: "Headshot Frequency by Weapon" })
+            .getByRole("article", { name: "Headshot Frequency per Weapon" })
             .locator('li[data-category-key="p67"]'),
     ).toContainText("31.7%")
     await expect(
         weapons
-            .getByRole("article", { name: "Unzoomed Accuracy by Weapon" })
+            .getByRole("article", { name: "Unzoomed Accuracy per Weapon" })
             .locator('li[data-category-key="p09"]'),
     ).toContainText("281.0%")
     await expect(
         weapons
-            .getByRole("article", { name: "Headshot Frequency by Weapon" })
+            .getByRole("article", { name: "Headshot Frequency per Weapon" })
             .locator('li[data-category-key="p11"]'),
     ).toHaveCount(0)
     await expect(
         weapons
-            .getByRole("article", { name: "Shots Fired by Weapon" })
+            .getByRole("article", { name: "Shots Fired per Weapon" })
             .locator('li[data-category-key="p61"]'),
     ).toContainText("294,381")
     await expect(
         weapons
-            .getByRole("article", { name: "Shots Fired per Kill by Weapon" })
+            .getByRole("article", { name: "Shots Fired per Kill per Weapon" })
             .locator('li[data-category-key="p91"]'),
     ).toContainText("95.7")
     await expect(
         weapons.getByRole("article", { name: "Kills per Weapon" }).locator("li"),
     ).toHaveCount(47)
     await expect(
-        weapons.getByRole("article", { name: "Longest Kill by Weapon" }).locator("li"),
+        weapons.getByRole("article", { name: "Longest Kill per Weapon" }).locator("li"),
     ).toHaveCount(47)
     await expect(
         weapons
@@ -69,7 +69,7 @@ test("links hover state across visible weapon rows", async ({ page, isMobile }) 
     await page.waitForLoadState("networkidle")
 
     const kills = page.getByRole("article", { name: "Kills per Weapon" })
-    const longestKill = page.getByRole("article", { name: "Longest Kill by Weapon" })
+    const longestKill = page.getByRole("article", { name: "Longest Kill per Weapon" })
     const fiftyCalDistance = longestKill.locator('li[data-category-key="p90"]')
     const fiftyCalKills = kills.locator('li[data-category-key="p90"]')
     const sniperKills = kills.locator('li[data-category-key="p67"]')
@@ -90,7 +90,7 @@ test("links hover state across visible weapon rows", async ({ page, isMobile }) 
     await expect(fiftyCalArc).toHaveCSS("transition-duration", "0s")
 
     await fiftyCalDistanceButton.click()
-    await longestKill.getByRole("heading", { name: "Longest Kill by Weapon" }).hover()
+    await longestKill.getByRole("heading", { name: "Longest Kill per Weapon" }).hover()
     await expect(fiftyCalDistanceButton).toHaveAttribute("aria-pressed", "true")
     await expect(fiftyCalKillsButton).toHaveAttribute("aria-pressed", "true")
     await expect(fiftyCalKills).toHaveCSS("opacity", "1")

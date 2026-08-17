@@ -44,6 +44,18 @@ describe("getWeaponBreakdowns", () => {
             "weapon-damage-per-shot",
             "weapon-shots-per-kill",
         ])
+        expect(breakdowns.map(({ title }) => title)).toEqual([
+            "Kills per Weapon",
+            "Shots Fired per Weapon",
+            "Longest Kill per Weapon",
+            "Headshot Frequency per Weapon",
+            "Most Kills Between Deaths per Weapon",
+            "Most Kills in One Round per Weapon",
+            "Unzoomed Accuracy per Weapon",
+            "Zoomed Accuracy per Weapon",
+            "Damage Dealt per Shot per Weapon",
+            "Shots Fired per Kill per Weapon",
+        ])
     })
 
     test("formats integer and decimal statistics", () => {

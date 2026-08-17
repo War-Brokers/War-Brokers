@@ -41,7 +41,7 @@ const breakdowns = [
     {
         field: "wins",
         id: "wins",
-        title: "Wins by Game Mode",
+        title: "Wins per Game Mode",
         valueLabel: "Wins",
         includeZero: false,
     },
@@ -49,7 +49,7 @@ const breakdowns = [
     // {
     //     field: "losses",
     //     id: "losses",
-    //     title: "Losses by Game Mode",
+    //     title: "Losses per Game Mode",
     //     valueLabel: "Losses",
     //     includeZero: false,
     // },

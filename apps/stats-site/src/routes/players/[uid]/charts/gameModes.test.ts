@@ -23,6 +23,7 @@ describe("getGameModeBreakdowns", () => {
             { key: "m00", label: "Team Death Match", value: 10 },
             { key: "m99", label: "m99", value: 5 },
         ])
+        expect(wins.title).toBe("Wins per Game Mode")
     })
 
     test("creates an empty model for missing and zero-only data", () => {

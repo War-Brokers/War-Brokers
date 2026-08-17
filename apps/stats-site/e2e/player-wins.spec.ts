@@ -64,7 +64,7 @@ test("links pie and bar hover states", async ({ page, isMobile }) => {
 
     await page.goto(`/players/${pompUID}`)
 
-    const wins = page.getByRole("article", { name: "Wins by Game Mode" })
+    const wins = page.getByRole("article", { name: "Wins per Game Mode" })
     const teamDeathMatchArc = wins.locator('svg path[data-category-key="m00"]')
     const battleRoyaleArc = wins.locator('svg path[data-category-key="m11"]')
     const teamDeathMatchRow = wins.locator('li[data-category-key="m00"]')
@@ -89,7 +89,7 @@ test("uses tap instead of hover for touch input", async ({ page, isMobile }) => 
 
     await page.goto(`/players/${pompUID}`)
 
-    const wins = page.getByRole("article", { name: "Wins by Game Mode" })
+    const wins = page.getByRole("article", { name: "Wins per Game Mode" })
     const teamDeathMatchArc = wins.locator('svg path[data-category-key="m00"]')
     const teamDeathMatchRow = wins.locator('li[data-category-key="m00"]')
     const battleRoyaleRow = wins.locator('li[data-category-key="m11"]')
@@ -130,8 +130,8 @@ test("pins and unpins highlighted bars", async ({ page }) => {
     await page.goto(`/players/${pompUID}`)
     await page.waitForLoadState("networkidle")
 
-    const wins = page.getByRole("article", { name: "Wins by Game Mode" })
-    const heading = wins.getByRole("heading", { name: "Wins by Game Mode" })
+    const wins = page.getByRole("article", { name: "Wins per Game Mode" })
+    const heading = wins.getByRole("heading", { name: "Wins per Game Mode" })
     const teamDeathMatchRow = wins.locator('li[data-category-key="m00"]')
     const battleRoyaleRow = wins.locator('li[data-category-key="m11"]')
     const teamDeathMatchButton = teamDeathMatchRow.getByRole("button")
@@ -158,8 +158,8 @@ test("expands a pie segment further when pinned", async ({ page, isMobile }) => 
     await page.goto(`/players/${pompUID}`)
     await page.waitForLoadState("networkidle")
 
-    const wins = page.getByRole("article", { name: "Wins by Game Mode" })
-    const heading = wins.getByRole("heading", { name: "Wins by Game Mode" })
+    const wins = page.getByRole("article", { name: "Wins per Game Mode" })
+    const heading = wins.getByRole("heading", { name: "Wins per Game Mode" })
     const teamDeathMatchArc = wins.locator('svg path[data-category-key="m00"]')
     const teamDeathMatchButton = wins.locator('li[data-category-key="m00"]').getByRole("button")
     const restingRadii = await getArcRadii(teamDeathMatchArc)
@@ -228,7 +228,7 @@ test("follows the pointer and clamps the pie tooltip inside its chart", async ({
     await page.setViewportSize({ width: 800, height: 800 })
     await page.goto(`/players/${pompUID}`)
 
-    const wins = page.getByRole("article", { name: "Wins by Game Mode" })
+    const wins = page.getByRole("article", { name: "Wins per Game Mode" })
     const chart = wins.locator('[data-chart="wins-donut"]')
     const teamDeathMatchArc = wins.locator('svg path[data-category-key="m00"]')
     const missileLaunchArc = wins.locator('svg path[data-category-key="m10"]')
@@ -299,7 +299,7 @@ test("wins card changes from half width to full width", async ({ page }) => {
     await page.goto(`/players/${pompUID}`)
 
     const gameModes = page.getByRole("region", { name: "Game Mode Statistics" })
-    const wins = gameModes.getByRole("article", { name: "Wins by Game Mode" })
+    const wins = gameModes.getByRole("article", { name: "Wins per Game Mode" })
     const wideSectionBox = await gameModes.boundingBox()
     const wideCardBox = await wins.boundingBox()
 
