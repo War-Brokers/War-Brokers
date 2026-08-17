@@ -117,6 +117,53 @@ test("links hover state across visible weapon rows", async ({ page, isMobile }) 
     await expect(secondKill).toHaveCSS("opacity", "1")
 })
 
+test("shows vehicle statistics and derived metrics below weapon statistics", async ({ page }) => {
+    await page.goto(`/players/${pompUID}`)
+
+    const weapons = page.getByRole("region", { name: "Weapon Statistics" })
+    const vehicleStatistics = page.getByRole("region", { name: "Vehicle Statistics" })
+    const vehicleCards = vehicleStatistics.getByRole("article")
+
+    await expect(vehicleCards).toHaveCount(5)
+    expect(await vehicleCards.getByRole("heading").allTextContents()).toEqual([
+        "Kills per Vehicle",
+        "Distance Driven per Vehicle",
+        "Vehicle Usage Count",
+        "Distance Driven per Vehicle Usage",
+        "Self Destructs per Vehicle",
+    ])
+    await expect(
+        vehicleStatistics.getByRole("article", { name: "Kills per Vehicle" }).getByRole("img"),
+    ).toHaveAccessibleName("Donut chart showing 60,155 total kills distributed across 14 vehicles.")
+    await expect(
+        vehicleStatistics
+            .getByRole("article", { name: "Distance Driven per Vehicle", exact: true })
+            .locator('li[data-category-key="v40"]'),
+    ).toContainText("92,827.4 m")
+    await expect(
+        vehicleStatistics
+            .getByRole("article", { name: "Vehicle Usage Count" })
+            .locator('li[data-category-key="v30"]'),
+    ).toContainText("5,586")
+    await expect(
+        vehicleStatistics
+            .getByRole("article", { name: "Distance Driven per Vehicle Usage", exact: true })
+            .locator('li[data-category-key="v40"]'),
+    ).toContainText("1,031.4 m")
+    await expect(
+        vehicleStatistics
+            .getByRole("article", { name: "Self Destructs per Vehicle" })
+            .locator('li[data-category-key="v30"]'),
+    ).toContainText("46")
+
+    const weaponBox = await weapons.boundingBox()
+    const vehicleBox = await vehicleStatistics.boundingBox()
+
+    expect(weaponBox).not.toBeNull()
+    expect(vehicleBox).not.toBeNull()
+    expect(vehicleBox?.y).toBeGreaterThan((weaponBox?.y ?? 0) + (weaponBox?.height ?? 0))
+})
+
 test("footer ends at the document boundary", async ({ page }) => {
     await page.goto(`/players/${pompUID}`)
 

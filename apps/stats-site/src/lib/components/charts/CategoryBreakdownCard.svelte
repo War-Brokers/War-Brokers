@@ -182,7 +182,9 @@
                         class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"
                         aria-hidden="true"
                     >
-                        <strong class="text-2xl font-black text-gray-100 tabular-nums">
+                        <strong
+                            class="text-2xl text-gray-100 tabular-nums text-shadow-gray-900 text-shadow-md"
+                        >
                             {model.formatValue(total)}
                         </strong>
                         <span class="text-xs font-bold tracking-wider text-gray-400 uppercase">
