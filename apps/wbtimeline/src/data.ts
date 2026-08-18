@@ -1,112 +1,21 @@
-import type Entry from "@/components/Entry"
+import { z } from "zod"
 
-const data: Parameters<typeof Entry>[0][] = [
-    {
-        timestamp: "Nov 13, 2017",
-        category: "development",
-        subcategory: "releases",
-        title: "Release of open beta for browsers",
-        description: "",
-    },
-    {
-        timestamp: "Nov 15, 2017",
-        category: "community",
-        subcategory: "videos",
-        description: "",
-        title: "First War Brokers video on YouTube",
-        media: ["https://www.youtube.com/embed/6lPotBirfpU"],
-    },
-    {
-        timestamp: "Jan 18, 2018",
-        category: "development",
-        subcategory: "releases",
-        description: "",
-        title: "Release of open beta on steam",
-    },
-    {
-        timestamp: "Feb 12, 2018",
-        category: "development",
-        subcategory: "maps",
-        description: "",
-        title: "Temple added",
-    },
-    {
-        timestamp: "Mar 5, 2018",
-        category: "development",
-        subcategory: "weapons",
-        description: "",
-        title: "Minigun & Revolver added",
-    },
-    {
-        timestamp: "Mar 13, 2018",
-        category: "development",
-        subcategory: "maps",
-        description: "",
-        title: "Escape added",
-    },
-    {
-        timestamp: "Apr 3, 2018",
-        category: "development",
-        subcategory: "stats page",
-        description: "",
-        title: "War Brokers Stats Page goes online",
-    },
-    {
-        timestamp: "Feb 8, 2019",
-        category: "development",
-        subcategory: "weapons",
-        description: "",
-        title: "Crossbow added",
-    },
-    {
-        timestamp: "Mar 27, 2019",
-        category: "development",
-        subcategory: "weapons",
-        description: "",
-        title: "SCAR added",
-    },
-    {
-        timestamp: "Feb 12, 2020",
-        category: "development",
-        subcategory: "game modes",
-        description: "",
-        title: "Competitive Mode added",
-    },
-    {
-        timestamp: "May 21, 2020",
-        category: "development",
-        subcategory: "maps",
-        description: "",
-        title: "Dungeon added",
-    },
-    {
-        timestamp: "Mar 4, 2021",
-        category: "development",
-        subcategory: "maps",
-        description: "",
-        title: "4v4 Three Lane added",
-    },
-    {
-        timestamp: "Mar 11, 2021",
-        category: "development",
-        subcategory: "maps",
-        description: "",
-        title: "4v4 Sniper Alley added",
-    },
-    {
-        timestamp: "Mar 24, 2021",
-        category: "development",
-        subcategory: "maps",
-        description: "",
-        title: "4v4 Pyramid added",
-    },
-    {
-        timestamp: "Aug 27, 2021",
-        category: "development",
-        subcategory: "maps",
-        description: "",
-        title: "Siege added",
-    },
-]
+import source from "./data.yaml"
 
-export default data
+const timelineEntrySchema = z.strictObject({
+    timestamp: z.string(),
+    category: z.enum(["community", "development"]),
+    subcategory: z.string().optional(),
+    title: z.string(),
+    description: z
+        .string()
+        .nullable()
+        .transform((description) => description ?? ""),
+    media: z.array(z.string()).optional(),
+})
+
+const timelineSchema = z.array(timelineEntrySchema)
+
+export type TimelineEntry = z.infer<typeof timelineEntrySchema>
+
+export const data = timelineSchema.parse(source)

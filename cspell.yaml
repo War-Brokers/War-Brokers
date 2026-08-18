@@ -95,6 +95,7 @@ words:
     - trgm
     - trpc
     - tsup
+    - turbopack
     - turborepo
     - uids
     - unranked

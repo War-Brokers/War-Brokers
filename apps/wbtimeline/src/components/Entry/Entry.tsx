@@ -4,19 +4,9 @@ import { faCog, faFlag } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { nanoid } from "nanoid"
 
-interface Props {
-    className?: string
+import type { TimelineEntry } from "@/data"
 
-    category: "community" | "development"
-    subcategory?: string
-    timestamp: string
-
-    title: string
-    description: string
-    media?: string[]
-}
-
-export default function Entry(props: Props) {
+export default function Entry(props: TimelineEntry & { className?: string }) {
     return (
         <section className={`entry ml-[6.56rem] mr-4 p-4 lg:ml-4 ${props.className ?? ""}`}>
             <div className="icon absolute flex aspect-square w-14 items-center justify-center rounded-full border-[3px] border-solid border-white bg-gray-900">
@@ -44,7 +34,7 @@ export default function Entry(props: Props) {
     )
 }
 
-function icon(category: Props["category"]) {
+function icon(category: TimelineEntry["category"]) {
     switch (category) {
         case "community":
             return <FontAwesomeIcon icon={faFlag} />

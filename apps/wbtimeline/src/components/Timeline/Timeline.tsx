@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid"
 
 import Entry from "@/components/Entry"
-import data from "@/data"
+import { data } from "@/data"
 
 import styles from "./styles.module.scss"
 
