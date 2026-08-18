@@ -10,9 +10,21 @@ test("shows time alive and per-minute rates", async ({ page }) => {
 
     const timeAlive = page.getByText("Time Alive", { exact: true }).locator("../..")
     await expect(timeAlive).toContainText("256.19 hours")
+    await expect(
+        page.getByText("Total Damage Dealt", { exact: true }).locator("../.."),
+    ).toContainText("4,221,755.9")
+    await expect(
+        page.getByText("Total Damage Received", { exact: true }).locator("../.."),
+    ).toContainText("5,998,023.2")
     const canHover = await page.evaluate(() => matchMedia("(hover: hover)").matches)
 
-    for (const title of ["XP", "Total Kills", "Total Deaths"]) {
+    for (const title of [
+        "XP",
+        "Total Kills",
+        "Total Deaths",
+        "Total Damage Dealt",
+        "Total Damage Received",
+    ]) {
         const stat = page.getByText(title, { exact: true }).locator("../..")
         const trigger = stat.getByRole("button", { name: new RegExp(`${title} rate`) })
         if (canHover) await trigger.hover()

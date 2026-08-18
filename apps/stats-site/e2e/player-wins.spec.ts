@@ -237,6 +237,7 @@ test("follows the pointer and clamps the pie tooltip inside its chart", async ({
     const missileLaunchBar = wins
         .locator('li[data-category-key="m10"]')
         .locator('[aria-hidden="true"]')
+    await chart.scrollIntoViewIfNeeded()
     const chartBox = await chart.boundingBox()
     if (!chartBox) throw new Error("Wins chart is not visible")
 

@@ -20,6 +20,8 @@
         badges,
         totalKills,
         totalDeaths,
+        totalDamageDealt,
+        totalDamageReceived,
         xpPercentile,
         killsEloPercentile,
         gamesEloPercentile,
@@ -33,6 +35,13 @@
         if (!player.time_alive) return undefined
 
         return `${((value * 60) / player.time_alive).toFixed(2)}/min`
+    }
+
+    function formatDamage(value: number) {
+        return value.toLocaleString("en-US", {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
+        })
     }
 
     dayjs.extend(utc)
@@ -208,6 +217,16 @@
         rate={formatRatePerMinute(totalDeaths)}
     />
     <Stat title="KDR" data={(totalKills / totalDeaths).toFixed(2)} />
+    <Stat
+        title="Total Damage Dealt"
+        data={formatDamage(totalDamageDealt)}
+        rate={formatRatePerMinute(totalDamageDealt)}
+    />
+    <Stat
+        title="Total Damage Received"
+        data={formatDamage(totalDamageReceived)}
+        rate={formatRatePerMinute(totalDamageReceived)}
+    />
     <Stat
         title="Time Alive"
         data={player.time_alive == null

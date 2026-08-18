@@ -6,6 +6,7 @@ import type { CategoryBreakdownModel } from "$lib/components/charts/categoryBrea
 export type WeaponStats = Pick<
     Player,
     | "damage_dealt"
+    | "damage_received"
     | "headshots"
     | "kills_per_weapon"
     | "longest_kill"
@@ -240,6 +241,26 @@ export function getWeaponBreakdowns(player: WeaponStats) {
                 true,
             ),
             formatValue: formatPercentage,
+        },
+        {
+            id: "weapon-damage-dealt",
+            title: "Damage Dealt per Weapon",
+            categoryLabel: "Weapon",
+            categoryPlural: "weapons",
+            valueLabel: "Damage dealt",
+            chartKind: "part-to-whole",
+            rows: createRows(player.damage_dealt),
+            formatValue: formatDecimal,
+        },
+        {
+            id: "weapon-damage-received",
+            title: "Damage Received per Weapon",
+            categoryLabel: "Weapon",
+            categoryPlural: "weapons",
+            valueLabel: "Damage received",
+            chartKind: "part-to-whole",
+            rows: createRows(player.damage_received),
+            formatValue: formatDecimal,
         },
         {
             id: "weapon-damage-per-shot",

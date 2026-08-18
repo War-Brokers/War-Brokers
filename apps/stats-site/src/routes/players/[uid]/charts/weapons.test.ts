@@ -5,6 +5,7 @@ import { getWeaponBreakdowns, type WeaponStats } from "./weapons"
 
 const emptyWeaponStats = {
     damage_dealt: null,
+    damage_received: null,
     headshots: null,
     kills_per_weapon: null,
     longest_kill: null,
@@ -41,6 +42,8 @@ describe("getWeaponBreakdowns", () => {
             "weapon-kills-in-round",
             "weapon-unzoomed-accuracy",
             "weapon-zoomed-accuracy",
+            "weapon-damage-dealt",
+            "weapon-damage-received",
             "weapon-damage-per-shot",
             "weapon-shots-per-kill",
         ])
@@ -53,6 +56,8 @@ describe("getWeaponBreakdowns", () => {
             "Most Kills in One Round per Weapon",
             "Unzoomed Accuracy per Weapon",
             "Zoomed Accuracy per Weapon",
+            "Damage Dealt per Weapon",
+            "Damage Received per Weapon",
             "Damage Dealt per Shot per Weapon",
             "Shots Fired per Kill per Weapon",
         ])
@@ -75,6 +80,8 @@ describe("getWeaponBreakdowns", () => {
             ["weapon-headshot-frequency", "1,234.0%"],
             ["weapon-unzoomed-accuracy", "1,234.0%"],
             ["weapon-zoomed-accuracy", "1,234.0%"],
+            ["weapon-damage-dealt", "1,234.0"],
+            ["weapon-damage-received", "1,234.0"],
             ["weapon-damage-per-shot", "1,234.0"],
             ["weapon-shots-per-kill", "1,234.0"],
         ] as const
@@ -104,6 +111,7 @@ describe("getWeaponBreakdowns", () => {
     test("derives frequency, accuracy, damage, and shot metrics", () => {
         const player = createWeaponStats({
             damage_dealt: { p61: 100 },
+            damage_received: { p62: 75.5 },
             headshots: { p61: 10 },
             kills_per_weapon: { p61: 4 },
             shots_fired_unzoomed: { p61: 20, p62: 4 },
@@ -122,6 +130,12 @@ describe("getWeaponBreakdowns", () => {
         ])
         expect(getBreakdown("weapon-zoomed-accuracy", player).rows).toMatchObject([
             { key: "p61", value: 50 },
+        ])
+        expect(getBreakdown("weapon-damage-dealt", player).rows).toMatchObject([
+            { key: "p61", value: 100 },
+        ])
+        expect(getBreakdown("weapon-damage-received", player).rows).toMatchObject([
+            { key: "p62", value: 75.5 },
         ])
         expect(getBreakdown("weapon-damage-per-shot", player).rows).toMatchObject([
             { key: "p61", value: 2 },

@@ -7,7 +7,7 @@ test("shows weapon statistics and derived metrics", async ({ page }) => {
 
     const weapons = page.getByRole("region", { name: "Weapon Statistics" })
 
-    await expect(weapons.getByRole("article")).toHaveCount(10)
+    await expect(weapons.getByRole("article")).toHaveCount(12)
     await expect(
         weapons.getByRole("article", { name: "Kills per Weapon" }).getByRole("img"),
     ).toHaveAccessibleName("Donut chart showing 60,104 total kills distributed across 47 weapons.")
@@ -36,6 +36,26 @@ test("shows weapon statistics and derived metrics", async ({ page }) => {
             .getByRole("article", { name: "Headshot Frequency per Weapon" })
             .locator('li[data-category-key="p11"]'),
     ).toHaveCount(0)
+    await expect(
+        weapons.getByRole("article", { name: "Damage Dealt per Weapon" }).getByRole("img"),
+    ).toHaveAccessibleName(
+        /Donut chart showing .+ total damage dealt distributed across \d+ weapons\./,
+    )
+    await expect(
+        weapons.getByRole("article", { name: "Damage Received per Weapon" }).getByRole("img"),
+    ).toHaveAccessibleName(
+        /Donut chart showing .+ total damage received distributed across \d+ weapons\./,
+    )
+    await expect(
+        weapons
+            .getByRole("article", { name: "Damage Dealt per Weapon" })
+            .locator('li[data-category-key="p67"]'),
+    ).toContainText("1,691,467.2")
+    await expect(
+        weapons
+            .getByRole("article", { name: "Damage Received per Weapon" })
+            .locator('li[data-category-key="p61"]'),
+    ).toContainText("1,143,703.2")
     await expect(
         weapons
             .getByRole("article", { name: "Shots Fired per Weapon" })
