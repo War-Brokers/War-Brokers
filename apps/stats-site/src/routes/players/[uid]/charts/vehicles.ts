@@ -34,7 +34,7 @@ const vehicleColors = {
     [Vehicle.Jet1Fin]: "text-pink-300",
     [Vehicle.Jet2Fin]: "text-fuchsia-300",
     [Vehicle.MachineGunTurret]: "text-purple-300",
-    [Vehicle.UNKNOWN_VEHICLE_60]: "text-violet-300",
+    [Vehicle.UFO]: "text-violet-300",
     [Vehicle.UNKNOWN_VEHICLE_110]: "text-blue-300",
     [Vehicle.UNKNOWN_VEHICLE_111]: "text-amber-300",
     [Vehicle.UNKNOWN_VEHICLE_112]: "text-indigo-300",
