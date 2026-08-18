@@ -15,6 +15,14 @@ export const load = (async ({ params }) => {
     return {
         player: player,
         badges: getPlayerBadges(player.uid),
+        totalKills: Object.values(player.kills_per_vehicle ?? {}).reduce(
+            (total, kills) => total + kills,
+            0,
+        ),
+        totalDeaths: Object.values(player.deaths ?? {}).reduce(
+            (total, deaths) => total + deaths,
+            0,
+        ),
         xpPercentile: trpc.players.percentile.xp.query({ uid }),
         killsEloPercentile: trpc.players.percentile.killsElo.query({ uid }),
         gamesEloPercentile: trpc.players.percentile.gamesElo.query({ uid }),

@@ -15,7 +15,15 @@
     import WeaponCharts from "./charts/WeaponCharts.svelte"
 
     const { data }: { data: PageData } = $props()
-    const { player, badges, xpPercentile, killsEloPercentile, gamesEloPercentile } = data
+    const {
+        player,
+        badges,
+        totalKills,
+        totalDeaths,
+        xpPercentile,
+        killsEloPercentile,
+        gamesEloPercentile,
+    } = data
 
     function MongoDBObjectId2UnixTimestamp(s: string) {
         return parseInt(s.substring(0, 8), 16)
@@ -182,6 +190,9 @@
         percentile={gamesEloPercentile}
         popoverSideOffset={48}
     />
+    <Stat title="Total Kills" data={totalKills.toLocaleString("en-US")} />
+    <Stat title="Total Deaths" data={totalDeaths.toLocaleString("en-US")} />
+    <Stat title="KDR" data={(totalKills / totalDeaths).toFixed(2)} />
 </div>
 
 <GameModeCharts {player} />

@@ -94,6 +94,8 @@ test("uses tap instead of hover for touch input", async ({ page, isMobile }) => 
     const teamDeathMatchRow = wins.locator('li[data-category-key="m00"]')
     const battleRoyaleRow = wins.locator('li[data-category-key="m11"]')
     const teamDeathMatchButton = teamDeathMatchRow.getByRole("button")
+
+    await teamDeathMatchArc.scrollIntoViewIfNeeded()
     const arcPoint = await getArcPoint(teamDeathMatchArc)
 
     if (!arcPoint) throw new Error("Team Death Match arc is not visible")
