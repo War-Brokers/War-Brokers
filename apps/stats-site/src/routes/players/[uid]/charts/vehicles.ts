@@ -3,12 +3,19 @@ import { Vehicle, VehicleName, vehicleSchema } from "@warbrokers/types/src/vehic
 
 import type { CategoryBreakdownModel } from "$lib/components/charts/categoryBreakdown"
 
+import {
+    createRows,
+    divideValues,
+    feetToMeters,
+    formatInteger,
+    formatMeters,
+    mapValues,
+} from "./utils"
+
 export type VehicleStats = Pick<
     Player,
     "distance_driven" | "distance_driven_count" | "kills_per_vehicle" | "self_destructs"
 >
-
-type VehicleValues = Readonly<Record<string, number>> | null | undefined
 
 const unknownVehicleColor = "text-gray-400"
 const vehicleNames = VehicleName satisfies Readonly<Record<Vehicle, string>>
@@ -52,36 +59,6 @@ function getVehiclePresentation(key: string) {
     }
 }
 
-function formatInteger(value: number) {
-    return value.toLocaleString("en-US", { maximumFractionDigits: 0 })
-}
-
-function formatMeters(value: number) {
-    return `${value.toLocaleString("en-US", {
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 1,
-    })} m`
-}
-
-function divideValues(numerators: VehicleValues, denominators: VehicleValues) {
-    return Object.fromEntries(
-        Object.entries(denominators ?? {})
-            .filter(([, denominator]) => denominator > 0)
-            .map(([key, denominator]) => [key, (numerators?.[key] ?? 0) / denominator]),
-    )
-}
-
-function createRows(values: VehicleValues, includeZero = false) {
-    return Object.entries(values ?? {})
-        .filter(([, value]) => Number.isFinite(value) && (includeZero || value > 0))
-        .map(([key, value]) => ({
-            key,
-            value,
-            ...getVehiclePresentation(key),
-        }))
-        .sort((a, b) => b.value - a.value || a.label.localeCompare(b.label))
-}
-
 export function getVehicleBreakdowns(player: VehicleStats) {
     return [
         {
@@ -91,7 +68,7 @@ export function getVehicleBreakdowns(player: VehicleStats) {
             categoryPlural: "vehicles",
             valueLabel: "Kills",
             chartKind: "part-to-whole",
-            rows: createRows(player.kills_per_vehicle),
+            rows: createRows(player.kills_per_vehicle, getVehiclePresentation),
             formatValue: formatInteger,
         },
         {
@@ -101,7 +78,10 @@ export function getVehicleBreakdowns(player: VehicleStats) {
             categoryPlural: "vehicles",
             valueLabel: "Distance traveled",
             chartKind: "part-to-whole",
-            rows: createRows(player.distance_driven),
+            rows: createRows(
+                mapValues(player.distance_driven, feetToMeters),
+                getVehiclePresentation,
+            ),
             formatValue: formatMeters,
         },
         {
@@ -111,7 +91,7 @@ export function getVehicleBreakdowns(player: VehicleStats) {
             categoryPlural: "vehicles",
             valueLabel: "Uses",
             chartKind: "part-to-whole",
-            rows: createRows(player.distance_driven_count),
+            rows: createRows(player.distance_driven_count, getVehiclePresentation),
             formatValue: formatInteger,
         },
         {
@@ -122,7 +102,11 @@ export function getVehicleBreakdowns(player: VehicleStats) {
             valueLabel: "Distance per usage",
             chartKind: "ranked-values",
             rows: createRows(
-                divideValues(player.distance_driven, player.distance_driven_count),
+                mapValues(
+                    divideValues(player.distance_driven, player.distance_driven_count),
+                    feetToMeters,
+                ),
+                getVehiclePresentation,
                 true,
             ),
             formatValue: formatMeters,
@@ -134,7 +118,7 @@ export function getVehicleBreakdowns(player: VehicleStats) {
             categoryPlural: "vehicles",
             valueLabel: "Self destructs",
             chartKind: "part-to-whole",
-            rows: createRows(player.self_destructs),
+            rows: createRows(player.self_destructs, getVehiclePresentation),
             formatValue: formatInteger,
         },
     ] as const satisfies CategoryBreakdownModel[]

@@ -159,7 +159,7 @@ test("shows vehicle statistics and derived metrics below weapon statistics", asy
         vehicleStatistics
             .getByRole("article", { name: "Distance Traveled per Vehicle", exact: true })
             .locator('li[data-category-key="v40"]'),
-    ).toContainText("92,827.4 m")
+    ).toContainText("28,293.8 m")
     await expect(
         vehicleStatistics
             .getByRole("article", { name: "Vehicle Usage Count" })
@@ -169,7 +169,7 @@ test("shows vehicle statistics and derived metrics below weapon statistics", asy
         vehicleStatistics
             .getByRole("article", { name: "Distance Traveled per Vehicle Usage", exact: true })
             .locator('li[data-category-key="v40"]'),
-    ).toContainText("1,031.4 m")
+    ).toContainText("314.4 m")
     await expect(
         vehicleStatistics
             .getByRole("article", { name: "Self Destructs per Vehicle" })

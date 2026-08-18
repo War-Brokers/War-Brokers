@@ -49,8 +49,14 @@ export const playerSchema = z.object({
 
     // Vehicle Stats
     self_destructs: z.record(vehicleSchema, z.number().int()).or(z.null()),
-    distance_driven: z.record(vehicleSchema, z.number()).or(z.null()),
-    distance_driven_count: z.record(vehicleSchema, z.number().int()).or(z.null()),
+    distance_driven: z
+        .record(vehicleSchema, z.number())
+        .or(z.null())
+        .describe("Distance driven per vehicle in feet"),
+    distance_driven_count: z
+        .record(vehicleSchema, z.number().int())
+        .or(z.null())
+        .describe("Number of datapoints in distance_driven"),
     kills_per_vehicle: z.record(vehicleSchema, z.number().int()).or(z.null()),
 
     // Weapon Stats
@@ -69,7 +75,11 @@ export const playerSchema = z.object({
     kills_per_weapon: z.record(weaponIDSchema, z.number().int()).or(z.null()),
     deaths: z.record(weaponIDSchema, z.number().int()).or(z.null()),
     headshots: z.record(weaponIDSchema, z.number().int()).or(z.null()),
-    longest_kill: z.record(weaponIDSchema, z.number()).or(z.null()).optional(),
+    longest_kill: z
+        .record(weaponIDSchema, z.number())
+        .or(z.null())
+        .optional()
+        .describe("Longest kill per weapon in feet"),
 
     // Flags
     banned: z

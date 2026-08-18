@@ -3,6 +3,18 @@ import { Weapon, weaponIDSchema, WeaponName } from "@warbrokers/types/src/weapon
 
 import type { CategoryBreakdownModel } from "$lib/components/charts/categoryBreakdown"
 
+import {
+    addValues,
+    createRows,
+    divideValues,
+    feetToMeters,
+    formatDecimal,
+    formatInteger,
+    formatMeters,
+    formatPercentage,
+    mapValues,
+} from "./utils"
+
 export type WeaponStats = Pick<
     Player,
     | "deaths"
@@ -19,10 +31,7 @@ export type WeaponStats = Pick<
     | "shots_hit_zoomed"
 >
 
-type WeaponValues = Readonly<Record<string, number>> | null | undefined
-
 const unknownWeaponColor = "text-gray-400"
-const metersPerFoot = 0.3048
 const weaponNames = WeaponName satisfies Readonly<Record<Weapon, string>>
 const weaponColors = {
     [Weapon.AirStrike]: "text-orange-500",
@@ -100,59 +109,6 @@ function getWeaponPresentation(key: string) {
     }
 }
 
-function formatInteger(value: number) {
-    return value.toLocaleString("en-US", { maximumFractionDigits: 0 })
-}
-
-function formatDecimal(value: number) {
-    return value.toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 })
-}
-
-function formatPercentage(value: number) {
-    return `${formatDecimal(value)}%`
-}
-
-function formatMeters(value: number) {
-    return `${formatDecimal(value)} m`
-}
-
-function addValues(...records: WeaponValues[]) {
-    const sums: Record<string, number> = {}
-
-    for (const record of records) {
-        for (const [key, value] of Object.entries(record ?? {})) {
-            sums[key] = (sums[key] ?? 0) + value
-        }
-    }
-
-    return sums
-}
-
-function divideValues(numerators: WeaponValues, denominators: WeaponValues, factor = 1) {
-    return Object.fromEntries(
-        Object.entries(denominators ?? {})
-            .filter(([, denominator]) => denominator > 0)
-            .map(([key, denominator]) => [key, ((numerators?.[key] ?? 0) / denominator) * factor]),
-    )
-}
-
-function scaleValues(values: WeaponValues, factor: number) {
-    return Object.fromEntries(
-        Object.entries(values ?? {}).map(([key, value]) => [key, value * factor]),
-    )
-}
-
-function createRows(values: WeaponValues, includeZero = false) {
-    return Object.entries(values ?? {})
-        .filter(([, value]) => Number.isFinite(value) && (includeZero || value > 0))
-        .map(([key, value]) => ({
-            key,
-            value,
-            ...getWeaponPresentation(key),
-        }))
-        .sort((a, b) => b.value - a.value || a.label.localeCompare(b.label))
-}
-
 export function getWeaponBreakdowns(player: WeaponStats) {
     const shotsFired = addValues(player.shots_fired_unzoomed, player.shots_fired_zoomed)
 
@@ -164,7 +120,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
             categoryPlural: "weapons",
             valueLabel: "Kills",
             chartKind: "part-to-whole",
-            rows: createRows(player.kills_per_weapon),
+            rows: createRows(player.kills_per_weapon, getWeaponPresentation),
             formatValue: formatInteger,
         },
         {
@@ -174,7 +130,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
             categoryPlural: "weapons",
             valueLabel: "Damage dealt",
             chartKind: "part-to-whole",
-            rows: createRows(player.damage_dealt),
+            rows: createRows(player.damage_dealt, getWeaponPresentation),
             formatValue: formatDecimal,
         },
         {
@@ -184,7 +140,11 @@ export function getWeaponBreakdowns(player: WeaponStats) {
             categoryPlural: "weapons",
             valueLabel: "Shots per kill",
             chartKind: "ranked-values",
-            rows: createRows(divideValues(shotsFired, player.kills_per_weapon), true),
+            rows: createRows(
+                divideValues(shotsFired, player.kills_per_weapon),
+                getWeaponPresentation,
+                true,
+            ),
             formatValue: formatDecimal,
         },
         {
@@ -194,7 +154,11 @@ export function getWeaponBreakdowns(player: WeaponStats) {
             categoryPlural: "weapons",
             valueLabel: "Damage per shot",
             chartKind: "ranked-values",
-            rows: createRows(divideValues(player.damage_dealt, shotsFired), true),
+            rows: createRows(
+                divideValues(player.damage_dealt, shotsFired),
+                getWeaponPresentation,
+                true,
+            ),
             formatValue: formatDecimal,
         },
         {
@@ -204,7 +168,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
             categoryPlural: "weapons",
             valueLabel: "Deaths",
             chartKind: "part-to-whole",
-            rows: createRows(player.deaths),
+            rows: createRows(player.deaths, getWeaponPresentation),
             formatValue: formatInteger,
         },
         {
@@ -214,7 +178,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
             categoryPlural: "weapons",
             valueLabel: "Damage received",
             chartKind: "part-to-whole",
-            rows: createRows(player.damage_received),
+            rows: createRows(player.damage_received, getWeaponPresentation),
             formatValue: formatDecimal,
         },
         {
@@ -224,7 +188,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
             categoryPlural: "weapons",
             valueLabel: "Shots fired",
             chartKind: "part-to-whole",
-            rows: createRows(shotsFired),
+            rows: createRows(shotsFired, getWeaponPresentation),
             formatValue: formatInteger,
         },
         {
@@ -234,7 +198,11 @@ export function getWeaponBreakdowns(player: WeaponStats) {
             categoryPlural: "weapons",
             valueLabel: "Headshot frequency",
             chartKind: "ranked-values",
-            rows: createRows(divideValues(player.headshots, shotsFired, 100), true),
+            rows: createRows(
+                divideValues(player.headshots, shotsFired, 100),
+                getWeaponPresentation,
+                true,
+            ),
             formatValue: formatPercentage,
         },
         {
@@ -246,6 +214,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
             chartKind: "ranked-values",
             rows: createRows(
                 divideValues(player.shots_hit_unzoomed, player.shots_fired_unzoomed, 100),
+                getWeaponPresentation,
                 true,
             ),
             formatValue: formatPercentage,
@@ -259,6 +228,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
             chartKind: "ranked-values",
             rows: createRows(
                 divideValues(player.shots_hit_zoomed, player.shots_fired_zoomed, 100),
+                getWeaponPresentation,
                 true,
             ),
             formatValue: formatPercentage,
@@ -270,7 +240,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
             categoryPlural: "weapons",
             valueLabel: "Kills",
             chartKind: "ranked-values",
-            rows: createRows(player.most_kills_between_deaths),
+            rows: createRows(player.most_kills_between_deaths, getWeaponPresentation),
             formatValue: formatInteger,
         },
         {
@@ -280,7 +250,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
             categoryPlural: "weapons",
             valueLabel: "Kills",
             chartKind: "ranked-values",
-            rows: createRows(player.most_kills_in_round),
+            rows: createRows(player.most_kills_in_round, getWeaponPresentation),
             formatValue: formatInteger,
         },
         {
@@ -290,7 +260,7 @@ export function getWeaponBreakdowns(player: WeaponStats) {
             categoryPlural: "weapons",
             valueLabel: "Distance",
             chartKind: "ranked-values",
-            rows: createRows(scaleValues(player.longest_kill, metersPerFoot)),
+            rows: createRows(mapValues(player.longest_kill, feetToMeters), getWeaponPresentation),
             formatValue: formatMeters,
         },
     ] as const satisfies CategoryBreakdownModel[]

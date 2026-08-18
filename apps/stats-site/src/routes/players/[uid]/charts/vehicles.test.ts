@@ -64,7 +64,11 @@ describe("getVehicleBreakdowns", () => {
         ])
     })
 
-    test("derives distance traveled per positive vehicle usage count", () => {
+    test("converts distances from feet to meters", () => {
+        const distanceTraveled = getBreakdown(
+            "vehicle-distance-traveled",
+            createVehicleStats({ distance_driven: { v00: 100 } }),
+        )
         const distancePerUsage = getBreakdown(
             "vehicle-distance-per-usage",
             createVehicleStats({
@@ -73,8 +77,9 @@ describe("getVehicleBreakdowns", () => {
             }),
         )
 
+        expect(distanceTraveled.rows).toMatchObject([{ key: "v00", value: 30.48 }])
         expect(distancePerUsage.rows).toMatchObject([
-            { key: "v00", value: 25 },
+            { key: "v00", value: 7.62 },
             { key: "v02", value: 0 },
         ])
     })
