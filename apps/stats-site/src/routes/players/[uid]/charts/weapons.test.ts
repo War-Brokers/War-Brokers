@@ -4,6 +4,7 @@ import { describe, expect, test } from "vitest"
 import { getWeaponBreakdowns, type WeaponStats } from "./weapons"
 
 const emptyWeaponStats = {
+    deaths: null,
     damage_dealt: null,
     damage_received: null,
     headshots: null,
@@ -35,37 +36,40 @@ describe("getWeaponBreakdowns", () => {
 
         expect(breakdowns.map(({ id }) => id)).toEqual([
             "weapon-kills",
+            "weapon-damage-dealt",
+            "weapon-shots-per-kill",
+            "weapon-damage-per-shot",
+            "weapon-deaths",
+            "weapon-damage-received",
             "weapon-shots-fired",
-            "weapon-longest-kill",
             "weapon-headshot-frequency",
-            "weapon-kills-between-deaths",
-            "weapon-kills-in-round",
             "weapon-unzoomed-accuracy",
             "weapon-zoomed-accuracy",
-            "weapon-damage-dealt",
-            "weapon-damage-received",
-            "weapon-damage-per-shot",
-            "weapon-shots-per-kill",
+            "weapon-kills-between-deaths",
+            "weapon-kills-in-round",
+            "weapon-longest-kill",
         ])
         expect(breakdowns.map(({ title }) => title)).toEqual([
             "Kills per Weapon",
+            "Damage Dealt per Weapon",
+            "Shots Fired per Kill per Weapon",
+            "Damage Dealt per Shot per Weapon",
+            "Deaths per Weapon",
+            "Damage Received per Weapon",
             "Shots Fired per Weapon",
-            "Longest Kill per Weapon",
             "Headshot Frequency per Weapon",
-            "Most Kills Between Deaths per Weapon",
-            "Most Kills in One Round per Weapon",
             "Unzoomed Accuracy per Weapon",
             "Zoomed Accuracy per Weapon",
-            "Damage Dealt per Weapon",
-            "Damage Received per Weapon",
-            "Damage Dealt per Shot per Weapon",
-            "Shots Fired per Kill per Weapon",
+            "Most Kills Between Deaths per Weapon",
+            "Most Kills in One Round per Weapon",
+            "Longest Kill per Weapon",
         ])
     })
 
     test("formats integer and decimal statistics", () => {
         const integerBreakdowns = [
             "weapon-kills",
+            "weapon-deaths",
             "weapon-shots-fired",
             "weapon-kills-between-deaths",
             "weapon-kills-in-round",
@@ -108,8 +112,9 @@ describe("getWeaponBreakdowns", () => {
         ])
     })
 
-    test("derives frequency, accuracy, damage, and shot metrics", () => {
+    test("derives frequency, accuracy, damage, death, and shot metrics", () => {
         const player = createWeaponStats({
+            deaths: { p62: 8 },
             damage_dealt: { p61: 100 },
             damage_received: { p62: 75.5 },
             headshots: { p61: 10 },
@@ -134,6 +139,7 @@ describe("getWeaponBreakdowns", () => {
         expect(getBreakdown("weapon-damage-dealt", player).rows).toMatchObject([
             { key: "p61", value: 100 },
         ])
+        expect(getBreakdown("weapon-deaths", player).rows).toMatchObject([{ key: "p62", value: 8 }])
         expect(getBreakdown("weapon-damage-received", player).rows).toMatchObject([
             { key: "p62", value: 75.5 },
         ])

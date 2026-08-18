@@ -7,7 +7,7 @@ test("shows weapon statistics and derived metrics", async ({ page }) => {
 
     const weapons = page.getByRole("region", { name: "Weapon Statistics" })
 
-    await expect(weapons.getByRole("article")).toHaveCount(12)
+    await expect(weapons.getByRole("article")).toHaveCount(13)
     await expect(
         weapons.getByRole("article", { name: "Kills per Weapon" }).getByRole("img"),
     ).toHaveAccessibleName("Donut chart showing 60,104 total kills distributed across 47 weapons.")
