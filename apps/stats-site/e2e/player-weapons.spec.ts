@@ -147,9 +147,9 @@ test("shows vehicle statistics and derived metrics below weapon statistics", asy
     await expect(vehicleCards).toHaveCount(5)
     expect(await vehicleCards.getByRole("heading").allTextContents()).toEqual([
         "Kills per Vehicle",
-        "Distance Driven per Vehicle",
+        "Distance Traveled per Vehicle",
         "Vehicle Usage Count",
-        "Distance Driven per Vehicle Usage",
+        "Distance Traveled per Vehicle Usage",
         "Self Destructs per Vehicle",
     ])
     await expect(
@@ -157,7 +157,7 @@ test("shows vehicle statistics and derived metrics below weapon statistics", asy
     ).toHaveAccessibleName("Donut chart showing 60,155 total kills distributed across 14 vehicles.")
     await expect(
         vehicleStatistics
-            .getByRole("article", { name: "Distance Driven per Vehicle", exact: true })
+            .getByRole("article", { name: "Distance Traveled per Vehicle", exact: true })
             .locator('li[data-category-key="v40"]'),
     ).toContainText("92,827.4 m")
     await expect(
@@ -167,7 +167,7 @@ test("shows vehicle statistics and derived metrics below weapon statistics", asy
     ).toContainText("5,586")
     await expect(
         vehicleStatistics
-            .getByRole("article", { name: "Distance Driven per Vehicle Usage", exact: true })
+            .getByRole("article", { name: "Distance Traveled per Vehicle Usage", exact: true })
             .locator('li[data-category-key="v40"]'),
     ).toContainText("1,031.4 m")
     await expect(

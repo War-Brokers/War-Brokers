@@ -95,11 +95,11 @@ export function getVehicleBreakdowns(player: VehicleStats) {
             formatValue: formatInteger,
         },
         {
-            id: "vehicle-distance-driven",
-            title: "Distance Driven per Vehicle",
+            id: "vehicle-distance-traveled",
+            title: "Distance Traveled per Vehicle",
             categoryLabel: "Vehicle",
             categoryPlural: "vehicles",
-            valueLabel: "Distance driven",
+            valueLabel: "Distance traveled",
             chartKind: "part-to-whole",
             rows: createRows(player.distance_driven),
             formatValue: formatMeters,
@@ -116,7 +116,7 @@ export function getVehicleBreakdowns(player: VehicleStats) {
         },
         {
             id: "vehicle-distance-per-usage",
-            title: "Distance Driven per Vehicle Usage",
+            title: "Distance Traveled per Vehicle Usage",
             categoryLabel: "Vehicle",
             categoryPlural: "vehicles",
             valueLabel: "Distance per usage",

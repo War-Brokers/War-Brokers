@@ -28,11 +28,11 @@ describe("getVehicleBreakdowns", () => {
 
         expect(breakdowns.map(({ id, title }) => ({ id, title }))).toEqual([
             { id: "vehicle-kills", title: "Kills per Vehicle" },
-            { id: "vehicle-distance-driven", title: "Distance Driven per Vehicle" },
+            { id: "vehicle-distance-traveled", title: "Distance Traveled per Vehicle" },
             { id: "vehicle-usage-count", title: "Vehicle Usage Count" },
             {
                 id: "vehicle-distance-per-usage",
-                title: "Distance Driven per Vehicle Usage",
+                title: "Distance Traveled per Vehicle Usage",
             },
             { id: "vehicle-self-destructs", title: "Self Destructs per Vehicle" },
         ])
@@ -40,7 +40,7 @@ describe("getVehicleBreakdowns", () => {
 
     test("formats count and distance statistics", () => {
         expect(getBreakdown("vehicle-kills", emptyVehicleStats).formatValue(1234.6)).toBe("1,235")
-        expect(getBreakdown("vehicle-distance-driven", emptyVehicleStats).formatValue(1234)).toBe(
+        expect(getBreakdown("vehicle-distance-traveled", emptyVehicleStats).formatValue(1234)).toBe(
             "1,234.0 m",
         )
         expect(
@@ -64,7 +64,7 @@ describe("getVehicleBreakdowns", () => {
         ])
     })
 
-    test("derives distance driven per positive vehicle usage count", () => {
+    test("derives distance traveled per positive vehicle usage count", () => {
         const distancePerUsage = getBreakdown(
             "vehicle-distance-per-usage",
             createVehicleStats({
