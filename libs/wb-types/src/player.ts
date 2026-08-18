@@ -80,13 +80,38 @@ export const playerSchema = z.object({
     // Time
     time: z.number().int().describe("UNIX timestamp of last session"),
     joinTime: z.number().int().describe("UNIX timestamp of join date & time (could be 0)"),
-    ping_time: z.number().int().or(z.null()).optional(),
-    ping_time_count: z.number().int().or(z.null()).optional(),
-    frame_rate: z.number().or(z.null()).optional(),
-    frame_rate_count: z.number().int().or(z.null()).optional(),
-    time_alive_count: z.number().int().gte(0).or(z.null()).optional(),
-    time_alive_longest: z.number().or(z.null()).optional(),
-    time_alive: z.number().gte(0).or(z.null()).optional(),
+    ping_time: z.number().int().or(z.null()).optional().describe("Running average of ping in ms"),
+    ping_time_count: z
+        .number()
+        .int()
+        .or(z.null())
+        .optional()
+        .describe("Number of datapoints in ping_time"),
+    frame_rate: z.number().or(z.null()).optional().describe("Running average of player FPS"),
+    frame_rate_count: z
+        .number()
+        .int()
+        .or(z.null())
+        .optional()
+        .describe("Number of datapoints in frame_rate"),
+    time_alive: z
+        .number()
+        .gte(0)
+        .or(z.null())
+        .optional()
+        .describe("Running average of time alive in seconds"),
+    time_alive_count: z
+        .number()
+        .int()
+        .gte(0)
+        .or(z.null())
+        .optional()
+        .describe("Number of datapoints in time_alive"),
+    time_alive_longest: z
+        .number()
+        .or(z.null())
+        .optional()
+        .describe("Longest time alive in seconds"),
 })
 
 export type Player = z.infer<typeof playerSchema>

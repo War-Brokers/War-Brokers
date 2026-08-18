@@ -29,6 +29,12 @@
         return parseInt(s.substring(0, 8), 16)
     }
 
+    function formatRatePerMinute(value: number) {
+        if (!player.time_alive) return undefined
+
+        return `${((value * 60) / player.time_alive).toFixed(2)}/min`
+    }
+
     dayjs.extend(utc)
     dayjs.extend(relativeTime)
     const playingSince = dayjs.unix(MongoDBObjectId2UnixTimestamp(player.uid)).utc()
@@ -172,6 +178,7 @@
     <Stat
         title="XP"
         data={player.xp.toLocaleString("en-US")}
+        rate={formatRatePerMinute(player.xp)}
         _id="xp-percentile"
         percentile={xpPercentile}
         popoverSideOffset={48}
@@ -190,9 +197,23 @@
         percentile={gamesEloPercentile}
         popoverSideOffset={48}
     />
-    <Stat title="Total Kills" data={totalKills.toLocaleString("en-US")} />
-    <Stat title="Total Deaths" data={totalDeaths.toLocaleString("en-US")} />
+    <Stat
+        title="Total Kills"
+        data={totalKills.toLocaleString("en-US")}
+        rate={formatRatePerMinute(totalKills)}
+    />
+    <Stat
+        title="Total Deaths"
+        data={totalDeaths.toLocaleString("en-US")}
+        rate={formatRatePerMinute(totalDeaths)}
+    />
     <Stat title="KDR" data={(totalKills / totalDeaths).toFixed(2)} />
+    <Stat
+        title="Time Alive"
+        data={player.time_alive == null
+            ? "Unknown"
+            : `${(player.time_alive / 60 / 60).toFixed(2)} hours`}
+    />
 </div>
 
 <GameModeCharts {player} />

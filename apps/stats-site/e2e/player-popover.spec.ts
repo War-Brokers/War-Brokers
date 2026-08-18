@@ -5,6 +5,24 @@ const popoverSelector = '[data-slot="popover-content"]'
 
 test.use({ timezoneId: "UTC" })
 
+test("shows time alive and per-minute rates", async ({ page }) => {
+    await page.goto(`/players/${pompUID}`)
+
+    const timeAlive = page.getByText("Time Alive", { exact: true }).locator("../..")
+    await expect(timeAlive).toContainText("256.19 hours")
+    const canHover = await page.evaluate(() => matchMedia("(hover: hover)").matches)
+
+    for (const title of ["XP", "Total Kills", "Total Deaths"]) {
+        const stat = page.getByText(title, { exact: true }).locator("../..")
+        const trigger = stat.getByRole("button", { name: new RegExp(`${title} rate`) })
+        if (canHover) await trigger.hover()
+        else await trigger.focus()
+        await expect(page.getByRole("tooltip", { name: `${title} rate` })).toHaveText(
+            /^\d+\.\d{2}\/min$/,
+        )
+    }
+})
+
 test("shows local date and time details for profile timestamps", async ({ page }) => {
     await page.goto(`/players/${pompUID}`)
     await page.waitForLoadState("networkidle")
@@ -112,7 +130,20 @@ test("rank popover draws above the wins chart", async ({ page }) => {
         element.scrollIntoView({ block: "start" })
     })
     await trigger.hover()
-    await expect(page.locator(popoverSelector)).toBeVisible()
+    const popover = page.locator(popoverSelector)
+    await expect(popover).toBeVisible()
+
+    const popoverBox = await popover.boundingBox()
+    if (!popoverBox) throw new Error("Expected popover bounds")
+
+    await page.locator('[data-chart="wins-donut"]').evaluate(
+        (element, { left, top }) => {
+            element.style.position = "fixed"
+            element.style.left = `${left}px`
+            element.style.top = `${top}px`
+        },
+        { left: popoverBox.x + 16, top: popoverBox.y + 16 },
+    )
 
     const paintOrder = await page.evaluate(() => {
         const popover = document.querySelector('[data-slot="popover-content"]')
