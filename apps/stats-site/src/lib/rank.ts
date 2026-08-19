@@ -8,55 +8,37 @@ import ascended from "$lib/assets/ranks/shield-sapphire-12.svg"
 import competent from "$lib/assets/ranks/shield-silver-3.svg"
 import novice from "$lib/assets/ranks/shield-unranked.svg"
 
-export type Rank =
-    | "Ascended"
-    | "Godlike"
-    | "Legendary"
-    | "Master"
-    | "Pro"
-    | "Advanced"
-    | "Competent"
-    | "Adequate"
-    | "Novice"
+export const ranks = {
+    Ascended: /***/ { icon: ascended, /***/ color: "#1250BC", percentile: 99.99 },
+    Godlike: /****/ { icon: godlike, /****/ color: "#73F0E8", percentile: 99.9 },
+    Legendary: /**/ { icon: legendary, /**/ color: "#C62D43", percentile: 99.5 },
+    Master: /*****/ { icon: master, /*****/ color: "#FC9504", percentile: 98 },
+    Pro: /********/ { icon: pro, /********/ color: "#FEC92B", percentile: 95 },
+    Advanced: /***/ { icon: advanced, /***/ color: "#FEEF8E", percentile: 90 },
+    Competent: /**/ { icon: competent, /**/ color: "#DDE7ED", percentile: 80 },
+    Adequate: /***/ { icon: adequate, /***/ color: "#EDA379", percentile: 60 },
+    Novice: /*****/ { icon: novice, /*****/ color: "#324692", percentile: 0 },
+} as const satisfies Record<
+    string,
+    {
+        icon: string
+        color: string
+        percentile: number
+    }
+>
 
-export const rank2iconMap: { [key in Rank]: string } = {
-    Ascended: ascended,
-    Godlike: godlike,
-    Legendary: legendary,
-    Master: master,
-    Pro: pro,
-    Advanced: advanced,
-    Competent: competent,
-    Adequate: adequate,
-    Novice: novice,
-}
+export type Rank = keyof typeof ranks
 
-export const rank2percentileMap: { [key in Rank]: number } = {
-    Ascended: 99.95,
-    Godlike: 99.9,
-    Legendary: 99.5,
-    Master: 98,
-    Pro: 95,
-    Advanced: 90,
-    Competent: 80,
-    Adequate: 60,
-    Novice: 0,
-}
+const rankNamesByPercentile = Object.keys(ranks)
+    .filter((rank): rank is Rank => Object.hasOwn(ranks, rank))
+    .sort((a, b) => ranks[b].percentile - ranks[a].percentile)
 
-export function percentile2rank(percentile: number): {
-    rank: Rank
-    icon: string
-} {
-    let rank: Rank = "Novice"
+export function percentile2rank(percentile: number) {
+    const rank =
+        rankNamesByPercentile.find((rank) => percentile > ranks[rank].percentile) ??
+        rankNamesByPercentile.at(-1)
 
-    if (percentile > rank2percentileMap["Adequate"]) rank = "Adequate"
-    if (percentile > rank2percentileMap["Competent"]) rank = "Competent"
-    if (percentile > rank2percentileMap["Advanced"]) rank = "Advanced"
-    if (percentile > rank2percentileMap["Pro"]) rank = "Pro"
-    if (percentile > rank2percentileMap["Master"]) rank = "Master"
-    if (percentile > rank2percentileMap["Legendary"]) rank = "Legendary"
-    if (percentile > rank2percentileMap["Godlike"]) rank = "Godlike"
-    if (percentile > rank2percentileMap["Ascended"]) rank = "Ascended"
+    if (rank === undefined) throw new Error("At least one rank must be configured")
 
-    return { rank, icon: rank2iconMap[rank] }
+    return { rank, icon: ranks[rank].icon } as const satisfies { rank: Rank; icon: string }
 }
