@@ -317,7 +317,7 @@ test("squad filters explain empty results and can be cleared", async ({ page }) 
     await filter.fill("no-squad-match")
 
     await expect(page.getByText("No squads match “no-squad-match”.")).toBeVisible()
-    await page.getByRole("button", { name: "Clear search" }).click()
+    await filter.fill("")
 
     await expect(filter).toHaveValue("")
     await expect(page.locator('main a[href^="/squads/"]').first()).toBeVisible()

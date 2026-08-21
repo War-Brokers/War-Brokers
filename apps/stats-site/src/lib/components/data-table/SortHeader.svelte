@@ -3,13 +3,17 @@
     import ArrowUp from "@lucide/svelte/icons/arrow-up"
     import ArrowUpDown from "@lucide/svelte/icons/arrow-up-down"
 
+    import { cn } from "$lib/utils"
+
     type SortDirection = "asc" | "desc" | false
 
     const {
+        align = "start",
         getSort,
         label,
         ontoggle,
     }: {
+        align?: "start" | "end"
         getSort: () => SortDirection
         label: string
         ontoggle: (multi: boolean) => void
@@ -20,7 +24,10 @@
 
 <button
     type="button"
-    class="-mx-2 flex h-10 w-[calc(100%+1rem)] items-center gap-2 px-2 text-start font-medium hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-orange-400 active:bg-gray-800"
+    class={cn(
+        "-mx-2 flex h-10 w-[calc(100%+1rem)] items-center gap-2 px-2 font-medium hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-orange-400 active:bg-gray-800",
+        align === "end" ? "justify-end text-end" : "text-start",
+    )}
     aria-label={`Sort by ${label}`}
     onclick={(event) => {
         ontoggle(event.shiftKey)
@@ -28,10 +35,10 @@
 >
     <span>{label}</span>
     {#if sort === "asc"}
-        <ArrowUp class="size-4 shrink-0 text-orange-400" />
+        <ArrowUp class="size-4 shrink-0 text-orange-400" aria-hidden="true" />
     {:else if sort === "desc"}
-        <ArrowDown class="size-4 shrink-0 text-orange-400" />
+        <ArrowDown class="size-4 shrink-0 text-orange-400" aria-hidden="true" />
     {:else}
-        <ArrowUpDown class="size-4 shrink-0 text-gray-300" />
+        <ArrowUpDown class="size-4 shrink-0 text-gray-300" aria-hidden="true" />
     {/if}
 </button>

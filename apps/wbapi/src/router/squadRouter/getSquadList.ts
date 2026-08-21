@@ -3,7 +3,12 @@ import { z } from "zod"
 import { db } from "@/index"
 import { publicProcedure } from "@/trpc"
 
-export const responseSchema = z.array(z.string())
+export const responseSchema = z.array(
+    z.object({
+        squad: z.string(),
+        memberCount: z.number().int().positive(),
+    }),
+)
 export type Response = z.infer<typeof responseSchema>
 
 export default (tag: string) =>
@@ -18,6 +23,4 @@ export default (tag: string) =>
         })
         .input(z.undefined())
         .output(responseSchema)
-        .query(async () => {
-            return await db.getSquads()
-        })
+        .query(async () => await db.getSquads())

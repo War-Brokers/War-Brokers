@@ -9,6 +9,41 @@ import { weapons } from "@warbrokers/types/src/weapon"
 
 const NUM_STATS = 50_000 // production has around 43k as of writing
 
+// 80% of players are affiliated with a squad the size of which ranges from 10 to 500
+const squadConfig = {
+    affiliationRatio: 0.8,
+    minSize: 10,
+    maxSize: 500,
+} as const
+const squadNameCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const squadNamePool = faker.helpers.shuffle(
+    Array.from(squadNameCharacters).flatMap((firstCharacter) =>
+        Array.from(squadNameCharacters, (secondCharacter) => `${firstCharacter}${secondCharacter}`),
+    ),
+)
+const squadNames = faker.helpers.shuffle(
+    squadNamePool
+        .slice(
+            0,
+            Math.floor(
+                (NUM_STATS * squadConfig.affiliationRatio) /
+                    ((squadConfig.minSize + squadConfig.maxSize) / 2),
+            ),
+        )
+        .flatMap((squadName, index, squads) =>
+            Array.from(
+                {
+                    length: Math.round(
+                        squadConfig.minSize +
+                            (squadConfig.maxSize - squadConfig.minSize) *
+                                (index / (squads.length - 1)),
+                    ),
+                },
+                () => squadName,
+            ),
+        ),
+)
+
 /**
  * Generates option for faker.js with laplace distribution.
  */
@@ -1130,11 +1165,7 @@ export const stats: Player[] = [
                             }),
                         { probability: 0.5 }, // Default is 0.5 but we're making it explicit here.
                     ) ?? null,
-                squad:
-                    faker.helpers.maybe(
-                        () => faker.helpers.arrayElement(["SQUAD1", "SQUAD2", "SQUAD3", "SQUAD4"]),
-                        { probability: 0.8 },
-                    ) ?? "",
+                squad: squadNames.pop() ?? "",
                 killsELO: faker.number.float(
                     // roughly matches production distribution
                     LaplaceOptions({
