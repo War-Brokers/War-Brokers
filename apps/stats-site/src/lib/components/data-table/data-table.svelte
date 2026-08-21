@@ -44,6 +44,7 @@
     const table = createTable({
         features: dataTableFeatures,
         columns,
+        sortDescFirst: false,
         get data() {
             return data
         },
