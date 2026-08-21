@@ -159,10 +159,10 @@
         </div>
         {#if data.aUid && data.bUid}
             <div class="skeleton-reveal mt-10 flex flex-col gap-3 py-6" aria-hidden="true">
-                <div class="h-[4.25rem] rounded-2xl bg-gray-900 sm:h-[4.75rem]"></div>
-                <div class="h-24 rounded-2xl bg-gray-900 sm:h-[6.5rem]"></div>
-                <div class="h-32 rounded-2xl bg-gray-900 sm:h-[7.5rem]"></div>
-                <div class="h-32 rounded-2xl bg-gray-900 sm:h-[7.5rem]"></div>
+                <div class="h-17 rounded-2xl bg-gray-900 sm:h-19"></div>
+                <div class="h-24 rounded-2xl bg-gray-900 sm:h-26"></div>
+                <div class="h-32 rounded-2xl bg-gray-900 sm:h-30"></div>
+                <div class="h-32 rounded-2xl bg-gray-900 sm:h-30"></div>
             </div>
         {/if}
     </section>

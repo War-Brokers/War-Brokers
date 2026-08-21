@@ -68,7 +68,7 @@
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <div
     class={cn(
-        "overflow-auto border border-gray-600 bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 [&>[data-slot=table-container]]:overflow-visible",
+        "overflow-auto border border-gray-600 bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 *:data-[slot=table-container]:overflow-visible",
         containerClass,
     )}
     role="region"

@@ -66,7 +66,7 @@
                     >
                         {#if loadedMapImageUrl !== mapImageUrl}
                             <Skeleton
-                                class="skeleton-reveal absolute inset-0 h-full w-full rounded-lg"
+                                class="skeleton-reveal absolute inset-0 size-full rounded-lg"
                                 aria-hidden="true"
                             />
                         {/if}
@@ -77,7 +77,7 @@
                             height="144"
                             loading="lazy"
                             class:invisible={loadedMapImageUrl !== mapImageUrl}
-                            class="h-full w-full object-contain"
+                            class="size-full object-contain"
                             onload={finishMapImageLoad}
                             onerror={finishMapImageLoad}
                         />

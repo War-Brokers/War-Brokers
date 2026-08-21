@@ -199,7 +199,7 @@
         {/if}
 
         <ol
-            class="px-3 py-3"
+            class="p-3"
             onpointerleave={() => {
                 setHoveredRowKey(undefined)
             }}

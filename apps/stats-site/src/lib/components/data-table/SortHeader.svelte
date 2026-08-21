@@ -25,7 +25,7 @@
 <button
     type="button"
     class={cn(
-        "-mx-2 flex h-10 w-[calc(100%+1rem)] items-center gap-2 px-2 font-medium hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-orange-400 active:bg-gray-800",
+        "-mx-2 flex h-10 w-[calc(100%+1rem)] items-center gap-2 px-2 font-medium hover:bg-gray-600 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-orange-400 active:bg-gray-800",
         align === "end" ? "justify-end text-end" : "text-start",
     )}
     aria-label={`Sort by ${label}`}

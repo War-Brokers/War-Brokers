@@ -6,7 +6,7 @@
     const { class: className, children, ...restProps }: HTMLTableAttributes = $props()
 </script>
 
-<div data-slot="table-container" class="relative h-full w-full overflow-x-auto">
+<div data-slot="table-container" class="relative size-full overflow-x-auto">
     <table data-slot="table" class={cn("w-full caption-bottom text-sm", className)} {...restProps}>
         {@render children?.()}
     </table>

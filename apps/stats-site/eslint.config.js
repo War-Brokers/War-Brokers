@@ -14,6 +14,11 @@ export default defineConfig(
     ...wbConfig,
     betterTailwindcss.configs["correctness-error"],
     {
+        rules: {
+            "better-tailwindcss/enforce-canonical-classes": "error",
+        },
+    },
+    {
         settings: {
             "better-tailwindcss": {
                 cwd: import.meta.dirname,

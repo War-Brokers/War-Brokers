@@ -229,9 +229,9 @@
 <div bind:this={rootElement} class="flex w-full flex-col items-center text-start font-normal">
     <search aria-label={label} class="flex w-full flex-col items-center">
         <div
-            class="flex h-12 w-full max-w-[36rem] min-w-0 items-center justify-center rounded-full pr-3 sm:pr-7 dark:bg-gray-600"
+            class="flex h-12 w-full max-w-xl min-w-0 items-center justify-center rounded-full pr-3 sm:pr-7 dark:bg-gray-600"
         >
-            <div aria-hidden="true" class="ml-2 h-5 w-5 shrink-0 sm:ml-3 sm:h-7 sm:w-7"></div>
+            <div aria-hidden="true" class="ml-2 size-5 shrink-0 sm:ml-3 sm:size-7"></div>
             <div class="relative flex w-full min-w-0 flex-col">
                 <input
                     bind:value={query}
@@ -248,7 +248,7 @@
                     aria-describedby={message ? `${inputId}-message` : undefined}
                     aria-invalid={messageIsError ? "true" : undefined}
                     aria-label={label}
-                    class="my-auto h-full w-full min-w-0 border-none bg-transparent text-lg leading-7 placeholder:text-gray-300 focus:ring-0 dark:text-gray-200"
+                    class="my-auto size-full min-w-0 border-none bg-transparent text-lg/7 placeholder:text-gray-300 focus:ring-0 dark:text-gray-200"
                     {placeholder}
                     on:input={handleInput}
                     on:keydown={handleKeydown}
@@ -323,7 +323,7 @@
         <span
             id={`${inputId}-message`}
             class={cn(
-                "min-h-6 max-w-[36rem] text-base",
+                "min-h-6 max-w-xl text-base",
                 messageIsError ? "text-red-400" : "text-gray-400",
             )}
         >

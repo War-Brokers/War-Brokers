@@ -412,7 +412,7 @@
 
 <article class="overflow-hidden rounded-xl border border-gray-700 bg-gray-900">
     <header
-        class="flex flex-col gap-1 border-b border-gray-700 px-4 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:px-6"
+        class="flex flex-col gap-1 border-b border-gray-700 p-4 sm:flex-row sm:items-baseline sm:justify-between sm:px-6"
     >
         <h3 class="text-lg font-semibold text-gray-100">{title}</h3>
         {#await Promise.all([updatedAt, cacheUpdateIntervalHours])}
@@ -453,7 +453,7 @@
     {:then { buckets, bucketSize }}
         {#if buckets.length === 0}
             <p
-                class="flex min-h-[21rem] items-center justify-center px-4 text-sm text-gray-400"
+                class="flex min-h-84 items-center justify-center px-4 text-sm text-gray-400"
                 role="status"
             >
                 No {title} distribution data is available.
@@ -480,11 +480,11 @@
                         </div>
                         <div class="relative min-h-0 w-full flex-1" bind:clientWidth={chartWidth}>
                             <div
-                                class="h-full w-full"
+                                class="size-full"
                                 role="img"
                                 aria-label={`${title} histogram with a cumulative percentile line and colored rank milestone bars. Data is available in the following table.`}
                             >
-                                <Chart.Container {id} config={chartConfig} class="h-full w-full">
+                                <Chart.Container {id} config={chartConfig} class="size-full">
                                     <BarChart
                                         data={completeBuckets}
                                         xScale={scaleBand().padding(bandPadding)}
@@ -693,9 +693,7 @@
             </figure>
         {/if}
     {:catch _}
-        <p
-            class="flex min-h-[21rem] items-center justify-center px-4 text-sm font-bold text-red-400"
-        >
+        <p class="flex min-h-84 items-center justify-center px-4 text-sm font-bold text-red-400">
             Failed to load
         </p>
     {/await}

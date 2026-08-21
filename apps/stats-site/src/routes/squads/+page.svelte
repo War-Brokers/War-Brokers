@@ -46,7 +46,7 @@
             autocomplete="off"
             spellcheck="false"
             bind:value={searchTerm}
-            class="h-10 min-w-0 rounded-lg border border-gray-600 bg-gray-600 px-3 text-base leading-6 text-gray-100 placeholder:text-gray-300 focus-visible:border-orange-400 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-orange-400"
+            class="h-10 min-w-0 rounded-lg border border-gray-600 bg-gray-600 px-3 text-base/6 text-gray-100 placeholder:text-gray-300 focus-visible:border-orange-400 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-orange-400"
             placeholder="Squad Name"
         />
     </div>
