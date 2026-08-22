@@ -5,9 +5,7 @@ import type { DataTableFeatures } from "$lib/components/data-table"
 import type { PageData } from "./$types"
 import MemberNameCell from "./MemberNameCell.svelte"
 
-type Member = Awaited<PageData["members"]>[number]
-
-const columnHelper = createColumnHelper<DataTableFeatures, Member>()
+const columnHelper = createColumnHelper<DataTableFeatures, PageData["members"][number]>()
 
 export const memberColumns = columnHelper.columns([
     columnHelper.accessor("nick", {
