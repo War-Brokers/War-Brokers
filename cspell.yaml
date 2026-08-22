@@ -50,6 +50,7 @@ words:
     - libx
     - libxkbcommon
     - linebreak
+    - llms
     - mainthread
     - marceloprado
     - Marksmans
