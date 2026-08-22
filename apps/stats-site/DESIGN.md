@@ -88,7 +88,9 @@ updating this document in the same change.
 
 ### Loading States
 
-- Page structure should load as quickly as possible and not wait for anything. Let data stream in as they are ready.
+- Page structure should load as quickly as possible and not wait for any external data source. Let data stream in as they are ready.
+  - Except pure DB queries. The PostgreSQL DB sits right next to the web server so the latency is negligible.
+    Read `wbapi` source code when trpc call is used in `*.server.ts` and if the endpoint only makes drizzle queries don't bother with loading state and `await` it on the backend.
 - Minimize layout shift.
   - Loading placeholders must reserve approximately the same space and structure as the resolved content.
   - Give media and charts an explicit aspect ratio or stable minimum height.
