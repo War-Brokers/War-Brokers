@@ -37,7 +37,10 @@
                 aria-busy="true"
                 aria-label="Kills Elo leaderboard"
             >
-                <LoadingRows rows={SIMPLE_LEADERBOARD_LEN + 1} />
+                <LoadingRows
+                    rows={SIMPLE_LEADERBOARD_LEN + 1}
+                    headers={[{ label: "Kills ELO", skeletonClass: "w-20" }]}
+                />
             </tbody>
         {:then killsEloRanking}
             <tbody>
@@ -47,7 +50,7 @@
                     </StateRow>
                 {:else}
                     {#each killsEloRanking as { uid, nick, squad, killsELO }, i (uid)}
-                        <Row rank={i + 1} {nick} {squad} {uid} stat={killsELO.toFixed(2)} />
+                        <Row rank={i + 1} {nick} {squad} {uid} stats={[killsELO.toFixed(2)]} />
                     {/each}
                     <ViewMore href={resolve("/leaderboard/killsELO")} />
                 {/if}
@@ -75,7 +78,10 @@
                 aria-busy="true"
                 aria-label="Games Elo leaderboard"
             >
-                <LoadingRows rows={SIMPLE_LEADERBOARD_LEN + 1} />
+                <LoadingRows
+                    rows={SIMPLE_LEADERBOARD_LEN + 1}
+                    headers={[{ label: "Games ELO", skeletonClass: "w-20" }]}
+                />
             </tbody>
         {:then gamesEloRanking}
             <tbody>
@@ -85,7 +91,7 @@
                     </StateRow>
                 {:else}
                     {#each gamesEloRanking as { uid, nick, squad, gamesELO }, i (uid)}
-                        <Row rank={i + 1} {nick} {squad} {uid} stat={gamesELO.toFixed(2)} />
+                        <Row rank={i + 1} {nick} {squad} {uid} stats={[gamesELO.toFixed(2)]} />
                     {/each}
                     <ViewMore href={resolve("/leaderboard/gamesELO")} />
                 {/if}
@@ -114,7 +120,13 @@
                 aria-busy="true"
                 aria-label="XP and level leaderboard"
             >
-                <LoadingRows rows={SIMPLE_LEADERBOARD_LEN + 1} secondaryStat />
+                <LoadingRows
+                    rows={SIMPLE_LEADERBOARD_LEN + 1}
+                    headers={[
+                        { label: "XP", skeletonClass: "w-20" },
+                        { label: "Level", skeletonClass: "w-12" },
+                    ]}
+                />
             </tbody>
         {:then xpRanking}
             <tbody>
@@ -129,8 +141,7 @@
                             {nick}
                             {squad}
                             {uid}
-                            stat={xp.toLocaleString("en-US")}
-                            stat2={level}
+                            stats={[xp.toLocaleString("en-US"), level]}
                         />
                     {/each}
                     <ViewMore href={resolve("/leaderboard/xp")} />

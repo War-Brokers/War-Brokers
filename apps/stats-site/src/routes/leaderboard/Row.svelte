@@ -2,12 +2,13 @@
     import { resolve } from "$app/paths"
     import A from "$lib/components/A.svelte"
 
+    import type { LeaderboardValue } from "./types"
+
     export let rank: number
     export let nick: string
     export let squad: string | null
     export let uid: string
-    export let stat: string | number
-    export let stat2: string | number | undefined = undefined
+    export let stats: readonly [LeaderboardValue, ...LeaderboardValue[]]
 </script>
 
 <tr class="p-9 whitespace-nowrap hover:bg-gray-700">
@@ -20,8 +21,7 @@
             {nick}
         </A>
     </td>
-    <td class="text-left">{stat}</td>
-    {#if stat2}
-        <td class="text-left">{stat2}</td>
-    {/if}
+    {#each stats as stat, index (index)}
+        <td class="text-left">{stat}</td>
+    {/each}
 </tr>

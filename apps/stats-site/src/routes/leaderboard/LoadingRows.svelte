@@ -1,6 +1,8 @@
 <script lang="ts">
+    import type { LeaderboardHeader } from "./types"
+
     export let rows: number
-    export let secondaryStat = false
+    export let headers: readonly [LeaderboardHeader, ...LeaderboardHeader[]]
 </script>
 
 {#each { length: rows } as _, index (index)}
@@ -11,13 +13,10 @@
         <td class="pr-4">
             <div class="h-4 w-32 max-w-full rounded bg-gray-500"></div>
         </td>
-        <td>
-            <div class="h-4 w-20 rounded bg-gray-500"></div>
-        </td>
-        {#if secondaryStat}
+        {#each headers as header, index (index)}
             <td>
-                <div class="h-4 w-12 rounded bg-gray-500"></div>
+                <div class={`h-4 rounded bg-gray-500 ${header.skeletonClass ?? "w-20"}`}></div>
             </td>
-        {/if}
+        {/each}
     </tr>
 {/each}
