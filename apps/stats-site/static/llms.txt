@@ -1,0 +1,4 @@
+# War Brokers Stats
+
+Statistics site for a first-person shooting game "War Brokers".
+This site provides individual player statistics, squad rosters, leaderboards, server status, and other useful information.
