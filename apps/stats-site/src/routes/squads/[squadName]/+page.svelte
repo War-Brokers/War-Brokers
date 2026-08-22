@@ -1,74 +1,53 @@
 <script lang="ts">
-    import SiDiscord from "@icons-pack/svelte-simple-icons/icons/SiDiscord"
-
-    import A from "$lib/components/A.svelte"
     import DataTable from "$lib/components/data-table/data-table.svelte"
     import Title from "$lib/components/title.svelte"
 
     import type { PageData } from "./$types"
     import { memberColumns } from "./columns"
+    import APG from "./customSquadHeaders/APG.svelte"
+    import CAESAR from "./customSquadHeaders/CAESAR.svelte"
+    import SquadHeader from "./SquadHeader.svelte"
 
-    type Member = Awaited<PageData["members"]>[number]
+    const { data }: { data: PageData } = $props()
+    const { squadName, squadConfig } = data
 
-    export let data: PageData
-    const { discordInviteCode, members, serverMembersCount, squadName } = data
-
-    const memberTableProps = {
+    const memberTableProps = $derived({
         ariaLabel: `${squadName} members`,
         caption: `${squadName} members`,
         columns: memberColumns,
         emptyMessage: "No members are available.",
-        getRowId: (member: Member) => member.uid,
+        getRowId: (member: Awaited<PageData["members"]>[number]) => member.uid,
         initialSorting: [{ id: "nick", desc: false }],
-        loadingRowCount: 5,
         tableClass: "min-w-[42rem]",
-    }
+    })
 </script>
 
-<Title title={`Squad ${squadName}`} />
+<Title title={squadConfig?.fullName ? `${squadName} - ${squadConfig.fullName}` : squadName} />
 
-<h2 class="w-full text-center text-3xl font-black">Squad {squadName}</h2>
-
-{#if discordInviteCode}
-    <A
-        class="mx-auto mb-10 flex items-center justify-center text-gray-100 hover:text-gray-100"
-        href={`https://discord.gg/${discordInviteCode}`}
-        external
-    >
-        <SiDiscord class="size-9 shrink-0 p-2" aria-hidden="true" />
-        Discord (
-        {#if serverMembersCount}
-            {#await serverMembersCount}
-                <span class="skeleton-reveal inline-flex items-baseline gap-1" aria-busy="true">
-                    <span
-                        class="inline-block h-5 w-12 animate-pulse rounded bg-gray-600 motion-reduce:animate-none"
-                        aria-hidden="true"
-                    ></span>
-                    members
-                </span>
-            {:then count}
-                <span><b>{count}</b> members</span>
-            {:catch _}
-                <span class="font-bold text-red-400" role="status">Failed to load</span>
-            {/await}
-        {:else}
-            <span>members</span>
-        {/if})
-    </A>
+{#if squadName === "APG"}
+    <APG {...data} />
+{:else if squadName === "CAESAR"}
+    <CAESAR {...data} />
+{:else}
+    <SquadHeader {...data} />
 {/if}
 
-{#await members}
-    <div class="mb-10 flex items-baseline gap-1" aria-hidden="true">
+{#await data.members}
+    <div class="mb-4 flex items-baseline gap-1" aria-hidden="true">
         <span class="h-7 w-8 rounded bg-gray-600"></span> members
     </div>
 {:then members}
-    <div class="mb-10 flex items-baseline gap-1">
+    <div class="mb-4 flex items-baseline gap-1">
         <span class="text-xl font-bold">{members.length}</span> members
+    </div>
+{:catch _}
+    <div class="mb-4 flex items-baseline gap-1">
+        <span class="font-bold text-red-400" role="status">Failed to load</span>
     </div>
 {/await}
 
-{#await members}
-    <DataTable {...memberTableProps} state="loading" />
+{#await data.members}
+    <DataTable {...memberTableProps} state="loading" loadingRowCount={1} />
 {:then members}
     <DataTable {...memberTableProps} data={members} />
 {:catch _}
