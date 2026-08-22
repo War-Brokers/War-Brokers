@@ -58,9 +58,10 @@
   description:
   name: project:wbapi
 
+# sunset project. Keeping it around since there are issues created with this label.
 - color: 009b66
   description:
-  name: project:wbtimeline
+  name: project:wbtimeline # cspell:disable-line
 
 #
 # Type

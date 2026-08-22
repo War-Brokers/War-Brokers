@@ -15,4 +15,3 @@
    - http://localhost:4000 - WB DB
    - http://localhost:5000 - wbapi
    - http://localhost:5173 - stats site
-   - http://localhost:3000 - wbtimeline

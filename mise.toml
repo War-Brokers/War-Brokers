@@ -352,7 +352,6 @@ set -m
 
 pnpm turbo run dev \
     --filter=@warbrokers/stats-site \
-    --filter=@warbrokers/wbtimeline \
     --color &
 frontend_pid=$!
 
@@ -368,7 +367,6 @@ cleanup() {
 trap cleanup EXIT
 
 ./scripts/wait-for-port 5173 "$frontend_pid" # Stats site
-./scripts/wait-for-port 3000 "$frontend_pid" # WB timeline
 
 pnpm --filter=@warbrokers/stats-site test:e2e
 

@@ -17,15 +17,14 @@ WBP (War Brokers Projects) is a collection of [pomp][pomp]'s\*
 
 ## Projects
 
-|           Name            |                                         Short Description                                          | Development Status |
-| :-----------------------: | :------------------------------------------------------------------------------------------------: | :----------------: |
-|      War Brokers Hub      |                        web UI for everything WB (squads, stats, wiki, etc)                         |      Planned       |
-|    [WB UI v2][wbuiv2]     |                          An interactive new design of the War Brokers UI                           |     Pre-Alpha      |
-| [Stats Site][stats-site]  |              An attempt to create an improved version of https://stats.warbrokers.io               |       Stable       |
-|   [WB Types][wb-types]    |                            shared Typescript types & [Zod][zod] schema                             |       Stable       |
-|      [WB API][wbapi]      |                                    DB mirror & API proxy for WB                                    |       Stable       |
-| [WB Timeline][wbtimeline] | a website that lists various events happened in the War Brokers community in a chronological order |       Stable       |
-|  [War Brokers Mods][wbm]  |                             An unofficial utility mod for War Brokers                              |      Archived      |
+|           Name           |                            Short Description                            | Development Status |
+| :----------------------: | :---------------------------------------------------------------------: | :----------------: |
+|     War Brokers Hub      |           web UI for everything WB (squads, stats, wiki, etc)           |      Planned       |
+|    [WB UI v2][wbuiv2]    |             An interactive new design of the War Brokers UI             |     Pre-Alpha      |
+| [Stats Site][stats-site] | An attempt to create an improved version of https://stats.warbrokers.io |       Stable       |
+|   [WB Types][wb-types]   |               shared Typescript types & [Zod][zod] schema               |       Stable       |
+|     [WB API][wbapi]      |                      DB mirror & API proxy for WB                       |       Stable       |
+| [War Brokers Mods][wbm]  |                An unofficial utility mod for War Brokers                |      Archived      |
 
 [pomp]: https://github.com/pompydev
 [wbuiv2]: https://github.com/War-Brokers/wbuiv2
@@ -33,7 +32,6 @@ WBP (War Brokers Projects) is a collection of [pomp][pomp]'s\*
 [wb-types]: https://github.com/War-Brokers/War-Brokers/tree/master/libs/wb-types
 [zod]: https://github.com/colinhacks/zod
 [wbapi]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbapi
-[wbtimeline]: https://github.com/War-Brokers/War-Brokers/tree/master/apps/wbtimeline
 [wbm]: https://git.pompy.dev/war-brokers-mods
 
 ## Sponsors
