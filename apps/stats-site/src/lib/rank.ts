@@ -29,7 +29,7 @@ export const ranks = {
 
 export type Rank = keyof typeof ranks
 
-const rankNamesByPercentile = Object.keys(ranks)
+export const rankNamesByPercentile = Object.keys(ranks)
     .filter((rank): rank is Rank => Object.hasOwn(ranks, rank))
     .sort((a, b) => ranks[b].percentile - ranks[a].percentile)
 
