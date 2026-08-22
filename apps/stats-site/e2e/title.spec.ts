@@ -13,7 +13,7 @@ test("should have proper title", async ({ page }) => {
     await expect(page).toHaveTitle("Squads" + suffix)
 
     await page.goto("/squads/LP")
-    await expect(page).toHaveTitle("Llama's Pyjamas" + suffix)
+    await expect(page).toHaveTitle("LP - Llama's Pyjamas" + suffix)
 
     await page.goto("/-vs-")
     await expect(page).toHaveTitle("? vs ?" + suffix)
