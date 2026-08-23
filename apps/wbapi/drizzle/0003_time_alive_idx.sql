@@ -1,0 +1,1 @@
+CREATE INDEX "time_alive_idx" ON "players" USING btree ("time_alive");

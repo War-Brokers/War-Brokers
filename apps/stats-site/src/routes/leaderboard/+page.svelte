@@ -5,6 +5,7 @@
     import Table from "$lib/components/Table/Table.svelte"
     import THead from "$lib/components/Table/THead.svelte"
     import Title from "$lib/components/title.svelte"
+    import { formatTimeAlive } from "$lib/formatting"
 
     import type { PageData } from "./$types"
     import { SIMPLE_LEADERBOARD_LEN } from "./config"
@@ -15,7 +16,7 @@
     import ViewMore from "./ViewMore.svelte"
 
     export let data: PageData
-    const { killsEloRanking, gamesEloRanking, xpRanking } = data
+    const { killsEloRanking, gamesEloRanking, timeAliveRanking, xpRanking } = data
 </script>
 
 <Title title="Leaderboard" />
@@ -94,6 +95,53 @@
                         <Row rank={i + 1} {nick} {squad} {uid} stats={[gamesELO.toFixed(2)]} />
                     {/each}
                     <ViewMore href={resolve("/leaderboard/gamesELO")} />
+                {/if}
+            </tbody>
+        {:catch _}
+            <tbody>
+                <StateRow colspan={3} rows={SIMPLE_LEADERBOARD_LEN + 1} tone="error">
+                    Failed to load
+                </StateRow>
+            </tbody>
+        {/await}
+    </Table>
+
+    <LeaderboardHeading>Time Alive</LeaderboardHeading>
+    <Table>
+        <caption class="sr-only">Time Alive leaderboard</caption>
+        <THead>
+            <IndexHeaderCell>#</IndexHeaderCell>
+            <DataHeaderCell>Player</DataHeaderCell>
+            <th class="min-w-32">Time Alive</th>
+        </THead>
+        {#await timeAliveRanking}
+            <tbody
+                class="animate-pulse motion-reduce:animate-none"
+                aria-busy="true"
+                aria-label="Time Alive leaderboard"
+            >
+                <LoadingRows
+                    rows={SIMPLE_LEADERBOARD_LEN + 1}
+                    headers={[{ label: "Time Alive", skeletonClass: "w-24" }]}
+                />
+            </tbody>
+        {:then timeAliveRanking}
+            <tbody>
+                {#if timeAliveRanking.length === 0}
+                    <StateRow colspan={3} rows={SIMPLE_LEADERBOARD_LEN + 1} tone="empty">
+                        No ranked players are available.
+                    </StateRow>
+                {:else}
+                    {#each timeAliveRanking as { uid, nick, squad, time_alive }, i (uid)}
+                        <Row
+                            rank={i + 1}
+                            {nick}
+                            {squad}
+                            {uid}
+                            stats={[formatTimeAlive(time_alive)]}
+                        />
+                    {/each}
+                    <ViewMore href={resolve("/leaderboard/timeAlive")} />
                 {/if}
             </tbody>
         {:catch _}

@@ -34,6 +34,10 @@ export default (tag: string) =>
                     bucketSize: z.literal(distributionBucketSizes.level),
                     buckets: z.array(bucketSchema),
                 }),
+                timeAlive: z.object({
+                    bucketSize: z.literal(distributionBucketSizes.timeAlive),
+                    buckets: z.array(bucketSchema),
+                }),
                 xp: z.object({
                     bucketSize: z.literal(distributionBucketSizes.xp),
                     buckets: z.array(bucketSchema),
@@ -43,7 +47,8 @@ export default (tag: string) =>
             }),
         )
         .query(async () => {
-            const { gamesElo, killsElo, level, xp, updatedAt } = await getCachedDistribution()
+            const { gamesElo, killsElo, level, timeAlive, xp, updatedAt } =
+                await getCachedDistribution()
 
             return {
                 gamesElo: {
@@ -57,6 +62,10 @@ export default (tag: string) =>
                 level: {
                     bucketSize: distributionBucketSizes.level,
                     buckets: level,
+                },
+                timeAlive: {
+                    bucketSize: distributionBucketSizes.timeAlive,
+                    buckets: timeAlive,
                 },
                 xp: {
                     bucketSize: distributionBucketSizes.xp,

@@ -46,6 +46,11 @@
             title: "XP",
             unit: "XP",
         },
+        {
+            statistic: "timeAlive",
+            title: "Time Alive in hours",
+            unit: "hours",
+        },
     ] as const
 </script>
 

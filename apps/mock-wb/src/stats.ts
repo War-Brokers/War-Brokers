@@ -1116,8 +1116,32 @@ export const stats: Player[] = [
                           max: zombieTimeAliveCount * 1000,
                           fractionDigits: 5,
                       })
+            const secondsPerHour = 60 * 60
+            const maxTimeAliveHours = 17_500
             const timeAlive =
-                totalKills === 0 ? 0 : (totalKills / faker.number.float({ min: 0.05, max: 5 })) * 60
+                faker.number.float({ min: 0, max: 1 }) < 0.0001
+                    ? faker.number.float({
+                          min: 2_500 * secondsPerHour,
+                          max: maxTimeAliveHours * secondsPerHour,
+                          fractionDigits: 5,
+                      })
+                    : (faker.helpers.maybe(
+                          () =>
+                              faker.number.float(
+                                  ExponentialOptions({
+                                      min: 25 * secondsPerHour,
+                                      max: maxTimeAliveHours * secondsPerHour,
+                                      scale: 8 * secondsPerHour,
+                                      shape: 0.4,
+                                  }),
+                              ),
+                          { probability: 0.215 },
+                      ) ??
+                      faker.number.float({
+                          min: 0,
+                          max: 25 * secondsPerHour - 1,
+                          fractionDigits: 5,
+                      }))
             const timeAliveCount = timeAlive === 0 ? 0 : totalDeaths + 1
             const averageTimeAlive = timeAliveCount === 0 ? 0 : timeAlive / timeAliveCount
             const timeAliveLongest =

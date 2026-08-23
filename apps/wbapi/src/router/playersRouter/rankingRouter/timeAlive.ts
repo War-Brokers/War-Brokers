@@ -1,0 +1,31 @@
+import { z } from "zod"
+
+import { db } from "@/index"
+import { publicProcedure } from "@/trpc"
+
+import { rankingInput } from "."
+
+export default (tags: string[]) =>
+    publicProcedure
+        .meta({
+            openapi: {
+                method: "GET",
+                path: "/players/ranking/timeAlive",
+                tags,
+            },
+        })
+        .input(rankingInput)
+        .output(
+            z.array(
+                z.object({
+                    uid: z.string(),
+                    nick: z.string(),
+                    squad: z.string().nullable(),
+                    time_alive: z.number(),
+                }),
+            ),
+        )
+        .query(async ({ input }) => {
+            const { limit, offset } = input
+            return await db.getTimeAliveRanking(limit, offset || 0)
+        })

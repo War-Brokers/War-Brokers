@@ -274,8 +274,8 @@ test("a distribution failure produces one status announcement", async ({ page })
     await page.goto("/")
 
     const globalStatistics = page.getByRole("region", { name: "Global Statistics" })
-    await expect(globalStatistics.getByText("Update time unavailable")).toHaveCount(4)
-    await expect(globalStatistics.getByText("Failed to load", { exact: true })).toHaveCount(4)
+    await expect(globalStatistics.getByText("Update time unavailable")).toHaveCount(5)
+    await expect(globalStatistics.getByText("Failed to load", { exact: true })).toHaveCount(5)
     await expect(globalStatistics.getByRole("status")).toHaveCount(1)
     await expect(globalStatistics.getByRole("status")).toHaveText(
         "Global statistics failed to load.",

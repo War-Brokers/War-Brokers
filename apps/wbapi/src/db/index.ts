@@ -9,13 +9,19 @@ import {
     getGamesEloDistribution,
     getKillsEloDistribution,
     getLevelDistribution,
+    getTimeAliveDistribution,
     getXPDistribution,
 } from "./distribution"
 import getDBPlayerCount from "./getDBPlayerCount"
 import getPercentile from "./getPercentile"
 import getSquadMembers from "./getSquadMembers"
 import getSquads from "./getSquads"
-import { getGamesEloRanking, getKillsEloRanking, getXPRanking } from "./ranking"
+import {
+    getGamesEloRanking,
+    getKillsEloRanking,
+    getTimeAliveRanking,
+    getXPRanking,
+} from "./ranking"
 import searchPlayerByName from "./searchPlayerByName"
 import setPlayer from "./setPlayer"
 
@@ -41,9 +47,11 @@ export function initDB() {
         getGamesEloDistribution: getGamesEloDistribution(db),
         getXPDistribution: getXPDistribution(db),
         getLevelDistribution: getLevelDistribution(db),
+        getTimeAliveDistribution: getTimeAliveDistribution(db),
 
         getKillsEloRanking: getKillsEloRanking(db),
         getGamesEloRanking: getGamesEloRanking(db),
+        getTimeAliveRanking: getTimeAliveRanking(db),
         getXPRanking: getXPRanking(db),
     }
 }

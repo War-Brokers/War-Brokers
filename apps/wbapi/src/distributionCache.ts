@@ -19,13 +19,15 @@ async function refreshDistribution(): Promise<CachedPlayerDistribution> {
         db.getGamesEloDistribution(),
         db.getKillsEloDistribution(),
         db.getLevelDistribution(),
+        db.getTimeAliveDistribution(),
         db.getXPDistribution(),
     ])
-        .then(([gamesElo, killsElo, level, xp]) => {
+        .then(([gamesElo, killsElo, level, timeAlive, xp]) => {
             cachedDistribution = {
                 gamesElo,
                 killsElo,
                 level,
+                timeAlive,
                 xp,
                 updatedAt: new Date().toISOString(),
             }

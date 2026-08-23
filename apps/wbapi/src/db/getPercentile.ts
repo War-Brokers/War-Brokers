@@ -1,5 +1,5 @@
 import type { Player } from "@warbrokers/types/src/player"
-import { eq, sql } from "drizzle-orm"
+import { eq, isNotNull, sql } from "drizzle-orm"
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js"
 
 import { players } from "@/db/schema"
@@ -11,7 +11,7 @@ export default (db: PostgresJsDatabase) => {
      * i.e. This player is better than X percent of players.
      */
     return async (
-        key: "xp" | "gamesELO" | "killsELO",
+        key: "xp" | "gamesELO" | "killsELO" | "time_alive",
         uid: Player["uid"],
     ): Promise<Result<number>> => {
         let n: number // number of players with worse stats than the player we're comparing with
@@ -24,6 +24,7 @@ export default (db: PostgresJsDatabase) => {
                     n: sql<number>`RANK() OVER (ORDER BY ${players[key]} ASC)`.as("n"),
                 })
                 .from(players)
+                .where(isNotNull(players[key]))
                 .as("sq")
 
             const arr = await db
@@ -43,7 +44,10 @@ export default (db: PostgresJsDatabase) => {
         }
 
         {
-            const [count] = await db.select({ N: sql<number>`count(*)` }).from(players)
+            const [count] = await db
+                .select({ N: sql<number>`count(*)` })
+                .from(players)
+                .where(isNotNull(players[key]))
 
             if (!count) throw new Error("Player count query returned no rows")
 

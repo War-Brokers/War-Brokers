@@ -82,6 +82,7 @@ export const players = pgTable(
         index("squad_idx").using("hash", table.squad),
         index("killsELO_idx").using("btree", table.killsELO.asc()),
         index("gamesELO_idx").using("btree", table.gamesELO.asc()),
+        index("time_alive_idx").using("btree", table.time_alive.asc()),
     ],
 )
 

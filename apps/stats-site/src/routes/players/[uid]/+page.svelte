@@ -25,6 +25,7 @@
         xpPercentile,
         killsEloPercentile,
         gamesEloPercentile,
+        timeAlivePercentile,
     } = data
 
     function MongoDBObjectId2UnixTimestamp(s: string) {
@@ -232,6 +233,9 @@
         data={player.time_alive == null
             ? "Unknown"
             : `${(player.time_alive / 60 / 60).toFixed(2)} hours`}
+        _id="time-alive-percentile"
+        percentile={timeAlivePercentile}
+        popoverSideOffset={48}
     />
 </div>
 

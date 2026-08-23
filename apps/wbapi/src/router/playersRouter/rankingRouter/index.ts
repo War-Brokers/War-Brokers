@@ -4,6 +4,7 @@ import { createTRPCRouter } from "@/trpc"
 
 import gamesElo from "./gamesElo"
 import killsElo from "./killsElo"
+import timeAlive from "./timeAlive"
 import xp from "./xp"
 
 export const tag = "ranking"
@@ -17,5 +18,6 @@ export default (parentTag: string) =>
     createTRPCRouter({
         killsElo: killsElo([parentTag, tag]),
         gamesElo: gamesElo([parentTag, tag]),
+        timeAlive: timeAlive([parentTag, tag]),
         xp: xp([parentTag, tag]),
     })

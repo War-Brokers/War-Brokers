@@ -26,5 +26,8 @@ export const load = (async ({ params }) => {
         xpPercentile: trpc.players.percentile.xp.query({ uid }),
         killsEloPercentile: trpc.players.percentile.killsElo.query({ uid }),
         gamesEloPercentile: trpc.players.percentile.gamesElo.query({ uid }),
+        timeAlivePercentile: player.time_alive
+            ? trpc.players.percentile.timeAlive.query({ uid })
+            : undefined,
     }
 }) satisfies PageServerLoad

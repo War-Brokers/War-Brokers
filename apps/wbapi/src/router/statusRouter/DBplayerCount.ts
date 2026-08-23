@@ -13,6 +13,8 @@ export default (tag: string) =>
                 tags: [tag],
             },
         })
-        .input(z.undefined())
+        .input(z.object({ statistic: z.literal("timeAlive").optional() }).optional())
         .output(z.number())
-        .query(() => db.getDBPlayerCount())
+        .query(({ input }) =>
+            db.getDBPlayerCount(input?.statistic === "timeAlive" ? "time_alive" : undefined),
+        )

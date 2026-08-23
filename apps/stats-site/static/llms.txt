@@ -4,10 +4,11 @@
 
 ## Statistics
 
-- [Home](/): Player counts, live streams, and global statistics.
+- [Home](/): Player counts, live streams, and global player statistics.
 - [Leaderboards](/leaderboard): Overview of the global player leaderboards.
 - [Games Elo leaderboard](/leaderboard/gamesELO): Players ranked by Games Elo.
 - [Kills Elo leaderboard](/leaderboard/killsELO): Players ranked by Kills Elo.
+- [Time Alive leaderboard](/leaderboard/timeAlive): Players ranked by total time alive.
 - [XP leaderboard](/leaderboard/xp): Players ranked by experience points and level.
 - [Ranks](/ranks): War Brokers player rank thresholds and badges.
 - [Servers](/servers): Active War Brokers servers by region.

@@ -164,6 +164,7 @@ readonly routes=(
     "leaderboard|/leaderboard"
     "leaderboard-games-elo|/leaderboard/gamesELO"
     "leaderboard-kills-elo|/leaderboard/killsELO"
+    "leaderboard-time-alive|/leaderboard/timeAlive"
     "leaderboard-xp|/leaderboard/xp"
     "player|/players/${player_uid}"
     "ranks|/ranks"

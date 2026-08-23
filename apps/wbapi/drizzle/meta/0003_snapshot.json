@@ -1,0 +1,409 @@
+{
+  "id": "919b0c42-ba23-4bc5-a509-869e6a4579b3",
+  "prevId": "37342236-19b9-41e4-99c5-a386b91d1b73",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.players": {
+      "name": "players",
+      "schema": "",
+      "columns": {
+        "uid": {
+          "name": "uid",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "nick": {
+          "name": "nick",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nicklower": {
+          "name": "nicklower",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "level": {
+          "name": "level",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "xp": {
+          "name": "xp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "coins": {
+          "name": "coins",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "squad": {
+          "name": "squad",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "killsELO": {
+          "name": "killsELO",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gamesELO": {
+          "name": "gamesELO",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "wins": {
+          "name": "wins",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "losses": {
+          "name": "losses",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "number_of_jumps": {
+          "name": "number_of_jumps",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scuds_launched": {
+          "name": "scuds_launched",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "zombie_kills": {
+          "name": "zombie_kills",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "zombie_deaths": {
+          "name": "zombie_deaths",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "zombie_time_alive": {
+          "name": "zombie_time_alive",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "zombie_time_alive_count": {
+          "name": "zombie_time_alive_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "zombie_wins": {
+          "name": "zombie_wins",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "self_destructs": {
+          "name": "self_destructs",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "distance_driven": {
+          "name": "distance_driven",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "distance_driven_count": {
+          "name": "distance_driven_count",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kills_per_vehicle": {
+          "name": "kills_per_vehicle",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shots_fired_unzoomed": {
+          "name": "shots_fired_unzoomed",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shots_fired_zoomed": {
+          "name": "shots_fired_zoomed",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shots_hit_unzoomed": {
+          "name": "shots_hit_unzoomed",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shots_hit_zoomed": {
+          "name": "shots_hit_zoomed",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "damage_dealt": {
+          "name": "damage_dealt",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "damage_received": {
+          "name": "damage_received",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "most_kills_between_deaths": {
+          "name": "most_kills_between_deaths",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "most_kills_in_round": {
+          "name": "most_kills_in_round",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kills_per_weapon": {
+          "name": "kills_per_weapon",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deaths": {
+          "name": "deaths",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "headshots": {
+          "name": "headshots",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "longest_kill": {
+          "name": "longest_kill",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "banned": {
+          "name": "banned",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "steam": {
+          "name": "steam",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "time": {
+          "name": "time",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "joinTime": {
+          "name": "joinTime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ping_time": {
+          "name": "ping_time",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ping_time_count": {
+          "name": "ping_time_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "frame_rate": {
+          "name": "frame_rate",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "frame_rate_count": {
+          "name": "frame_rate_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "time_alive_count": {
+          "name": "time_alive_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "time_alive_longest": {
+          "name": "time_alive_longest",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "time_alive": {
+          "name": "time_alive",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "nicklower_idx": {
+          "name": "nicklower_idx",
+          "columns": [
+            {
+              "expression": "nicklower",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last",
+              "opclass": "gin_trgm_ops"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "level_idx": {
+          "name": "level_idx",
+          "columns": [
+            {
+              "expression": "level",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "xp_idx": {
+          "name": "xp_idx",
+          "columns": [
+            {
+              "expression": "xp",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "squad_idx": {
+          "name": "squad_idx",
+          "columns": [
+            {
+              "expression": "squad",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "hash",
+          "with": {}
+        },
+        "killsELO_idx": {
+          "name": "killsELO_idx",
+          "columns": [
+            {
+              "expression": "killsELO",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "gamesELO_idx": {
+          "name": "gamesELO_idx",
+          "columns": [
+            {
+              "expression": "gamesELO",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "time_alive_idx": {
+          "name": "time_alive_idx",
+          "columns": [
+            {
+              "expression": "time_alive",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
