@@ -3,6 +3,7 @@ import { redirect } from "@sveltejs/kit"
 import { parsePage } from "$lib/components/Paged/pageUtil"
 import trpc from "$lib/trpc"
 
+import { withPercentile } from "../withPercentile"
 import type { PageServerLoad } from "./$types"
 
 const LIMIT = 50
@@ -16,10 +17,13 @@ export const load = (({ url }) => {
         page,
         limit: LIMIT,
         offset,
-        getGamesEloRanking: trpc.players.ranking.gamesElo.query({
-            limit: LIMIT,
-            offset,
-        }),
+        getGamesEloRanking: withPercentile(
+            trpc.players.ranking.gamesElo.query({
+                limit: LIMIT,
+                offset,
+            }),
+            "gamesElo",
+        ),
         playerCount: trpc.status.dbPlayerCount.query(),
     }
 }) satisfies PageServerLoad

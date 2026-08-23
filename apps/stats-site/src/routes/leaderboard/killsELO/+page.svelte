@@ -10,10 +10,11 @@
         caption: "Kills Elo leaderboard",
         headers: [{ label: "Kills ELO", class: "min-w-24", skeletonClass: "w-20" }],
         ranking: data.killsEloRanking.then((players) =>
-            players.map(({ uid, nick, squad, killsELO }) => ({
+            players.map(({ uid, nick, squad, percentile, killsELO }) => ({
                 uid,
                 nick,
                 squad,
+                percentile,
                 stats: [killsELO.toFixed(2)] as const,
             })),
         ),

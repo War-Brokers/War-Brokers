@@ -52,6 +52,7 @@
                         nick={player.nick}
                         squad={player.squad}
                         uid={player.uid}
+                        percentile={player.percentile}
                         stats={player.stats}
                     />
                 {/each}

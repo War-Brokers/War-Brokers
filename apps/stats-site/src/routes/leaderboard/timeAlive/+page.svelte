@@ -12,10 +12,11 @@
         caption: "Time Alive leaderboard",
         headers: [{ label: "Time Alive", class: "min-w-32", skeletonClass: "w-24" }],
         ranking: data.timeAliveRanking.then((players) =>
-            players.map(({ uid, nick, squad, time_alive }) => ({
+            players.map(({ uid, nick, squad, percentile, time_alive }) => ({
                 uid,
                 nick,
                 squad,
+                percentile,
                 stats: [formatTimeAlive(time_alive)] as const,
             })),
         ),

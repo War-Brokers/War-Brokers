@@ -13,10 +13,11 @@
             { label: "Level", class: "min-w-24", skeletonClass: "w-12" },
         ],
         ranking: data.XPRanking.then((players) =>
-            players.map(({ uid, nick, squad, xp, level }) => ({
+            players.map(({ uid, nick, squad, percentile, xp, level }) => ({
                 uid,
                 nick,
                 squad,
+                percentile,
                 stats: [xp.toLocaleString("en-US"), level] as const,
             })),
         ),

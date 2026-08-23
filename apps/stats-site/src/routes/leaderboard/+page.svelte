@@ -50,8 +50,15 @@
                         No ranked players are available.
                     </StateRow>
                 {:else}
-                    {#each killsEloRanking as { uid, nick, squad, killsELO }, i (uid)}
-                        <Row rank={i + 1} {nick} {squad} {uid} stats={[killsELO.toFixed(2)]} />
+                    {#each killsEloRanking as { uid, nick, squad, percentile, killsELO }, i (uid)}
+                        <Row
+                            rank={i + 1}
+                            {nick}
+                            {squad}
+                            {uid}
+                            {percentile}
+                            stats={[killsELO.toFixed(2)]}
+                        />
                     {/each}
                     <ViewMore href={resolve("/leaderboard/killsELO")} />
                 {/if}
@@ -91,8 +98,15 @@
                         No ranked players are available.
                     </StateRow>
                 {:else}
-                    {#each gamesEloRanking as { uid, nick, squad, gamesELO }, i (uid)}
-                        <Row rank={i + 1} {nick} {squad} {uid} stats={[gamesELO.toFixed(2)]} />
+                    {#each gamesEloRanking as { uid, nick, squad, percentile, gamesELO }, i (uid)}
+                        <Row
+                            rank={i + 1}
+                            {nick}
+                            {squad}
+                            {uid}
+                            {percentile}
+                            stats={[gamesELO.toFixed(2)]}
+                        />
                     {/each}
                     <ViewMore href={resolve("/leaderboard/gamesELO")} />
                 {/if}
@@ -132,12 +146,13 @@
                         No ranked players are available.
                     </StateRow>
                 {:else}
-                    {#each timeAliveRanking as { uid, nick, squad, time_alive }, i (uid)}
+                    {#each timeAliveRanking as { uid, nick, squad, percentile, time_alive }, i (uid)}
                         <Row
                             rank={i + 1}
                             {nick}
                             {squad}
                             {uid}
+                            {percentile}
                             stats={[formatTimeAlive(time_alive)]}
                         />
                     {/each}
@@ -183,12 +198,13 @@
                         No ranked players are available.
                     </StateRow>
                 {:else}
-                    {#each xpRanking as { uid, nick, squad, xp, level }, i (uid)}
+                    {#each xpRanking as { uid, nick, squad, percentile, xp, level }, i (uid)}
                         <Row
                             rank={i + 1}
                             {nick}
                             {squad}
                             {uid}
+                            {percentile}
                             stats={[xp.toLocaleString("en-US"), level]}
                         />
                     {/each}

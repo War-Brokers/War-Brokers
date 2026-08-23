@@ -10,10 +10,11 @@
         caption: "Games Elo leaderboard",
         headers: [{ label: "Games ELO", class: "min-w-24", skeletonClass: "w-20" }],
         ranking: data.getGamesEloRanking.then((players) =>
-            players.map(({ uid, nick, squad, gamesELO }) => ({
+            players.map(({ uid, nick, squad, percentile, gamesELO }) => ({
                 uid,
                 nick,
                 squad,
+                percentile,
                 stats: [gamesELO.toFixed(2)] as const,
             })),
         ),

@@ -10,6 +10,7 @@ export type LeaderboardRow = {
     uid: string
     nick: string
     squad: string | null
+    percentile: Promise<number | undefined>
     stats: readonly [LeaderboardValue, ...LeaderboardValue[]]
 }
 

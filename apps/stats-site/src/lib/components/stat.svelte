@@ -7,13 +7,14 @@
     import { percentile2rank } from "$lib/rank"
     import { cn } from "$lib/utils"
 
-    export let title: string
-    export let data: string | number
+    export let title = ""
+    export let data: string | number | undefined = undefined
     export let _id: string | undefined = undefined
     export let percentile: Promise<number | undefined> | undefined = undefined
     export let popoverSideOffset = 4
     export let compact = false
     export let rate: string | undefined = undefined
+    export let iconOnly = false
 
     const chart = {
         baseline: 68,
@@ -71,8 +72,14 @@
     }
 </script>
 
-<div class={cn("flex flex-col", compact ? "w-full min-w-0 items-center" : "min-w-24")}>
-    {#if title || percentile}
+<div
+    class={cn(
+        "flex",
+        iconOnly ? "size-7 shrink-0 items-center justify-center" : "flex-col",
+        !iconOnly && (compact ? "w-full min-w-0 items-center" : "min-w-24"),
+    )}
+>
+    {#if title || percentile !== undefined}
         <div class={cn("flex w-full", compact && "justify-center")}>
             {#if title}
                 <span class="font-bold whitespace-nowrap dark:text-gray-400">
@@ -90,7 +97,7 @@
                             openDelay={0}
                             closeDelay={0}
                             class={cn(
-                                "flex items-center justify-center rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400",
+                                "flex shrink-0 items-center justify-center rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400",
                                 title && "ms-1.5",
                             )}
                         >
@@ -172,30 +179,32 @@
             {/await}
         </div>
     {/if}
-    {#if rate}
-        <button
-            type="button"
-            aria-label="{data}. {title} rate: {rate}"
-            class={cn(
-                "group relative w-fit rounded-sm font-black underline decoration-dotted underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400",
-                compact ? "w-full text-center wrap-break-word sm:text-2xl" : "text-2xl",
-            )}
-        >
-            {data}
-            <span
-                role="tooltip"
-                aria-label="{title} rate"
-                class="pointer-events-none invisible absolute bottom-full left-1/2 z-50 mb-1 -translate-x-1/2 rounded-lg bg-gray-900 px-3 py-2 text-sm font-light whitespace-nowrap text-gray-100 opacity-0 shadow-md ring-1 ring-gray-700 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100"
+    {#if !iconOnly && data !== undefined}
+        {#if rate}
+            <button
+                type="button"
+                aria-label="{data}. {title} rate: {rate}"
+                class={cn(
+                    "group relative w-fit rounded-sm font-black underline decoration-dotted underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400",
+                    compact ? "w-full text-center wrap-break-word sm:text-2xl" : "text-2xl",
+                )}
             >
-                {rate}
-            </span>
-        </button>
-    {:else}
-        <span
-            class={cn(
-                "font-black",
-                compact ? "w-full text-center wrap-break-word sm:text-2xl" : "text-2xl",
-            )}>{data}</span
-        >
+                {data}
+                <span
+                    role="tooltip"
+                    aria-label="{title} rate"
+                    class="pointer-events-none invisible absolute bottom-full left-1/2 z-50 mb-1 -translate-x-1/2 rounded-lg bg-gray-900 px-3 py-2 text-sm font-light whitespace-nowrap text-gray-100 opacity-0 shadow-md ring-1 ring-gray-700 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100"
+                >
+                    {rate}
+                </span>
+            </button>
+        {:else}
+            <span
+                class={cn(
+                    "font-black",
+                    compact ? "w-full text-center wrap-break-word sm:text-2xl" : "text-2xl",
+                )}>{data}</span
+            >
+        {/if}
     {/if}
 </div>
