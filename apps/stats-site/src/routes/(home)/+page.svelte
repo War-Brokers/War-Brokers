@@ -4,7 +4,7 @@
 
     import { resolve } from "$app/paths"
     import A from "$lib/components/A.svelte"
-    import Distribution from "$lib/components/Distribution.svelte"
+    import Distribution from "$lib/components/Distribution/Distribution.svelte"
     import PlayerSearch from "$lib/components/PlayerSearch.svelte"
     import Title from "$lib/components/title.svelte"
 
