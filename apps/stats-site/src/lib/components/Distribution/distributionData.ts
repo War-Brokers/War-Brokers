@@ -8,9 +8,25 @@ export type DistributionData = {
     bucketSize: number
 }
 
+export type LogBucket = {
+    exponent: number
+    count: number
+}
+
+export type LogDistributionData = {
+    buckets: LogBucket[]
+    bucketBase: number
+}
+
+export type DistributionScale = "band" | "linear"
+
 export type ChartBucket = Bucket & {
     playersBelow: number
     percentile: number
+}
+
+export function getLogBucketBoundary(exponent: number, bucketBase: number) {
+    return bucketBase ** exponent - 1
 }
 
 export function getTickValues(buckets: readonly Bucket[]) {
@@ -45,7 +61,7 @@ export function fillMissingBuckets(buckets: readonly Bucket[], bucketSize: numbe
     })
 }
 
-export function addCumulativeValues(buckets: readonly Bucket[]) {
+export function addCumulativeValues<T extends Bucket>(buckets: readonly T[]) {
     const totalCount = buckets.reduce((total, bucket) => total + bucket.count, 0)
     let playersBelow = 0
 
@@ -59,7 +75,7 @@ export function addCumulativeValues(buckets: readonly Bucket[]) {
         playersBelow += bucket.count
 
         return cumulativeBucket
-    }) satisfies ChartBucket[]
+    })
 }
 
 export function formatCompact(value: number) {
@@ -83,11 +99,10 @@ export function formatBetterThan(value: number) {
     return `better than ${percentile}%`
 }
 
-export function formatBucketLabel(start: number, size: number, compact = false) {
-    const end = start + size - 1
+export function formatBucketRange(start: number, end: number, compact = false) {
     const format = compact
         ? formatCompact
         : (value: number) => value.toLocaleString("en-US", { useGrouping: "min2" })
 
-    return `${format(start)}-${format(end)}`
+    return `[${format(start)}, ${format(end)})`
 }

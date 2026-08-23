@@ -1,6 +1,8 @@
-import { scaleBand } from "d3-scale"
+import { scaleBand, scaleLinear } from "d3-scale"
 
 import { type Rank, rankNamesByPercentile, ranks } from "$lib/rank"
+
+import type { DistributionScale } from "./distributionData"
 
 const focusOutlineWidth = 2
 const focusOutlineOffset = 2
@@ -11,8 +13,6 @@ export type RankMarkerBucket = {
     playersBelow: number
     percentile: number
 }
-
-export type RankMarkerScale = (value: number) => number | undefined
 
 export const rankMarkerGeometry = {
     iconSize: 32,
@@ -47,12 +47,16 @@ export const rankMilestones = [...rankNamesByPercentile]
 
 type RankMilestone = (typeof rankMilestones)[number]
 export type PositionedRankMilestone = RankMilestone & { x: number; iconX: number }
+type RankMarkerBucketPosition = {
+    x: number
+    width: number
+}
+type RankMarkerBucketPositioner = (bucket: RankMarkerBucket) => RankMarkerBucketPosition
 
 function getRankMilestoneX(
     percentile: number,
     buckets: readonly RankMarkerBucket[],
-    xScale: RankMarkerScale,
-    bandwidth: number,
+    getBucketPosition: RankMarkerBucketPositioner,
 ) {
     const lastBucket = buckets.at(-1)
     if (!lastBucket) return 0
@@ -66,7 +70,9 @@ function getRankMilestoneX(
             ? 0
             : Math.min(1, Math.max(0, (targetCount - bucket.playersBelow) / bucket.count))
 
-    return Number(xScale(bucket.start)) + bandwidth * bucketProgress
+    const { x, width } = getBucketPosition(bucket)
+
+    return x + width * bucketProgress
 }
 
 function spreadRankIcons(milestones: Array<RankMilestone & { x: number }>, maximumX: number) {
@@ -94,13 +100,12 @@ function spreadRankIcons(milestones: Array<RankMilestone & { x: number }>, maxim
 
 export function getRankMilestonePositions(
     buckets: readonly RankMarkerBucket[],
-    xScale: RankMarkerScale,
-    bandwidth: number,
+    getBucketPosition: RankMarkerBucketPositioner,
     containerWidth: number,
 ) {
     const milestones = rankMilestones.map((milestone) => ({
         ...milestone,
-        x: getRankMilestoneX(milestone.percentile, buckets, xScale, bandwidth),
+        x: getRankMilestoneX(milestone.percentile, buckets, getBucketPosition),
     }))
     // Keep the right half of the last icon and its focus outline in view.
     const maximumX = Math.max(
@@ -116,16 +121,51 @@ export function getRankMilestonePositions(
 export function getRankMilestonePositionsForWidth(
     buckets: readonly RankMarkerBucket[],
     containerWidth: number,
+    scale: DistributionScale = "band",
+    bucketSize = 0,
 ) {
-    if (containerWidth === 0) return []
+    if (containerWidth <= 0) return []
 
-    const xScale = scaleBand<number>()
-        .domain(buckets.map((bucket) => bucket.start))
-        // Match LayerChart's padded range so overlay icons and SVG paths share x positions.
-        .range([0, containerWidth - rankMarkerChartPadding.left - rankMarkerChartPadding.right])
-        .padding(rankMarkerBandPadding)
+    const range = [0, containerWidth - rankMarkerChartPadding.left - rankMarkerChartPadding.right]
 
-    return getRankMilestonePositions(buckets, xScale, xScale.bandwidth(), containerWidth)
+    if (scale === "band") {
+        const xScale = scaleBand<number>()
+            .domain(buckets.map((bucket) => bucket.start))
+            // Match LayerChart's padded range so overlay icons and SVG paths share x positions.
+            .range(range)
+            .padding(rankMarkerBandPadding)
+
+        return getRankMilestonePositions(
+            buckets,
+            (bucket) => ({
+                x: Number(xScale(bucket.start)),
+                width: xScale.bandwidth(),
+            }),
+            containerWidth,
+        )
+    }
+
+    const firstBucket = buckets[0]
+    const lastBucket = buckets.at(-1)
+    if (!firstBucket || !lastBucket) return []
+
+    const domainStart = firstBucket.start
+    const domainEnd = lastBucket.start + bucketSize
+    if (domainEnd <= domainStart) return []
+
+    const domain = [domainStart, domainEnd]
+
+    const xScale = scaleLinear().domain(domain).range(range)
+
+    return getRankMilestonePositions(
+        buckets,
+        (bucket) => {
+            const x = xScale(bucket.start)
+
+            return { x, width: xScale(bucket.start + bucketSize) - x }
+        },
+        containerWidth,
+    )
 }
 
 export function getRankMilestonePath(

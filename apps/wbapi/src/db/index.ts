@@ -9,6 +9,9 @@ import {
     getGamesEloDistribution,
     getKillsEloDistribution,
     getLevelDistribution,
+    getLogLevelDistribution,
+    getLogTimeAliveDistribution,
+    getLogXPDistribution,
     getTimeAliveDistribution,
     getXPDistribution,
 } from "./distribution"
@@ -48,6 +51,9 @@ export function initDB() {
         getXPDistribution: getXPDistribution(db),
         getLevelDistribution: getLevelDistribution(db),
         getTimeAliveDistribution: getTimeAliveDistribution(db),
+        getLogLevelDistribution: getLogLevelDistribution(db),
+        getLogTimeAliveDistribution: getLogTimeAliveDistribution(db),
+        getLogXPDistribution: getLogXPDistribution(db),
 
         getKillsEloRanking: getKillsEloRanking(db),
         getGamesEloRanking: getGamesEloRanking(db),

@@ -5,8 +5,12 @@ import { players } from "@/db/schema"
 
 import type { DistributionBucket } from "."
 
-const secondsPerHour = 60 * 60
+export const secondsPerHour = 60 * 60
 export const bucketSize = 25
+
+export const timeAliveCondition = sql`
+    ${players.time_alive} IS NOT NULL AND ${players.time_alive} >= 0
+`
 
 export default (db: PostgresJsDatabase) => {
     return async (): Promise<DistributionBucket[]> => {
@@ -16,7 +20,7 @@ export default (db: PostgresJsDatabase) => {
                     * ${bucketSize} AS start,
                 count(*)::integer AS count
             FROM ${players}
-            WHERE ${players.time_alive} IS NOT NULL
+            WHERE ${timeAliveCondition}
             GROUP BY 1
             ORDER BY 1
         `)

@@ -25,7 +25,11 @@ function getPosition(rank: string, positions: PositionedRankMilestone[]) {
 
 describe("rank marker geometry", () => {
     it("interpolates each rank within its distribution bucket", () => {
-        const positions = getRankMilestonePositions(buckets, (value) => value * 10, 10, 500)
+        const positions = getRankMilestonePositions(
+            buckets,
+            (bucket) => ({ x: bucket.start * 10, width: 10 }),
+            500,
+        )
 
         expect(getPosition("Novice", positions)).toMatchObject({ x: 0, iconX: 0 })
         expect(getPosition("Adequate", positions)).toMatchObject({ x: 102, iconX: 102 })
@@ -39,8 +43,7 @@ describe("rank marker geometry", () => {
                 { start: 10, count: 0, playersBelow: 10, percentile: 50 },
                 { start: 20, count: 10, playersBelow: 10, percentile: 50 },
             ],
-            (value) => value,
-            10,
+            (bucket) => ({ x: bucket.start, width: 10 }),
             500,
         )
 
@@ -50,8 +53,7 @@ describe("rank marker geometry", () => {
     it("spreads overlapping markers across the available width", () => {
         const positions = getRankMilestonePositions(
             [{ start: 0, count: 100, playersBelow: 0, percentile: 0 }],
-            () => 0,
-            0,
+            () => ({ x: 0, width: 0 }),
             100,
         )
 
@@ -62,6 +64,14 @@ describe("rank marker geometry", () => {
 
     it("keeps the width helper empty before the chart has a width", () => {
         expect(getRankMilestonePositionsForWidth(buckets, 0)).toEqual([])
+    })
+
+    it("uses continuous bucket widths for linear coordinates", () => {
+        const positions = getRankMilestonePositionsForWidth(buckets, 500, "linear", 10)
+
+        expect(getPosition("Novice", positions).x).toBe(0)
+        expect(getPosition("Adequate", positions).x).toBeCloseTo(266.4)
+        expect(getPosition("Competent", positions).x).toBeCloseTo(355.2)
     })
 
     it("builds a leader path only when a marker moved", () => {

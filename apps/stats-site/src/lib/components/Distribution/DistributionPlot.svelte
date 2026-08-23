@@ -5,7 +5,7 @@
 
 <script lang="ts">
     import { scaleBand, scaleLinear } from "d3-scale"
-    import { Axis, BarChart, Circle, Spline } from "layerchart"
+    import { Axis, BarChart, Circle, Rect, Spline } from "layerchart"
     import { onMount } from "svelte"
 
     import * as Chart from "$lib/components/ui/chart"
@@ -13,15 +13,18 @@
 
     import {
         addCumulativeValues,
-        type Bucket,
         type ChartBucket,
+        type DistributionData,
+        type DistributionScale,
         fillMissingBuckets,
         formatBetterThan,
-        formatBucketLabel,
+        formatBucketRange,
         formatCompact,
         formatCount,
         formatNumber,
+        getLogBucketBoundary,
         getTickValues,
+        type LogDistributionData,
     } from "./distributionData"
     import {
         getRankMilestonePath,
@@ -62,25 +65,51 @@
 
     type DistributionChartContext = {
         containerWidth: number
-        xScale: ((value: number) => number | undefined) & { bandwidth?: () => number }
+        xScale: DistributionChartScale
+        yScale: DistributionChartScale
         yRange: number[]
         tooltip: { data: unknown }
+    }
+
+    type DistributionChartScale = ((value: number) => number | undefined) & {
+        bandwidth?: () => number
     }
 
     type Props = {
         id: string
         title: string
-        buckets: Bucket[]
-        bucketSize: number
+        data: DistributionData | LogDistributionData
         compactTooltip?: boolean
+        scale?: DistributionScale
     }
 
-    const { id, title, buckets, bucketSize, compactTooltip = false }: Props = $props()
+    const { id, title, data, compactTooltip = false, scale = "band" }: Props = $props()
 
     let chartWidth = $state(0)
     let activeRankPopover = $state<string>()
 
-    const completeBuckets = $derived(addCumulativeValues(fillMissingBuckets(buckets, bucketSize)))
+    function isLogDistributionData(
+        value: DistributionData | LogDistributionData,
+    ): value is LogDistributionData {
+        return "bucketBase" in value
+    }
+
+    const isLogarithmic = $derived(isLogDistributionData(data))
+    const bucketSize = $derived(isLogDistributionData(data) ? 1 : data.bucketSize)
+    const logBucketBase = $derived(isLogDistributionData(data) ? data.bucketBase : undefined)
+    const plotBuckets = $derived(
+        isLogDistributionData(data)
+            ? data.buckets.map((bucket) => ({ start: bucket.exponent, count: bucket.count }))
+            : data.buckets,
+    )
+    const xScaleType = $derived(isLogarithmic ? "linear" : scale)
+
+    const completeBuckets = $derived(
+        addCumulativeValues(fillMissingBuckets(plotBuckets, bucketSize)),
+    )
+    const xScale = $derived(
+        xScaleType === "band" ? scaleBand<number>().padding(rankMarkerBandPadding) : scaleLinear(),
+    )
 
     onMount(() => {
         const closeOtherRankPopover = (event: Event) => {
@@ -174,6 +203,85 @@
         return scaleLinear().domain(distributionChart.line.axis.domain).range(range)
     }
 
+    function getBucketEnd(bucket: ChartBucket) {
+        return bucket.start + bucketSize
+    }
+
+    function getHorizontalValue(bucket: ChartBucket) {
+        if (xScaleType === "band") return bucket.start
+
+        return [bucket.start, getBucketEnd(bucket)]
+    }
+
+    function getHorizontalBucketWidth(scale: DistributionChartScale, bucket: ChartBucket) {
+        if (scale.bandwidth) return scale.bandwidth()
+
+        return Math.max(0, Number(scale(getBucketEnd(bucket))) - Number(scale(bucket.start)))
+    }
+
+    function getHorizontalBarDimensions(context: DistributionChartContext, bucket: ChartBucket) {
+        const x = Number(context.xScale(bucket.start))
+        const y = Number(context.yScale(bucket.count))
+        const baseline = Number(context.yScale(0))
+
+        return {
+            x,
+            y,
+            width: getHorizontalBucketWidth(context.xScale, bucket),
+            height: Math.max(0, baseline - y),
+        }
+    }
+
+    function getHorizontalTickValues() {
+        const ticks = getTickValues(completeBuckets)
+        if (xScaleType === "band") return ticks
+
+        const firstBucket = completeBuckets[0]
+        const lastBucket = completeBuckets.at(-1)
+        const endpoints =
+            firstBucket && lastBucket ? [firstBucket.start, getBucketEnd(lastBucket)] : []
+
+        return [...new Set([...ticks, ...endpoints])].sort((left, right) => left - right)
+    }
+
+    function formatHorizontalBucketLabel(value: unknown) {
+        const values = Array.isArray(value) ? (value as unknown[]) : [value]
+        const start = values[0]
+        if (typeof start !== "number") return String(start)
+
+        const end = typeof values[1] === "number" ? values[1] : start + bucketSize
+        if (isLogarithmic && logBucketBase !== undefined) {
+            return formatBucketRange(
+                getLogBucketBoundary(start, logBucketBase),
+                getLogBucketBoundary(end, logBucketBase),
+                compactTooltip,
+            )
+        }
+
+        return formatBucketRange(start, start + bucketSize, compactTooltip)
+    }
+
+    function formatHorizontalTick(value: unknown) {
+        const coordinate = Number(value)
+        const actualValue =
+            isLogarithmic && logBucketBase !== undefined
+                ? getLogBucketBoundary(coordinate, logBucketBase)
+                : coordinate
+
+        return formatCompact(actualValue)
+    }
+
+    function formatTableBucketLabel(bucket: ChartBucket) {
+        if (isLogarithmic && logBucketBase !== undefined) {
+            return formatBucketRange(
+                getLogBucketBoundary(bucket.start, logBucketBase),
+                getLogBucketBoundary(getBucketEnd(bucket), logBucketBase),
+            )
+        }
+
+        return formatBucketRange(bucket.start, getBucketEnd(bucket))
+    }
+
     function updateRankPopover(rank: string, open: boolean) {
         const popoverId = `${id}-${rank}`
 
@@ -190,6 +298,8 @@
             ? false
             : "xScale" in value &&
                   typeof value.xScale === "function" &&
+                  "yScale" in value &&
+                  typeof value.yScale === "function" &&
                   "containerWidth" in value &&
                   typeof value.containerWidth === "number" &&
                   "yRange" in value &&
@@ -232,19 +342,20 @@
                 <div
                     class="size-full"
                     role="img"
-                    aria-label={`${title} histogram with a cumulative percentile line and colored rank milestone bars. Data is available in the following table.`}
+                    aria-label={`${title} histogram with a cumulative percentile line and colored rank milestone bars. Horizontal scale: ${isLogarithmic ? "logarithmic" : scale === "linear" ? "linear" : "bucketed"}. Data is available in the following table.`}
                 >
                     <Chart.Container {id} config={chartConfig} class="size-full">
                         <BarChart
                             data={completeBuckets}
-                            xScale={scaleBand().padding(rankMarkerBandPadding)}
-                            x="start"
+                            {xScale}
+                            x={getHorizontalValue}
                             padding={rankMarkerChartPadding}
                             series={barSeries}
                             props={{
-                                bars: {
-                                    stroke: "none",
-                                    rounded: "none",
+                                tooltip: {
+                                    context: {
+                                        mode: xScaleType === "band" ? "band" : "bisect-x",
+                                    },
                                 },
                                 highlight: {
                                     area: {
@@ -255,20 +366,36 @@
                                 },
                             }}
                         >
+                            {#snippet marks({ context })}
+                                {@const chartContext = asDistributionChartContext(context)}
+                                {#each completeBuckets as bucket (bucket.start)}
+                                    <Rect
+                                        {...getHorizontalBarDimensions(chartContext, bucket)}
+                                        fill="currentColor"
+                                        stroke="none"
+                                        motion="none"
+                                        class={distributionChart.bar.colorClass}
+                                    />
+                                {/each}
+                            {/snippet}
                             {#snippet aboveMarks({ context })}
                                 {@const chartContext = asDistributionChartContext(context)}
                                 {@const lineScale = getLineScale(chartContext.yRange)}
-                                {@const bandwidth = chartContext.xScale.bandwidth?.() ?? 0}
                                 {@const pathData = completeBuckets
                                     .map(
                                         (bucket, index) =>
-                                            `${index === 0 ? "M" : "L"}${Number(chartContext.xScale(bucket.start)) + bandwidth / 2},${lineScale(bucket[distributionChart.line.metric.key])}`,
+                                            `${index === 0 ? "M" : "L"}${Number(chartContext.xScale(bucket.start)) + getHorizontalBucketWidth(chartContext.xScale, bucket) / 2},${lineScale(bucket[distributionChart.line.metric.key])}`,
                                     )
                                     .join(" ")}
                                 {@const positionedRankMilestones = getRankMilestonePositions(
                                     completeBuckets,
-                                    chartContext.xScale,
-                                    bandwidth,
+                                    (bucket) => ({
+                                        x: Number(chartContext.xScale(bucket.start)),
+                                        width: getHorizontalBucketWidth(
+                                            chartContext.xScale,
+                                            bucket,
+                                        ),
+                                    }),
                                     chartContext.containerWidth,
                                 )}
                                 {#each positionedRankMilestones as milestone (milestone.rank)}
@@ -297,7 +424,11 @@
                                         cx={Number(
                                             chartContext.xScale(chartContext.tooltip.data.start),
                                         ) +
-                                            bandwidth / 2}
+                                            getHorizontalBucketWidth(
+                                                chartContext.xScale,
+                                                chartContext.tooltip.data,
+                                            ) /
+                                                2}
                                         cy={lineScale(
                                             chartContext.tooltip.data[
                                                 distributionChart.line.metric.key
@@ -316,8 +447,8 @@
                                 <Axis
                                     placement="bottom"
                                     scale={chartContext.xScale}
-                                    ticks={getTickValues(completeBuckets)}
-                                    format={(value) => formatCompact(Number(value))}
+                                    ticks={getHorizontalTickValues()}
+                                    format={formatHorizontalTick}
                                 />
                                 <Axis
                                     placement={distributionChart.line.axis.placement}
@@ -329,19 +460,12 @@
                                 />
                             {/snippet}
                             {#snippet tooltip()}
-                                <Chart.Tooltip
-                                    labelFormatter={(value) =>
-                                        formatBucketLabel(
-                                            Number(value),
-                                            bucketSize,
-                                            compactTooltip,
-                                        )}
-                                />
+                                <Chart.Tooltip labelFormatter={formatHorizontalBucketLabel} />
                             {/snippet}
                         </BarChart>
                     </Chart.Container>
                 </div>
-                {#each getRankMilestonePositionsForWidth(completeBuckets, chartWidth) as milestone (milestone.rank)}
+                {#each getRankMilestonePositionsForWidth(completeBuckets, chartWidth, xScaleType, bucketSize) as milestone (milestone.rank)}
                     <Popover.Root
                         open={activeRankPopover === `${id}-${milestone.rank}`}
                         onOpenChange={(open) => {
@@ -418,7 +542,7 @@
             <tbody>
                 {#each completeBuckets as bucket (bucket.start)}
                     <tr>
-                        <td>{formatBucketLabel(bucket.start, bucketSize)}</td>
+                        <td>{formatTableBucketLabel(bucket)}</td>
                         {#each chartMetrics as metric (metric.key)}
                             <td>
                                 {metric.tableFormat(bucket[metric.key])}
@@ -430,6 +554,8 @@
         </table>
     </div>
     <figcaption class="sr-only">
-        {title} distribution and cumulative percentile.
+        {title} distribution and cumulative percentile with a {isLogarithmic
+            ? "logarithmic"
+            : scale} horizontal scale.
     </figcaption>
 </figure>

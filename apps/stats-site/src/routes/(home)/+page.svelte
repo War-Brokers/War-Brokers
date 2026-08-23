@@ -11,9 +11,10 @@
     import type { PageData } from "./$types"
     import Metric from "./Metric.svelte"
 
-    export let data: PageData
+    const { data }: { data: PageData } = $props()
     const {
         distribution,
+        logDistribution,
         playerCount: _playerCount,
         playersOnline,
         twitchStreams: _twitchStreams,
@@ -30,26 +31,36 @@
             statistic: "gamesElo",
             title: "Games Elo",
             unit: "Elo",
+            scale: "band",
+            logData: undefined,
         },
         {
             statistic: "killsElo",
             title: "Kills Elo",
             unit: "Elo",
+            scale: "band",
+            logData: undefined,
         },
         {
             statistic: "level",
             title: "Level",
             unit: "levels",
+            scale: "linear",
+            logData: logDistribution.then((value) => value.level),
         },
         {
             statistic: "xp",
             title: "XP",
             unit: "XP",
+            scale: "linear",
+            logData: logDistribution.then((value) => value.xp),
         },
         {
             statistic: "timeAlive",
             title: "Time Alive in hours",
             unit: "hours",
+            scale: "linear",
+            logData: logDistribution.then((value) => value.timeAlive),
         },
     ] as const
 </script>
@@ -92,9 +103,11 @@
                 id={`distribution-${chart.statistic}`}
                 title={chart.title}
                 data={distribution.then((value) => value[chart.statistic])}
+                logData={chart.logData}
                 updatedAt={distributionUpdatedAt}
                 cacheUpdateIntervalHours={distributionCacheUpdateIntervalHours}
                 compactTooltip={chart.statistic === "xp"}
+                scale={chart.scale}
             />
         {/each}
     </div>

@@ -267,7 +267,9 @@ test("map previews render above the sticky table header", async ({ page }) => {
 test("a distribution failure produces one status announcement", async ({ page }) => {
     await page.route("**/", async (route) => {
         const response = await route.fetch()
-        const body = rejectStreamedPromise(await response.text(), 2)
+        let body = await response.text()
+        body = rejectStreamedPromise(body, 2)
+        body = rejectStreamedPromise(body, 3)
         await route.fulfill({ response, body })
     })
 

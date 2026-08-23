@@ -1,17 +1,23 @@
 <script lang="ts">
+    import type { Snippet } from "svelte"
+
     type Props = {
         title: string
         updatedAt: string | Promise<string>
         cacheUpdateIntervalHours: number | Promise<number>
+        controls?: Snippet | undefined
     }
 
-    const { title, updatedAt, cacheUpdateIntervalHours }: Props = $props()
+    const { title, updatedAt, cacheUpdateIntervalHours, controls }: Props = $props()
 </script>
 
 <header
     class="flex flex-col gap-1 border-b border-gray-700 p-4 sm:flex-row sm:items-baseline sm:justify-between sm:px-6"
 >
-    <h3 class="text-lg font-semibold text-gray-100">{title}</h3>
+    <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+        <h3 class="text-lg font-semibold text-gray-100">{title}</h3>
+        {#if controls}{@render controls()}{/if}
+    </div>
     {#await Promise.all([updatedAt, cacheUpdateIntervalHours])}
         <span class="skeleton-reveal" aria-busy="true">
             <span

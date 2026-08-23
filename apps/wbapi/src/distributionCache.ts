@@ -1,74 +1,108 @@
-import type { PlayerDistribution } from "@/db/distribution"
+import type { LogPlayerDistribution, PlayerDistribution } from "@/db/distribution"
 import { db } from "@/index"
 
 export const cacheUpdateIntervalHours = 24
 
-export type CachedPlayerDistribution = PlayerDistribution & {
+type CachedValue<T> = {
+    value: T
     updatedAt: string
 }
 
-let cachedDistribution: CachedPlayerDistribution | undefined
-let refreshPromise: Promise<CachedPlayerDistribution> | undefined
-let refreshTimer: NodeJS.Timeout | undefined
-let started = false
+function createDistributionCache<T>(name: string, load: () => Promise<T>) {
+    let cachedValue: CachedValue<T> | undefined
+    let refreshPromise: Promise<CachedValue<T>> | undefined
+    let started = false
 
-async function refreshDistribution(): Promise<CachedPlayerDistribution> {
-    if (refreshPromise) return await refreshPromise
+    async function refresh() {
+        if (refreshPromise) return await refreshPromise
 
-    refreshPromise = Promise.all([
-        db.getGamesEloDistribution(),
-        db.getKillsEloDistribution(),
-        db.getLevelDistribution(),
-        db.getTimeAliveDistribution(),
-        db.getXPDistribution(),
-    ])
-        .then(([gamesElo, killsElo, level, timeAlive, xp]) => {
-            cachedDistribution = {
-                gamesElo,
-                killsElo,
-                level,
-                timeAlive,
-                xp,
-                updatedAt: new Date().toISOString(),
-            }
+        refreshPromise = load()
+            .then((value) => {
+                cachedValue = { value, updatedAt: new Date().toISOString() }
+                return cachedValue
+            })
+            .finally(() => {
+                refreshPromise = undefined
+            })
 
-            return cachedDistribution
-        })
-        .finally(() => {
-            refreshPromise = undefined
-        })
+        return await refreshPromise
+    }
 
-    return await refreshPromise
+    function scheduleRefreshAfter(delay: number) {
+        const timer = setTimeout(runRefreshCycle, delay)
+        timer.unref()
+    }
+
+    function runRefreshCycle() {
+        void refresh().then(
+            () => {
+                scheduleRefreshAfter(cacheUpdateIntervalHours * 60 * 60 * 1000)
+            },
+            (error: unknown) => {
+                console.error(`[${name}-refresh-error]`, error)
+                scheduleRefreshAfter(60 * 1000) // 1 minute
+            },
+        )
+    }
+
+    function start() {
+        if (started) return
+        started = true
+        runRefreshCycle()
+    }
+
+    async function get() {
+        if (cachedValue) return cachedValue
+        if (refreshPromise) return await refreshPromise
+
+        // startDistributionCache is called on server startup so this should mostly be unreachable
+        throw new Error(`${name} cache is unavailable`)
+    }
+
+    return { get, start }
 }
 
-function scheduleRefreshAfter(delay: number) {
-    refreshTimer = setTimeout(runRefreshCycle, delay)
-    refreshTimer.unref()
-}
+const distributionCache = createDistributionCache<PlayerDistribution>(
+    "player-distribution",
+    async () => {
+        const [gamesElo, killsElo, level, timeAlive, xp] = await Promise.all([
+            db.getGamesEloDistribution(),
+            db.getKillsEloDistribution(),
+            db.getLevelDistribution(),
+            db.getTimeAliveDistribution(),
+            db.getXPDistribution(),
+        ])
 
-function runRefreshCycle() {
-    void refreshDistribution().then(
-        () => {
-            scheduleRefreshAfter(cacheUpdateIntervalHours * 60 * 60 * 1000)
-        },
-        (error: unknown) => {
-            console.error("[player-distribution-refresh-error]", error)
-            scheduleRefreshAfter(60 * 1000) // 1 minute
-        },
-    )
-}
+        return { gamesElo, killsElo, level, timeAlive, xp }
+    },
+)
+
+const logDistributionCache = createDistributionCache<LogPlayerDistribution>(
+    "player-log-distribution",
+    async () => {
+        const [level, timeAlive, xp] = await Promise.all([
+            db.getLogLevelDistribution(),
+            db.getLogTimeAliveDistribution(),
+            db.getLogXPDistribution(),
+        ])
+
+        return { level, timeAlive, xp }
+    },
+)
 
 export function startDistributionCache() {
-    if (started) return
-    started = true
-
-    runRefreshCycle()
+    distributionCache.start()
+    logDistributionCache.start()
 }
 
-export async function getCachedDistribution(): Promise<CachedPlayerDistribution> {
-    if (cachedDistribution) return cachedDistribution
-    if (refreshPromise) return await refreshPromise
+export async function getCachedDistribution() {
+    const { value, updatedAt } = await distributionCache.get()
 
-    // startDistributionCache is called on server startup so this should mostly be unreachable
-    throw new Error("Player distribution cache is unavailable")
+    return { ...value, updatedAt }
+}
+
+export async function getCachedLogDistribution() {
+    const { value, updatedAt } = await logDistributionCache.get()
+
+    return { ...value, updatedAt }
 }
