@@ -3,12 +3,10 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js"
 
 import { players } from "@/db/schema"
 
-export default (db: PostgresJsDatabase) => {
-    return async () =>
-        await db
-            .select({ squad: sql<string>`coalesce(${players.squad}, '')`, memberCount: count() })
-            .from(players)
-            .where(and(isNotNull(players.squad), ne(players.squad, "")))
-            .groupBy(players.squad)
-            .orderBy(asc(players.squad))
-}
+export default (db: PostgresJsDatabase) => () =>
+    db
+        .select({ squad: sql<string>`coalesce(${players.squad}, '')`, memberCount: count() })
+        .from(players)
+        .where(and(isNotNull(players.squad), ne(players.squad, "")))
+        .groupBy(players.squad)
+        .orderBy(asc(players.squad))

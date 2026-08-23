@@ -15,4 +15,4 @@ export default (tag: string) =>
         })
         .input(z.undefined())
         .output(z.number())
-        .query(async () => await db.getDBPlayerCount())
+        .query(() => db.getDBPlayerCount())

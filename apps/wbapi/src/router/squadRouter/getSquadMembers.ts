@@ -30,4 +30,4 @@ export default (tag: string) =>
             }),
         )
         .output(z.array(playerSelectSchema))
-        .query(async ({ input }) => await db.getSquadMembers(input.squadName))
+        .query(({ input }) => db.getSquadMembers(input.squadName))

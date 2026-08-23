@@ -23,4 +23,4 @@ export default (tag: string) =>
         })
         .input(z.undefined())
         .output(responseSchema)
-        .query(async () => await db.getSquads())
+        .query(() => db.getSquads())
