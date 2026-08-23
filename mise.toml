@@ -144,10 +144,9 @@ fi
 [tasks.lighthouse]
 description = "Audit stats site routes with Lighthouse"
 alias = "ll"
-wait_for = ["check:lint", "check:types"]
-run = [{ task = "test:with-backend", args = ["lighthouse:audit"] }]
+run = [{ task = "test:with-backend", args = ["lighthouse:run"] }]
 
-[tasks."lighthouse:audit"]
+[tasks."lighthouse:run"]
 description = "Run Lighthouse against local services"
 hide = true
 run = '''
@@ -338,7 +337,7 @@ run = "mise -E dev exec -- pnpm test:unit --color"
 
 [tasks."test:e2e"]
 description = "Run end-to-end tests"
-wait_for = ["check:lint", "check:types", "lighthouse"]
+wait_for = ["lighthouse"]
 run = [{ task = "test:with-backend", args = ["test:e2e:run"] }]
 
 [tasks."test:e2e:run"]
@@ -379,13 +378,12 @@ fi
 
 [tasks."test:browser"]
 description = "Run browser tests"
-wait_for = ["check:lint", "check:types"]
 run = [{ task = "test:with-backend", args = ["test:browser:run"] }]
 
 [tasks."test:browser:run"]
 description = "Run browser tests against local services"
 hide = true
-run = [{ task = "lighthouse:audit" }, { task = "test:e2e:run" }]
+depends = ["lighthouse:run", "test:e2e:run"]
 
 [tasks.verify]
 description = "Run all checks and tests"
