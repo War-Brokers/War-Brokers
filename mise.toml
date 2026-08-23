@@ -12,6 +12,11 @@ MISE_NIX_LINK_PATHS = "bin,sbin,lib,share/postgresql,share/man,share/info,share/
 description = "Install node dependencies"
 run = "mise -E dev exec -- pnpm install --frozen-lockfile"
 
+[tasks.build]
+description = "Build the workspace"
+depends = ["install"]
+run = "mise -E dev exec -- pnpm turbo run build --color"
+
 [tasks."db:start"]
 description = "Start a local PostgreSQL database"
 run = '''
@@ -84,7 +89,7 @@ run = "mise -E dev exec -- pnpm -F wbapi db:studio"
 
 [tasks.dev]
 description = "Start dev servers"
-depends = ["db:migrate"]
+depends = ["build", "db:migrate"]
 depends_post = ["db:stop"]
 run = "mise -E dev exec -- pnpm dev:workspace --color"
 
@@ -144,6 +149,7 @@ fi
 [tasks.lighthouse]
 description = "Audit stats site routes with Lighthouse"
 alias = "ll"
+depends = ["build"]
 run = [{ task = "test:with-backend", args = ["lighthouse:run"] }]
 
 [tasks."lighthouse:run"]
@@ -183,7 +189,6 @@ if (printf '' >/dev/tcp/127.0.0.1/4173) >/dev/null 2>&1; then
     exit 1
 fi
 
-pnpm turbo run build --filter=@warbrokers/stats-site --cache-dir=.turbo --color
 HOST=127.0.0.1 PORT=4173 pnpm --filter=@warbrokers/stats-site exec node build &
 server_pid=$!
 declare -A audit_pids=()
@@ -317,11 +322,13 @@ run = "mise -E dev exec -- pnpm fmt:check"
 [tasks."check:lint"]
 description = "Lint the workspace"
 depends = ["install"]
+wait_for = ["build"]
 run = "mise -E dev exec -- pnpm lint --color"
 
 [tasks."check:types"]
 description = "Type-check the workspace"
 depends = ["install"]
+wait_for = ["build"]
 run = '''
 #!/usr/bin/env -S mise -E dev exec -- bash
 
@@ -379,6 +386,7 @@ fi
 
 [tasks."test:browser"]
 description = "Run browser tests"
+depends = ["build"]
 run = [{ task = "test:with-backend", args = ["test:browser:run"] }]
 
 [tasks."test:browser:run"]
@@ -390,6 +398,7 @@ depends = ["lighthouse:run", "test:e2e:run"]
 description = "Run all checks and tests"
 alias = "vv"
 depends = [
+    "build",
     "check:spelling",
     "check:format",
     "check:lint",

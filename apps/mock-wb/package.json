@@ -5,7 +5,7 @@
     "type": "module",
     "main": "./build/index.js",
     "scripts": {
-        "dev": "pnpm build && node .",
+        "dev": "node .",
         "build": "rm -rf build && tsup",
         "lint": "eslint .",
         "typecheck": "tsc --noEmit",
