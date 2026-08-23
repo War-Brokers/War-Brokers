@@ -25,5 +25,6 @@ export const load = (({ url }) => {
             "killsElo",
         ),
         playerCount: trpc.status.dbPlayerCount.query(),
+        statRange: trpc.players.range.killsElo.query().catch(() => undefined),
     }
 }) satisfies PageServerLoad

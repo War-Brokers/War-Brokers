@@ -19,6 +19,7 @@ import getDBPlayerCount from "./getDBPlayerCount"
 import getPercentile from "./getPercentile"
 import getSquadMembers from "./getSquadMembers"
 import getSquads from "./getSquads"
+import getStatRange from "./getStatRange"
 import {
     getGamesEloRanking,
     getKillsEloRanking,
@@ -44,6 +45,7 @@ export function initDB() {
         getSquads: getSquads(db),
         getSquadMembers: getSquadMembers(db),
         getPercentile: getPercentile(db),
+        getStatRange: getStatRange(db),
         getDBPlayerCount: getDBPlayerCount(db),
 
         getKillsEloDistribution: getKillsEloDistribution(db),

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { scaleBarWidth } from "../barWidth"
     import PaginatedLeaderboard from "../PaginatedLeaderboard.svelte"
     import type { LeaderboardView } from "../types"
     import type { PageData } from "./$types"
@@ -15,6 +16,7 @@
                 nick,
                 squad,
                 percentile,
+                barWidth: data.statRange.then((range) => scaleBarWidth(killsELO, range)),
                 stats: [killsELO.toFixed(2)] as const,
             })),
         ),

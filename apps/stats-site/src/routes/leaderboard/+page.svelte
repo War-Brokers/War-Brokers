@@ -8,6 +8,7 @@
     import { formatTimeAlive } from "$lib/formatting"
 
     import type { PageData } from "./$types"
+    import { scaleBarWidth } from "./barWidth"
     import { SIMPLE_LEADERBOARD_LEN } from "./config"
     import LeaderboardHeading from "./LeaderboardHeading.svelte"
     import LoadingRows from "./LoadingRows.svelte"
@@ -16,7 +17,16 @@
     import ViewMore from "./ViewMore.svelte"
 
     export let data: PageData
-    const { killsEloRanking, gamesEloRanking, timeAliveRanking, xpRanking } = data
+    const {
+        gamesEloRange,
+        gamesEloRanking,
+        killsEloRange,
+        killsEloRanking,
+        timeAliveRange,
+        timeAliveRanking,
+        xpRange,
+        xpRanking,
+    } = data
 </script>
 
 <Title title="Leaderboard" />
@@ -57,6 +67,7 @@
                             {squad}
                             {uid}
                             {percentile}
+                            barWidth={killsEloRange.then((range) => scaleBarWidth(killsELO, range))}
                             stats={[killsELO.toFixed(2)]}
                         />
                     {/each}
@@ -105,6 +116,7 @@
                             {squad}
                             {uid}
                             {percentile}
+                            barWidth={gamesEloRange.then((range) => scaleBarWidth(gamesELO, range))}
                             stats={[gamesELO.toFixed(2)]}
                         />
                     {/each}
@@ -153,6 +165,9 @@
                             {squad}
                             {uid}
                             {percentile}
+                            barWidth={timeAliveRange.then((range) =>
+                                scaleBarWidth(time_alive, range),
+                            )}
                             stats={[formatTimeAlive(time_alive)]}
                         />
                     {/each}
@@ -205,6 +220,7 @@
                             {squad}
                             {uid}
                             {percentile}
+                            barWidth={xpRange.then((range) => scaleBarWidth(xp, range))}
                             stats={[xp.toLocaleString("en-US"), level]}
                         />
                     {/each}

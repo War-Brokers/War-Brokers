@@ -13,5 +13,9 @@ export const load = (() => {
             "timeAlive",
         ),
         xpRanking: withPercentile(trpc.players.ranking.xp.query({ limit }), "xp"),
+        gamesEloRange: trpc.players.range.gamesElo.query().catch(() => undefined),
+        killsEloRange: trpc.players.range.killsElo.query().catch(() => undefined),
+        timeAliveRange: trpc.players.range.timeAlive.query().catch(() => undefined),
+        xpRange: trpc.players.range.xp.query().catch(() => undefined),
     }
 }) satisfies PageServerLoad

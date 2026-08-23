@@ -25,5 +25,6 @@ export const load = (({ url }) => {
             "timeAlive",
         ),
         playerCount: trpc.status.dbPlayerCount.query({ statistic: "timeAlive" }),
+        statRange: trpc.players.range.timeAlive.query().catch(() => undefined),
     }
 }) satisfies PageServerLoad

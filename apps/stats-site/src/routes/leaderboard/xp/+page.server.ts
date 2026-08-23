@@ -19,5 +19,6 @@ export const load = (({ url }) => {
         offset,
         XPRanking: withPercentile(trpc.players.ranking.xp.query({ limit: LIMIT, offset }), "xp"),
         playerCount: trpc.status.dbPlayerCount.query(),
+        statRange: trpc.players.range.xp.query().catch(() => undefined),
     }
 }) satisfies PageServerLoad

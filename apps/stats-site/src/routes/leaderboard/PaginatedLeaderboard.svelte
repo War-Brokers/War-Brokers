@@ -53,6 +53,7 @@
                         squad={player.squad}
                         uid={player.uid}
                         percentile={player.percentile}
+                        barWidth={player.barWidth}
                         stats={player.stats}
                     />
                 {/each}

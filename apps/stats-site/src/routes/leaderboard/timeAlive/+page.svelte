@@ -1,6 +1,7 @@
 <script lang="ts">
     import { formatTimeAlive } from "$lib/formatting"
 
+    import { scaleBarWidth } from "../barWidth"
     import PaginatedLeaderboard from "../PaginatedLeaderboard.svelte"
     import type { LeaderboardView } from "../types"
     import type { PageData } from "./$types"
@@ -17,6 +18,7 @@
                 nick,
                 squad,
                 percentile,
+                barWidth: data.statRange.then((range) => scaleBarWidth(time_alive, range)),
                 stats: [formatTimeAlive(time_alive)] as const,
             })),
         ),

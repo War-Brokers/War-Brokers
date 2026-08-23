@@ -4,6 +4,7 @@ import distribution from "./distribution"
 import getPlayer from "./getPlayer"
 import logDistribution from "./logDistribution"
 import percentileRouter from "./percentileRouter"
+import rangeRouter from "./rangeRouter"
 import rankingRouter from "./rankingRouter"
 import searchByName from "./searchByName"
 
@@ -18,4 +19,5 @@ export default createTRPCRouter({
 
     percentile: percentileRouter(tag),
     ranking: rankingRouter(tag),
+    range: rangeRouter(tag),
 })
