@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { lvl2xp } from "@warbrokers/types/src/level"
     import dayjs from "dayjs"
     import relativeTime from "dayjs/plugin/relativeTime"
     import utc from "dayjs/plugin/utc"
@@ -49,6 +50,16 @@
     dayjs.extend(relativeTime)
     const playingSince = dayjs.unix(MongoDBObjectId2UnixTimestamp(player.uid)).utc()
     const lastSeen = player.time === 0 ? undefined : dayjs.unix(player.time).utc()
+    const currentLevelXP = lvl2xp(player.level)
+    const nextLevelXP = lvl2xp(player.level + 1)
+    const levelXPRange = nextLevelXP - currentLevelXP
+    const levelXP = Math.max(0, Math.min(player.xp - currentLevelXP, levelXPRange))
+    const xpMissing = Math.max(0, nextLevelXP - player.xp)
+    const levelProgress = {
+        value: levelXP,
+        max: levelXPRange,
+        details: `${xpMissing.toLocaleString("en-US")} XP required for level ${player.level + 1}`,
+    }
     const absoluteTimeFormatter = new Intl.DateTimeFormat("en-US", {
         dateStyle: "long",
         timeStyle: "short",
@@ -186,7 +197,7 @@
 </div>
 
 <div class="flex w-full flex-wrap gap-10">
-    <Stat title="Level" data={player.level} />
+    <Stat title="Level" data={player.level} progress={levelProgress} />
     <Stat
         title="XP"
         data={player.xp.toLocaleString("en-US")}

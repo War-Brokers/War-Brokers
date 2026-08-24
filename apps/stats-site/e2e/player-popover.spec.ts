@@ -35,6 +35,24 @@ test("shows time alive and per-minute rates", async ({ page }) => {
     }
 })
 
+test("shows level progress percentage and XP details on demand", async ({ page }) => {
+    await page.goto(`/players/${pompUID}`)
+    await page.waitForLoadState("networkidle")
+
+    const level = page.getByText("Level", { exact: true }).locator("../..")
+    await expect(level).not.toContainText("22,760 XP required for level 380")
+    await expect(level.getByRole("progressbar")).toHaveCount(0)
+
+    await level.getByRole("button", { name: /level progress details/ }).hover()
+    const progressPopover = page.locator(`${popoverSelector}[aria-label="Level progress details"]`)
+    await expect(
+        progressPopover.getByRole("progressbar", { name: "Level progress" }),
+    ).toHaveAttribute("value", "2240")
+    await expect(progressPopover).toContainText("8.96%")
+    await expect(progressPopover).toContainText("2,240 / 25,000 XP")
+    await expect(progressPopover).toContainText("22,760 XP required for level 380")
+})
+
 test("shows local date and time details for profile timestamps", async ({ page }) => {
     await page.goto(`/players/${pompUID}`)
     await page.waitForLoadState("networkidle")

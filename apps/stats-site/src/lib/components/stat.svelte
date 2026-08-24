@@ -15,6 +15,13 @@
     export let compact = false
     export let rate: string | undefined = undefined
     export let iconOnly = false
+    export let progress:
+        | {
+              value: number
+              max: number
+              details: string
+          }
+        | undefined = undefined
 
     const chart = {
         baseline: 68,
@@ -180,7 +187,57 @@
         </div>
     {/if}
     {#if !iconOnly && data !== undefined}
-        {#if rate}
+        {#if progress}
+            {@const percentage =
+                progress.max > 0
+                    ? Math.min(100, Math.max(0, (progress.value / progress.max) * 100))
+                    : 0}
+            {@const percentageText = `${percentage.toFixed(2)}%`}
+            <Popover.Root>
+                <Popover.Trigger
+                    type="button"
+                    openOnHover
+                    openDelay={0}
+                    closeDelay={100}
+                    class={cn(
+                        "w-fit rounded-sm font-black underline decoration-dotted underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400",
+                        compact ? "w-full text-center wrap-break-word sm:text-2xl" : "text-2xl",
+                    )}
+                >
+                    {data}
+                    <span class="sr-only">
+                        {title
+                            ? `Show ${title.toLowerCase()} progress details`
+                            : "Show progress details"}
+                    </span>
+                </Popover.Trigger>
+                <Popover.Content
+                    side="top"
+                    align="center"
+                    collisionPadding={2}
+                    aria-label={title ? `${title} progress details` : undefined}
+                    class="w-64 max-w-[calc(100vw-2rem)] p-4 font-light"
+                >
+                    <div class="flex flex-col gap-2">
+                        <progress
+                            value={progress.value}
+                            max={progress.max}
+                            aria-label={title ? `${title} progress` : undefined}
+                            aria-valuetext={percentageText}
+                            class="h-1.5 w-full overflow-hidden rounded-full bg-gray-700 accent-orange-500 [&::-moz-progress-bar]:rounded-full [&::-moz-progress-bar]:bg-orange-500 [&::-webkit-progress-bar]:bg-gray-700 [&::-webkit-progress-value]:rounded-full [&::-webkit-progress-value]:bg-orange-500"
+                        ></progress>
+                        <div class="flex items-baseline justify-between gap-3 text-xs">
+                            <span class="font-bold text-gray-200">{percentageText}</span>
+                            <span class="text-gray-400">
+                                {progress.value.toLocaleString("en-US")} /
+                                {progress.max.toLocaleString("en-US")} XP
+                            </span>
+                        </div>
+                        <p class="text-center text-gray-300">{progress.details}</p>
+                    </div>
+                </Popover.Content>
+            </Popover.Root>
+        {:else if rate}
             <button
                 type="button"
                 aria-label="{data}. {title} rate: {rate}"

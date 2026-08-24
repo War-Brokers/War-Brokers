@@ -1,6 +1,21 @@
 import { expect, test } from "vitest"
 
-import { xp2lvl } from "./level"
+import { lvl2xp, xp2lvl } from "./level"
+
+test("lvl2xp", () => {
+    for (const level of [0, -1, 1.5, Number.NaN, Number.POSITIVE_INFINITY]) {
+        expect(() => lvl2xp(level)).toThrow(
+            `Level must be an integer lower than 1 but got ${level}`,
+        )
+    }
+
+    expect(lvl2xp(1)).toEqual(100)
+    expect(lvl2xp(13)).toEqual(87_000)
+    expect(lvl2xp(14)).toEqual(102_000)
+    expect(lvl2xp(23)).toEqual(237_000)
+    expect(lvl2xp(24)).toEqual(250_000)
+    expect(lvl2xp(101)).toEqual(2_175_000)
+})
 
 test("xp2lvl", () => {
     expect(() => xp2lvl(0)).toThrow("XP can not be lower than 100 but got 0")
