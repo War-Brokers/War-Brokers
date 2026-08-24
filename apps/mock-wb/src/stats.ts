@@ -41,7 +41,8 @@ const squadNames = faker.helpers.shuffle(
                 },
                 () => squadName,
             ),
-        ),
+        )
+        .concat(Array.from({ length: squadConfig.minSize }, () => "100%")),
 )
 
 /**

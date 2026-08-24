@@ -61,8 +61,10 @@
 <div class="mb-10 flex w-full flex-col items-center justify-center">
     <h1 class="mx-auto mb-4 text-4xl font-black">
         {#if player.squad}
-            <A href={resolve("/squads/[squadName]", { squadName: player.squad })}
-                >[{player.squad}]</A
+            <A
+                href={resolve("/squads/[squadName]", {
+                    squadName: encodeURIComponent(player.squad),
+                })}>[{player.squad}]</A
             >
         {/if}
         {player.nick}
