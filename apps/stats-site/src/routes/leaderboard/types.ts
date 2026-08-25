@@ -36,6 +36,7 @@ export type LeaderboardTableView<Player extends LeaderboardPlayer> = {
     visibleRows: number
     rankOffset?: number
     range?: Promise<StatRange | undefined>
+    updatedAt?: Promise<number>
     viewMore?: ResolvedPathname
     emptyMessage?: string
 }
@@ -48,4 +49,5 @@ export type LeaderboardView<Player extends LeaderboardPlayer> = {
     offset: number
     limit: number
     range?: Promise<StatRange | undefined>
+    updatedAt?: Promise<number>
 }

@@ -3,6 +3,7 @@
     import Table from "$lib/components/Table/Table.svelte"
 
     import { scaleBarWidth } from "./barWidth"
+    import LeaderboardUpdatedAt from "./LeaderboardUpdatedAt.svelte"
     import LoadingRows from "./LoadingRows.svelte"
     import Row from "./Row.svelte"
     import StateRow from "./StateRow.svelte"
@@ -13,6 +14,7 @@
     export let visibleRows: LeaderboardTableView<Player>["visibleRows"]
     export let rankOffset = 0
     export let range: LeaderboardTableView<Player>["range"] = undefined
+    export let updatedAt: LeaderboardTableView<Player>["updatedAt"] = undefined
     export let viewMore: LeaderboardTableView<Player>["viewMore"] = undefined
     export let emptyMessage: LeaderboardTableView<Player>["emptyMessage"] =
         "No ranked players are available."
@@ -30,7 +32,16 @@
 </script>
 
 {#if showHeading}
-    <h3 class="mt-10 mb-3 w-full text-xl font-semibold">{definition.heading}</h3>
+    <h3
+        class="mt-10 mb-3 flex w-full flex-wrap items-baseline gap-x-3 gap-y-1 text-xl font-semibold"
+    >
+        <span>{definition.heading}</span>
+        {#if updatedAt}<LeaderboardUpdatedAt {updatedAt} />{/if}
+    </h3>
+{:else if updatedAt}
+    <div class="my-3 flex w-full justify-start">
+        <LeaderboardUpdatedAt {updatedAt} />
+    </div>
 {/if}
 
 <Table>

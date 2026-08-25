@@ -1,6 +1,6 @@
 import { fetchUpstream } from "@/fetch"
 
-import { fetchDailyStats } from "./index"
+import { fetchDailyStats, getDailyStatsUpdatedAt } from "./index"
 
 const DAILY_CACHE_TIME = 10 * 60 * 1000
 
@@ -39,6 +39,7 @@ it("returns stale daily data while checking for a newer source update", async ()
 
     const firstResponse = await fetchDailyStats()
     await expect(firstResponse.text()).resolves.toBe(dailyFeed)
+    await expect(getDailyStatsUpdatedAt()).resolves.toBe(1787551934)
     expect(mockedFetchUpstream).toHaveBeenCalledTimes(2)
 
     jest.advanceTimersByTime(DAILY_CACHE_TIME)

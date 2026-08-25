@@ -22,5 +22,6 @@
     visibleRows={view.limit}
     rankOffset={view.offset}
     range={view.range}
+    updatedAt={view.updatedAt}
     emptyMessage="No ranked players are available on this page."
 />

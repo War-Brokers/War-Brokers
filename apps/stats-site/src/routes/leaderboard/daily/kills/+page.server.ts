@@ -17,6 +17,7 @@ export const load = (({ url }) => {
         limit: LIMIT,
         offset,
         dailyKillsRanking: trpc.players.ranking.dailyKills.query({ limit: LIMIT, offset }),
+        dailyStatsUpdatedAt: trpc.players.ranking.dailyStatsUpdatedAt.query(),
         playerCount: trpc.status.dbPlayerCount.query({ statistic: "dailyKills" }),
         statRange: trpc.players.range.dailyKills.query().catch(() => undefined),
     }

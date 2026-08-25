@@ -13,6 +13,7 @@
         offset: data.offset,
         limit: data.limit,
         range: data.statRange,
+        updatedAt: data.dailyStatsUpdatedAt,
     } as const
 </script>
 

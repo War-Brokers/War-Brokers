@@ -8,7 +8,7 @@
     import type { PageData } from "./$types"
 
     export let data: PageData
-    const { dailyKillsRanking, statRange } = data
+    const { dailyKillsRanking, dailyStatsUpdatedAt, statRange } = data
 </script>
 
 <Title title="Daily Leaderboards" />
@@ -21,6 +21,7 @@
         ranking={dailyKillsRanking}
         visibleRows={SIMPLE_LEADERBOARD_LEN}
         range={statRange}
+        updatedAt={dailyStatsUpdatedAt}
         viewMore={resolve(dailyKillsLeaderboard.path)}
         showHeading
     />

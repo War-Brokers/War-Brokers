@@ -63,4 +63,9 @@ export async function fetchDailyStats() {
     return value.response.clone()
 }
 
+export async function getDailyStatsUpdatedAt() {
+    const { value } = await dailyStatsCache.get()
+    return value.sourceUpdatedAt
+}
+
 export { getDailyKillsPlayerCount, getDailyKillsRange, getDailyKillsRanking } from "./dailyKills"
