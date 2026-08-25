@@ -6,6 +6,8 @@
 
 - [Home](/): Player counts, live streams, and global player statistics.
 - [Leaderboards](/leaderboard): Overview of the global player leaderboards.
+- [Daily leaderboards](/leaderboard/daily): Player leaderboards for the current daily stats period.
+- [Daily kills leaderboard](/leaderboard/daily/kills): Players ranked by kills earned since yesterday.
 - [Games Elo leaderboard](/leaderboard/gamesELO): Players ranked by Games Elo.
 - [Kills Elo leaderboard](/leaderboard/killsELO): Players ranked by Kills Elo.
 - [Time Alive leaderboard](/leaderboard/timeAlive): Players ranked by total time alive.

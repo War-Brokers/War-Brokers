@@ -3,20 +3,29 @@ import { z } from "zod"
 import type { StatRangeStatistic } from "@/db/getStatRange"
 import { db } from "@/index"
 import { createTRPCRouter, publicProcedure } from "@/trpc"
+import { getDailyKillsRange } from "@/wbdb"
 
 export const tag = "range"
 
 const statisticLabels = {
+    dailyKills: "daily kills",
     gamesElo: "games Elo",
     killsElo: "kills Elo",
     level: "level",
     timeAlive: "time alive",
     xp: "XP",
-} as const satisfies Record<StatRangeStatistic, string>
+} as const satisfies Record<StatRangeStatistic | "dailyKills", string>
+
+type RangeStatistic = keyof typeof statisticLabels
 
 const statRange = z.object({ min: z.number(), max: z.number() })
 
-const rangeProcedure = (statistic: StatRangeStatistic, tags: string[]) =>
+function getRange(statistic: RangeStatistic) {
+    if (statistic === "dailyKills") return getDailyKillsRange()
+    return db.getStatRange(statistic)
+}
+
+const rangeProcedure = (statistic: RangeStatistic, tags: string[]) =>
     publicProcedure
         .meta({
             openapi: {
@@ -28,10 +37,11 @@ const rangeProcedure = (statistic: StatRangeStatistic, tags: string[]) =>
         })
         .input(z.undefined())
         .output(statRange)
-        .query(async () => await db.getStatRange(statistic))
+        .query(async () => await getRange(statistic))
 
 export default (parentTag: string) =>
     createTRPCRouter({
+        dailyKills: rangeProcedure("dailyKills", [parentTag, tag]),
         gamesElo: rangeProcedure("gamesElo", [parentTag, tag]),
         killsElo: rangeProcedure("killsElo", [parentTag, tag]),
         level: rangeProcedure("level", [parentTag, tag]),

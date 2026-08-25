@@ -168,6 +168,8 @@ readonly routes=(
     "home|/"
     "comparison|/${player_uid}-vs-${player_uid}"
     "leaderboard|/leaderboard"
+    "leaderboard-daily|/leaderboard/daily"
+    "leaderboard-daily-kills|/leaderboard/daily/kills"
     "leaderboard-games-elo|/leaderboard/gamesELO"
     "leaderboard-kills-elo|/leaderboard/killsELO"
     "leaderboard-time-alive|/leaderboard/timeAlive"

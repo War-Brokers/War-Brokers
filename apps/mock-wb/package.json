@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "@warbrokers/types": "workspace:*",
-        "csv-parse": "5.6.0",
+        "csv-parse": "7.0.2",
         "csv-stringify": "6.5.2",
         "express": "5.0.1",
         "express-basic-auth": "1.2.1",

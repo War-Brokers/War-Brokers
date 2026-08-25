@@ -1,19 +1,9 @@
-import { fetchUpstream } from "@/fetch"
 import { FailReason } from "@/types"
+import { fetchPlayerStats } from "@/wbdb"
 
 import { fetchPlayer } from "./fetchPlayer"
 
-jest.mock("@/fetch", () => ({
-    fetchUpstream: jest.fn(),
-}))
-
-jest.mock("@/env", () => ({
-    env: {
-        WB_DB_BASE: "https://domain.example",
-        WB_DB_ID: "id",
-        WB_DB_PW: "password",
-    },
-}))
+jest.mock("@/wbdb", () => ({ fetchPlayerStats: jest.fn() }))
 
 const playerData = {
     uid: "player-uid",
@@ -50,10 +40,10 @@ const playerData = {
     joinTime: 0,
 }
 
-const mockedFetchUpstream = jest.mocked(fetchUpstream)
+const mockedFetchPlayerStats = jest.mocked(fetchPlayerStats)
 
 function mockPlayerResponse(overrides: Partial<typeof playerData> | Record<string, unknown> = {}) {
-    mockedFetchUpstream.mockResolvedValue(
+    mockedFetchPlayerStats.mockResolvedValue(
         new Response(
             JSON.stringify({
                 ...playerData,
@@ -105,7 +95,7 @@ test("converts string weapon-stat values to numbers", async () => {
 })
 
 test("treats an HTTP 404 as unavailable", async () => {
-    mockedFetchUpstream.mockResolvedValue(new Response("Not found", { status: 404 }))
+    mockedFetchPlayerStats.mockResolvedValue(new Response("Not found", { status: 404 }))
 
     await expect(fetchPlayer(playerData.uid)).resolves.toEqual({
         success: false,
@@ -114,7 +104,7 @@ test("treats an HTTP 404 as unavailable", async () => {
 })
 
 test("identifies the upstream missing-player response", async () => {
-    mockedFetchUpstream.mockResolvedValue(new Response(`No data for player: ${playerData.uid}`))
+    mockedFetchPlayerStats.mockResolvedValue(new Response(`No data for player: ${playerData.uid}`))
 
     await expect(fetchPlayer(playerData.uid)).resolves.toEqual({
         success: false,
@@ -123,7 +113,7 @@ test("identifies the upstream missing-player response", async () => {
 })
 
 test("identifies the upstream missing-record response", async () => {
-    mockedFetchUpstream.mockResolvedValue(new Response("Error! Cannot find record"))
+    mockedFetchPlayerStats.mockResolvedValue(new Response("Error! Cannot find record"))
 
     await expect(fetchPlayer(playerData.uid)).resolves.toEqual({
         success: false,
@@ -132,7 +122,7 @@ test("identifies the upstream missing-record response", async () => {
 })
 
 test("requires an exact HTTP 200 missing-player response", async () => {
-    mockedFetchUpstream.mockResolvedValue(
+    mockedFetchPlayerStats.mockResolvedValue(
         new Response(`No data for player: ${playerData.uid}`, { status: 201 }),
     )
 
@@ -143,7 +133,7 @@ test("requires an exact HTTP 200 missing-player response", async () => {
 })
 
 test("treats an unsuccessful upstream response as unavailable", async () => {
-    mockedFetchUpstream.mockResolvedValue(new Response("Unavailable", { status: 503 }))
+    mockedFetchPlayerStats.mockResolvedValue(new Response("Unavailable", { status: 503 }))
 
     await expect(fetchPlayer(playerData.uid)).resolves.toEqual({
         success: false,
@@ -152,7 +142,7 @@ test("treats an unsuccessful upstream response as unavailable", async () => {
 })
 
 test("treats an upstream network rejection as unavailable", async () => {
-    mockedFetchUpstream.mockRejectedValue(new TypeError("fetch failed"))
+    mockedFetchPlayerStats.mockRejectedValue(new TypeError("fetch failed"))
 
     await expect(fetchPlayer(playerData.uid)).resolves.toEqual({
         success: false,

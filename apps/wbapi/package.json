@@ -23,6 +23,7 @@
         "@trpc/server": "10.45.4",
         "@warbrokers/types": "workspace:*",
         "cors": "2.8.5",
+        "csv-parse": "7.0.2",
         "dotenv": "16.4.5",
         "drizzle-orm": "0.45.2",
         "drizzle-zod": "0.5.1",

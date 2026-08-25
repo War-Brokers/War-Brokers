@@ -2,6 +2,7 @@ import { z } from "zod"
 
 import { db } from "@/index"
 import { publicProcedure } from "@/trpc"
+import { getDailyKillsPlayerCount } from "@/wbdb"
 
 export default (tag: string) =>
     publicProcedure
@@ -13,8 +14,15 @@ export default (tag: string) =>
                 tags: [tag],
             },
         })
-        .input(z.object({ statistic: z.literal("timeAlive").optional() }).optional())
+        .input(z.object({ statistic: z.enum(["timeAlive", "dailyKills"]) }).optional())
         .output(z.number())
-        .query(({ input }) =>
-            db.getDBPlayerCount(input?.statistic === "timeAlive" ? "time_alive" : undefined),
-        )
+        .query(({ input }) => {
+            switch (input?.statistic) {
+                case undefined:
+                    return db.getDBPlayerCount()
+                case "timeAlive":
+                    return db.getDBPlayerCount("time_alive")
+                case "dailyKills":
+                    return getDailyKillsPlayerCount()
+            }
+        })

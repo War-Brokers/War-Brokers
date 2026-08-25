@@ -2,20 +2,14 @@ import type { Player } from "@warbrokers/types/src/player"
 import { playerSchema } from "@warbrokers/types/src/player"
 import { z } from "zod"
 
-import { env } from "@/env"
-import { fetchUpstream } from "@/fetch"
 import type { Result } from "@/types"
 import { FailReason } from "@/types"
+import { fetchPlayerStats } from "@/wbdb"
 
 export async function fetchPlayer(uid: Player["uid"]): Promise<Result<Player>> {
     let res: Response
     try {
-        res = await fetchUpstream(`${env.WB_DB_BASE}/get_player_stats.php?uid=${uid}`, {
-            headers: {
-                Authorization:
-                    "Basic " + Buffer.from(`${env.WB_DB_ID}:${env.WB_DB_PW}`).toString("base64"),
-            },
-        })
+        res = await fetchPlayerStats(uid)
     } catch (error) {
         console.error(`failed to get player stats of ${uid}`, error)
         return {

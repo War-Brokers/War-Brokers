@@ -1,13 +1,13 @@
 <script lang="ts">
-    import { xpLeaderboard } from "../definitions"
-    import PaginatedLeaderboard from "../PaginatedLeaderboard.svelte"
+    import { dailyKillsLeaderboard } from "../../definitions"
+    import PaginatedLeaderboard from "../../PaginatedLeaderboard.svelte"
     import type { PageData } from "./$types"
 
     export let data: PageData
 
     const view = {
-        definition: xpLeaderboard,
-        ranking: data.XPRanking,
+        definition: dailyKillsLeaderboard,
+        ranking: data.dailyKillsRanking,
         playerCount: data.playerCount,
         page: data.page,
         offset: data.offset,

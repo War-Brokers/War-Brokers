@@ -1306,5 +1306,133 @@ export const stats: Player[] = [
     ),
 ]
 
-// todo: incomplete
-export const dailyStats: (Pick<Player, "uid" | "nick" | "nicklower"> & Partial<Player>)[] = []
+const MAX_DAILY_PLAY_TIME = 24 * 60 * 60
+const dailyIntegerStatFields = new Set<string>([
+    "wins",
+    "losses",
+    "number_of_jumps",
+    "scuds_launched",
+    "zombie_kills",
+    "zombie_deaths",
+    "zombie_time_alive_count",
+    "zombie_wins",
+    "self_destructs",
+    "distance_driven_count",
+    "kills_per_vehicle",
+    "shots_fired_unzoomed",
+    "shots_fired_zoomed",
+    "shots_hit_unzoomed",
+    "shots_hit_zoomed",
+    "most_kills_between_deaths",
+    "most_kills_in_round",
+    "kills_per_weapon",
+    "deaths",
+    "headshots",
+    "ping_time_count",
+    "frame_rate_count",
+    "time_alive_count",
+] as const)
+const dailyFloatStatFields = new Set<string>([
+    "zombie_time_alive",
+    "distance_driven",
+    "damage_dealt",
+    "damage_received",
+    "longest_kill",
+    "frame_rate",
+    "ping_time",
+    "time_alive",
+    "time_alive_longest",
+] as const)
+
+function scaleDailyNumber(value: number, ratio: number, integer: boolean) {
+    const scaled = value * ratio
+    return integer ? Math.round(scaled) : Math.round(scaled * 100_000) / 100_000
+}
+
+function scaleDailyValue(value: unknown, ratio: number, integer: boolean) {
+    if (value === null || value === undefined) return value
+    if (typeof value === "number") return scaleDailyNumber(value, ratio, integer)
+    if (typeof value !== "object" || Array.isArray(value))
+        throw new TypeError("Daily stat fields must contain numbers or numeric records")
+
+    return Object.fromEntries(
+        Object.entries(value).map(([key, nestedValue]) => {
+            if (typeof nestedValue !== "number")
+                throw new TypeError("Daily stat records must contain numbers")
+
+            return [key, scaleDailyNumber(nestedValue, ratio, integer)] as const
+        }),
+    )
+}
+
+function sumDailyValues(value: unknown) {
+    if (typeof value !== "object" || value === null || Array.isArray(value)) return 0
+
+    let total = 0
+    for (const nestedValue of Object.values(value)) {
+        if (typeof nestedValue !== "number")
+            throw new TypeError("Daily stat records must contain numbers")
+        total += nestedValue
+    }
+    return total
+}
+
+function scaleDailyPlayerStats(player: Player, ratio: number) {
+    const dailyPlayer = { ...player }
+
+    for (const [field, value] of Object.entries(player)) {
+        if (!dailyIntegerStatFields.has(field) && !dailyFloatStatFields.has(field)) continue
+
+        Object.assign(dailyPlayer, {
+            [field]: scaleDailyValue(value, ratio, dailyIntegerStatFields.has(field)),
+        })
+    }
+
+    return dailyPlayer
+}
+
+type DailyStatsRecord = Pick<Player, "uid" | "nick" | "nicklower"> &
+    Partial<Player> & {
+        guest: 0 | 1
+        total_kills: number
+        kill_to_death_ratio: number
+        kills_per_minute: number
+    }
+
+export const dailyStats: DailyStatsRecord[] = faker.helpers
+    .arrayElements(stats, 1000)
+    .map((player) => {
+        const totalTimeAlive = player.time_alive
+        const dailyTimeAlive =
+            totalTimeAlive === null || totalTimeAlive === undefined
+                ? totalTimeAlive
+                : faker.number.float({
+                      min: 0,
+                      max: Math.min(totalTimeAlive, MAX_DAILY_PLAY_TIME),
+                      fractionDigits: 5,
+                  })
+        const playTimeRatio =
+            typeof totalTimeAlive === "number" &&
+            totalTimeAlive > 0 &&
+            typeof dailyTimeAlive === "number"
+                ? dailyTimeAlive / totalTimeAlive
+                : 0
+        const dailyPlayer = scaleDailyPlayerStats(player, playTimeRatio)
+        const totalKills = sumDailyValues(dailyPlayer.kills_per_weapon)
+        const totalDeaths = sumDailyValues(dailyPlayer.deaths)
+        const dailyMinutes = typeof dailyTimeAlive === "number" ? dailyTimeAlive / 60 : 0
+        const dailyTimeAliveField =
+            dailyTimeAlive === undefined ? {} : { time_alive: dailyTimeAlive }
+
+        return {
+            ...dailyPlayer,
+            ...dailyTimeAliveField,
+            guest: player.steam === true ? 0 : 1,
+            total_kills: totalKills,
+            kill_to_death_ratio: totalDeaths === 0 ? totalKills : totalKills / totalDeaths,
+            kills_per_minute:
+                dailyMinutes === 0
+                    ? 0
+                    : Math.round((totalKills / dailyMinutes) * 100_000) / 100_000,
+        } satisfies DailyStatsRecord
+    })

@@ -75,15 +75,25 @@ export function pick<T extends object, Key extends keyof T>(
     return newObj
 }
 
-export function csvStringify(obj: readonly UnknownRecord[]): string {
+export function csvStringify(obj: readonly UnknownRecord[], columns?: readonly string[]): string {
     return stringify(
         obj.map((x) => flattenObject(x)),
         {
             header: true,
             quoted: true,
+            ...(columns === undefined ? {} : { columns }),
             cast: {
                 boolean: (value) => (value ? "1" : "0"),
             },
         },
     )
+}
+
+/**
+ * Formats UNIX timestamp (seconds) to YY-MM-DD.
+ */
+export function formatTimestampDate(timestamp: number | undefined) {
+    if (timestamp === undefined) return undefined
+    if (timestamp === 0) return 0
+    return new Date(timestamp * 1000).toISOString().slice(2, 10)
 }

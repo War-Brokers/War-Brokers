@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { LeaderboardHeader } from "./types"
+    import type { LeaderboardColumnHeader } from "./types"
 
     export let rows: number
-    export let headers: readonly [LeaderboardHeader, ...LeaderboardHeader[]]
+    export let headers: readonly [LeaderboardColumnHeader, ...LeaderboardColumnHeader[]]
 </script>
 
 {#each { length: rows } as _, index (index)}

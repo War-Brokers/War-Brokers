@@ -1,30 +1,19 @@
 <script lang="ts">
-    import { scaleBarWidth } from "../barWidth"
+    import { gamesEloLeaderboard } from "../definitions"
     import PaginatedLeaderboard from "../PaginatedLeaderboard.svelte"
-    import type { LeaderboardView } from "../types"
     import type { PageData } from "./$types"
 
     export let data: PageData
 
     const view = {
-        title: "Games ELO Leaderboard",
-        caption: "Games Elo leaderboard",
-        headers: [{ label: "Games ELO", class: "min-w-24", skeletonClass: "w-20" }],
-        ranking: data.getGamesEloRanking.then((players) =>
-            players.map(({ uid, nick, squad, percentile, gamesELO }) => ({
-                uid,
-                nick,
-                squad,
-                percentile,
-                barWidth: data.statRange.then((range) => scaleBarWidth(gamesELO, range)),
-                stats: [gamesELO.toFixed(2)] as const,
-            })),
-        ),
+        definition: gamesEloLeaderboard,
+        ranking: data.getGamesEloRanking,
         playerCount: data.playerCount,
         page: data.page,
         offset: data.offset,
         limit: data.limit,
-    } as const satisfies LeaderboardView
+        range: data.statRange,
+    } as const
 </script>
 
 <PaginatedLeaderboard {view} />
