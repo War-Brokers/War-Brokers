@@ -1,14 +1,6 @@
 #!/usr/bin/env -S mise -E dev exec -- bash
 #MISE description="Run all checks and tests"
 #MISE alias="vv"
-#MISE depends=[
-#MISE     "build",
-#MISE     "check:spelling",
-#MISE     "check:format",
-#MISE     "check:lint",
-#MISE     "check:types",
-#MISE     "test:unit",
-#MISE     "test:browser",
-#MISE ]
+#MISE depends=["build", "check:spelling", "check:format", "check:lint", "check:types", "test:unit", "test:browser"]
 
 set -euo pipefail
