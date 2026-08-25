@@ -5,7 +5,7 @@
     "type": "module",
     "main": "./build/index.js",
     "scripts": {
-        "dev": "../../scripts/wait-for-port 4000 && pnpm start:dev",
+        "dev": "pnpm start:dev",
         "build": "rm -rf build && tsup && tsc --emitDeclarationOnly",
         "start:dev": "NODE_ENV=development node .",
         "start:prod": "node .",

@@ -1,0 +1,84 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="Run a test task with local backend services"
+#MISE hide=true
+#MISE depends=["install", "db:start"]
+#MISE depends_post=["db:stop"]
+#MISE env={PUBLIC_WBAPI_URL = "http://127.0.0.1:5000/trpc"}
+#USAGE arg "<tasks>" var=#true
+
+set -euo pipefail
+set -m
+
+for reference in $(nix-store --query --references "$(mise -E dev where nix:playwright-test)"); do
+    if [[ "$reference" == *-playwright-browsers ]]; then
+        browsers_path="$reference"
+        break
+    fi
+done
+test -n "${browsers_path:-}"
+export PLAYWRIGHT_BROWSERS_PATH="$browsers_path"
+
+export DATABASE_URL="postgresql://postgres@localhost:5432/postgres"
+pnpm -F wbapi db:migrate
+mise run backend:dev &
+backend_pid=$!
+task_pids=()
+
+cleanup() {
+    status=$?
+    trap - EXIT INT TERM
+
+    for pid in "${task_pids[@]}"; do
+        kill -INT -- "-$pid" >/dev/null 2>&1 || true
+        wait "$pid" >/dev/null 2>&1 || true
+    done
+
+    kill -INT -- "-${backend_pid:-}" >/dev/null 2>&1 || true
+    wait "$backend_pid" >/dev/null 2>&1 || true
+
+    exit "$status"
+}
+
+trap cleanup EXIT INT TERM
+
+readonly readiness_url="http://127.0.0.1:5000/players/getPlayer?uid=5d2ead35d142affb05757778"
+readonly readiness_deadline=$((SECONDS + 300))
+
+while ! curl --silent --fail --max-time 2 "$readiness_url" >/dev/null; do
+    if ! kill -0 "$backend_pid" >/dev/null 2>&1; then
+        printf 'Backend exited before becoming ready.\n' >&2
+        exit 1
+    fi
+
+    if (( SECONDS >= readiness_deadline )); then
+        printf 'Timed out waiting for backend readiness.\n' >&2
+        exit 1
+    fi
+
+    sleep 1
+done
+
+printf 'Backend is ready.\n'
+
+eval "task_commands=(${usage_tasks?})"
+for task in "${task_commands[@]}"; do
+    mise run "$task" &
+    task_pids+=("$!")
+done
+
+task_status=0
+for pid in "${task_pids[@]}"; do
+    if ! wait "$pid"; then
+        task_status=1
+    fi
+done
+if (( task_status != 0 )); then
+    exit "$task_status"
+fi
+task_pids=()
+
+if ! kill -0 "$backend_pid" >/dev/null 2>&1; then
+    printf 'Backend services exited during browser testing.\n' >&2
+    wait "$backend_pid"
+    exit 1
+fi

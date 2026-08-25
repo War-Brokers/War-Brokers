@@ -1,0 +1,7 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="Run unit tests"
+#MISE depends=["install"]
+
+set -euo pipefail
+
+pnpm test:unit --color

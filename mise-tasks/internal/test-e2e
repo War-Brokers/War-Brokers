@@ -1,0 +1,32 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="Run end-to-end tests against local services"
+#MISE hide=true
+
+set -euo pipefail
+set -m
+
+pnpm turbo run dev \
+    --filter=@warbrokers/stats-site \
+    --color &
+frontend_pid=$!
+
+cleanup() {
+    status=$?
+    trap - EXIT INT TERM
+    kill -INT -- "-$frontend_pid" >/dev/null 2>&1 || true
+    wait "$frontend_pid" >/dev/null 2>&1 || true
+
+    exit "$status"
+}
+
+trap cleanup EXIT INT TERM
+
+./scripts/wait-for-port 5173 "$frontend_pid" # Stats site
+
+pnpm --filter=@warbrokers/stats-site test:e2e
+
+if ! kill -0 "$frontend_pid" >/dev/null 2>&1; then
+    printf 'Frontend services exited during end-to-end testing.\n' >&2
+    wait "$frontend_pid"
+    exit 1
+fi

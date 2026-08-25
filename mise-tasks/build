@@ -1,0 +1,7 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="Build the workspace"
+#MISE depends=["install"]
+
+set -euo pipefail
+
+pnpm turbo run build --color

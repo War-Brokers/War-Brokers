@@ -17,7 +17,8 @@
 
     // tailwind
     "files.associations": {
-        "*.css": "tailwindcss"
+        "*.css": "tailwindcss",
+        "mise-tasks/**": "shellscript"
     },
 
     // Svelte

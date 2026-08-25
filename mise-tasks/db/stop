@@ -1,0 +1,12 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="Stop and delete the local PostgreSQL database"
+
+set -euo pipefail
+
+data_dir="${MISE_PROJECT_ROOT}/.mise/postgres"
+
+if [[ -s "$data_dir/PG_VERSION" ]] && pg_ctl --pgdata="$data_dir" status >/dev/null 2>&1; then
+    pg_ctl --pgdata="$data_dir" --mode=fast --wait stop
+fi
+
+rm -rf "$data_dir"

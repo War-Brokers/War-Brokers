@@ -1,0 +1,7 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="Run end-to-end tests"
+#MISE wait_for=["lighthouse"]
+
+set -euo pipefail
+
+mise run test:with-backend ./mise-tasks/internal/test-e2e

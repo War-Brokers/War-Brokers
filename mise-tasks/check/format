@@ -1,0 +1,7 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="Check formatting"
+#MISE depends=["install"]
+
+set -euo pipefail
+
+pnpm fmt:check

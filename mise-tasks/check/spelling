@@ -1,0 +1,7 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="Check spelling"
+#MISE depends=["install"]
+
+set -euo pipefail
+
+cspell .

@@ -1,0 +1,9 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="Type-check the workspace"
+#MISE depends=["install"]
+#MISE wait_for=["build"]
+
+set -euo pipefail
+
+pnpm typecheck --color
+pnpm --filter=@warbrokers/stats-site check

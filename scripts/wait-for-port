@@ -4,8 +4,14 @@ set -euo pipefail
 
 port="${1:?Usage: wait-for-port PORT [PID]}"
 pid="${2:-}"
+timeout_seconds="${WAIT_FOR_PORT_TIMEOUT:-60}"
 
-for _ in {1..120}; do
+if ! [[ "$timeout_seconds" =~ ^[1-9][0-9]*$ ]]; then
+    echo "WAIT_FOR_PORT_TIMEOUT must be a positive integer" >&2
+    exit 1
+fi
+
+for ((attempt = 0; attempt < timeout_seconds * 2; attempt++)); do
     if (echo >/dev/tcp/localhost/"$port") >/dev/null 2>&1; then
         exit 0
     fi

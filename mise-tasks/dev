@@ -1,0 +1,35 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="Start dev servers"
+#MISE depends=["build", "db:migrate"]
+#MISE depends_post=["db:stop"]
+
+set -euo pipefail
+set -m
+
+mise run backend:dev &
+backend_pid=$!
+
+cleanup() {
+    status=$?
+    trap - EXIT INT TERM
+
+    for pid in "${stats_site_pid:-}" "${backend_pid:-}"; do
+        if [[ -n "$pid" ]]; then
+            kill -INT -- "-$pid" >/dev/null 2>&1 || true
+            wait "$pid" >/dev/null 2>&1 || true
+        fi
+    done
+
+    exit "$status"
+}
+
+trap cleanup EXIT INT TERM
+
+WAIT_FOR_PORT_TIMEOUT=300 ./scripts/wait-for-port 5000 "$backend_pid"
+
+pnpm turbo run dev \
+    --filter=@warbrokers/stats-site \
+    --color &
+stats_site_pid=$!
+
+wait "$stats_site_pid"

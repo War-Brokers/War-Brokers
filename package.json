@@ -5,7 +5,6 @@
     "scripts": {
         "turbo": "turbo",
         "dev": "mise run dev",
-        "dev:workspace": "turbo run dev",
         "build": "turbo run build --cache-dir=.turbo",
         "fmt:check": "oxfmt --check",
         "lint": "eslint eslint.config.js oxfmt.config.ts && turbo run lint",

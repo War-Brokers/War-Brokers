@@ -1,0 +1,7 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="drizzle-kit generate"
+#MISE depends=["install", "db:start"]
+
+set -euo pipefail
+
+pnpm -F wbapi db:generate

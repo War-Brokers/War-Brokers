@@ -1,0 +1,36 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="Start local backend services"
+#MISE hide=true
+
+set -euo pipefail
+set -m
+
+pnpm turbo run dev \
+    --filter=@warbrokers/mock-wb \
+    --color &
+mock_pid=$!
+
+cleanup() {
+    status=$?
+    trap - EXIT INT TERM
+
+    for pid in "${wbapi_pid:-}" "${mock_pid:-}"; do
+        if [[ -n "$pid" ]]; then
+            kill -INT -- "-$pid" >/dev/null 2>&1 || true
+            wait "$pid" >/dev/null 2>&1 || true
+        fi
+    done
+
+    exit "$status"
+}
+
+trap cleanup EXIT INT TERM
+
+WAIT_FOR_PORT_TIMEOUT=300 ./scripts/wait-for-port 4000 "$mock_pid"
+
+pnpm turbo run dev \
+    --filter=@warbrokers/wbapi \
+    --color &
+wbapi_pid=$!
+
+wait "$wbapi_pid"

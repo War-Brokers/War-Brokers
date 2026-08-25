@@ -1,0 +1,8 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="Audit stats site routes with Lighthouse"
+#MISE alias="ll"
+#MISE depends=["build"]
+
+set -euo pipefail
+
+mise run test:with-backend ./mise-tasks/internal/lighthouse

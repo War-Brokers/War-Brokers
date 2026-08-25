@@ -1,0 +1,30 @@
+#!/usr/bin/env -S mise -E dev exec -- bash
+#MISE description="Start a local PostgreSQL database"
+
+set -euo pipefail
+
+data_dir="${MISE_PROJECT_ROOT}/.mise/postgres"
+
+if [[ -s "$data_dir/PG_VERSION" ]] && pg_ctl --pgdata="$data_dir" status >/dev/null 2>&1; then
+    exit 0
+fi
+
+if pg_isready --host=127.0.0.1 --port=5432 >/dev/null 2>&1; then
+    echo "Port 5432 is already used by another PostgreSQL server" >&2
+    exit 1
+fi
+
+rm -rf "$data_dir"
+mkdir -p "$data_dir"
+initdb --pgdata="$data_dir" --auth=trust --encoding=UTF8 --no-locale
+
+pg_ctl \
+    --pgdata="$data_dir" \
+    --log="$data_dir/postgres.log" \
+    --options="-h 127.0.0.1 -p 5432 -k /tmp" \
+    --wait \
+    start
+
+if [[ "${USER:-}" != postgres ]]; then
+    createuser --host=127.0.0.1 --port=5432 --username="$USER" --superuser postgres
+fi
