@@ -22,6 +22,13 @@ jest.mock("@/env", () => ({
 
 jest.mock("@/fetch", () => ({ fetchUpstream: jest.fn() }))
 
+jest.mock("@/db/client", () => ({
+    db: {
+        getKnownPlayerUIDs: jest.fn().mockResolvedValue(["uid"]),
+        setPlayer: jest.fn(),
+    },
+}))
+
 it("returns stale daily data while checking for a newer source update", async () => {
     jest.useFakeTimers()
     jest.setSystemTime(new Date("2026-01-01T00:00:00Z"))

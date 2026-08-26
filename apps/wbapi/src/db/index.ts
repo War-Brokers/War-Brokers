@@ -16,6 +16,7 @@ import {
     getXPDistribution,
 } from "./distribution"
 import getDBPlayerCount from "./getDBPlayerCount"
+import getKnownPlayerUIDs from "./getKnownPlayerUIDs"
 import getPercentile from "./getPercentile"
 import getSquadMembers from "./getSquadMembers"
 import getSquads from "./getSquads"
@@ -47,6 +48,7 @@ export function initDB() {
         getPercentile: getPercentile(db),
         getStatRange: getStatRange(db),
         getDBPlayerCount: getDBPlayerCount(db),
+        getKnownPlayerUIDs: getKnownPlayerUIDs(db),
 
         getKillsEloDistribution: getKillsEloDistribution(db),
         getGamesEloDistribution: getGamesEloDistribution(db),

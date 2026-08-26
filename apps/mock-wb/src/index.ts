@@ -5,7 +5,7 @@ import express from "express"
 import basicAuth from "express-basic-auth"
 
 import { seedDB } from "./seed-db"
-import { dailyStats, stats } from "./stats"
+import { dailyStats, stats, untrackedPlayer } from "./stats"
 import { csvStringify, formatTimestampDate, pick } from "./utils"
 
 const PORT = 4000
@@ -153,7 +153,10 @@ app.get("/get_player_stats.php", (req, res) => {
         return
     }
 
-    const data = stats.find((e) => e.uid === uid)
+    const data =
+        stats.find((e) => e.uid === uid) ??
+        (uid === untrackedPlayer.uid ? untrackedPlayer : undefined)
+
     if (!data) {
         res.send(`No data for player: ${uid}`)
         return

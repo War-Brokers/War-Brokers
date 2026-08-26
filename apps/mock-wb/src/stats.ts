@@ -1399,6 +1399,56 @@ type DailyStatsRecord = Pick<Player, "uid" | "nick" | "nicklower"> &
         kills_per_minute: number
     }
 
+/**
+ * This player exists to simulate a situation where a player exists in upstream WB DB and
+ * is available from endpoints like `get_player_list.php` or `get_daily_stats.php` but is
+ * not tracked by WBP's PostgreSQL database. So it is left out of local dev DB seeding.
+ */
+export const untrackedPlayer = {
+    uid: "111111111111111111111111",
+    nick: "Untracked player",
+    nicklower: "untracked player",
+    level: 10,
+    xp: 1000,
+    coins: null,
+    squad: null,
+    killsELO: 1200,
+    gamesELO: 1200,
+    wins: { m00: 10 },
+    losses: { m00: 5 },
+    number_of_jumps: 20,
+    scuds_launched: 2,
+    zombie_kills: 3,
+    zombie_deaths: 1,
+    zombie_wins: 0,
+    zombie_time_alive: 30,
+    zombie_time_alive_count: 1,
+    self_destructs: null,
+    distance_driven: null,
+    distance_driven_count: null,
+    kills_per_vehicle: null,
+    shots_fired_unzoomed: { p01: 200 },
+    shots_fired_zoomed: { p01: 100 },
+    shots_hit_unzoomed: { p01: 80 },
+    shots_hit_zoomed: { p01: 40 },
+    damage_dealt: { p01: 1000 },
+    damage_received: { p01: 500 },
+    kills_per_weapon: { p01: 100 },
+    deaths: { p01: 10 },
+    headshots: { p01: 20 },
+    banned: false,
+    steam: true,
+    time: 1742434763,
+    joinTime: 1564650224,
+    time_alive: 1200,
+    time_alive_count: 10,
+    time_alive_longest: 180,
+    guest: 0,
+    total_kills: 100,
+    kill_to_death_ratio: 10,
+    kills_per_minute: 5,
+} as const satisfies DailyStatsRecord
+
 export const dailyStats: DailyStatsRecord[] = faker.helpers
     .arrayElements(stats, 1000)
     .map((player) => {
@@ -1436,3 +1486,4 @@ export const dailyStats: DailyStatsRecord[] = faker.helpers
                     : Math.round((totalKills / dailyMinutes) * 100_000) / 100_000,
         } satisfies DailyStatsRecord
     })
+    .concat(untrackedPlayer)

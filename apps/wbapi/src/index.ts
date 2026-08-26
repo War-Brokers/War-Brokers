@@ -10,11 +10,11 @@ import { openApiDocument } from "@/openapi"
 import { appRouter } from "@/router"
 import { createContext } from "@/trpc"
 
-import { initDB } from "./db"
+import { db } from "./db/client"
 import { startDistributionCache } from "./distributionCache"
 import { isPrivate } from "./private"
 
-export const db = initDB()
+export { db }
 
 startDistributionCache()
 
