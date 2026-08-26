@@ -266,7 +266,7 @@
                 <div
                     aria-busy={state === "loading"}
                     class={cn(
-                        "absolute top-20 h-96 max-h-96 w-full overflow-auto rounded-lg py-4 dark:bg-gray-600",
+                        "absolute top-20 z-20 h-96 max-h-96 w-full overflow-auto rounded-lg py-4 dark:bg-gray-600",
                         state === "loading" && "animate-pulse motion-reduce:animate-none",
                         !open && "hidden",
                     )}
