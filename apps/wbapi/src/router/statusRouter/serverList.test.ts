@@ -3,7 +3,7 @@ import { WBMap } from "@warbrokers/types/src/map"
 
 import { parseData } from "./serverList"
 
-test.each([
+it.each([
     {
         region: "ASIA",
         data: "9,198.13.39.1:48002,ASIA,281,128,0,5,45.32.18.182:48000,ASIA,281,128,0,18,207.148.98.252:48000,ASIA,281,128,0,4,45.32.18.182:48002,ASIA,281,128,0,51,45.32.18.182:48001,ASIA,281,128,0,3,198.13.39.1:48001,ASIA,281,128,6,49,207.148.98.252:48001,ASIA,281,128,0,20,207.148.98.252:48002,ASIA,281,128,0,24,198.13.39.1:48000,ASIA,281,128,13,3",
@@ -92,7 +92,7 @@ test.each([
     expect(parseData(data).filter((server) => server.playerCount > 0)).toStrictEqual(expected)
 })
 
-test("decodes spectate-only battle royale servers", () => {
+it("decodes spectate-only battle royale servers", () => {
     expect(parseData("1,203.0.113.1:48000,AS_BATTLE_ROYALE,281,75,11,9")).toStrictEqual([
         {
             name: "AS_BATTLE_ROYALE_01",

@@ -1,5 +1,5 @@
 import { vehicles } from "@warbrokers/types/src/vehicle"
-import { describe, expect, test } from "vitest"
+import { describe, expect, it } from "vitest"
 
 import { getVehicleBreakdowns, type VehicleStats } from "./vehicles"
 
@@ -23,7 +23,7 @@ function getBreakdown(id: string, player: VehicleStats) {
 }
 
 describe("getVehicleBreakdowns", () => {
-    test("creates vehicle statistics in the requested order", () => {
+    it("creates vehicle statistics in the requested order", () => {
         const breakdowns = getVehicleBreakdowns(emptyVehicleStats)
 
         expect(breakdowns.map(({ id, title }) => ({ id, title }))).toEqual([
@@ -38,7 +38,7 @@ describe("getVehicleBreakdowns", () => {
         ])
     })
 
-    test("formats count and distance statistics", () => {
+    it("formats count and distance statistics", () => {
         expect(getBreakdown("vehicle-kills", emptyVehicleStats).formatValue(1234.6)).toBe("1,235")
         expect(getBreakdown("vehicle-distance-traveled", emptyVehicleStats).formatValue(1234)).toBe(
             "1,234.0 m",
@@ -48,7 +48,7 @@ describe("getVehicleBreakdowns", () => {
         ).toBe("1,234.0 m")
     })
 
-    test("labels, filters, and sorts vehicle records", () => {
+    it("labels, filters, and sorts vehicle records", () => {
         const kills = getBreakdown(
             "vehicle-kills",
             createVehicleStats({
@@ -64,7 +64,7 @@ describe("getVehicleBreakdowns", () => {
         ])
     })
 
-    test("converts distances from feet to meters", () => {
+    it("converts distances from feet to meters", () => {
         const distanceTraveled = getBreakdown(
             "vehicle-distance-traveled",
             createVehicleStats({ distance_driven: { v00: 100 } }),
@@ -84,7 +84,7 @@ describe("getVehicleBreakdowns", () => {
         ])
     })
 
-    test("assigns one stable color to each known vehicle and a fallback to unknown IDs", () => {
+    it("assigns one stable color to each known vehicle and a fallback to unknown IDs", () => {
         const kills = getBreakdown(
             "vehicle-kills",
             createVehicleStats({

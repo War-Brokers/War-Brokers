@@ -75,7 +75,7 @@ async function getApiData<T>(page: Page, path: string, parse: (value: unknown) =
     return data
 }
 
-test("distribution switches toggle horizontal scale", async ({ page }) => {
+test("distribution switches toggle the horizontal scale", async ({ page }) => {
     await page.goto("/")
 
     for (const { statistic, title } of scaleStatistics) {

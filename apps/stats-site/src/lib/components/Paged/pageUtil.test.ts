@@ -1,8 +1,8 @@
-import { expect, test } from "vitest"
+import { expect, it } from "vitest"
 
 import { defaultValue, parsePage } from "./pageUtil"
 
-test("parsePage", () => {
+it("parses valid page numbers", () => {
     const LIMIT = 30
 
     // invalid

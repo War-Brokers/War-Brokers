@@ -1,8 +1,6 @@
 import { expect, test } from "@playwright/test"
 
-test("mobile navigation exposes and hides its links without resetting on navigation", async ({
-    page,
-}) => {
+test("exposes and hides links without resetting on mobile navigation", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 800 })
     await page.goto("/ranks", { waitUntil: "networkidle" })
 

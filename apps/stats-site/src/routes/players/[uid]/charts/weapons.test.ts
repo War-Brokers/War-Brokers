@@ -1,5 +1,5 @@
 import { weapons } from "@warbrokers/types/src/weapon"
-import { describe, expect, test } from "vitest"
+import { describe, expect, it } from "vitest"
 
 import { getWeaponBreakdowns, type WeaponStats } from "./weapons"
 
@@ -31,7 +31,7 @@ function getBreakdown(id: string, player: WeaponStats) {
 }
 
 describe("getWeaponBreakdowns", () => {
-    test("creates the complete weapon statistics set", () => {
+    it("creates the complete weapon statistics set", () => {
         const breakdowns = getWeaponBreakdowns(emptyWeaponStats)
 
         expect(breakdowns.map(({ id }) => id)).toEqual([
@@ -66,7 +66,7 @@ describe("getWeaponBreakdowns", () => {
         ])
     })
 
-    test("formats integer and decimal statistics", () => {
+    it("formats integer and decimal statistics", () => {
         const integerBreakdowns = [
             "weapon-kills",
             "weapon-deaths",
@@ -95,7 +95,7 @@ describe("getWeaponBreakdowns", () => {
         }
     })
 
-    test("labels, filters, and sorts weapon records", () => {
+    it("labels, filters, and sorts weapon records", () => {
         const kills = getBreakdown(
             "weapon-kills",
             createWeaponStats({
@@ -112,7 +112,7 @@ describe("getWeaponBreakdowns", () => {
         ])
     })
 
-    test("derives frequency, accuracy, damage, death, and shot metrics", () => {
+    it("derives frequency, accuracy, damage, death, and shot metrics", () => {
         const player = createWeaponStats({
             deaths: { p62: 8 },
             damage_dealt: { p61: 100 },
@@ -156,7 +156,7 @@ describe("getWeaponBreakdowns", () => {
         ])
     })
 
-    test("converts longest-kill distances from feet to meters", () => {
+    it("converts longest-kill distances from feet to meters", () => {
         const longestKill = getBreakdown(
             "weapon-longest-kill",
             createWeaponStats({ longest_kill: { p61: 100 } }),
@@ -166,7 +166,7 @@ describe("getWeaponBreakdowns", () => {
         expect(longestKill.formatValue(longestKill.rows[0]?.value ?? 0)).toBe("30.5 m")
     })
 
-    test("omits ratios without a positive denominator", () => {
+    it("omits ratios without a positive denominator", () => {
         const player = createWeaponStats({
             damage_dealt: { p61: 100 },
             kills_per_weapon: { p61: 0 },
@@ -179,7 +179,7 @@ describe("getWeaponBreakdowns", () => {
         expect(getBreakdown("weapon-shots-per-kill", player).rows).toEqual([])
     })
 
-    test("assigns stable colors to specific weapons", () => {
+    it("assigns stable colors to specific weapons", () => {
         const player = createWeaponStats({
             kills_per_weapon: { p61: 10, p67: 5, p123: 1 },
             longest_kill: { p61: 100 },
@@ -193,7 +193,7 @@ describe("getWeaponBreakdowns", () => {
         expect(longestKill.rows[0]?.colorClass).toBe(kills.rows[0]?.colorClass)
     })
 
-    test("assigns a unique color to every known weapon", () => {
+    it("assigns a unique color to every known weapon", () => {
         const kills = getBreakdown(
             "weapon-kills",
             createWeaponStats({

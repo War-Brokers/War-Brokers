@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 
 import { loadPlayerSlot } from "./playerSlot"
 
@@ -13,14 +13,14 @@ function trpcError(code?: string) {
 }
 
 describe("loadPlayerSlot", () => {
-    test("distinguishes an intentionally empty slot", async () => {
+    it("distinguishes an intentionally empty slot", async () => {
         const getPlayer = vi.fn()
 
         await expect(loadPlayerSlot(undefined, getPlayer)).resolves.toEqual({ status: "empty" })
         expect(getPlayer).not.toHaveBeenCalled()
     })
 
-    test("distinguishes an invalid UID", async () => {
+    it("distinguishes an invalid UID", async () => {
         const getPlayer = vi.fn()
 
         await expect(loadPlayerSlot("invalid", getPlayer)).resolves.toEqual({
@@ -30,20 +30,20 @@ describe("loadPlayerSlot", () => {
         expect(getPlayer).not.toHaveBeenCalled()
     })
 
-    test("returns a found player", async () => {
+    it("returns a found player", async () => {
         await expect(loadPlayerSlot(uid, vi.fn().mockResolvedValue(player))).resolves.toEqual({
             status: "found",
             player,
         })
     })
 
-    test("distinguishes a missing player", async () => {
+    it("distinguishes a missing player", async () => {
         await expect(
             loadPlayerSlot(uid, vi.fn().mockRejectedValue(trpcError("NOT_FOUND"))),
         ).resolves.toEqual({ status: "not-found", uid })
     })
 
-    test("distinguishes API and network failures", async () => {
+    it("distinguishes API and network failures", async () => {
         await expect(
             loadPlayerSlot(uid, vi.fn().mockRejectedValue(trpcError("INTERNAL_SERVER_ERROR"))),
         ).resolves.toEqual({ status: "unavailable", uid })

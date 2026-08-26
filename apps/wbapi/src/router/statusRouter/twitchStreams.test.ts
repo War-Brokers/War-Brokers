@@ -1,6 +1,6 @@
 import { parseData } from "./twitchStreams"
 
-test("twitchStreams", () => {
+it("parses Twitch stream responses", () => {
     expect(parseData("0,")).toStrictEqual({
         success: true,
         data: { total: 0, streams: [] },

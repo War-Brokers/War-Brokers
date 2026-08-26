@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test"
 
 const suffix = " - War Brokers Stats"
 
-test("should have proper title", async ({ page }) => {
+test("uses the expected title for each route", async ({ page }) => {
     await page.goto("/")
     await expect(page).toHaveTitle("Home" + suffix)
 
