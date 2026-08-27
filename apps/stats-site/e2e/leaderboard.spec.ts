@@ -3,6 +3,8 @@ import { expect, test } from "@playwright/test"
 const leaderboardRoutes = [
     "/leaderboard",
     "/leaderboard/daily",
+    "/leaderboard/daily/battleRoyaleWins",
+    "/leaderboard/daily/classicModeWins",
     "/leaderboard/daily/kills",
     "/leaderboard/gamesELO",
     "/leaderboard/killsELO",

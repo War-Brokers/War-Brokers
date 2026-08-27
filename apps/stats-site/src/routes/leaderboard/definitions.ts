@@ -7,6 +7,8 @@ type GamesEloPlayer = LeaderboardPlayer & { gamesELO: number }
 type TimeAlivePlayer = LeaderboardPlayer & { time_alive: number }
 type XpPlayer = LeaderboardPlayer & { xp: number; level: number }
 type DailyKillsPlayer = LeaderboardPlayer & { dailyKills: number }
+type DailyClassicModeWinsPlayer = LeaderboardPlayer & { dailyClassicModeWins: number }
+type DailyBattleRoyaleWinsPlayer = LeaderboardPlayer & { dailyBattleRoyaleWins: number }
 
 export const killsEloLeaderboard = {
     heading: "Kills ELO",
@@ -85,11 +87,43 @@ export const dailyKillsLeaderboard = {
     path: "/leaderboard/daily/kills",
     columns: [
         {
-            label: "Daily kills",
-            class: "min-w-28",
-            skeletonClass: "w-20",
+            label: "Kills",
+            class: "min-w-18",
+            skeletonClass: "w-18",
             value: (player) => player.dailyKills.toLocaleString("en-US"),
         },
     ],
     barValue: (player) => player.dailyKills,
 } as const satisfies LeaderboardDefinition<DailyKillsPlayer>
+
+export const dailyClassicModeWinsLeaderboard = {
+    heading: "Classic Mode Wins",
+    title: "Daily Classic Mode Wins Leaderboard",
+    caption: "Daily Classic Mode wins leaderboard",
+    path: "/leaderboard/daily/classicModeWins",
+    columns: [
+        {
+            label: "Wins",
+            class: "min-w-18",
+            skeletonClass: "w-18",
+            value: (player) => player.dailyClassicModeWins.toLocaleString("en-US"),
+        },
+    ],
+    barValue: (player) => player.dailyClassicModeWins,
+} as const satisfies LeaderboardDefinition<DailyClassicModeWinsPlayer>
+
+export const dailyBattleRoyaleWinsLeaderboard = {
+    heading: "Battle Royale Wins",
+    title: "Daily Battle Royale Wins Leaderboard",
+    caption: "Daily Battle Royale wins leaderboard",
+    path: "/leaderboard/daily/battleRoyaleWins",
+    columns: [
+        {
+            label: "Wins",
+            class: "min-w-18",
+            skeletonClass: "w-18",
+            value: (player) => player.dailyBattleRoyaleWins.toLocaleString("en-US"),
+        },
+    ],
+    barValue: (player) => player.dailyBattleRoyaleWins,
+} as const satisfies LeaderboardDefinition<DailyBattleRoyaleWinsPlayer>

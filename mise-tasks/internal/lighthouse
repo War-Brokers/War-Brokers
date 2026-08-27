@@ -14,6 +14,8 @@ readonly routes=(
     "leaderboard|/leaderboard"
     "leaderboard-daily|/leaderboard/daily"
     "leaderboard-daily-kills|/leaderboard/daily/kills"
+    "leaderboard-daily-battle-royale-wins|/leaderboard/daily/battleRoyaleWins"
+    "leaderboard-daily-classic-mode-wins|/leaderboard/daily/classicModeWins"
     "leaderboard-games-elo|/leaderboard/gamesELO"
     "leaderboard-kills-elo|/leaderboard/killsELO"
     "leaderboard-time-alive|/leaderboard/timeAlive"
@@ -91,7 +93,7 @@ for pid in "${!audit_pids[@]}"; do
     unset 'audit_pids[$pid]'
 done
 
-if (( audit_status != 0 )); then
+if ((audit_status != 0)); then
     exit 1
 fi
 

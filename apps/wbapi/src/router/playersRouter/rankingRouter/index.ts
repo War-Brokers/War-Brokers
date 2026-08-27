@@ -2,6 +2,8 @@ import { z } from "zod"
 
 import { createTRPCRouter } from "@/trpc"
 
+import dailyBattleRoyaleWins from "./dailyBattleRoyaleWins"
+import dailyClassicModeWins from "./dailyClassicModeWins"
 import dailyKills from "./dailyKills"
 import dailyStatsUpdatedAt from "./dailyStatsUpdatedAt"
 import gamesElo from "./gamesElo"
@@ -18,6 +20,8 @@ export const rankingInput = z.object({
 
 export default (parentTag: string) =>
     createTRPCRouter({
+        dailyBattleRoyaleWins: dailyBattleRoyaleWins([parentTag, tag]),
+        dailyClassicModeWins: dailyClassicModeWins([parentTag, tag]),
         dailyKills: dailyKills([parentTag, tag]),
         dailyStatsUpdatedAt: dailyStatsUpdatedAt([parentTag, tag]),
         killsElo: killsElo([parentTag, tag]),

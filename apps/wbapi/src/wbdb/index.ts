@@ -11,6 +11,8 @@ import { env } from "@/env"
 import { fetchUpstream, upstreamTimeoutMs } from "@/fetch"
 import { fetchPlayer } from "@/fetchPlayer"
 
+import { createDailyLeaderboards } from "./dailyLeaderboard"
+
 const DAILY_CACHE_TIME = 10 * 60 * 1000 // 10 minutes in milliseconds
 const DAILY_FETCH_TIMEOUT = 60 * 1000 // 1 minute in millisecond
 
@@ -137,4 +139,21 @@ export async function getDailyStatsUpdatedAt() {
     return value.sourceUpdatedAt
 }
 
-export { getDailyKillsPlayerCount, getDailyKillsRange, getDailyKillsRanking } from "./dailyKills"
+const dailyLeaderboards = createDailyLeaderboards(fetchDailyStats)
+
+export const getDailyKillsRanking = (limit: number, offset: number = 0) =>
+    dailyLeaderboards.dailyKills.ranking(limit, offset)
+export const getDailyKillsPlayerCount = () => dailyLeaderboards.dailyKills.count()
+export const getDailyKillsRange = () => dailyLeaderboards.dailyKills.range()
+
+export const getDailyClassicModeWinsRanking = (limit: number, offset: number = 0) =>
+    dailyLeaderboards.dailyClassicModeWins.ranking(limit, offset)
+export const getDailyClassicModeWinsPlayerCount = () =>
+    dailyLeaderboards.dailyClassicModeWins.count()
+export const getDailyClassicModeWinsRange = () => dailyLeaderboards.dailyClassicModeWins.range()
+
+export const getDailyBattleRoyaleWinsRanking = (limit: number, offset: number = 0) =>
+    dailyLeaderboards.dailyBattleRoyaleWins.ranking(limit, offset)
+export const getDailyBattleRoyaleWinsPlayerCount = () =>
+    dailyLeaderboards.dailyBattleRoyaleWins.count()
+export const getDailyBattleRoyaleWinsRange = () => dailyLeaderboards.dailyBattleRoyaleWins.range()
