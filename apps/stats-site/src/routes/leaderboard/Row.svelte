@@ -21,7 +21,7 @@
             {#if percentile}
                 <Stat iconOnly {percentile} />
             {/if}
-            <A href={resolve("/players/[uid]", { uid })}>
+            <A class="inline-block min-w-6" href={resolve("/players/[uid]", { uid })}>
                 {#if squad}
                     <span class="text-gray-300">[{squad}]</span>
                 {/if}

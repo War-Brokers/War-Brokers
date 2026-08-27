@@ -8,6 +8,7 @@ set -m
 readonly base_url="http://127.0.0.1:4173"
 readonly player_uid="5d2ead35d142affb05757778"
 readonly reports_dir="${MISE_PROJECT_ROOT}/.mise/lighthouse"
+readonly max_parallel_audits=4
 readonly routes=(
     "home|/"
     "comparison|/${player_uid}-vs-${player_uid}"
@@ -39,14 +40,16 @@ fi
 
 HOST=127.0.0.1 PORT=4173 pnpm --filter=@warbrokers/stats-site exec node build &
 server_pid=$!
-declare -A audit_pids=()
+audit_pids=()
 
 cleanup() {
     status=$?
     trap - EXIT INT TERM
 
-    for pid in "${!audit_pids[@]}"; do
+    for pid in "${audit_pids[@]}"; do
         kill -INT -- "-$pid" >/dev/null 2>&1 || true
+    done
+    for pid in "${audit_pids[@]}"; do
         wait "$pid" >/dev/null 2>&1 || true
     done
 
@@ -76,21 +79,38 @@ audit_route() {
         --output-path="${reports_dir}/${name}"
 }
 
-audit_status=0
-for entry in "${routes[@]}"; do
-    name="${entry%%|*}"
-    route="${entry#*|}"
+audit_worker() {
+    local worker_index="$1"
+    local audit_index
+    local entry
+    local name
+    local route
+    local worker_status=0
 
-    audit_route "$name" "$route" &
-    audit_pids[$!]="$route"
+    for ((audit_index = worker_index; audit_index < ${#routes[@]}; audit_index += max_parallel_audits)); do
+        entry="${routes[$audit_index]}"
+        name="${entry%%|*}"
+        route="${entry#*|}"
+
+        if ! audit_route "$name" "$route"; then
+            printf 'Lighthouse failed for %s.\n' "$route" >&2
+            worker_status=1
+        fi
+    done
+
+    return "$worker_status"
+}
+
+audit_status=0
+for ((worker_index = 0; worker_index < max_parallel_audits; worker_index++)); do
+    audit_worker "$worker_index" &
+    audit_pids+=("$!")
 done
 
-for pid in "${!audit_pids[@]}"; do
+for pid in "${audit_pids[@]}"; do
     if ! wait "$pid"; then
-        printf 'Lighthouse failed for %s.\n' "${audit_pids[$pid]}" >&2
         audit_status=1
     fi
-    unset 'audit_pids[$pid]'
 done
 
 if ((audit_status != 0)); then
