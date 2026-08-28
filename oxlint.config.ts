@@ -18,6 +18,7 @@ export default defineConfig({
         "**/*.timestamp-*",
     ],
     rules: {
+        complexity: ["error", { max: 10, variant: "modified" }],
         "constructor-super": "error",
         "for-direction": "error",
         "getter-return": "error",

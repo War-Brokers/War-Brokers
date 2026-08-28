@@ -4,39 +4,73 @@ const pompUID = "5d2ead35d142affb05757778"
 
 async function getArcPoint(arc: Locator, options: { rightmost?: boolean; targetX?: number } = {}) {
     return arc.evaluate((element, options) => {
+        type Point = { x: number; y: number }
+
+        function getFirstPoint(element: SVGPathElement, bounds: DOMRect, matrix: DOMMatrix) {
+            for (let y = bounds.y; y <= bounds.y + bounds.height; y += 2) {
+                for (let x = bounds.x; x <= bounds.x + bounds.width; x += 2) {
+                    const point = new DOMPoint(x, y)
+                    if (!element.isPointInFill(point)) continue
+
+                    const screenPoint = point.matrixTransform(matrix)
+                    return { x: screenPoint.x, y: screenPoint.y }
+                }
+            }
+
+            return undefined
+        }
+
+        function getSelectedPoint(
+            element: SVGPathElement,
+            bounds: DOMRect,
+            matrix: DOMMatrix,
+            selectPoint: (point: Point, selectedPoint: Point | undefined) => Point,
+        ) {
+            let selectedPoint: Point | undefined
+
+            for (let y = bounds.y; y <= bounds.y + bounds.height; y += 2) {
+                for (let x = bounds.x; x <= bounds.x + bounds.width; x += 2) {
+                    const point = new DOMPoint(x, y)
+                    if (!element.isPointInFill(point)) continue
+
+                    const screenPoint = point.matrixTransform(matrix)
+                    selectedPoint = selectPoint(
+                        { x: screenPoint.x, y: screenPoint.y },
+                        selectedPoint,
+                    )
+                }
+            }
+
+            return selectedPoint
+        }
+
+        function getClosestPoint(point: Point, selectedPoint: Point | undefined, targetX: number) {
+            if (!selectedPoint || Math.abs(point.x - targetX) < Math.abs(selectedPoint.x - targetX))
+                return point
+
+            return selectedPoint
+        }
+
+        function getRightmostPoint(point: Point, selectedPoint: Point | undefined) {
+            if (!selectedPoint || point.x > selectedPoint.x) return point
+
+            return selectedPoint
+        }
+
         if (!(element instanceof SVGPathElement)) return undefined
 
         const bounds = element.getBBox()
         const matrix = element.getScreenCTM()
         if (!matrix) return undefined
-        let selectedPoint: { x: number; y: number } | undefined
 
-        for (let y = bounds.y; y <= bounds.y + bounds.height; y += 2) {
-            for (let x = bounds.x; x <= bounds.x + bounds.width; x += 2) {
-                const point = new DOMPoint(x, y)
+        if (options.targetX !== undefined)
+            return getSelectedPoint(element, bounds, matrix, (point, selectedPoint) =>
+                getClosestPoint(point, selectedPoint, options.targetX),
+            )
 
-                if (element.isPointInFill(point)) {
-                    const screenPoint = point.matrixTransform(matrix)
-                    if (options.targetX !== undefined) {
-                        if (
-                            !selectedPoint ||
-                            Math.abs(screenPoint.x - options.targetX) <
-                                Math.abs(selectedPoint.x - options.targetX)
-                        ) {
-                            selectedPoint = { x: screenPoint.x, y: screenPoint.y }
-                        }
-                    } else if (options.rightmost) {
-                        if (!selectedPoint || screenPoint.x > selectedPoint.x) {
-                            selectedPoint = { x: screenPoint.x, y: screenPoint.y }
-                        }
-                    } else {
-                        return { x: screenPoint.x, y: screenPoint.y }
-                    }
-                }
-            }
-        }
+        if (options.rightmost) return getSelectedPoint(element, bounds, matrix, getRightmostPoint)
 
-        return selectedPoint
+        return getFirstPoint(element, bounds, matrix)
     }, options)
 }
 

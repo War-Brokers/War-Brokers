@@ -5,7 +5,7 @@ import express from "express"
 import basicAuth from "express-basic-auth"
 
 import { seedDB } from "./seed-db"
-import { dailyStats, stats, untrackedPlayer } from "./stats"
+import { dailyStats, stats, untrackedPlayer } from "./dummy-players"
 import { csvStringify, formatTimestampDate, pick } from "./utils"
 
 const PORT = 4000

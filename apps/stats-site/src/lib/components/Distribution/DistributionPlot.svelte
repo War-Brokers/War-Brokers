@@ -5,7 +5,7 @@
 
 <script lang="ts">
     import { scaleBand, scaleLinear } from "d3-scale"
-    import { Axis, BarChart, Circle, Rect, Spline } from "layerchart"
+    import { BarChart, type ChartContextValue } from "layerchart"
     import { onMount } from "svelte"
 
     import * as Chart from "$lib/components/ui/chart"
@@ -27,13 +27,16 @@
         type LogDistributionData,
     } from "./distributionData"
     import {
-        getRankMilestonePath,
-        getRankMilestonePositions,
         getRankMilestonePositionsForWidth,
         rankMarkerBandPadding,
         rankMarkerChartPadding,
         rankMarkerGeometry,
     } from "./rankMarkerGeometry"
+    import DistributionAxes from "./DistributionAxes.svelte"
+    import DistributionBars from "./DistributionBars.svelte"
+    import DistributionOverlay from "./DistributionOverlay.svelte"
+    import { getBucketEnd } from "./distributionChartGeometry"
+    import type { DistributionLineAxis } from "./distributionChartTypes"
 
     type SeriesKey = Exclude<keyof ChartBucket, "start">
 
@@ -63,18 +66,6 @@
         }
     }
 
-    type DistributionChartContext = {
-        containerWidth: number
-        xScale: DistributionChartScale
-        yScale: DistributionChartScale
-        yRange: number[]
-        tooltip: { data: unknown }
-    }
-
-    type DistributionChartScale = ((value: number) => number | undefined) & {
-        bandwidth?: () => number
-    }
-
     type Props = {
         id: string
         title: string
@@ -87,6 +78,7 @@
 
     let chartWidth = $state(0)
     let activeRankPopover = $state<string>()
+    let chartContext = $state<ChartContextValue<ChartBucket>>()
 
     function isLogDistributionData(
         value: DistributionData | LogDistributionData,
@@ -157,7 +149,7 @@
                 ticks: [0, 25, 50, 75, 100],
                 format: (value: number) => `${value}%`,
                 tickMarks: false,
-            },
+            } satisfies DistributionLineAxis,
         },
     } satisfies DistributionChart)
 
@@ -187,49 +179,10 @@
         },
     ])
 
-    function isRecord(value: unknown): value is Record<string, unknown> {
-        return typeof value === "object" && value !== null
-    }
-
-    function isChartBucket(value: unknown): value is ChartBucket {
-        return (
-            isRecord(value) &&
-            typeof value["start"] === "number" &&
-            chartMetrics.every((metric) => typeof value[metric.key] === "number")
-        )
-    }
-
-    function getLineScale(range: number[]) {
-        return scaleLinear().domain(distributionChart.line.axis.domain).range(range)
-    }
-
-    function getBucketEnd(bucket: ChartBucket) {
-        return bucket.start + bucketSize
-    }
-
     function getHorizontalValue(bucket: ChartBucket) {
         if (xScaleType === "band") return bucket.start
 
-        return [bucket.start, getBucketEnd(bucket)]
-    }
-
-    function getHorizontalBucketWidth(scale: DistributionChartScale, bucket: ChartBucket) {
-        if (scale.bandwidth) return scale.bandwidth()
-
-        return Math.max(0, Number(scale(getBucketEnd(bucket))) - Number(scale(bucket.start)))
-    }
-
-    function getHorizontalBarDimensions(context: DistributionChartContext, bucket: ChartBucket) {
-        const x = Number(context.xScale(bucket.start))
-        const y = Number(context.yScale(bucket.count))
-        const baseline = Number(context.yScale(0))
-
-        return {
-            x,
-            y,
-            width: getHorizontalBucketWidth(context.xScale, bucket),
-            height: Math.max(0, baseline - y),
-        }
+        return [bucket.start, getBucketEnd(bucket, bucketSize)]
     }
 
     function getHorizontalTickValues() {
@@ -239,7 +192,9 @@
         const firstBucket = completeBuckets[0]
         const lastBucket = completeBuckets.at(-1)
         const endpoints =
-            firstBucket && lastBucket ? [firstBucket.start, getBucketEnd(lastBucket)] : []
+            firstBucket && lastBucket
+                ? [firstBucket.start, getBucketEnd(lastBucket, bucketSize)]
+                : []
 
         return [...new Set([...ticks, ...endpoints])].sort((left, right) => left - right)
     }
@@ -275,11 +230,11 @@
         if (isLogarithmic && logBucketBase !== undefined) {
             return formatBucketRange(
                 getLogBucketBoundary(bucket.start, logBucketBase),
-                getLogBucketBoundary(getBucketEnd(bucket), logBucketBase),
+                getLogBucketBoundary(getBucketEnd(bucket, bucketSize), logBucketBase),
             )
         }
 
-        return formatBucketRange(bucket.start, getBucketEnd(bucket))
+        return formatBucketRange(bucket.start, getBucketEnd(bucket, bucketSize))
     }
 
     function updateRankPopover(rank: string, open: boolean) {
@@ -291,32 +246,6 @@
                 new CustomEvent(rankPopoverEvent, { detail: popoverId }),
             )
         } else if (activeRankPopover === popoverId) activeRankPopover = undefined
-    }
-
-    function isDistributionChartContext(value: unknown): value is DistributionChartContext {
-        return typeof value !== "object" || value === null
-            ? false
-            : "xScale" in value &&
-                  typeof value.xScale === "function" &&
-                  "yScale" in value &&
-                  typeof value.yScale === "function" &&
-                  "containerWidth" in value &&
-                  typeof value.containerWidth === "number" &&
-                  "yRange" in value &&
-                  Array.isArray(value.yRange) &&
-                  value.yRange.every((item) => typeof item === "number") &&
-                  "tooltip" in value &&
-                  typeof value.tooltip === "object" &&
-                  value.tooltip !== null &&
-                  "data" in value.tooltip
-    }
-
-    function asDistributionChartContext(value: unknown): DistributionChartContext {
-        if (!isDistributionChartContext(value)) {
-            throw new Error("Invalid distribution chart context")
-        }
-
-        return value
     }
 </script>
 
@@ -346,6 +275,7 @@
                 >
                     <Chart.Container {id} config={chartConfig} class="size-full">
                         <BarChart
+                            bind:context={chartContext}
                             data={completeBuckets}
                             {xScale}
                             x={getHorizontalValue}
@@ -366,98 +296,37 @@
                                 },
                             }}
                         >
-                            {#snippet marks({ context })}
-                                {@const chartContext = asDistributionChartContext(context)}
-                                {#each completeBuckets as bucket (bucket.start)}
-                                    <Rect
-                                        {...getHorizontalBarDimensions(chartContext, bucket)}
-                                        fill="currentColor"
-                                        stroke="none"
-                                        motion="none"
-                                        class={distributionChart.bar.colorClass}
-                                    />
-                                {/each}
-                            {/snippet}
-                            {#snippet aboveMarks({ context })}
-                                {@const chartContext = asDistributionChartContext(context)}
-                                {@const lineScale = getLineScale(chartContext.yRange)}
-                                {@const pathData = completeBuckets
-                                    .map(
-                                        (bucket, index) =>
-                                            `${index === 0 ? "M" : "L"}${Number(chartContext.xScale(bucket.start)) + getHorizontalBucketWidth(chartContext.xScale, bucket) / 2},${lineScale(bucket[distributionChart.line.metric.key])}`,
-                                    )
-                                    .join(" ")}
-                                {@const positionedRankMilestones = getRankMilestonePositions(
-                                    completeBuckets,
-                                    (bucket) => ({
-                                        x: Number(chartContext.xScale(bucket.start)),
-                                        width: getHorizontalBucketWidth(
-                                            chartContext.xScale,
-                                            bucket,
-                                        ),
-                                    }),
-                                    chartContext.containerWidth,
-                                )}
-                                {#each positionedRankMilestones as milestone (milestone.rank)}
-                                    <Spline
-                                        pathData={getRankMilestonePath(
-                                            milestone,
-                                            chartContext.yRange,
-                                        )}
-                                        stroke={milestone.color}
-                                        strokeWidth={3}
-                                        stroke-linejoin="round"
-                                        opacity={0.75}
-                                        motion="none"
-                                        class="pointer-events-none"
-                                    />
-                                {/each}
-                                <Spline
-                                    {pathData}
-                                    stroke="currentColor"
-                                    strokeWidth={2}
-                                    motion="none"
-                                    class={distributionChart.line.colorClass}
-                                />
-                                {#if isChartBucket(chartContext.tooltip.data)}
-                                    <Circle
-                                        cx={Number(
-                                            chartContext.xScale(chartContext.tooltip.data.start),
-                                        ) +
-                                            getHorizontalBucketWidth(
-                                                chartContext.xScale,
-                                                chartContext.tooltip.data,
-                                            ) /
-                                                2}
-                                        cy={lineScale(
-                                            chartContext.tooltip.data[
-                                                distributionChart.line.metric.key
-                                            ],
-                                        )}
-                                        r={3.5}
-                                        fill="currentColor"
-                                        strokeWidth={2}
-                                        motion="none"
-                                        class={`stroke-gray-900 ${distributionChart.line.colorClass}`}
+                            {#snippet marks()}
+                                {#if chartContext}
+                                    <DistributionBars
+                                        context={chartContext}
+                                        buckets={completeBuckets}
+                                        {bucketSize}
+                                        colorClass={distributionChart.bar.colorClass}
                                     />
                                 {/if}
                             {/snippet}
-                            {#snippet axis({ context })}
-                                {@const chartContext = asDistributionChartContext(context)}
-                                <Axis
-                                    placement="bottom"
-                                    scale={chartContext.xScale}
-                                    ticks={getHorizontalTickValues()}
-                                    format={formatHorizontalTick}
-                                />
-                                <Axis
-                                    placement={distributionChart.line.axis.placement}
-                                    scale={getLineScale(chartContext.yRange)}
-                                    ticks={distributionChart.line.axis.ticks}
-                                    format={(value) =>
-                                        distributionChart.line.axis.format(Number(value))}
-                                    tickMarks={distributionChart.line.axis.tickMarks}
-                                />
+                            {#snippet aboveMarks()}
+                                {#if chartContext}
+                                    <DistributionOverlay
+                                        context={chartContext}
+                                        buckets={completeBuckets}
+                                        {bucketSize}
+                                        lineMetricKey={distributionChart.line.metric.key}
+                                        lineAxis={distributionChart.line.axis}
+                                        lineColorClass={distributionChart.line.colorClass}
+                                    />
+                                {/if}
+                            {/snippet}
+                            {#snippet axis()}
+                                {#if chartContext}
+                                    <DistributionAxes
+                                        context={chartContext}
+                                        horizontalTicks={getHorizontalTickValues()}
+                                        lineAxis={distributionChart.line.axis}
+                                        {formatHorizontalTick}
+                                    />
+                                {/if}
                             {/snippet}
                             {#snippet tooltip()}
                                 <Chart.Tooltip labelFormatter={formatHorizontalBucketLabel} />

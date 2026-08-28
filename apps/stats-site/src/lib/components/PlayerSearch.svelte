@@ -45,6 +45,12 @@
     }
     $: messageIsError = state === "error" || (state === "idle" && Boolean(error))
 
+    function searchAnnouncement(text: string, results: SearchResult[]) {
+        if (results.length === 0) return `No players found for "${text}".`
+
+        return `${results.length} ${results.length === 1 ? "player" : "players"} found.`
+    }
+
     const runSearch = debounce(async (text: string, requestId: number) => {
         if (requestId !== latestRequest) return
 
@@ -58,10 +64,7 @@
 
             searchResults = results
             state = results.length > 0 ? "results" : "empty"
-            announcement =
-                results.length > 0
-                    ? `${results.length} ${results.length === 1 ? "player" : "players"} found.`
-                    : `No players found for "${text}".`
+            announcement = searchAnnouncement(text, results)
         } catch {
             if (requestId !== latestRequest) return
 
@@ -142,6 +145,20 @@
         })
     }
 
+    function highlightNext() {
+        open = true
+        setHighlightedIndex(
+            highlightedIndex < 0 ? 0 : Math.min(highlightedIndex + 1, searchResults.length - 1),
+        )
+    }
+
+    function highlightPrevious() {
+        open = true
+        setHighlightedIndex(
+            highlightedIndex < 0 ? searchResults.length - 1 : Math.max(highlightedIndex - 1, 0),
+        )
+    }
+
     function handleKeydown(event: KeyboardEvent) {
         if (state !== "results" || searchResults.length === 0) {
             if (event.key === "Escape" && open) {
@@ -155,21 +172,11 @@
         switch (event.key) {
             case "ArrowDown":
                 event.preventDefault()
-                open = true
-                setHighlightedIndex(
-                    highlightedIndex < 0
-                        ? 0
-                        : Math.min(highlightedIndex + 1, searchResults.length - 1),
-                )
+                highlightNext()
                 break
             case "ArrowUp":
                 event.preventDefault()
-                open = true
-                setHighlightedIndex(
-                    highlightedIndex < 0
-                        ? searchResults.length - 1
-                        : Math.max(highlightedIndex - 1, 0),
-                )
+                highlightPrevious()
                 break
             case "Enter":
                 if (!open || !highlightedResult) return

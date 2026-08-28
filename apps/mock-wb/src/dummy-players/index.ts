@@ -1,11 +1,18 @@
-import assert from "node:assert/strict"
-
 import { faker } from "@faker-js/faker"
 import { gameModes } from "@warbrokers/types/src/gameMode"
 import { xp2lvl } from "@warbrokers/types/src/level"
 import type { Player } from "@warbrokers/types/src/player"
-import { vehicles } from "@warbrokers/types/src/vehicle"
-import { weapons } from "@warbrokers/types/src/weapon"
+
+import { ExponentialOptions, LaplaceOptions } from "./distributions"
+import { fakeRecord } from "./fake-record"
+import {
+    fakeTimeAlive,
+    fakeTimeAliveCount,
+    fakeTimeAliveLongest,
+    fakeZombieTimeAlive,
+} from "./fake-time-alive"
+import { fakeVehiclePlayerFields, fakeVehicleStats } from "./fake-vehicle-stats"
+import { fakeWeaponPlayerFields, fakeWeaponStats } from "./fake-weapon-stats"
 
 const NUM_STATS = 50_000 // production has around 43k as of writing
 
@@ -45,176 +52,11 @@ const squadNames = faker.helpers.shuffle(
         .concat(Array.from({ length: squadConfig.minSize }, () => "100%")),
 )
 
-/**
- * Generates option for faker.js with laplace distribution.
- */
-function LaplaceOptions({
-    min,
-    max,
-    mode,
-    leftScale,
-    rightScale,
-    spikeProbability,
-}: {
-    min: number
-    max: number
-    mode: number
-    leftScale: number
-    rightScale: number
-    spikeProbability: number
-}) {
+function getWeaponTotals(weaponStats: ReturnType<typeof fakeWeaponStats>) {
     return {
-        min,
-        max,
-        distributor: (randomizer) => {
-            if (randomizer.next() < spikeProbability) return (mode - min) / (max - min)
-
-            let value: number
-
-            do {
-                const isLeft = randomizer.next() < leftScale / (leftScale + rightScale)
-                const scale = isLeft ? leftScale : rightScale
-                const distance = -scale * Math.log(1 - randomizer.next())
-                value = mode + (isLeft ? -distance : distance)
-            } while (value < min || value > max)
-
-            return (value - min) / (max - min)
-        },
-    } as const satisfies Parameters<typeof faker.number.float>["0"]
-}
-
-/**
- * Generates option for faker.js with exponential distribution.
- */
-function ExponentialOptions({
-    min,
-    max,
-    scale,
-    shape,
-}: {
-    min: number
-    max: number
-    scale: number
-    shape: number
-}) {
-    // cumulative distribution function
-    const cdf = (value: number) => 1 - Math.exp(-Math.pow(value / scale, shape))
-    const minimumCdf = cdf(min)
-    const maximumCdf = cdf(max)
-
-    return {
-        min,
-        max,
-        distributor: (randomizer) => {
-            const probability = minimumCdf + randomizer.next() * (maximumCdf - minimumCdf)
-            const value = scale * Math.pow(-Math.log(1 - probability), 1 / shape)
-
-            return (value - min) / (max - min)
-        },
-    } as const satisfies Parameters<typeof faker.number.float>["0"]
-}
-
-type FakeRecordOptions<Key extends string, Value> = {
-    keys: readonly Key[]
-    fakeValue: (key: Key) => Value
-}
-
-/**
- * Generates a value for every supplied key. Random omission can apply to each
- * key independently or to the entire record. Empty results are `undefined`.
- */
-function fakeRecord<const Key extends string, Value>(
-    options: FakeRecordOptions<Key, Value> & { randomOmission: "subset" },
-): Partial<Record<Key, Value>> | undefined
-function fakeRecord<const Key extends string, Value>(
-    options: FakeRecordOptions<Key, Value> & { randomOmission: "all-or-nothing" },
-): Record<Key, Value> | undefined
-function fakeRecord<const Key extends string, Value>(
-    options: FakeRecordOptions<Key, Value> & { randomOmission?: never },
-): Record<Key, Value>
-function fakeRecord({
-    keys,
-    fakeValue,
-    randomOmission,
-}: {
-    keys: readonly string[]
-    fakeValue: (...args: never[]) => unknown
-    randomOmission?: "subset" | "all-or-nothing"
-}) {
-    const generate = ({ randomSubset }: { randomSubset: boolean } = { randomSubset: false }) => {
-        const record: Record<string, unknown> = {}
-
-        for (const key of keys) {
-            if (!randomSubset || faker.datatype.boolean({ probability: 0.9 })) {
-                record[key] = Reflect.apply(fakeValue, undefined, [key])
-            }
-        }
-
-        return record
+        totalKills: weaponStats?.totalKills ?? 0,
+        totalDeaths: weaponStats?.totalDeaths ?? 0,
     }
-
-    if (randomOmission === "subset") {
-        const record = generate({ randomSubset: true })
-        return Object.keys(record).length === 0 ? undefined : record
-    }
-
-    if (randomOmission === "all-or-nothing") {
-        const record = faker.helpers.maybe(() => generate(), { probability: 0.9 })
-        return record === undefined || Object.keys(record).length === 0 ? undefined : record
-    }
-
-    return generate()
-}
-
-/**
- * Splits `total` randomly across all supplied `keys` while preserving the exact total.
- *
- * ```javascript
- * distribute({ keys: ["p61", "p62", "p67"], total: 100 })
- * ```
- *
- * Might return:
- *
- * ```javascript
- * {
- *     p61: 52,
- *     p62: 31,
- *     p67: 17,
- * }
- * ```
- *
- * and
- *
- * ```javascript
- * sumStats(distribute({ keys, total })) === total // is true
- * ```
- *
- * If keys is empty, it returns `{}`.
- */
-function distribute({ keys, total }: { keys: readonly string[]; total: number }) {
-    if (keys.length === 0) return {}
-
-    const weights = keys.map(() => faker.number.float({ min: 0.01, max: 1 }))
-    const totalWeight = weights.reduce((sum, weight) => sum + weight, 0)
-    const distributed = fakeRecord({
-        keys,
-        fakeValue: (key) => {
-            const weight = weights[keys.indexOf(key)] ?? 0
-            return Math.floor((total * weight) / totalWeight)
-        },
-    })
-    const remainder = total - Object.values(distributed).reduce((total, value) => total + value, 0)
-    const firstKey = keys[0]
-
-    if (firstKey !== undefined) distributed[firstKey] = (distributed[firstKey] ?? 0) + remainder
-
-    assert.equal(
-        Object.values(distributed).reduce((sum, value) => sum + value, 0),
-        total,
-        "Distributed values must sum to the requested total",
-    )
-
-    return distributed
 }
 
 export const stats: Player[] = [
@@ -921,240 +763,20 @@ export const stats: Player[] = [
                 }),
             )
 
-            // todo: match distribution with production
-            const weaponStats =
-                faker.helpers.maybe(
-                    () => {
-                        const totalKills = Math.floor(
-                            xp * faker.number.float({ min: 0.002, max: 0.01 }),
-                        )
-                        const totalDeaths =
-                            totalKills === 0
-                                ? faker.number.int({
-                                      min: 0,
-                                      max: Math.max(1, Math.floor(xp * 0.005)),
-                                  })
-                                : Math.max(
-                                      1,
-                                      Math.round(
-                                          totalKills / faker.number.float({ min: 0.2, max: 5 }),
-                                      ),
-                                  )
-                        const activeWeapons = faker.helpers.arrayElements(weapons, {
-                            min: totalKills > 0 || totalDeaths > 0 ? 1 : 0,
-                            max: weapons.length,
-                        })
-                        const killsPerWeapon = distribute({
-                            keys: activeWeapons,
-                            total: totalKills,
-                        })
-                        const deaths = distribute({ keys: activeWeapons, total: totalDeaths })
-                        const killsUnzoomed = fakeRecord({
-                            keys: activeWeapons,
-                            fakeValue: (weapon) =>
-                                faker.number.int({ min: 0, max: killsPerWeapon[weapon] ?? 0 }),
-                        })
-                        const killsZoomed = fakeRecord({
-                            keys: activeWeapons,
-                            fakeValue: (weapon) =>
-                                (killsPerWeapon[weapon] ?? 0) - killsUnzoomed[weapon],
-                        })
-                        const maxZeroKillShots = Math.max(100, Math.floor(Math.sqrt(xp) * 10))
-                        const fakeShots = (kills: number) => {
-                            const fired =
-                                kills === 0
-                                    ? faker.number.int(maxZeroKillShots)
-                                    : faker.number.int({ min: kills * 2, max: kills * 100 })
-                            const minimumAccuracy = fired === 0 ? 0 : Math.max(0.05, kills / fired)
-                            const hit = Math.max(
-                                kills,
-                                Math.floor(
-                                    fired * faker.number.float({ min: minimumAccuracy, max: 0.75 }),
-                                ),
-                            )
-
-                            return { fired, hit }
-                        }
-                        const unzoomed = Object.fromEntries(
-                            activeWeapons.map((weapon) => [
-                                weapon,
-                                fakeShots(killsUnzoomed[weapon]),
-                            ]),
-                        )
-                        const zoomed = Object.fromEntries(
-                            activeWeapons.map((weapon) => [weapon, fakeShots(killsZoomed[weapon])]),
-                        )
-                        const shotsFiredUnzoomed = fakeRecord({
-                            keys: activeWeapons,
-                            fakeValue: (weapon) => unzoomed[weapon]?.fired ?? 0,
-                        })
-                        const shotsFiredZoomed = fakeRecord({
-                            keys: activeWeapons,
-                            fakeValue: (weapon) => zoomed[weapon]?.fired ?? 0,
-                        })
-                        const shotsHitUnzoomed = fakeRecord({
-                            keys: activeWeapons,
-                            fakeValue: (weapon) => unzoomed[weapon]?.hit ?? 0,
-                        })
-                        const shotsHitZoomed = fakeRecord({
-                            keys: activeWeapons,
-                            fakeValue: (weapon) => zoomed[weapon]?.hit ?? 0,
-                        })
-                        const totalShotsHit = fakeRecord({
-                            keys: activeWeapons,
-                            fakeValue: (weapon) =>
-                                shotsHitUnzoomed[weapon] + shotsHitZoomed[weapon],
-                        })
-                        const killingWeapons = activeWeapons.filter(
-                            (weapon) => (killsPerWeapon[weapon] ?? 0) > 0,
-                        )
-                        const mostKillsInRound = fakeRecord({
-                            keys: killingWeapons,
-                            fakeValue: (weapon) =>
-                                faker.number.int({
-                                    min: 1,
-                                    max: Math.min(killsPerWeapon[weapon] ?? 1, 100),
-                                }),
-                        })
-
-                        return {
-                            shotsFiredUnzoomed,
-                            shotsFiredZoomed,
-                            shotsHitUnzoomed,
-                            shotsHitZoomed,
-                            damageDealt: fakeRecord({
-                                keys: activeWeapons,
-                                fakeValue: (weapon) => {
-                                    const hits = totalShotsHit[weapon]
-                                    return hits === 0
-                                        ? 0
-                                        : faker.number.float({
-                                              min: hits,
-                                              max: hits * 100,
-                                              fractionDigits: 5,
-                                          })
-                                },
-                            }),
-                            damageReceived: fakeRecord({
-                                keys: activeWeapons,
-                                fakeValue: (weapon) => {
-                                    const weaponDeaths = deaths[weapon] ?? 0
-                                    return weaponDeaths === 0
-                                        ? 0
-                                        : faker.number.float({
-                                              min: weaponDeaths,
-                                              max: weaponDeaths * 200,
-                                              fractionDigits: 5,
-                                          })
-                                },
-                            }),
-                            mostKillsBetweenDeaths: fakeRecord({
-                                keys: killingWeapons,
-                                fakeValue: (weapon) =>
-                                    faker.number.int({ min: 1, max: mostKillsInRound[weapon] }),
-                            }),
-                            mostKillsInRound,
-                            killsPerWeapon,
-                            deaths,
-                            headshots: fakeRecord({
-                                keys: activeWeapons,
-                                fakeValue: (weapon) =>
-                                    faker.number.int({ min: 0, max: totalShotsHit[weapon] }),
-                            }),
-                            longestKill: fakeRecord({
-                                keys: killingWeapons,
-                                fakeValue: () =>
-                                    faker.number.float({ min: 0, max: 4000, fractionDigits: 5 }),
-                            }),
-                            totalKills,
-                            totalDeaths,
-                        }
-                    },
-                    { probability: 0.9 },
-                ) ?? null
-            const totalKills = weaponStats?.totalKills ?? 0
-            const totalDeaths = weaponStats?.totalDeaths ?? 0
-            const vehicleStats =
-                faker.helpers.maybe(() => {
-                    const activeVehicles = faker.helpers.arrayElements(vehicles, {
-                        min: totalKills > 0 ? 1 : 0,
-                        max: vehicles.length,
-                    })
-                    const distanceDrivenCount = fakeRecord({
-                        keys: activeVehicles,
-                        fakeValue: () => faker.number.int(100),
-                    })
-
-                    return {
-                        selfDestructs: fakeRecord({
-                            keys: activeVehicles,
-                            fakeValue: () => faker.number.int(20),
-                        }),
-                        distanceDriven: fakeRecord({
-                            keys: activeVehicles,
-                            fakeValue: (vehicle) =>
-                                distanceDrivenCount[vehicle] *
-                                faker.number.float({
-                                    min: 0,
-                                    max: 10_000,
-                                    fractionDigits: 5,
-                                }),
-                        }),
-                        distanceDrivenCount,
-                        killsPerVehicle: distribute({
-                            keys: activeVehicles,
-                            total: totalKills,
-                        }),
-                    }
-                }) ?? null
+            const weaponStats = fakeWeaponStats(xp)
+            const { totalKills, totalDeaths } = getWeaponTotals(weaponStats)
+            const vehicleStats = fakeVehicleStats(totalKills)
             const zombieDeaths = faker.number.int(100)
             const zombieTimeAliveCount = faker.number.int({ min: zombieDeaths, max: 1000 })
-            const zombieTimeAlive =
-                zombieTimeAliveCount === 0
-                    ? 0
-                    : faker.number.float({
-                          min: 0,
-                          max: zombieTimeAliveCount * 1000,
-                          fractionDigits: 5,
-                      })
-            const secondsPerHour = 60 * 60
-            const maxTimeAliveHours = 17_500
-            const timeAlive =
-                faker.number.float({ min: 0, max: 1 }) < 0.0001
-                    ? faker.number.float({
-                          min: 2_500 * secondsPerHour,
-                          max: maxTimeAliveHours * secondsPerHour,
-                          fractionDigits: 5,
-                      })
-                    : (faker.helpers.maybe(
-                          () =>
-                              faker.number.float(
-                                  ExponentialOptions({
-                                      min: 25 * secondsPerHour,
-                                      max: maxTimeAliveHours * secondsPerHour,
-                                      scale: 8 * secondsPerHour,
-                                      shape: 0.4,
-                                  }),
-                              ),
-                          { probability: 0.215 },
-                      ) ??
-                      faker.number.float({
-                          min: 0,
-                          max: 25 * secondsPerHour - 1,
-                          fractionDigits: 5,
-                      }))
-            const timeAliveCount = timeAlive === 0 ? 0 : totalDeaths + 1
+            const zombieTimeAlive = fakeZombieTimeAlive(zombieTimeAliveCount)
+            const timeAlive = fakeTimeAlive()
+            const timeAliveCount = fakeTimeAliveCount({ timeAlive, totalDeaths })
             const averageTimeAlive = timeAliveCount === 0 ? 0 : timeAlive / timeAliveCount
-            const timeAliveLongest =
-                timeAliveCount === 0
-                    ? 0
-                    : timeAliveCount === 1
-                      ? timeAlive
-                      : faker.number.float({
-                            min: averageTimeAlive,
-                            max: Math.min(timeAlive, Math.max(averageTimeAlive * 5, 2000)),
-                            fractionDigits: 5,
-                        })
+            const timeAliveLongest = fakeTimeAliveLongest({
+                timeAlive,
+                timeAliveCount,
+                averageTimeAlive,
+            })
             const pingTimeCount = faker.number.int(20_000)
             const frameRateCount = faker.number.int(20_000)
             const lastSession = faker.date.past({ years: 1 })
@@ -1238,34 +860,8 @@ export const stats: Player[] = [
                     randomOmission: "all-or-nothing",
                 }),
                 zombie_wins: faker.number.int(100),
-                self_destructs: vehicleStats?.selfDestructs ?? null,
-                distance_driven: vehicleStats?.distanceDriven ?? null,
-                distance_driven_count: vehicleStats?.distanceDrivenCount ?? null,
-                kills_per_vehicle: vehicleStats?.killsPerVehicle ?? null,
-                shots_fired_unzoomed: weaponStats?.shotsFiredUnzoomed ?? null,
-                shots_fired_zoomed: weaponStats?.shotsFiredZoomed ?? null,
-                shots_hit_unzoomed: weaponStats?.shotsHitUnzoomed ?? null,
-                shots_hit_zoomed: weaponStats?.shotsHitZoomed ?? null,
-                damage_dealt: weaponStats?.damageDealt ?? null,
-                damage_received: weaponStats?.damageReceived ?? null,
-                ...fakeRecord({
-                    keys: ["most_kills_between_deaths"] as const,
-                    fakeValue: () => weaponStats?.mostKillsBetweenDeaths ?? null,
-                    randomOmission: "all-or-nothing",
-                }),
-                ...fakeRecord({
-                    keys: ["most_kills_in_round"] as const,
-                    fakeValue: () => weaponStats?.mostKillsInRound ?? null,
-                    randomOmission: "all-or-nothing",
-                }),
-                kills_per_weapon: weaponStats?.killsPerWeapon ?? null,
-                deaths: weaponStats?.deaths ?? null,
-                headshots: weaponStats?.headshots ?? null,
-                ...fakeRecord({
-                    keys: ["longest_kill"] as const,
-                    fakeValue: () => weaponStats?.longestKill ?? null,
-                    randomOmission: "all-or-nothing",
-                }),
+                ...fakeVehiclePlayerFields(vehicleStats),
+                ...fakeWeaponPlayerFields(weaponStats),
                 banned: false,
                 ...fakeRecord({
                     keys: ["steam"] as const,
@@ -1391,6 +987,16 @@ function scaleDailyPlayerStats(player: Player, ratio: number) {
     return dailyPlayer
 }
 
+function getDailyTimeAlive(totalTimeAlive: Player["time_alive"]) {
+    return totalTimeAlive === null || totalTimeAlive === undefined
+        ? totalTimeAlive
+        : faker.number.float({
+              min: 0,
+              max: Math.min(totalTimeAlive, MAX_DAILY_PLAY_TIME),
+              fractionDigits: 5,
+          })
+}
+
 type DailyStatsRecord = Pick<Player, "uid" | "nick" | "nicklower"> &
     Partial<Player> & {
         guest: 0 | 1
@@ -1398,6 +1004,30 @@ type DailyStatsRecord = Pick<Player, "uid" | "nick" | "nicklower"> &
         kill_to_death_ratio: number
         kills_per_minute: number
     }
+
+function getDailyStatsFields({
+    player,
+    dailyPlayer,
+    dailyTimeAlive,
+}: {
+    player: Player
+    dailyPlayer: Player
+    dailyTimeAlive: Player["time_alive"]
+}) {
+    const totalKills = sumDailyValues(dailyPlayer.kills_per_weapon)
+    const totalDeaths = sumDailyValues(dailyPlayer.deaths)
+    const dailyMinutes = typeof dailyTimeAlive === "number" ? dailyTimeAlive / 60 : 0
+
+    return {
+        ...dailyPlayer,
+        ...(dailyTimeAlive === undefined ? {} : { time_alive: dailyTimeAlive }),
+        guest: player.steam === true ? 0 : 1,
+        total_kills: totalKills,
+        kill_to_death_ratio: totalDeaths === 0 ? totalKills : totalKills / totalDeaths,
+        kills_per_minute:
+            dailyMinutes === 0 ? 0 : Math.round((totalKills / dailyMinutes) * 100_000) / 100_000,
+    } satisfies DailyStatsRecord
+}
 
 /**
  * This player exists to simulate a situation where a player exists in upstream WB DB and
@@ -1453,14 +1083,7 @@ export const dailyStats: DailyStatsRecord[] = faker.helpers
     .arrayElements(stats, 1000)
     .map((player) => {
         const totalTimeAlive = player.time_alive
-        const dailyTimeAlive =
-            totalTimeAlive === null || totalTimeAlive === undefined
-                ? totalTimeAlive
-                : faker.number.float({
-                      min: 0,
-                      max: Math.min(totalTimeAlive, MAX_DAILY_PLAY_TIME),
-                      fractionDigits: 5,
-                  })
+        const dailyTimeAlive = getDailyTimeAlive(totalTimeAlive)
         const playTimeRatio =
             typeof totalTimeAlive === "number" &&
             totalTimeAlive > 0 &&
@@ -1468,22 +1091,7 @@ export const dailyStats: DailyStatsRecord[] = faker.helpers
                 ? dailyTimeAlive / totalTimeAlive
                 : 0
         const dailyPlayer = scaleDailyPlayerStats(player, playTimeRatio)
-        const totalKills = sumDailyValues(dailyPlayer.kills_per_weapon)
-        const totalDeaths = sumDailyValues(dailyPlayer.deaths)
-        const dailyMinutes = typeof dailyTimeAlive === "number" ? dailyTimeAlive / 60 : 0
-        const dailyTimeAliveField =
-            dailyTimeAlive === undefined ? {} : { time_alive: dailyTimeAlive }
 
-        return {
-            ...dailyPlayer,
-            ...dailyTimeAliveField,
-            guest: player.steam === true ? 0 : 1,
-            total_kills: totalKills,
-            kill_to_death_ratio: totalDeaths === 0 ? totalKills : totalKills / totalDeaths,
-            kills_per_minute:
-                dailyMinutes === 0
-                    ? 0
-                    : Math.round((totalKills / dailyMinutes) * 100_000) / 100_000,
-        } satisfies DailyStatsRecord
+        return getDailyStatsFields({ player, dailyPlayer, dailyTimeAlive })
     })
     .concat(untrackedPlayer)
