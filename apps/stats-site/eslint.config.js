@@ -1,17 +1,15 @@
 import tsParser from "@typescript-eslint/parser"
-import wbConfig, { strictTypeCheckedRules } from "@warbrokers/eslint-config"
 import { defineConfig } from "eslint/config"
 import betterTailwindcss from "eslint-plugin-better-tailwindcss"
+import oxlint from "eslint-plugin-oxlint"
 import svelte from "eslint-plugin-svelte"
 import globals from "globals"
 import svelteParser from "svelte-eslint-parser"
-import tseslint from "typescript-eslint"
 
 export default defineConfig(
     {
         ignores: [".svelte-kit/", "vite.config.ts.timestamp*"],
     },
-    ...wbConfig,
     betterTailwindcss.configs["correctness-error"],
     {
         rules: {
@@ -23,17 +21,6 @@ export default defineConfig(
             "better-tailwindcss": {
                 cwd: import.meta.dirname,
                 entryPoint: "src/app.css",
-            },
-        },
-    },
-    {
-        files: ["e2e/*.ts", "playwright.config.ts"],
-        languageOptions: {
-            parserOptions: {
-                projectService: {
-                    allowDefaultProject: ["playwright.config.ts"],
-                },
-                tsconfigRootDir: import.meta.dirname,
             },
         },
     },
@@ -49,42 +36,14 @@ export default defineConfig(
         },
     },
     {
-        files: [
-            "**/*.svelte",
-            "**/*.svelte.js",
-            "**/*.svelte.ts",
-            "*.svelte",
-            "*.svelte.js",
-            "*.svelte.ts",
-        ],
+        files: ["**/*.svelte"],
         languageOptions: {
             parser: svelteParser,
             parserOptions: {
                 extraFileExtensions: [".svelte"],
                 parser: tsParser,
-                projectService: true,
-                tsconfigRootDir: import.meta.dirname,
             },
         },
-        plugins: {
-            "@typescript-eslint": tseslint.plugin,
-        },
-        rules: {
-            ...strictTypeCheckedRules,
-            "no-unused-vars": "off",
-            "@typescript-eslint/no-unused-vars": [
-                "error",
-                {
-                    argsIgnorePattern: "^_",
-                    varsIgnorePattern: "^_",
-                    caughtErrorsIgnorePattern: "^_",
-                },
-            ],
-        },
     },
-    {
-        rules: {
-            "import/no-unresolved": ["error", { ignore: ["^\\$(?:app|env)/"] }],
-        },
-    },
+    ...oxlint.configs["flat/recommended"],
 )

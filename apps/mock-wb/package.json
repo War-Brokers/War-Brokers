@@ -7,7 +7,7 @@
     "scripts": {
         "dev": "node .",
         "build": "rm -rf build && tsup",
-        "lint": "eslint .",
+        "lint": "oxlint .",
         "typecheck": "tsc --noEmit",
         "clean": "rm -rf .turbo build node_modules"
     },
@@ -23,7 +23,6 @@
     "devDependencies": {
         "@faker-js/faker": "10.5.0",
         "@types/express": "5.0.0",
-        "@warbrokers/eslint-config": "workspace:*",
         "@warbrokers/typescript-config": "workspace:*",
         "tsup": "8.5.1"
     },

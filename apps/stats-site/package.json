@@ -9,7 +9,7 @@
         "preview": "vite preview",
         "test:unit": "vitest run",
         "test:e2e": "playwright test",
-        "lint": "svelte-kit sync && eslint .",
+        "lint": "svelte-kit sync && oxlint . && eslint \"src/**/*.svelte\"",
         "typecheck": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
         "clean": "rm -rf node_modules .svelte-kit .turbo *.timestamp-*"
@@ -28,7 +28,6 @@
         "@types/jsdom": "21.1.7",
         "@types/lodash": "4.17.13",
         "@typescript-eslint/parser": "8.65.0",
-        "@warbrokers/eslint-config": "workspace:*",
         "@warbrokers/playwright-config": "workspace:*",
         "@warbrokers/types": "workspace:*",
         "@warbrokers/typescript-config": "workspace:*",
@@ -39,6 +38,7 @@
         "dayjs": "1.11.13",
         "eslint": "9.39.3",
         "eslint-plugin-better-tailwindcss": "4.7.0",
+        "eslint-plugin-oxlint": "1.79.0",
         "eslint-plugin-svelte": "3.15.0",
         "globals": "17.4.0",
         "layerchart": "2.0.0-next.20",
@@ -53,7 +53,6 @@
         "tailwind-variants": "1.0.0",
         "tailwindcss": "4.3.3",
         "typescript": "6.0.3",
-        "typescript-eslint": "8.65.0",
         "vite": "5.4.21",
         "vitest": "2.1.9"
     },

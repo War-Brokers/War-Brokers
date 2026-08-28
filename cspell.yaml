@@ -66,10 +66,13 @@ words:
     - nicklower
     - nixos
     - nixpkgs
+    - nonconstructor
+    - nonoctal
     - Noto
     - nums
     - Nyarlatoteph
     - openapi
+    - oxlint
     - pg_isready
     - pgdata
     - Phönix

@@ -5,15 +5,13 @@
     "type": "module",
     "main": "index.ts",
     "scripts": {
-        "lint": "eslint .",
+        "lint": "oxlint .",
         "typecheck": "tsc --noEmit",
         "clean": "rm -rf .turbo node_modules"
     },
     "devDependencies": {
         "@playwright/test": "1.57.0",
-        "@warbrokers/eslint-config": "workspace:*",
         "@warbrokers/typescript-config": "workspace:*",
-        "eslint": "9.39.3",
         "typescript": "6.0.3"
     }
 }

@@ -7,7 +7,7 @@
         "dev": "mise run dev",
         "build": "turbo run build --cache-dir=.turbo",
         "fmt:check": "oxfmt --check",
-        "lint": "eslint eslint.config.js oxfmt.config.ts && turbo run lint",
+        "lint": "oxlint oxfmt.config.ts && turbo run lint",
         "typecheck": "turbo run typecheck",
         "test:e2e": "turbo run test:e2e",
         "test:unit": "turbo run test:unit",
@@ -15,9 +15,8 @@
     },
     "devDependencies": {
         "@types/node": "26.2.0",
-        "@warbrokers/eslint-config": "workspace:*",
-        "eslint": "9.39.3",
         "oxfmt": "0.62.0",
+        "oxlint": "1.79.0",
         "turbo": "2.10.7",
         "typescript": "6.0.3"
     },

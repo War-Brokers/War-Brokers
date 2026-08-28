@@ -1,6 +1,6 @@
 {
     "$schema": "https://turbo.build/schema.json",
-    "globalDependencies": ["oxfmt.config.ts"],
+    "globalDependencies": ["oxlint.config.ts", "oxfmt.config.ts"],
     "globalEnv": ["CI"],
     "tasks": {
         "dev": {

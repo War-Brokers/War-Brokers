@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "lint": "eslint src --quiet",
+        "lint": "oxlint src",
         "typecheck": "tsc --noEmit",
         "test:unit": "vitest run",
         "vitest": "vitest",
@@ -14,9 +14,7 @@
         "zod": "3.23.8"
     },
     "devDependencies": {
-        "@warbrokers/eslint-config": "workspace:*",
         "@warbrokers/typescript-config": "workspace:*",
-        "eslint": "9.39.3",
         "typescript": "6.0.3",
         "vitest": "2.1.9"
     }
