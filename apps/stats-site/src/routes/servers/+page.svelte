@@ -10,7 +10,6 @@
     import type { Server, Servers } from "./types"
 
     const regions: Region[] = regionSchema.options
-        .map((item) => item.value)
         .filter((item) => !item.includes("TEST"))
         .filter((item) => !item.includes("CLAN"))
 

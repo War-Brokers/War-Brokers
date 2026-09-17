@@ -27,7 +27,7 @@ export type Server = z.infer<typeof serverSchema>
 export const responseSchema = z.array(serverSchema)
 export type Response = z.infer<typeof responseSchema>
 
-const validRegions = regionSchema.options.map((option) => option.value).join(", ")
+const validRegions = regionSchema.options.join(", ")
 
 export default (tag: string) =>
     publicProcedure
